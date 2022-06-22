@@ -185,7 +185,7 @@ class ServiceLogic
 				continue;
 
 			$bet['game_id'] = $gameId;
-			$betting = $this->modelSlotBet->getByXslot($gameId, $bet, $lastFid);	//베팅내역검사
+			$betting = $this->modelSlotBet->getByXslot($gameId, $bet, $lastFid);	//베팅내역체크
 
 			if($bet['Status'] !== "BET")			//청산
 			{	
@@ -325,7 +325,7 @@ class ServiceLogic
 		if(count($arrInfo) < 3 || count($arrPrd) < 1)	//0-host, 1-ag_code, 2-ag_token
 			return false;
 
-		$objPrd = reset($arrPrd);			//첫요소얻기
+		$objPrd = reset($arrPrd);			
 		
 		$arrIdx = getHistoryIdx($objConf->conf_idx);
 		
@@ -396,7 +396,7 @@ class ServiceLogic
 			if($bet['bet_money'] == 0)
 				continue;
 
-			$betting = $this->modelSlotBet->getByFslot($gameId, $bet, $lastFid);	//베팅내역검사
+			$betting = $this->modelSlotBet->getByFslot($gameId, $bet, $lastFid);	//베팅내역체크
 			if(!is_null($betting))
 				continue;
 

@@ -67,7 +67,7 @@ class PladderRound_Model {
 	}
 
 	public function registerEmptyRound($arrRoundInfo){
-		//자료기지검사         
+		//자료기지체크         
 		$arrRound = $this->getByDate($arrRoundInfo['round_no'], $arrRoundInfo['round_date']);
         
         if(!is_null($arrRound))
