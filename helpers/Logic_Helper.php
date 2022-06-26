@@ -34,7 +34,14 @@
 	
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $url);
-	
+		if(substr($url, 0, 5) == 'https'){
+			curl_setopt($curl, CURLOPT_CAINFO, dirname(__FILE__) . '/cacert.pem');
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+		}
+		else
+		{
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		}
 		if (!is_null($post)) {
 			curl_setopt($curl, CURLOPT_POST, 1);
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
@@ -82,8 +89,14 @@
 	
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $url);
-	
-		// curl_setopt($curl, CURLOPT_POST, 1);
+		if(substr($url, 0, 5) == 'https'){
+			curl_setopt($curl, CURLOPT_CAINFO, dirname(__FILE__) . '/cacert.pem');
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+		}
+		else
+		{
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		}
 		if (!is_null($post)) {
 			curl_setopt($curl, CURLOPT_POST, 1);
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
