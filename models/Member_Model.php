@@ -160,7 +160,8 @@ class Member_Model {
 
         $strSql = "UPDATE ".$this->mTableName ;
         $strSql.= " JOIN (  SELECT ";
-        $fid = array_key_first($arrEmpPoint);
+        // $fid = array_key_first($arrEmpPoint);
+        $fid = key($arrEmpPoint);
 
         $strSql.= $fid." AS fid, ".$arrEmpPoint[$fid]." AS pt ";
         unset($arrEmpPoint[$fid]);
@@ -181,7 +182,8 @@ class Member_Model {
 
         $strSql = "UPDATE ".$this->mTableName ;
         $strSql.= " JOIN (  SELECT ";
-        $fid = array_key_first($arrMemBlank);
+        // $fid = array_key_first($arrMemBlank);
+        $fid = key($arrMemBlank);
 
         $strSql.= $fid." AS fid, ".$arrMemBlank[$fid]." AS pt ";
         unset($arrMemBlank[$fid]);
