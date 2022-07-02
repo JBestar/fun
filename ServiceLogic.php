@@ -1,37 +1,24 @@
 <?php
 
-
-include_once('models/CasinoBet_Model.php');
 include_once('models/SlotBet_Model.php');
 
-include_once('models/CasinoGame_Model.php');
-include_once('models/ConfGame_Model.php');
 include_once('models/ConfSite_Model.php');
 include_once('models/SlotPrd_Model.php');
-include_once('models/SlotGame_Model.php');
 
 include_once('models/Member_Model.php');
-include_once('models/MoneyHistory_Model.php');
 include_once('models/Reward_Model.php');
 
 class ServiceLogic
 {
 	private $mSnoopy ;
 
-	private $modelCasinoBet;
-	private $modelBballBet;
-	private $modelBladderBet;
 	private $modelSlotBet;
 
 	private $modelMember;
-	private $modelMoneyHist;
 	private $modelReward;
 
-	private $modelCasinoGame;
-	private $modelConfGame;
 	private $modelConfSite;
 	private $modelSlotPrd;
-	private $modelSlotGame;
 	
 	public $fLog;
 	
@@ -39,17 +26,12 @@ class ServiceLogic
 		$this->mSnoopy = new Snoopy();
 		$this->fLog = $fLog;
 
-		$this->modelCasinoBet = new CasinoBet_Model($dbConn);
 		$this->modelSlotBet = new SlotBet_Model($dbConn);
 
-		$this->modelCasinoGame = new CasinoGame_Model($dbConn);
-		$this->modelConfGame = new ConfGame_Model($dbConn);
 		$this->modelConfSite = new ConfSite_Model($dbConn);
 		$this->modelSlotPrd = new SlotPrd_Model($dbConn);
-		$this->modelSlotGame = new SlotGame_Model($dbConn);
 
 		$this->modelMember = new Member_Model($dbConn);
-		$this->modelMoneyHist = new MoneyHistory_Model($dbConn);
 		$this->modelReward = new Reward_Model($dbConn);
 	}
 
