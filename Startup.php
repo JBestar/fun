@@ -28,8 +28,8 @@
 		mkdir($tRootDir."/log");
 	}
 	
-    $strDate = date( 'Y-m-d', time());
-	$fLog = fopen($tRootDir."/log/acc_".$strDate, "a") ;
+    $fName = date( 'Y-m-d', time());
+	$fLog = fopen($tRootDir."/log/acc_".$fName, "a") ;
 	sleep(1);
 
 	$objServLogic = new ServiceLogic($dbConn, $fLog);
@@ -53,13 +53,17 @@
 
 		//로그파일 
 		if($nHour == 0 && $nMin == 0 && $nSec < 5){
-			if($fLog) fclose($fLog);
 
 			$strDate = date( 'Y-m-d', $tmNow );
-			$fLog = fopen($tRootDir."/log/acc_".$strDate, "a") ;
+			if($fName !== $strDate){
+				if($fLog) fclose($fLog);
+				
+				$fName = $strDate;
+				$fLog = fopen($tRootDir."/log/acc_".$fName, "a") ;
 		
-			$objServLogic->fLog = $fLog;
-			writeLog($fLog, $logHead."Log File--".$strDate."");
+				$objServLogic->fLog = $fLog;
+				writeLog($fLog, $logHead."Log File--".$fName."");
+			}
 		}
 		
 		$nMinSum = $nHour*60 + $nMin;
