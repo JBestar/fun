@@ -41,8 +41,10 @@
 	$bSlReg = false; 
 	$bFslReg = false; 
 
+	$ordFsl = 0;
 	$logHead = "<Oive>";
 	writeLog($fLog, $logHead."==============START==============");
+
 
 	while(true){
 
@@ -91,7 +93,7 @@
 		if(!$bSlDeny && !$bFslReg){
 			if($hFslot == null){
 				$hFslot = curl_multi_init();
-				$curl = $objServLogic->curlFslotBets();
+				$curl = $objServLogic->curlFslotBets($ordFsl);
 				curl_multi_add_handle($hFslot, $curl);
 				writeLog($fLog, $logHead."FSLOT-REQ-".$hFslot);
 			}
@@ -99,7 +101,7 @@
 			if($result != null){
 				$bFslReg = true;
 				// writeLog($fLog, $result);
-				$bInsert = $objServLogic->registerFslotBets($result);
+				$bInsert = $objServLogic->registerFslotBets($result, $ordFsl);
 			}
 		}  
 		

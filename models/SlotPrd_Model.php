@@ -43,12 +43,12 @@ class SlotPrd_Model {
 
     }
 
-	public function updateLastIdx($cat, $code, $idx){
+	public function updateHistoryId($cat, $code, $id){
     	
-		if(strlen($idx) < 1) return false;
+		if(strlen($id) < 1) return false;
 
     	$strSql = "UPDATE ".$this->mTableName." SET ";
-		$strSql.= " idx = '".$idx."' ";
+		$strSql.= " history_id = '".$id."' ";
 		$strSql.= " WHERE cat = '".$cat."' ";
 		$strSql.= " AND code = '".$code."' ";
 

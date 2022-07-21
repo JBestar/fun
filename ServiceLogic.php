@@ -55,14 +55,13 @@ class ServiceLogic
 		$confId = CONF_SLOT_1;
 		$logHead = "<SLOT> ";
 
-		$arrPrd = $this->modelSlotPrd->getByCat($gameId);
 		$objConf = $this->modelConfSite->getById($confId);
 		
 		if(is_null($objConf))
 			return null;
 		$arrInfo = explode("#", $objConf->conf_content);
 
-		if(count($arrInfo) < 3 || count($arrPrd) < 1)	//0-host, 1-ag_code, 2-ag_token
+		if(count($arrInfo) < 3)	//0-host, 1-ag_code, 2-ag_token
 			return null;
 
 		$url = $arrInfo[0]."/system/api/GetBetWinLogByIndex";
@@ -258,7 +257,7 @@ class ServiceLogic
 	
 	//===========네츄럴 슬롯 게임=================
 	
-	public function curlFslotBets() {
+	public function curlFslotBets(&$order) {
 		$gameId = GAME_SLOT_2;
 		$confId = CONF_SLOT_2;
 		$logHead = "<FSLOT> ";
@@ -270,18 +269,23 @@ class ServiceLogic
 		if(count($arrInfo) < 3 || count($arrPrd) < 1)	//0-host, 1-ag_code, 2-ag_token
 			return null;
 
-		$objPrd = reset($arrPrd);			//첫요소얻기
+		$order ++ ;
+		if($order > count($arrPrd) )
+			$order = 1;
+		$objPrd = $arrPrd[$order-1];			//Prd얻기
 		
 		$url = $arrInfo[0]."/game/history_with_id";
 		$arrIdx = getHistoryIdx($objConf->conf_idx);
-		
+		if($objPrd->history_id > 0)
+			$arrIdx['idx'] = $objPrd->history_id;
+
 		$arrPost['prd_id'] = $objPrd->code;			//게임사코드
 		$arrPost['history_id'] = $arrIdx['idx'] > 0 ? $arrIdx['idx'] + 1 : 0;		//마지막 history_id
         $arrPost['offset'] = "0";
         $arrPost['limit'] = "100";
         $post = json_encode($arrPost);
 
-		writeLog($this->fLog, $logHead."Request ID=".$arrPost['history_id']);
+		writeLog($this->fLog, $logHead."Request PRD=".$arrPost['prd_id']." ID=".$arrPost['history_id']);
 
 		$header =  [
 			'Content-Type: application/json',
@@ -295,7 +299,7 @@ class ServiceLogic
 		
 	}
 
-	public function registerFslotBets($response) {
+	public function registerFslotBets($response, $order) {
 		$gameId = GAME_SLOT_2;
 		$confId = CONF_SLOT_2;
 		$logHead = "<FSLOT> ";
@@ -307,8 +311,7 @@ class ServiceLogic
 		if(count($arrInfo) < 3 || count($arrPrd) < 1)	//0-host, 1-ag_code, 2-ag_token
 			return false;
 
-		$objPrd = reset($arrPrd);			
-		
+		$objPrd = $arrPrd[$order-1];			//Prd얻기		
 		$arrIdx = getHistoryIdx($objConf->conf_idx);
 		
 		$arrResult = json_decode($response, true);
@@ -375,8 +378,8 @@ class ServiceLogic
 			
 			writeLog($this->fLog, $logHead."BET-".$bet['history_id']."=>".$bet['bet_money']);
 
-			if($bet['bet_money'] == 0)
-				continue;
+			// if($bet['bet_money'] == 0)
+			// 	continue;
 
 			$betting = $this->modelSlotBet->getByFslot($gameId, $bet, $lastFid);	//베팅내역체크
 			if(!is_null($betting))
@@ -421,8 +424,10 @@ class ServiceLogic
 			
 		}
 
-		if($lastIdx > 0)
-			$this->modelConfSite->updateLastIdx($objConf->conf_id, $lastIdx."#".$arrIdx['fid']);
+		if($lastIdx > 0){
+			$this->modelSlotPrd->updateHistoryId($objPrd->cat, $objPrd->code, $lastIdx);
+			$this->modelConfSite->updateLastIdx($objConf->conf_id, $arrIdx['idx']."#".$arrIdx['fid']);
+		}
 
 		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
 		// writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);
