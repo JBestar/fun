@@ -67,16 +67,24 @@ class Member_Model {
 		$whereIn = implode("','", $arrLiveUid);  
         $whereIn = "'".$whereIn."'";
         
-        $strSql = "SELECT * FROM ".$this->mTableName;
+        $where = "";
         if($iGame == GAME_CASINO_EVOL){
-            $strSql.= " WHERE mb_live_id IN ( ".$whereIn.")"; 
+            $where = " WHERE mb_live_id IN ( ".$whereIn.")"; 
         } else if($iGame == GAME_SLOT_1){
-            $strSql.= " WHERE mb_slot_uid IN ( ".$whereIn.")"; 
+            $where = " WHERE mb_slot_uid IN ( ".$whereIn.")"; 
         } else if($iGame == GAME_SLOT_2){
-            $strSql.= " WHERE mb_fslot_id IN ( ".$whereIn.")";
+            $where = " WHERE mb_fslot_id IN ( ".$whereIn.")";
         } else if($iGame == GAME_CASINO_KGON){
-            $strSql.= " WHERE mb_uid IN ( ".$whereIn.")";
+            $where = " WHERE mb_uid IN ( ".$whereIn.")";
         } else return $arrMember; 
+
+        $strSql = "UPDATE ".$this->mTableName ;
+        $strSql.= " SET mb_time_bet = '".date('Y-m-d H:i:s')."'";
+        $strSql.= $where;
+        $this->mDbConn->query($strSql);
+        
+        $strSql = "SELECT * FROM ".$this->mTableName;
+        $strSql.= $where; 
     	
     	if($objResult = $this->mDbConn->query($strSql)){
 	    	if ($objResult->num_rows > 0) {
