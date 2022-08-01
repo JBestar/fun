@@ -141,6 +141,7 @@ class ServiceLogic
 		$objMember = null;
 		$arrEmpPoint = array();
 		$arrMemBlank = array();
+		$arrMemBet = array();
 		
 		$arrLiveUids = [];
 		foreach ($arrBet as $bet) {
@@ -148,7 +149,8 @@ class ServiceLogic
 				array_push($arrLiveUids, $bet['PlayerID']);
 		}
 		$arrMember = $this->modelMember->getMembersByLiveUids($arrLiveUids, $gameId);
-		writeLog($this->fLog, $logHead."Member Count-".count($arrMember));
+		if(count($arrMember) > 0)
+			writeLog($this->fLog, $logHead."***Member Count-".count($arrMember));
 		foreach ($arrMember as $member) {
 			$member->ratio = $this->modelMember->getEmployeeRatio($member, $gameId);
 		}
@@ -172,7 +174,8 @@ class ServiceLogic
 			{	
 				if(!is_null($betting) &&  intval($betting['bet_win_money']) == $bet['Amount'])
 					continue;
-	
+				
+				$arrMemBet[$objMember->mb_fid] = strToLocal($bet['Date']);
 				if(is_null($betting)){
 					$objPrd = getPrd($arrPrd, $bet['ThirdParty']);
 					if(!is_null($objPrd))
@@ -215,7 +218,8 @@ class ServiceLogic
 					}
 					
 				}
-				
+
+				$arrMemBet[$objMember->mb_fid] = strToLocal($bet['Date']);
 				$betId = 0;
 				if(is_null($betting)){
 					$objPrd = getPrd($arrPrd, $bet['ThirdParty']);
@@ -245,11 +249,11 @@ class ServiceLogic
 		if($lastIdx > 0)
 			$this->modelConfSite->updateLastIdx($objConf->conf_id, $lastIdx."#".$arrIdx['fid']);
 
-		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
-		// writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);
-
+		$this->modelMember->updateMemberBetTm($arrMemBet);
 		$bResult = $this->modelMember->updateMemberBlank($arrMemBlank);
 		// writeLog($this->fLog, $logHead."UpdateMemBlank-Count=".count($arrMemBlank)." Result=".$bResult);
+		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
+		// writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);
 
 		return $bInsert;
 	}
@@ -349,6 +353,7 @@ class ServiceLogic
 		$objMember = null;
 		$arrEmpPoint = array();
 		$arrMemBlank = array();
+		$arrMemBet = array();
 		
 		$arrLiveUids = [];
 		foreach ($arrBet as $bet) {
@@ -357,7 +362,8 @@ class ServiceLogic
 		}
 
 		$arrMember = $this->modelMember->getMembersByLiveUids($arrLiveUids, $gameId);
-		writeLog($this->fLog, $logHead."Member Count-".count($arrMember));
+		if(count($arrMember) > 0)
+			writeLog($this->fLog, $logHead."***Member Count-".count($arrMember));
 		foreach ($arrMember as $member) {
 			$member->ratio = $this->modelMember->getEmployeeRatio($member, $gameId);
 		}
@@ -413,6 +419,7 @@ class ServiceLogic
 			}
 			$bet['game_id'] = $gameId;
 			$bet['prd_id'] = $objPrd->code;
+			$arrMemBet[$objMember->mb_fid] = strToLocal($bet['created_at']);
 
 			$betId = $this->modelSlotBet->insertFslot($objMember, $bet, $bBlank, $nBlankPt);
 			if($betId > 0){
@@ -431,7 +438,7 @@ class ServiceLogic
 
 		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
 		// writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);
-
+		$this->modelMember->updateMemberBetTm($arrMemBet);
 		$bResult = $this->modelMember->updateMemberBlank($arrMemBlank);
 		// writeLog($this->fLog, $logHead."UpdateMemBlank-Count=".count($arrMemBlank)." Result=".$bResult);
 	

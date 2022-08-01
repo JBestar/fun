@@ -78,10 +78,10 @@ class Member_Model {
             $where = " WHERE mb_uid IN ( ".$whereIn.")";
         } else return $arrMember; 
 
-        $strSql = "UPDATE ".$this->mTableName ;
-        $strSql.= " SET mb_time_bet = '".date('Y-m-d H:i:s')."'";
-        $strSql.= $where;
-        $this->mDbConn->query($strSql);
+        // $strSql = "UPDATE ".$this->mTableName ;
+        // $strSql.= " SET mb_time_bet = '".date('Y-m-d H:i:s')."'";
+        // $strSql.= $where;
+        // $this->mDbConn->query($strSql);
         
         $strSql = "SELECT * FROM ".$this->mTableName;
         $strSql.= $where; 
@@ -206,6 +206,34 @@ class Member_Model {
         return $this->mDbConn->query($strSql);
     }
 
+    function updateMemberBetTm($arrMemBet){
+        if(count ($arrMemBet) < 1 )
+            return false;
+
+        $strSql = "UPDATE ".$this->mTableName ;
+        $strSql.= " JOIN (  SELECT ";
+        
+        $strNow = date("Y-m-d H:i:s");
+
+        $fid = key($arrMemBet);
+        if($arrMemBet[$fid] > $strNow)      //if After current time
+            $arrMemBet[$fid] = $strNow;
+
+        $strSql.= $fid." AS fid, '".$arrMemBet[$fid]."' AS bet_time ";
+        unset($arrMemBet[$fid]);
+
+        foreach ($arrMemBet as $fid => $bet_time) {
+            if($bet_time > $strNow)
+                $bet_time = $strNow;
+    
+            $strSql.= " UNION ALL SELECT ".$fid." , '".$bet_time."' " ;
+        }
+
+        $strSql.= ") memTb ON ".$this->mTableName.".mb_fid = memTb.fid AND member.mb_time_bet < memTb.bet_time ";
+        $strSql.= "SET mb_time_bet = bet_time" ;
+        
+        return $this->mDbConn->query($strSql);
+    }
     
     public function getEmpMemberByFid($fid)
     {
