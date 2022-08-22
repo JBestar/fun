@@ -43,6 +43,10 @@
 
 	$ordFsl = 0;
 	$logHead = "<Oive>";
+	
+	$secSleep = 5;
+	$secRepeat = 1;
+
 	writeLog($fLog, $logHead."==============START==============");
 
 
@@ -111,8 +115,8 @@
 			$bFslReg = false;
 
 			if(!$bInsert)
-				sleep(5);
-			else sleep(1);	//usleep(500000);
+				sleep($secSleep);
+			else sleep($secRepeat);	//usleep(500000);
 		}
 		
 	}
