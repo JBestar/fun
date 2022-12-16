@@ -79,7 +79,27 @@ class SlotBet_Model {
 
 		return $arrData;
     }
+	//슬롯게임
+	public function getByGslot($gameId, $bet, $fid = 0){
+		// SELECT bet_idx FROM bet_casino ORDER BY bet_fid DESC LIMIT 1
+		$strSql = "SELECT * FROM ".$this->mTableName;
+		$strSql.= " WHERE bet_fid >= '".$fid."' ";
+		$strSql.= " AND bet_game_id = '".$gameId."' ";
+		$strSql.= " AND bet_idx = '".$bet['txn_id']."' ";
 
+		$arrData = null;
+		if($objResult = $this->mDbConn->query($strSql)){
+			if ($objResult->num_rows > 0) {
+				while($arrRow = $objResult->fetch_assoc()) {
+					$arrData = $arrRow;
+					break;
+				}
+			}
+			$objResult->free();
+		}
+
+		return $arrData;
+	}
     public function insertFslot($objMember, $bet, $bBlank = false, $nBlankPt = 0){
     	
 		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, ";
@@ -210,6 +230,99 @@ class SlotBet_Model {
 		
 		return $this->mDbConn->query($strSql);
 	}
+
+
+	
+	public function insertGslot($objMember, $bet, $bBlank = false, $nBlankPt = 0){
+    	
+		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		$strSql.= " bet_money, bet_win_money, bet_agent_id, bet_player_id, bet_game_id, bet_game_type, bet_table_code, ";
+		$strSql.= " bet_choice, bet_result, point_amount, company_amount, obj_id ) VALUES "; 
+		
+		//bet_idx
+		$strSql.= " ( '".$bet['txn_id']."',";
+		//bet_emp_fid
+		$strSql.= " '".$objMember->mb_emp_fid."', ";
+		//bet_mb_uid
+		$strSql.= " '".$objMember->mb_uid."', ";
+		//bet_round_no
+		$strSql.= " '', ";
+		//bet_time
+		$strSql.= " '".strToLocal($bet['created_at'])."', "; //Local "2022-03-15 08:30:27"
+		if($bet['txn_type'] === "debit"){
+			//bet_money
+			$strSql.= " '".$bet['bet_money']."', ";
+			//bet_win_money
+			$strSql.= " '0', ";
+		} else if($bet['txn_type'] === "credit") {
+			//bet_money
+			$strSql.= " '0', ";
+			//bet_win_money
+			$strSql.= " '".$bet['win_money']."', ";
+		} else{
+			//bet_money
+			$strSql.= " '".$bet['bet_money']."', ";
+			//bet_win_money
+			$strSql.= " '".$bet['win_money']."', ";
+		}
+		
+		//bet_agent_id
+		$strSql.= " '".$bet['agent_code']."', "; 
+		//bet_player_id
+		$strSql.= " '".$bet['user_code']."', ";
+		//bet_game_id
+		$strSql.= " '".$bet['game_id']."', ";
+		//bet_game_type
+		$strSql.= " '".$bet['provider']."', ";
+		//bet_table_code
+		$strSql.= " '".$bet['game_code']."', ";
+		//start_balance
+		$strSql.= " '".$bet['user_start_balance']."', ";
+		//end_balance
+		$strSql.= " '".$bet['user_end_balance']."', ";
+		//Blank point
+		if($bBlank){
+			$strSql.= " '1', ";
+			$strSql.= " '".$nBlankPt."', ";
+		} else {
+			$strSql.= " '0', '0', ";
+		}
+		$strSql.= " 0 ";
+		$strSql.= " )";
+
+		if ($this->mDbConn->query($strSql) === TRUE) {
+			return $this->mDbConn->insert_id;
+		}
+		return 0;
+    } 
+    
+	public function updateGslot($fid, $bet, $bBlank = false, $nBlankPt = 0){
+
+
+		$strSql = "UPDATE ".$this->mTableName." SET ";	
+		if($bet['txn_type'] === "debit"){
+			//bet_money
+			$strSql.= " bet_money = '".$bet['bet_money']."' ";
+		} else if($bet['txn_type'] === "credit") {
+			//bet_win_money
+			$strSql.= " bet_win_money = '".$bet['win_money']."' ";
+		} else{
+			//bet_money
+			$strSql.= " bet_money = '".$bet['bet_money']."', ";
+			//bet_win_money
+			$strSql.= " bet_win_money = '".$bet['win_money']."' ";
+		}
+
+		if($bBlank){
+			$strSql.= ", point_amount = '1' ";
+			$strSql.= ", company_amount = '".$nBlankPt."' ";
+		}
+
+        $strSql.= " WHERE bet_fid = '".$fid."' ";
+		
+		return $this->mDbConn->query($strSql);
+	}
+
 
 }
 

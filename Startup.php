@@ -22,6 +22,11 @@
 	    die("Connection failed: ");
 	} 
 
+	$appType = APPTYPE_1;
+	if(array_key_exists('app_type', $arrConfig)){
+		$appType=intval($arrConfig['app_type']);
+	}
+
 	$tRootDir = dirname(__FILE__);
 	
 	if(!is_dir($tRootDir."/log")){
@@ -95,18 +100,34 @@
 		
 		//슬롯2 게임결과 기록
 		if(!$bSlDeny && !$bFslReg){
-			if($hFslot == null){
-				$hFslot = curl_multi_init();
-				$curl = $objServLogic->curlFslotBets($ordFsl);
-				curl_multi_add_handle($hFslot, $curl);
-				writeLog($fLog, $logHead."FSLOT-REQ-".$hFslot);
+			if($appType == APPTYPE_4 || $appType == APPTYPE_5){
+				if($hFslot == null){
+					$hFslot = curl_multi_init();
+					$curl = $objServLogic->curlGslotBets();
+					curl_multi_add_handle($hFslot, $curl);
+					writeLog($fLog, $logHead."GSLOT-REQ-".$hFslot);
+				}
+				$result = curlProc($hFslot, $fLog );
+				if($result != null){
+					$bFslReg = true;
+					// writeLog($fLog, $result);
+					$bInsert = $objServLogic->registerGslotBets($result);
+				}
+			} else {
+				if($hFslot == null){
+					$hFslot = curl_multi_init();
+					$curl = $objServLogic->curlFslotBets($ordFsl);
+					curl_multi_add_handle($hFslot, $curl);
+					writeLog($fLog, $logHead."FSLOT-REQ-".$hFslot);
+				}
+				$result = curlProc($hFslot, $fLog );
+				if($result != null){
+					$bFslReg = true;
+					// writeLog($fLog, $result);
+					$bInsert = $objServLogic->registerFslotBets($result, $ordFsl);
+				}
 			}
-			$result = curlProc($hFslot, $fLog );
-			if($result != null){
-				$bFslReg = true;
-				// writeLog($fLog, $result);
-				$bInsert = $objServLogic->registerFslotBets($result, $ordFsl);
-			}
+			
 		}  
 		
 		

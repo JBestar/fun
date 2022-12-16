@@ -13,15 +13,15 @@ class Member_Model {
         'mb_live_id', 'mb_live_uid', 'mb_live_money', 
         'mb_slot_uid', 'mb_slot_money', 
         'mb_fslot_id', 'mb_fslot_uid', 'mb_fslot_money',
-        'mb_kgon_id', 'mb_kgon_uid', 'mb_kgon_money' ];
+        'mb_kgon_id', 'mb_kgon_uid', 'mb_kgon_money',
+        'mb_gslot_uid', 'mb_gslot_money', 
+    ];
         
 	function __construct($dbConn)
 	{
 		$this->mDbConn = $dbConn;
 		$this->mTableName = "member";
-
 	}
-
     
 	public function getByFid($fid){
         $strSql = "SELECT * FROM ".$this->mTableName;
@@ -74,18 +74,15 @@ class Member_Model {
             $where = " WHERE mb_slot_uid IN ( ".$whereIn.")"; 
         } else if($iGame == GAME_SLOT_2){
             $where = " WHERE mb_fslot_id IN ( ".$whereIn.")";
+        } else if($iGame == GAME_SLOT_3){
+            $where = " WHERE mb_gslot_uid IN ( ".$whereIn.")";
         } else if($iGame == GAME_CASINO_KGON){
             $where = " WHERE mb_uid IN ( ".$whereIn.")";
         } else return $arrMember; 
-
-        // $strSql = "UPDATE ".$this->mTableName ;
-        // $strSql.= " SET mb_time_bet = '".date('Y-m-d H:i:s')."'";
-        // $strSql.= $where;
-        // $this->mDbConn->query($strSql);
         
         $strSql = "SELECT * FROM ".$this->mTableName;
         $strSql.= $where; 
-    	
+
     	if($objResult = $this->mDbConn->query($strSql)){
 	    	if ($objResult->num_rows > 0) {
 			  	while($arrRow = $objResult->fetch_assoc()) {
