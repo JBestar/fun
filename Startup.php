@@ -84,18 +84,21 @@
 				
 		//슬롯1 게임결과 기록
 		if(!$bSlDeny && !$bSlReg){
-			if($hSlot == null){
-				$hSlot = curl_multi_init();
-				$curl = $objServLogic->curlSlotBets();
-				curl_multi_add_handle($hSlot, $curl);
-				writeLog($fLog, $logHead."SLOT-REQ-".$hSlot);
+			if($appType == APPTYPE_1 || $appType == APPTYPE_3 || $appType == APPTYPE_4){
+				if($hSlot == null){
+					$hSlot = curl_multi_init();
+					$curl = $objServLogic->curlSlotBets();
+					curl_multi_add_handle($hSlot, $curl);
+					writeLog($fLog, $logHead."SLOT-REQ-".$hSlot);
+				}
+				$result = curlProc($hSlot, $fLog );
+				if($result != null){
+					$bSlReg = true;
+					// writeLog($fLog, $result);
+					$bInsert = $objServLogic->registerSlotBets($result);
+				}
 			}
-			$result = curlProc($hSlot, $fLog );
-			if($result != null){
-				$bSlReg = true;
-				// writeLog($fLog, $result);
-				$bInsert = $objServLogic->registerSlotBets($result);
-			}
+			
 		}  
 		
 		//슬롯2 게임결과 기록

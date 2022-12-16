@@ -645,7 +645,7 @@ class ServiceLogic
 						$arrIdx['fid'] = $betId;
 				} else {
 					$betId = $betting['bet_fid'];
-					$bResult = $this->modelSlotBet->updateXslot($betId, $bet, $bBlank, $nBlankPt);
+					$bResult = $this->modelSlotBet->updateGslot($betId, $bet, $bBlank, $nBlankPt);
 					writeLog($this->fLog, $logHead."Update BetId=".$betId."=>Result-".$bResult);
 
 				}
