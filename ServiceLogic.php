@@ -464,9 +464,10 @@ class ServiceLogic
 		$url = $arrInfo[0];
 		$arrIdx = getHistoryDate($objConf->conf_idx);
 		
-		$post = 'method=get_game_log';
-		$post.='&agent_code='.trim($arrInfo[1]);
-		$post.='&agent_token='.trim($arrInfo[2]);
+		$arrPost['method'] = "get_game_log";
+        $arrPost['agent_code'] = trim($arrInfo[1]);
+        $arrPost['agent_token'] = trim($arrInfo[2]);
+
 
 		$strStart = "";
 		$strEnd = "";
@@ -481,15 +482,17 @@ class ServiceLogic
 			$strEnd = date('Y-m-d H:i:s', strtotime("+1 month", $tmNow));
 		}
 
-		$post.='&game_type=slot';
-		$post.='&start='.$strStart;
-		$post.='&end='.$strEnd;
-		$post.='&page=0';
-		$post.='&perPage=500';
+		$arrPost['game_type'] = "slot";
+		$arrPost['start'] = $strStart;
+		$arrPost['end'] = $strEnd;
+		$arrPost['page'] = 0;
+		$arrPost['perPage'] = 500;
+
+        $post = json_encode($arrPost);
 
 		writeLog($this->fLog, $logHead."Request Date=".$strStart."~".$strEnd);
 
-		$header =  ['Content-Type: application/x-www-form-urlencoded',
+		$header =  ['Content-Type: application/json',
 			'Content-Length: ' . strlen($post),
 			'Accept: */*'
 		];
