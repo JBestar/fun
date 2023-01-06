@@ -1,0 +1,224 @@
+<?php 
+namespace App\Models;
+
+use CodeIgniter\Model;
+
+class Bet_Model extends Model {
+
+    protected $table      = 'bet_eos5ball';
+    protected $primaryKey = 'bet_fid';
+
+    protected $returnType = 'object'; 
+    protected $allowedFields = ['bet_state', 'bet_emp_fid', 'bet_mb_uid', 'bet_round_fid', 'bet_round_no', 
+    'bet_time', 'bet_mode', 'bet_target', 'bet_ratio', 'bet_money', 'user_before_money', 'user_view_state', 
+    'auto_config_id', 'auto_config_step', 
+    'point_amount', 'employee_amount', 'agency_amount', 'company_amount'];
+    private $mMemberTable = 'member';
+    private $mGameId = 0;
+    public function setType($gameId){
+        $this->mGameId = $gameId;
+        switch($gameId){
+            case GAME_POWER_BALL:   $this->table = 'bet_powerball';   break;
+            case GAME_POWER_LADDER: $this->table = 'bet_powerladder'; break;
+            case GAME_BOGLE_BALL:   $this->table = 'bet_bogleball';   break;
+            case GAME_BOGLE_LADDER: $this->table = 'bet_bogleladder'; break;
+            case GAME_EOS5_BALL:    $this->table = 'bet_eos5ball';    break;
+            case GAME_EOS3_BALL:    $this->table = 'bet_eos3ball';    break;
+            case GAME_COIN5_BALL:   $this->table = 'bet_coin5ball';   break;
+            case GAME_COIN3_BALL:   $this->table = 'bet_coin3ball';   break;
+            case GAME_HAPPY_BALL:   $this->table = 'bet_happyball';   break;
+            default: break;
+        }
+
+    }
+
+    public function gets($count){
+        
+        return $this->orderBy('bet_fid', 'DESC')
+                    ->findAll($count, 0);
+    }
+
+    public function followBet($fid){
+        $where = "auto_config_id = '".$fid."' ";
+        return $this->where($where)
+                    ->findAll(); 
+    }
+    
+    public function register($arrBetData, $objMember){
+        try {             
+            $data = [  
+                'bet_state' => STATE_ACTIVE,
+                'bet_emp_fid' => $objMember->mb_emp_fid,
+                'bet_mb_uid' => $objMember->mb_uid,
+                'bet_round_fid' => $arrBetData['roundid'],
+                'bet_round_no' => $arrBetData['roundno'],
+                'bet_time' => date("Y-m-d H:i:s"),    
+                'bet_mode' => $arrBetData['mode'],
+                'bet_target' => $arrBetData['target'],
+                'bet_ratio' => $arrBetData['ratio'],
+                'bet_money' => $arrBetData['amount'],
+                'user_before_money' => $objMember->mb_money,
+            ];
+            if(array_key_exists('fol_bet', $arrBetData)) {
+                $data['auto_config_id'] = $arrBetData['fol_bet'];
+                $data['auto_config_step'] = $arrBetData['fol_user'];
+            }
+
+            if($this->insert($data))
+                return $this->insertID();
+            else return 0;
+        } catch (\Exception $e) {  
+            return 0;
+        }
+        return 0;
+    }
+
+    function getBetStatist($objUser, $arrRoundData){
+        
+        if(is_null($objUser) || is_null($arrRoundData))
+            return null;
+
+        //3구멍베팅 회수
+        $strSql = " SELECT bet_fid, bet_mode FROM ".$this->table;
+        $strSql.= " WHERE bet_time > '".$arrRoundData['round_date']."' ";
+        $strSql.= " AND bet_mb_uid = '".$objUser->mb_uid."' AND bet_round_no = ".$arrRoundData['round_no'];
+        $strSql.= " AND bet_state = '".STATE_ACTIVE."' AND bet_mode >= '31' AND bet_mode <= '38' ";
+        $strSql.= " GROUP BY bet_mode ";
+
+        $query = $this -> db -> query($strSql);
+        $result = $query -> getResult();
+
+        return $result;
+    }
+
+    public function searchCount($reqData){
+
+        $where = " WHERE bet_mb_uid = '".$reqData['user_id']."' ";
+        $where.= "AND user_view_state = '0' ";
+        if(array_key_exists('date', $reqData) ){
+            $where.= "AND bet_time >= '".$reqData['date']." 00:00:00' ";
+            $where.= "AND bet_time <= '".$reqData['date']." 23:59:59' ";
+        } else {
+            $where.= "AND bet_time >= '".date("Y-m-d H:i:s", strtotime("-1 day", time()))."' ";
+        }
+        
+        $strSql = "SELECT count('bet_fid') as count FROM ".$this->table;
+        $strSql .= $where;
+
+        $query = $this -> db -> query($strSql);
+        $result = $query -> getRow();
+        
+        return $result->count; 
+
+    }
+
+    public function searchList($reqData){
+        $getFields = ['bet_fid', 'bet_state', 'bet_emp_fid', 'bet_mb_uid', 'bet_round_fid', 'bet_round_no',
+            'bet_time', 'bet_mode', 'bet_target', 'bet_ratio', 'bet_money', 'bet_result', 'bet_win_money'];
+
+        $strTbColum = " ".implode(", ", $getFields);
+
+        $where = " WHERE bet_mb_uid = '".$reqData['user_id']."' ";
+        $where.= "AND user_view_state = '0' ";
+        if(array_key_exists('date', $reqData) ){
+            $where.= "AND bet_time >= '".$reqData['date']." 00:00:00' ";
+            $where.= "AND bet_time <= '".$reqData['date']." 23:59:59' ";
+        } else {
+            $where.= "AND bet_time >= '".date("Y-m-d H:i:s", strtotime("-1 day", time()))."' ";
+        }
+        $strSql = " SELECT ".$strTbColum." FROM ".$this->table;
+        $strSql .= $where;
+
+        $page = $reqData['page'];
+        $count = $reqData['count'];
+        if($page < 1)
+            return NULL;
+        if($count < 1)
+            return NULL;
+        if($count > 100)
+            $count = 100;
+        
+        $nStartRow = ($page-1) * $count ;
+
+        $strSql.=" ORDER BY bet_fid DESC LIMIT ".$nStartRow.", ".$count;
+
+        $query = $this -> db -> query($strSql);
+        $result = $query -> getResult();
+        return $result;
+    }
+
+
+    public function getBetSumByMode($arrRoundInfo, $objConf)
+    {
+        $fidPct = 'mb_game_pb_percent';
+        $cntMode = 4;
+        switch($this->mGameId){
+            case GAME_POWER_BALL:   
+            case GAME_HAPPY_BALL:   $fidPct = 'mb_game_pb_percent'; $cntMode = 4; break;
+            case GAME_POWER_LADDER: $fidPct = 'mb_game_ps_percent'; $cntMode = 3; break;
+            case GAME_BOGLE_BALL:   $fidPct = 'mb_game_bb_percent'; $cntMode = 4; break;
+            case GAME_BOGLE_LADDER: $fidPct = 'mb_game_bs_percent'; $cntMode = 3; break;
+            case GAME_EOS5_BALL:    
+            case GAME_EOS3_BALL:    $fidPct = 'mb_game_eo_percent'; $cntMode = 4; break;
+            case GAME_COIN5_BALL:   
+            case GAME_COIN3_BALL:   $fidPct = 'mb_game_co_percent'; $cntMode = 4; break;
+            default: break;
+        } 
+
+        $arrSumData = [];
+        $arrSum = [];
+        $sqlSelect = ' SELECT SUM(bet_money_sum) AS bet_money_allsum FROM ( ';
+        
+        for ($i = 0; $i < $cntMode; $i++ ) {
+            $iMode = $i + 1;
+            if(is_null($objConf))
+                $strSql = $sqlSelect;
+            else $strSql = ' SELECT SUM(bet_money_sum * '.$fidPct.' DIV 100) AS bet_money_allsum FROM ( ';
+            
+            $strSql .= ' SELECT bet_mb_uid, bet_mode, bet_target, bet_ratio, SUM(bet_money) AS bet_money_sum, '.$fidPct.' FROM '.$this->table;
+            $strSql .= ' JOIN '.$this->mMemberTable.' ON '.$this->mMemberTable.'.mb_uid = '.$this->table.'.bet_mb_uid ';
+            $strSql .= " WHERE bet_round_no='".$arrRoundInfo['round_no']."' AND bet_state = '1' ";
+            $strSql .= " AND bet_time > '".$arrRoundInfo['round_start']."' AND bet_time < '".$arrRoundInfo['round_end']."' ";
+            $strSql .= " AND bet_mode='".$iMode."' AND bet_target='P' GROUP BY bet_mb_uid ";
+            $strSql .= ' ) tb_sum ';
+            $objResult = $this->db->query($strSql)->getRow();
+
+            // 유저별 베팅결과 합
+            $nSum = 0;
+            if (!is_null($objResult->bet_money_allsum)) {
+                $nSum = $objResult->bet_money_allsum;
+            }
+            // 게임별 누르기율 계산
+            if(!is_null($objConf))
+                $nSum = $nSum * $objConf->game_percent_1 / 100;
+            $arrSum[0] = (int) $nSum;
+
+            if(is_null($objConf))
+                $strSql = $sqlSelect;
+            else $strSql = ' SELECT SUM(bet_money_sum * '.$fidPct.' DIV 100) AS bet_money_allsum FROM ( ';
+            $strSql .= ' SELECT bet_mb_uid, bet_mode, bet_target, bet_ratio, SUM(bet_money) AS bet_money_sum, '.$fidPct.' FROM '.$this->table;
+            $strSql .= ' JOIN '.$this->mMemberTable.' ON '.$this->mMemberTable.'.mb_uid = '.$this->table.'.bet_mb_uid ';
+            $strSql .= " WHERE bet_round_no='".$arrRoundInfo['round_no']."' AND bet_state = '1' ";
+            $strSql .= " AND bet_time > '".$arrRoundInfo['round_start']."' AND bet_time < '".$arrRoundInfo['round_end']."' ";
+            $strSql .= " AND bet_mode='".$iMode."' AND bet_target='B' GROUP BY bet_mb_uid ";
+            $strSql .= ' ) tb_sum ';
+            $objResult = $this->db->query($strSql)->getRow();
+
+            // 유저별 베팅결과 합
+            $nSum = 0;
+            if (!is_null($objResult->bet_money_allsum)) {
+                $nSum = $objResult->bet_money_allsum;
+            }
+            // 게임별 누르기율 계산
+            if(!is_null($objConf))
+                $nSum = $nSum * $objConf->game_percent_1 / 100;
+            $arrSum[1] = (int) $nSum;
+
+            $arrSumData[$i] = $arrSum;
+        }
+
+        return $arrSumData;
+    }
+
+
+}

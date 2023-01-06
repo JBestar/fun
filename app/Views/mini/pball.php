@@ -1,0 +1,410 @@
+                
+
+                    <!-- content start -->
+                    <div class="content content_mini">
+                        <div class="game_wrap">
+                            <div class="game_area_bg npl_bg">
+                            <?php if($rate->game_index == GAME_BOGLE_BALL) : ?>
+                                <div class="game_area npl_game" style="height: 550px;">
+                                    <iframe
+                                        marginwidth="0"
+                                        marginheight="0"
+                                        frameborder="0"
+                                        scrolling="no"
+                                        id="game"
+                                        loading="lazy"
+                                        class="lazy"
+                                        data-loader="frame"
+                                        src="https://bepick.net/live/bubblepower/scrap"
+                                        style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
+                                    ></iframe>
+                                </div>
+                                <?php elseif($rate->game_index == GAME_EOS5_BALL) : ?>
+                                <div class="game_area npl_game" style="height: 550px;">
+                                    <iframe
+                                        marginwidth="0"
+                                        marginheight="0"
+                                        frameborder="0"
+                                        scrolling="no"
+                                        id="game"
+                                        loading="lazy"
+                                        class="lazy"
+                                        data-loader="frame"
+                                        src="https://bepick.net/live/eosball5m"
+                                        style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
+                                    ></iframe>
+                                </div>
+                                <?php elseif($rate->game_index == GAME_EOS3_BALL) : ?>
+                                <div class="game_area npl_game" style="height: 550px;">
+                                    <iframe
+                                        marginwidth="0"
+                                        marginheight="0"
+                                        frameborder="0"
+                                        scrolling="no"
+                                        id="game"
+                                        loading="lazy"
+                                        class="lazy"
+                                        data-loader="frame"
+                                        src="https://bepick.net/live/eosball3m"
+                                        style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
+                                    ></iframe>
+                                </div>
+                                <?php elseif($rate->game_index == GAME_COIN5_BALL) : ?>
+                                    <!-- https://dr-score.com/minigame/broadcast/coinpowerball5 -->
+                                    <!-- data-width="789"
+                                        data-height="609" -->
+                                <div class="game_area npl_game" style="height: 550px;">
+                                    <iframe
+                                        marginwidth="0"
+                                        marginheight="0"
+                                        frameborder="0"
+                                        scrolling="no"
+                                        id="game"
+                                        loading="lazy"
+                                        class="lazy"
+                                        data-loader="frame"
+                                        data-width="840"
+                                        data-height="650"
+                                        src="https://updown2.com/game/share/coinpowerball5"
+                                        style="transform: scale(0.859375); position: inherit; width: 830px; height: 680px;"
+                                    ></iframe>
+                                </div>
+                                <?php elseif($rate->game_index == GAME_COIN3_BALL) : ?>
+                                    <!-- https://dr-score.com/minigame/broadcast/coinpowerball3 -->
+                                <div class="game_area npl_game" style="height: 550px;">
+                                    <iframe
+                                        marginwidth="0"
+                                        marginheight="0"
+                                        frameborder="0"
+                                        scrolling="no"
+                                        id="game"
+                                        loading="lazy"
+                                        class="lazy"
+                                        data-loader="frame"
+                                        data-width="840"
+                                        data-height="650"
+                                        src="https://updown2.com/game/share/coinpowerball3"
+                                        style="transform: scale(0.859375); position: inherit; width: 830px; height: 680px;"
+                                    ></iframe>
+                                </div>
+                                <?php elseif($rate->game_index == GAME_HAPPY_BALL) : ?>
+                                <div class="game_area npl_game" style="height: 550px;">
+                                    <iframe
+                                        marginwidth="0"
+                                        marginheight="0"
+                                        frameborder="0"
+                                        scrolling="no"
+                                        id="game"
+                                        loading="lazy"
+                                        class="lazy"
+                                        data-loader="frame"
+                                        data-width="840"
+                                        data-height="650"
+                                        src="https://bepick.net/live/happy545/scrap"
+                                        style="transform: scale(0.859375); position: inherit; width: 830px; height: 680px;"
+                                    ></iframe>
+                                </div>
+                                <?php else :?>
+                                <div class="game_area npl_game" style="height: 550px;">
+                                    <iframe
+                                        marginwidth="0"
+                                        marginheight="0"
+                                        frameborder="0"
+                                        scrolling="no"
+                                        id="game"
+                                        loading="lazy"
+                                        class="lazy"
+                                        data-loader="frame"
+                                        src="http://ntry.com/scores/powerball/live.php"
+                                        style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
+                                    ></iframe>
+                                </div>
+                                <?php endif ?>
+                                <!--//game_area -->
+                            </div>
+                            <!--//game_area_bg -->
+                        </div>
+                        <!--//game_wrap -->
+
+                        <div class="betting_area betting_area_flex">
+                            <div class="col_left">
+                                <div class="mobile_header pc_none">
+                                    <div class="tit"><span class="betting_board_date" id="board_date"></span><span class="betting_board_round color_special" id="board_round"></span></div>
+                                    <div class="tit_right">
+                                        <div class="time betting_board_time" id="board_time"></div>
+                                        <img class="betting_board_refresh_btn lazy" src="/images/common/refresh_m_btn.png" style="" />
+                                        <button class="btn btn_hide_video">영상숨기기</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="game_item">
+                                    <div class="game_title">
+                                        <span class="tit">파워볼</span>
+                                        <button class="btn btn_hide_video m_none">영상숨기기</button>
+                                    </div>
+                                    
+                                    <div class="game_content">
+                                        <ul>
+                                            <li class="board_node" id="1">
+                                                <div class="bet bet_left large btn_select" id="1" pc="NPL">
+                                                    <div><span class="game_side blue">홀</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_1?></span>
+                                                </div>
+                                                <div class="vs">vs</div>
+                                                <div class="bet bet_right large btn_select" id="2" pc="NPL">
+                                                    <div><span class="game_side red">짝</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_1?></span>
+                                                </div>
+                                            </li>
+
+                                            <li class="board_node" id="2">
+                                                <div class="bet bet_left large btn_select" id="1" pc="NPL">
+                                                    <div><span class="game_side blue">언더</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_2?></span>
+                                                </div>
+                                                <div class="vs">vs</div>
+                                                <div class="bet bet_right large btn_select" id="2" pc="NPL">
+                                                    <div><span class="game_side red">오버</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_2?></span>
+                                                </div>
+                                            </li>
+
+                                            <li class="board_node" id="5">
+                                                <div class="bet bet_left small btn_select" id="1" pc="NPLC">
+                                                    <div><span class="game_side blue">홀</span><span class="game_side blue">언더</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_5?></span>
+                                                </div>
+                                                <div class="bet bet_left small btn_select" id="2" pc="NPLC">
+                                                    <div><span class="game_side blue">홀</span><span class="game_side red">오버</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_6?></span>
+                                                </div>
+                                                <div class="break_flex pc_none"></div>
+                                                <div class="bet bet_right small btn_select" id="3" pc="NPLC">
+                                                    <div><span class="game_side red">짝</span><span class="game_side blue">언더</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_7?></span>
+                                                </div>
+                                                <div class="bet bet_right small btn_select" id="4" pc="NPLC">
+                                                    <div><span class="game_side red">짝</span><span class="game_side red">오버</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_8?></span>
+                                                </div>
+                                            </li>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="game_item">
+                                    <div class="game_title">
+                                        <span class="tit">일반볼</span>
+                                    </div>
+                                    <div class="game_content">
+                                        <ul>
+                                            <li class="board_node" id="3">
+                                                <div class="bet bet_left large btn_select" id="1" pc="NPL">
+                                                    <div><span class="game_side blue">홀</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_3?></span></div>
+                                                <div class="vs">vs</div>
+                                                <div class="bet bet_right large btn_select" id="2" pc="NPL">
+                                                    <div><span class="game_side red">짝</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_3?></span></div>
+                                            </li>
+
+                                            <li class="board_node" id="4">
+                                                <div class="bet bet_left large btn_select" id="1" pc="NPL">
+                                                    <div><span class="game_side blue">언더</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_4?></span></div>
+                                                <div class="vs">vs</div>
+                                                <div class="bet bet_right large btn_select" id="2" pc="NPL">
+                                                    <div><span class="game_side red">오버</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_4?></span></div>
+                                            </li>
+                                            <li class="board_node" id="6">
+                                                <div class="bet bet_left small btn_select" id="1" pc="NPLC">
+                                                    <div><span class="game_side blue">홀</span><span class="game_side blue">언더</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_9?></span></div>
+                                                <div class="bet bet_left small btn_select" id="2" pc="NPLC">
+                                                    <div><span class="game_side blue">홀</span><span class="game_side red">오버</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_10?></span></div>
+                                                <div class="break_flex pc_none"></div>
+                                                <div class="bet bet_right small btn_select" id="3" pc="NPLC">
+                                                    <div><span class="game_side red">짝</span><span class="game_side blue">언더</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_11?></span></div>
+                                                <div class="bet bet_right small btn_select" id="4" pc="NPLC">
+                                                    <div><span class="game_side red">짝</span><span class="game_side red">오버</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_12?></span></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <?php if(!array_key_exists('bet.nl_deny', $_ENV) || !$_ENV['bet.nl_deny']) : ?>
+                                <div class="game_item">
+                                    <div class="game_title">
+                                        <span class="tit">일반볼 대중소</span>
+                                    </div>
+                                    <div class="game_content">
+                                        <ul>
+                                            <li class="board_node" id="7">
+                                                <div class="bet bet_left medium btn_select" id="1" pc="NPLC">
+                                                    <div><span class="game_side blue">홀</span><span class="game_side red">대</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_21?></span></div>
+                                                <div class="bet bet_left medium btn_select" id="2" pc="NPLC">
+                                                    <div><span class="game_side blue">홀</span><span class="game_side green">중</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_22?></span></div>
+                                                <div class="bet bet_left medium btn_select" id="3" pc="NPLC">
+                                                    <div><span class="game_side blue">홀</span><span class="game_side blue">소</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_23?></span></div>
+                                            </li>
+                                            <li class="board_node" id="7">
+                                                <div class="bet bet_right medium btn_select" id="4" pc="NPLC">
+                                                    <div><span class="game_side red">짝</span><span class="game_side red">대</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_24?></span></div>
+                                                <div class="bet bet_right medium btn_select" id="5" pc="NPLC">
+                                                    <div><span class="game_side red">짝</span><span class="game_side green">중</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_25?></span></div>
+                                                <div class="bet bet_right medium btn_select" id="6" pc="NPLC">
+                                                    <div><span class="game_side red">짝</span><span class="game_side blue">소</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_26?></span></div>
+                                            </li>
+                                            <li class="board_node" id="8">
+                                                <div class="bet bet_left medium btn_select" id="1" pc="NPL">
+                                                    <div><span class="game_side red">대</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_27?></span></div>
+                                                <div class="bet bet_right medium btn_select" id="2" pc="NPL">
+                                                    <div><span class="game_side green">중</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_28?></span></div>
+                                                <div class="bet bet_left medium btn_select" id="3" pc="NPL">
+                                                    <div><span class="game_side blue">소</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_29?></span></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <?php endif ?>
+
+                                <?php if(!array_key_exists('bet.np_deny', $_ENV) || !$_ENV['bet.np_deny']) : ?>
+                                <div class="game_item">
+                                    <div class="game_title">
+                                        <span class="tit">일반볼 + 파워볼 조합</span>
+                                    </div>
+                                    <div class="game_content">
+                                        <ul>
+                                            <li class="board_node" id="9">
+                                                <div class="bet bet_left small btn_select" id="1" pc="NPLC">
+                                                    <div><span class="game_side blue">일 홀</span><span class="game_side blue">파 홀</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_13?></span></div>
+                                                <div class="bet bet_left small btn_select" id="2" pc="NPLC">
+                                                    <div><span class="game_side blue">일 홀</span><span class="game_side red">파 짝</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_14?></span></div>
+                                                <div class="break_flex pc_none"></div>
+                                                <div class="bet bet_right small btn_select" id="3" pc="NPLC">
+                                                    <div><span class="game_side red">일 짝</span><span class="game_side blue">파 홀</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_15?></span></div>
+                                                <div class="bet bet_right small btn_select" id="4" pc="NPLC">
+                                                    <div><span class="game_side red">일 짝</span><span class="game_side red">파 짝</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_16?></span></div>
+                                            </li>
+                                            <li class="board_node" id="9">
+                                                <div class="bet bet_left small btn_select" id="5" pc="NPLC">
+                                                    <div><span class="game_side blue">일 언</span><span class="game_side blue">파 언</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_17?></span></div>
+                                                <div class="bet bet_left small btn_select" id="6" pc="NPLC">
+                                                    <div><span class="game_side blue">일 언</span><span class="game_side red">파 오</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_18?></span></div>
+                                                <div class="break_flex pc_none"></div>
+                                                <div class="bet bet_right small btn_select" id="7" pc="NPLC">
+                                                    <div><span class="game_side red">일 오</span><span class="game_side blue">파 언</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_19?></span></div>
+                                                <div class="bet bet_right small btn_select" id="8" pc="NPLC">
+                                                    <div><span class="game_side red">일 오</span><span class="game_side red">파 오</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_20?></span></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <?php endif ?>
+
+                                <?php if(!array_key_exists('bet.n2p_deny', $_ENV) || !$_ENV['bet.n2p_deny']) : ?>
+                                <div class="game_item">
+                                    <div class="game_title">
+                                        <span class="tit">일반볼조합 + 파워볼 홀짝</span>
+                                    </div>
+                                    <div class="game_content">
+                                        <ul>
+                                            <li class="board_node" id="10">
+                                                <div class="bet bet_left large btn_select" id="1" pc="NPLC">
+                                                    <div><span class="game_side blue">홀</span><span class="game_side blue">언더</span><span class="game_side blue">파 홀</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_31?></span></div>
+                                                <div class="bet bet_left large btn_select" id="2" pc="NPLC">
+                                                    <div><span class="game_side blue">홀</span><span class="game_side blue">언더</span><span class="game_side red">파 짝</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_31?></span></div>
+                                                <div class="break_flex pc_none"></div>
+                                            </li>
+                                            <li class="board_node" id="10">
+                                                <div class="bet bet_right large btn_select" id="3" pc="NPLC">
+                                                    <div><span class="game_side blue">홀</span><span class="game_side red">오버</span><span class="game_side blue">파 홀</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_31?></span></div>
+                                                <div class="bet bet_right large btn_select" id="4" pc="NPLC">
+                                                    <div><span class="game_side blue">홀</span><span class="game_side red">오버</span><span class="game_side red">파 짝</span></div>
+                                                   <span class="rate game_rate"><?=$rate->game_ratio_31?></span></div>
+                                            </li>
+                                            <li class="board_node" id="10">
+                                                <div class="bet bet_left large btn_select" id="5" pc="NPLC">
+                                                    <div><span class="game_side red">짝</span><span class="game_side blue">언더</span><span class="game_side blue">파 홀</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_31?></span></div>
+                                                <div class="bet bet_left large btn_select" id="6" pc="NPLC">
+                                                    <div><span class="game_side red">짝</span><span class="game_side blue">언더</span><span class="game_side red">파 짝</span></div>
+                                                   <span class="rate game_rate"><?=$rate->game_ratio_31?></span></div>
+                                                <div class="break_flex pc_none"></div>
+                                            </li>
+                                            <li class="board_node" id="10">
+                                                <div class="bet bet_right large btn_select" id="7" pc="NPLC">
+                                                    <div><span class="game_side red">짝</span><span class="game_side red">오버</span><span class="game_side blue">파 홀</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_31?></span></div>
+                                                <div class="bet bet_right large btn_select" id="8" pc="NPLC">
+                                                    <div><span class="game_side red">짝</span><span class="game_side red">오버</span><span class="game_side red">파 짝</span></div>
+                                                    <span class="rate game_rate"><?=$rate->game_ratio_31?></span></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <?php endif ?>
+
+                                <?php if(!array_key_exists('bet.pn_deny', $_ENV) || !$_ENV['bet.pn_deny']) : ?>
+                                <div class="game_item">
+                                    <div class="game_title">
+                                        <span class="tit">파워볼 맞추기</span>
+                                    </div>
+                                    <div class="game_content">
+                                        <ul>
+                                            <li class="board_node" id="11">
+                                                <div class="bet bet_left x_small btn_select" id="0" pc="NPLC"><span class="game_side blue"><b>0</b></span><span class="rate game_rate"><?=$rate->game_ratio_30?></span></div>
+                                                <div class="bet bet_right x_small btn_select" id="1" pc="NPLC"><span class="game_side red"><b>1</b></span><span class="rate game_rate"><?=$rate->game_ratio_30?></span></div>
+                                                <div class="bet bet_left x_small btn_select" id="2" pc="NPLC"><span class="game_side green"><b>2</b></span><span class="rate game_rate"><?=$rate->game_ratio_30?></span></div>
+                                                <div class="bet bet_right x_small btn_select" id="3" pc="NPLC"><span class="game_side blue"><b>3</b></span><span class="rate game_rate"><?=$rate->game_ratio_30?></span></div>
+                                                <div class="bet bet_left x_small btn_select" id="4" pc="NPLC"><span class="game_side red"><b>4</b></span><span class="rate game_rate"><?=$rate->game_ratio_30?></span></div>
+                                            </li>
+                                            <li class="board_node" id="11">
+                                                <div class="bet bet_left x_small btn_select" id="5" pc="NPLC"><span class="game_side blue"><b>5</b></span><span class="rate game_rate"><?=$rate->game_ratio_30?></span></div>
+                                                <div class="bet bet_right x_small btn_select" id="6" pc="NPLC"><span class="game_side red"><b>6</b></span><span class="rate game_rate"><?=$rate->game_ratio_30?></span></div>
+                                                <div class="bet bet_left x_small btn_select" id="7" pc="NPLC"><span class="game_side green"><b>7</b></span><span class="rate game_rate"><?=$rate->game_ratio_30?></span></div>
+                                                <div class="bet bet_right x_small btn_select" id="8" pc="NPLC"><span class="game_side blue"><b>8</b></span><span class="rate game_rate"><?=$rate->game_ratio_30?></span></div>
+                                                <div class="bet bet_left x_small btn_select" id="9" pc="NPLC"><span class="game_side red"><b>9</b></span><span class="rate game_rate"><?=$rate->game_ratio_30?></span></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <?php endif ?>
+                            </div>
+                            <!--//col_left -->
+                        </div>
+                        <!--//betting_area -->
+
+                        <script src="/js/mini/worker_sec.js"></script>
+                        <?php if(array_key_exists("app.produce", $_ENV)) :?>
+                            <script src="<?php echo base_url('/js/mini/npb_res.js?t='.time());?>"></script>
+                        <?php else : ?>
+                            <script src="<?php echo base_url('/js/mini/npb_res.js?v=1');?>"></script>
+                        <?php endif ?>
+
+                        

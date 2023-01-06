@@ -1,0 +1,824 @@
+<?php
+
+  	function is_login(){ 
+      if(!isset($_SESSION['logged_in']))
+        return false;
+      else if($_SESSION['logged_in']==TRUE)
+        return true;
+      else return false;  
+  	}
+
+    //사이드바의 선택상태 초기화 배렬을 반환해주는 함수
+    
+    function getNavInfo($objUser = NULL) {
+
+      $navInfo= array(
+          'user_id' => '',
+          'user_name' => '',
+          'user_grade' => GRADE_1,
+          'user_money' => '0',
+          'user_point' => '0',
+          'user_off' => false,
+      );
+      if(!is_null($objUser)){
+        $navInfo['user_id'] = $objUser->mb_uid;
+        $navInfo['user_name'] = $objUser->mb_nickname;
+        $navInfo['user_grade'] = $objUser->mb_grade;
+        $navInfo['user_money'] = number_format(allMoney($objUser));
+        $navInfo['user_point'] = number_format(intval($objUser->mb_point));
+        $navInfo['user_off'] = intval($objUser->mb_state_delete) > 0;
+      }
+
+      return $navInfo;
+    }
+
+    function getUserInfo($objUser, $objEmp = null) {
+
+      $userInfo['user_id'] = $objUser->mb_uid;
+      $userInfo['user_name'] = $objUser->mb_nickname;
+      $userInfo['user_grade'] = $objUser->mb_grade;
+      $userInfo['user_money'] = number_format(allMoney($objUser));
+      $userInfo['user_point'] = number_format(intval($objUser->mb_point));
+      $userInfo['user_off'] = intval($objUser->mb_state_delete) > 0;
+      $userInfo['user_bank_name'] = $objUser->mb_bank_name;
+
+      $len = mb_strlen($objUser->mb_bank_own);
+      $own = $objUser->mb_bank_own;
+      if($len > 1){
+        $own = mb_substr($objUser->mb_bank_own, 0, 1);
+        $own.= str_repeat('*', $len - 1);
+      }
+      $userInfo['user_bank_own'] = $own;
+
+      $len = mb_strlen($objUser->mb_bank_num);
+      $num = $objUser->mb_bank_num;
+      if($len > 2){
+        $num = mb_substr($objUser->mb_bank_num, 0, 2);
+        $num.= str_repeat('*', $len - 2);
+      }
+      $userInfo['user_bank_num'] = $num;
+      $userInfo['user_phone'] = $objUser->mb_phone;
+      $userInfo['user_join_at'] = $objUser->mb_time_join;
+      $userInfo['user_login_last'] = $objUser->mb_time_last;
+      $userInfo['user_ip_last'] = $objUser->mb_ip_last;
+      if($objEmp != null)
+        $userInfo['user_emp'] = $objEmp->mb_uid;
+      else
+        $userInfo['user_emp'] = "";
+
+      return $userInfo;
+    }
+
+    function getMiniInfo() {
+
+      $navInfo= array(
+          'gm_ref' => '',
+          'gm_bgb' => '',
+          'gm_bgl' => '',
+          'gm_e5' => '',
+          'gm_e3' => '',
+          'gm_c5' => '',
+          'gm_c3' => '',
+          'gm_bg' => '',
+          'gm_eos' => '',
+          'gm_co' => '',
+          'gm_hpb' => '',
+          'ls_rnd' => '',
+          'ls_bet' => '',
+      );
+      
+      return $navInfo;
+    }
+
+    function getDatesInfo() {
+      $tmNow = time();
+      return array(
+        date('Y/m/d', $tmNow),
+        date('Y/m/d', strtotime("-1 day", $tmNow)),
+        date('Y/m/d', strtotime("-2 days", $tmNow)),
+        date('Y/m/d', strtotime("-3 days", $tmNow)),
+        date('Y/m/d', strtotime("-4 days", $tmNow)),
+      );
+    }
+    //회차시작시간과 마감시간, 베팅초과시간 계산하는 함수-파워볼, 파워사다리
+    function getPbRoundTimes($objConfPb, $bAdvance = true){
+
+      //date_default_timezone_set('Asia/Seoul');
+      //$tmNow = mktime('23','59','40','5','25','2021')+TM_OFFSET;
+      $tmNow = time()+ ($bAdvance ? ADVANCE_SEC:0);
+      $nYear = date("Y",$tmNow);
+      $nMonth = date("m",$tmNow);
+      $nDay = date("d",$tmNow);
+
+      $nHour = date("G",$tmNow);
+      $nMin = date("i",$tmNow);
+
+      $nSumMinutes = $nHour * 60 + $nMin ;
+      $nRoundNo = floor($nSumMinutes / 5) ;
+      $nRoundNo = $nRoundNo % 288 + 1;
+      $arrRoundInfo['round_no'] = $nRoundNo;
+
+      $strDate = "";
+      if($nSumMinutes < 1440){
+        $strDate = date( 'Y-m-d', $tmNow );
+      }
+      else {
+        $strDate = date('Y-m-d', strtotime("+1 day", $tmNow));
+      }
+
+      $arrRoundInfo['round_date'] = $strDate;
+
+      $nSumMinutes = $nRoundNo * 5 ;
+      $nHour = $nSumMinutes / 60;
+      $nHour = floor($nHour);
+      $nMinute = $nSumMinutes % 60;
+
+      //현재시간설정      
+      $tmRoundCurrent = date("Y-m-d H:i:s", time());        
+      $arrRoundInfo['round_current'] = $tmRoundCurrent;
+
+      //회차 마감시간설정
+      $strRoundEnd = $strDate." ".$nHour.":".$nMinute.":"."0";
+      $tmRoundEnd = strtotime($strRoundEnd);
+      if($bAdvance)
+        $tmRoundEnd = strtotime("-".ADVANCE_SEC." seconds", $tmRoundEnd);
+      $arrRoundInfo['round_end'] = date("Y-m-d H:i:s", $tmRoundEnd);
+      
+      //회차 시작시간설정
+      $tmRoundStart = strtotime("-5 minutes", $tmRoundEnd);
+      $arrRoundInfo['round_start'] = date("Y-m-d H:i:s", $tmRoundStart);
+      
+      $tmBetEnd = 0;
+      //베팅 마감시간설정
+      if($objConfPb->game_time_countdown >= 20 && $objConfPb->game_time_countdown <= 280 ) {
+        //$objConfPb->game_time_countdown += 5;
+        $tmBetEnd = strtotime("-".$objConfPb->game_time_countdown." seconds", $tmRoundEnd);      
+      } else $tmBetEnd = strtotime("-1 minutes", $tmRoundEnd); 
+
+      $arrRoundInfo['round_bet_end'] = date("Y-m-d H:i:s", $tmBetEnd);
+      
+      return $arrRoundInfo;
+    }
+
+    //회차번호로부터 회차시작시간과 마감시간, 베팅초과시간 계산하는 함수-보글파워볼
+    function getBbRoundTimes($objConf){
+
+      $tmNow = time();
+      $nYear = date("Y",$tmNow);
+      $nMonth = date("m",$tmNow);
+      $nDay = date("d",$tmNow);
+
+      $nHour = date("G",$tmNow);
+      $nMin = date("i",$tmNow);
+      //$second = date("s",$tmNow);
+
+      $nSumMinutes = $nHour * 60 + $nMin;
+      $nRoundNo = floor($nSumMinutes / 2) ;
+      $nRoundNo = $nRoundNo % 720 + 1;
+      $arrRoundInfo['round_no'] = $nRoundNo;
+
+      $strDate = date( 'Y-m-d', $tmNow );
+      $arrRoundInfo['round_date'] = $strDate;
+
+      $nSumMinutes = $nRoundNo * 2 ;
+      $nHour = $nSumMinutes / 60;
+      $nHour = floor($nHour);
+      $nMinute = $nSumMinutes % 60;
+
+      //현재시간설정      
+      $tmRoundCurrent = date("Y-m-d H:i:s", $tmNow);        
+      $arrRoundInfo['round_current'] = $tmRoundCurrent;
+
+      //회차 마감시간설정
+      $strRoundEnd = $strDate." ".$nHour.":".$nMinute.":"."0";
+      $tmRoundEnd = strtotime($strRoundEnd);
+      $arrRoundInfo['round_end'] = date("Y-m-d H:i:s", $tmRoundEnd);
+      
+      //회차 시작시간설정
+      $tmRoundStart = strtotime("-2 minutes", $tmRoundEnd);
+      $arrRoundInfo['round_start'] = date("Y-m-d H:i:s", $tmRoundStart);
+      
+      $tmBetEnd = 0;
+      //베팅 마감시간설정
+      if($objConf->game_bet_permit != PERMIT_OK){
+        $tmBetEnd = $tmRoundStart;
+      } else if($objConf->game_time_countdown >= 20 && $objConf->game_time_countdown <= 90 ) {
+        //$objConf->game_time_countdown += 5;
+        $tmBetEnd = strtotime("-".$objConf->game_time_countdown." seconds", $tmRoundEnd);      
+      } else $tmBetEnd = strtotime("-1 minutes", $tmRoundEnd); 
+
+      $arrRoundInfo['round_bet_end'] = date("Y-m-d H:i:s", $tmBetEnd);
+      
+      return $arrRoundInfo;
+    }
+
+    
+    //회차번호로부터 회차시작시간과 마감시간, 베팅초과시간 계산하는 함수-보글사다리
+    function getBsRoundTimes($objConf){
+
+      $tmNow = time();
+      $nYear = date("Y",$tmNow);
+      $nMonth = date("m",$tmNow);
+      $nDay = date("d",$tmNow);
+
+      $nHour = date("G",$tmNow);
+      $nMin = date("i",$tmNow);
+      //$second = date("s",$tmNow);
+
+      $nSumMinutes = $nHour * 60 + $nMin;
+      $nRoundNo = floor($nSumMinutes / 3) ;
+      $nRoundNo = $nRoundNo % 480 + 1;
+      $arrRoundInfo['round_no'] = $nRoundNo;
+
+      $strDate = date( 'Y-m-d', $tmNow );
+      $arrRoundInfo['round_date'] = $strDate;
+
+      $nSumMinutes = $nRoundNo * 3 ;
+      $nHour = $nSumMinutes / 60;
+      $nHour = floor($nHour);
+      $nMinute = $nSumMinutes % 60;
+
+      //현재시간설정      
+      $tmRoundCurrent = date("Y-m-d H:i:s", $tmNow);        
+      $arrRoundInfo['round_current'] = $tmRoundCurrent;
+
+      //회차 마감시간설정
+      $strRoundEnd = $strDate." ".$nHour.":".$nMinute.":"."0";
+      $tmRoundEnd = strtotime($strRoundEnd);
+      $arrRoundInfo['round_end'] = date("Y-m-d H:i:s", $tmRoundEnd);
+      
+      //회차 시작시간설정
+      $tmRoundStart = strtotime("-3 minutes", $tmRoundEnd);
+      $arrRoundInfo['round_start'] = date("Y-m-d H:i:s", $tmRoundStart);
+      
+      $tmBetEnd = 0;
+      //베팅 마감시간설정
+      if($objConf->game_bet_permit != PERMIT_OK){
+        $tmBetEnd = $tmRoundStart;
+      } else if($objConf->game_time_countdown >= 20 && $objConf->game_time_countdown <= 150 ) {
+        //$objConf->game_time_countdown += 5;
+        $tmBetEnd = strtotime("-".$objConf->game_time_countdown." seconds", $tmRoundEnd);      
+      } else $tmBetEnd = strtotime("-1 minutes", $tmRoundEnd); 
+
+      $arrRoundInfo['round_bet_end'] = date("Y-m-d H:i:s", $tmBetEnd);
+      
+      return $arrRoundInfo;
+    }
+
+
+    
+    function calcRoundId($objLastRound, &$arrRoundData) {
+      $iResult = 0;   //0:비정상 1:정상
+      if($objLastRound->round_date == $arrRoundData['round_date']){
+        $arrRoundData['round_id'] = $objLastRound->round_fid + $arrRoundData['round_no'] - $objLastRound->round_num;
+        $iResult = 1;
+        
+      } else if($objLastRound->round_date < $arrRoundData['round_date']){
+        
+        $date1 = date_create($objLastRound->round_date);
+        $date2 = date_create($arrRoundData['round_date']);
+        
+        $dtDiff = date_diff($date1, $date2);
+        $nRoundDiff = $dtDiff->days*288 + $arrRoundData['round_no'] - $objLastRound->round_num;
+        $arrRoundData['round_id'] = $objLastRound->round_fid + $nRoundDiff;
+        if($nRoundDiff > 0 && $nRoundDiff < 300)
+          $iResult = 1;
+        
+      } else {
+        $arrRoundData['round_id'] = $objLastRound->round_fid + 1;
+      }
+      return $iResult;
+    }
+
+    
+    function InvalidGameTime(){
+
+      $tmNow = time()+ADVANCE_SEC;
+      
+      $nHour = date("G",$tmNow);
+      $nMin = date("i",$tmNow);
+
+      $nMinSum = $nHour * 60 + $nMin;
+      if($nMinSum <= 365)
+        return true;
+      return false;
+
+    }
+
+    function getMemberState($objMember, $iGame){
+      if(is_null($objMember))
+            return false;
+        else if($objMember->mb_state_active != STATE_ACTIVE)
+            return false;
+        else if($iGame > 0 && getStateByGame($objMember, $iGame) != PERMIT_OK) {
+            return false;  
+        }
+        return true;
+    }
+
+    function getStateByGame($objMember, $iGame){
+
+      switch($iGame){
+          case GAME_POWER_BALL: 
+          case GAME_HAPPY_BALL: return $objMember->mb_game_pb;
+          case GAME_POWER_LADDER: return $objMember->mb_game_ps;
+          case GAME_CASINO_KGON:
+          case GAME_CASINO_EVOL: return $objMember->mb_game_cs;
+          case GAME_BOGLE_BALL: return $objMember->mb_game_bb;
+          case GAME_BOGLE_LADDER: return $objMember->mb_game_bs;
+          case GAME_SLOT_1: 
+          case GAME_SLOT_2: 
+          case GAME_SLOT_3:     return $objMember->mb_game_sl;
+          case GAME_EOS5_BALL: 
+          case GAME_EOS3_BALL:  return $objMember->mb_game_eo;
+          case GAME_COIN5_BALL: 
+          case GAME_COIN3_BALL:  return $objMember->mb_game_co;
+          default: break;
+      } 
+      return 0;
+    }
+
+    //회차번호로부터 베팅가능성 계산하는 함수
+    function isEnableBet(&$arrBetData, $objUser, $objConf, $arrRoundData){
+
+      //0:오류 1:정상 2:유저베팅차단 3:전체베팅차단 4:최소금액오류 5:최대금액오류 6:보유머니 부족 7:적중최고금액 초과 
+      if(is_null( $objConf)) return 0;
+      if(is_null( $objUser)) return 0;
+
+      if (!array_key_exists("roundno", $arrBetData))
+        return 0;
+      
+      if($arrRoundData['round_no'] != $arrBetData['roundno']) return 0;
+
+      //게임 베팅가능성
+      if($objConf->game_bet_permit == STATE_DISABLE) return 3;
+
+      //유저 베팅 가능성
+      if($objUser->mb_state_active != STATE_ACTIVE || getStateByGame($objUser, $arrBetData['game']) != STATE_ACTIVE) 
+        return 2;
+      //상부회원 상태정보
+      if($objUser->emp_state_active != STATE_ACTIVE) return 2;
+
+      //베팅요청정보 체크
+      if($arrBetData['roundid'] < 1 ) return 0;
+      if($arrBetData['mode'] < 1 || $arrBetData['mode'] > 38) return 0;
+      if($arrBetData['amount'] < 1) return 0;
+
+      //금액 조건 체크
+      $arrBetData['amount'] = (int)($arrBetData['amount']);
+      if($arrBetData['amount'] > $objUser->mb_money)  return 6;
+
+
+      $tmCurrent = date("Y-m-d H:i:s", time()); 
+
+      if($tmCurrent < $arrRoundData['round_start'] || $tmCurrent > $arrRoundData['round_bet_end']){
+          return 0;        
+      }
+
+      if(strlen($arrBetData['target']) < 1)
+        return 0;
+
+      $ratioBet = "";
+      $nMode = (int)($arrBetData['mode']);
+
+
+      if(array_key_exists('bet.nl_deny', $_ENV) && $_ENV['bet.nl_deny']) {
+        if($nMode >= 21 && $nMode <= 29)
+          return 0;
+      }
+      if(array_key_exists('bet.np_deny', $_ENV) && $_ENV['bet.np_deny']) {
+        if($nMode >= 13 && $nMode <= 20)
+          return 0;
+      }
+      if(array_key_exists('bet.n2p_deny', $_ENV) && $_ENV['bet.n2p_deny']) {
+        if($nMode >= 31 && $nMode <= 38)
+          return 0;
+      }
+      if(array_key_exists('bet.pn_deny', $_ENV) && $_ENV['bet.pn_deny']) {
+        if($nMode == 30)
+          return 0;
+      }
+
+      $iType = 0; 
+      if($arrBetData['game'] == GAME_POWER_BALL || $arrBetData['game'] == GAME_BOGLE_BALL
+        || ( $arrBetData['game'] >= GAME_EOS5_BALL && $arrBetData['game'] <= GAME_COIN3_BALL) 
+        || $arrBetData['game'] == GAME_HAPPY_BALL) {
+
+         switch ($nMode) {
+           case 1: $ratioBet = $objConf->game_ratio_1; $iType = 1; break;
+           case 2: $ratioBet = $objConf->game_ratio_2; $iType = 1; break;
+           case 3: $ratioBet = $objConf->game_ratio_3; $iType = 1; break;
+           case 4: $ratioBet = $objConf->game_ratio_4; $iType = 1; break;
+           case 5: $ratioBet = $objConf->game_ratio_5; $iType = 2; break;
+           case 6: $ratioBet = $objConf->game_ratio_6; $iType = 2; break;
+           case 7: $ratioBet = $objConf->game_ratio_7; $iType = 2; break;
+           case 8: $ratioBet = $objConf->game_ratio_8; $iType = 2; break;
+           case 9: $ratioBet = $objConf->game_ratio_9; $iType = 3; break;
+           case 10: $ratioBet = $objConf->game_ratio_10; $iType = 3; break;
+           case 11: $ratioBet = $objConf->game_ratio_11; $iType = 3; break;
+           case 12: $ratioBet = $objConf->game_ratio_12; $iType = 3; break;
+           case 13: $ratioBet = $objConf->game_ratio_13; $iType = 4; break;
+           case 14: $ratioBet = $objConf->game_ratio_14; $iType = 4; break;
+           case 15: $ratioBet = $objConf->game_ratio_15; $iType = 4; break;
+           case 16: $ratioBet = $objConf->game_ratio_16; $iType = 4; break;
+           case 17: $ratioBet = $objConf->game_ratio_17; $iType = 4; break;
+           case 18: $ratioBet = $objConf->game_ratio_18; $iType = 4; break;
+           case 19: $ratioBet = $objConf->game_ratio_19; $iType = 4; break;
+           case 20: $ratioBet = $objConf->game_ratio_20; $iType = 4; break;
+           case 21: $ratioBet = $objConf->game_ratio_21; $iType = 5; break;
+           case 22: $ratioBet = $objConf->game_ratio_22; $iType = 5; break;
+           case 23: $ratioBet = $objConf->game_ratio_23; $iType = 5; break;
+           case 24: $ratioBet = $objConf->game_ratio_24; $iType = 5; break;
+           case 25: $ratioBet = $objConf->game_ratio_25; $iType = 5; break;
+           case 26: $ratioBet = $objConf->game_ratio_26; $iType = 5; break;
+           case 27: $ratioBet = $objConf->game_ratio_27; $iType = 5;  break;
+           case 28: $ratioBet = $objConf->game_ratio_28; $iType = 5;  break;
+           case 29: $ratioBet = $objConf->game_ratio_29; $iType = 5;  break;
+           case 30: $ratioBet = $objConf->game_ratio_30; $iType = 7;  break;
+           case 31:
+           case 32:
+           case 33:
+           case 34:
+           case 35:
+           case 36:
+           case 37:
+           case 38: $ratioBet = $objConf->game_ratio_31; $iType = 6; break;
+           default: break;
+         }
+      } else {
+        switch ($nMode) {
+          case 1: $ratioBet = $objConf->game_ratio_1; $iType = 1; break;
+          case 2: $ratioBet = $objConf->game_ratio_2; $iType = 1; break;
+          case 3: $ratioBet = $objConf->game_ratio_3; $iType = 1; break;
+          case 4: $ratioBet = $objConf->game_ratio_4; $iType = 2; break;
+          case 5: $ratioBet = $objConf->game_ratio_5; $iType = 2; break;
+          case 6: $ratioBet = $objConf->game_ratio_6; $iType = 2; break;
+          case 7: $ratioBet = $objConf->game_ratio_7; $iType = 2; break;
+          default: break;
+        }
+
+      }
+
+      if(strlen($ratioBet) < 1)   return 0;
+
+      $arrBetData['ratio'] = floatval($ratioBet);
+      $arrLimit = getLimitAmount($objConf, $iType);
+      if($arrLimit[0] > 0 && $arrBetData['amount'] < $arrLimit[0])  return 4;   //최소베팅금액 미달
+      if($arrLimit[1] > 0 && $arrBetData['amount'] > $arrLimit[1])  return 5;   //최대베팅금액 초과
+      if($arrLimit[2] > 0 && $arrBetData['amount'] * $arrBetData['ratio'] > $arrLimit[2]) return 7; //최대적중금액 초과
+
+      return 1;
+    }
+
+    //회차번호로부터 베팅가능성 계산하는 함수
+    function isEnableApiBet(&$arrBetData, $objUser, $objConf, $arrRoundData){
+
+      //0:오류 1:정상 3:베팅차단 4:최소금액오류 5:최대금액오류 6:보유머니 부족 7:적중최고금액 초과 
+      if(is_null( $objConf)) return 0;
+      if(is_null( $objUser)) return 0;
+
+      //게임 베팅가능성
+      if($objConf->game_bet_permit == STATE_DISABLE) return 3;
+
+      //유저 베팅 가능성
+      if($objUser->mb_state_active != STATE_ACTIVE || getStateByGame($objUser, $arrBetData['game']) != STATE_ACTIVE) 
+        return 3;
+      //상부회원 상태정보
+      if($objUser->emp_state_active != STATE_ACTIVE) return 3;
+
+      if($arrBetData['amount'] < 1) return 0;
+
+      //금액 조건 체크
+      $arrBetData['amount'] = (int)($arrBetData['amount']);
+      if($arrBetData['amount'] > $objUser->mb_money)  return 6;
+
+      if(strlen($arrBetData['target']) < 1)
+        return 0;
+
+
+      $ratioBet = "";
+      $nMode = (int)($arrBetData['mode']);
+      
+      if(array_key_exists('bet.nl_deny', $_ENV) && $_ENV['bet.nl_deny']) {
+        if($nMode >= 21 && $nMode <= 29)
+          return 0;
+      }
+      if(array_key_exists('bet.np_deny', $_ENV) && $_ENV['bet.np_deny']) {
+        if($nMode >= 13 && $nMode <= 20)
+          return 0;
+      }
+      if(array_key_exists('bet.n2p_deny', $_ENV) && $_ENV['bet.n2p_deny']) {
+        if($nMode >= 31 && $nMode <= 38)
+          return 0;
+      }
+      if(array_key_exists('bet.pn_deny', $_ENV) && $_ENV['bet.pn_deny']) {
+        if($nMode == 30)
+          return 0;
+      }
+      
+      $iType = 0; 
+      if($arrBetData['game'] == GAME_POWER_BALL || $arrBetData['game'] == GAME_BOGLE_BALL
+      || ( $arrBetData['game'] >= GAME_EOS5_BALL && $arrBetData['game'] <= GAME_COIN3_BALL) 
+      || $arrBetData['game'] >= GAME_HAPPY_BALL) {
+
+         switch ($nMode) {
+           case 1: $ratioBet = $objConf->game_ratio_1; $iType = 1; break;
+           case 2: $ratioBet = $objConf->game_ratio_2; $iType = 1; break;
+           case 3: $ratioBet = $objConf->game_ratio_3; $iType = 1; break;
+           case 4: $ratioBet = $objConf->game_ratio_4; $iType = 1; break;
+           case 5: $ratioBet = $objConf->game_ratio_5; $iType = 2; break;
+           case 6: $ratioBet = $objConf->game_ratio_6; $iType = 2; break;
+           case 7: $ratioBet = $objConf->game_ratio_7; $iType = 2; break;
+           case 8: $ratioBet = $objConf->game_ratio_8; $iType = 2; break;
+           case 9: $ratioBet = $objConf->game_ratio_9; $iType = 3; break;
+           case 10: $ratioBet = $objConf->game_ratio_10; $iType = 3; break;
+           case 11: $ratioBet = $objConf->game_ratio_11; $iType = 3; break;
+           case 12: $ratioBet = $objConf->game_ratio_12; $iType = 3; break;
+           case 13: $ratioBet = $objConf->game_ratio_13; $iType = 4; break;
+           case 14: $ratioBet = $objConf->game_ratio_14; $iType = 4; break;
+           case 15: $ratioBet = $objConf->game_ratio_15; $iType = 4; break;
+           case 16: $ratioBet = $objConf->game_ratio_16; $iType = 4; break;
+           case 17: $ratioBet = $objConf->game_ratio_17; $iType = 4; break;
+           case 18: $ratioBet = $objConf->game_ratio_18; $iType = 4; break;
+           case 19: $ratioBet = $objConf->game_ratio_19; $iType = 4; break;
+           case 20: $ratioBet = $objConf->game_ratio_20; $iType = 4; break;
+           case 21: $ratioBet = $objConf->game_ratio_21; $iType = 5; break;
+           case 22: $ratioBet = $objConf->game_ratio_22; $iType = 5; break;
+           case 23: $ratioBet = $objConf->game_ratio_23; $iType = 5; break;
+           case 24: $ratioBet = $objConf->game_ratio_24; $iType = 5; break;
+           case 25: $ratioBet = $objConf->game_ratio_25; $iType = 5; break;
+           case 26: $ratioBet = $objConf->game_ratio_26; $iType = 5; break;
+           case 27: $ratioBet = $objConf->game_ratio_27; $iType = 5;  break;
+           case 28: $ratioBet = $objConf->game_ratio_28; $iType = 5;  break;
+           case 29: $ratioBet = $objConf->game_ratio_29; $iType = 5;  break;
+           case 30: $ratioBet = $objConf->game_ratio_30; $iType = 7;  break;
+           case 31:
+           case 32:
+           case 33:
+           case 34:
+           case 35:
+           case 36:
+           case 37:
+           case 38: $ratioBet = $objConf->game_ratio_31; $iType = 6; break;
+           default: break;
+         }
+      } else {
+        switch ($nMode) {
+          case 1: $ratioBet = $objConf->game_ratio_1; $iType = 1; break;
+          case 2: $ratioBet = $objConf->game_ratio_2; $iType = 1; break;
+          case 3: $ratioBet = $objConf->game_ratio_3; $iType = 1; break;
+          case 4: $ratioBet = $objConf->game_ratio_4; $iType = 2; break;
+          case 5: $ratioBet = $objConf->game_ratio_5; $iType = 2; break;
+          case 6: $ratioBet = $objConf->game_ratio_6; $iType = 2; break;
+          case 7: $ratioBet = $objConf->game_ratio_7; $iType = 2; break;
+          default: break;
+        }
+
+      }
+
+      if(strlen($ratioBet) < 1)   return 0;
+
+      $arrBetData['ratio'] = floatval($ratioBet);
+      $arrLimit = getLimitAmount($objConf, $iType);
+      if($arrLimit[0] > 0 && $arrBetData['amount'] < $arrLimit[0])  return 4;   //최소베팅금액 미달
+      if($arrLimit[1] > 0 && $arrBetData['amount'] > $arrLimit[1])  return 5;   //최대베팅금액 초과
+      if($arrLimit[2] > 0 && $arrBetData['amount'] * $arrBetData['ratio'] > $arrLimit[2]) return 7; //최대적중금액 초과
+
+      return 1;
+    }
+    
+    function getLimitAmount($objConf, $iType){
+      $minBet = 0;
+      $maxBet = 0;
+      $maxWin = 0;
+  
+      switch($iType){
+          case 1: 
+              $minBet = intval($objConf->game_min_bet_money);
+              $maxBet = intval($objConf->game_max_bet_money);
+              $maxWin = intval($objConf->game_max_win_money);
+              break;
+          case 2: 
+              $minBet = intval($objConf->game_min2_bet_money);
+              $maxBet = intval($objConf->game_max2_bet_money);
+              $maxWin = intval($objConf->game_max2_win_money);
+              break;
+          case 3: 
+              $minBet = intval($objConf->game_min3_bet_money);
+              $maxBet = intval($objConf->game_max3_bet_money);
+              $maxWin = intval($objConf->game_max3_win_money);
+              break;
+          case 4: 
+              $minBet = intval($objConf->game_min4_bet_money);
+              $maxBet = intval($objConf->game_max4_bet_money);
+              $maxWin = intval($objConf->game_max4_win_money);
+              break;
+          case 5: 
+              $minBet = intval($objConf->game_min5_bet_money);
+              $maxBet = intval($objConf->game_max5_bet_money);
+              $maxWin = intval($objConf->game_max5_win_money);
+              break;
+          case 6: 
+              $minBet = intval($objConf->game_min6_bet_money);
+              $maxBet = intval($objConf->game_max6_bet_money);
+              $maxWin = intval($objConf->game_max6_win_money);
+              break;
+          case 7: 
+              $minBet = intval($objConf->game_min7_bet_money);
+              $maxBet = intval($objConf->game_max7_bet_money);
+              $maxWin = intval($objConf->game_max7_win_money);
+              break;
+          default : 
+              $minBet = intval($objConf->game_min_bet_money);
+              $maxBet = intval($objConf->game_max_bet_money);
+              $maxWin = intval($objConf->game_max_win_money);
+              break;
+      }
+      return [$minBet, $maxBet, $maxWin];
+    }
+
+    function isEnableBetTime($arrRoundData){
+
+      $tmCurrent = date("Y-m-d H:i:s", time()); 
+
+      if($tmCurrent < $arrRoundData['round_start'] || $tmCurrent > $arrRoundData['round_bet_end']){
+          return false;        
+      }
+      return true;
+    }
+
+    function getRatioByGame($objMember, $iGame, $iMode = 0){
+      $fRatio = 0;
+      switch($iGame){
+          case GAME_POWER_BALL: 
+          case GAME_HAPPY_BALL: 
+                $fRatio = $iMode<5 ? $objMember->mb_game_pb_ratio : $objMember->mb_game_pb2_ratio;
+                break;
+          case GAME_POWER_LADDER: 
+                $fRatio = $objMember->mb_game_ps_ratio;
+                break;
+          case GAME_CASINO_EVOL: 
+                $fRatio = $objMember->mb_game_cs_ratio;
+                break;
+          case GAME_BOGLE_BALL: 
+                $fRatio = $iMode<5 ? $objMember->mb_game_bb_ratio : $objMember->mb_game_bb2_ratio;
+                break;
+          case GAME_BOGLE_LADDER: 
+                $fRatio = $objMember->mb_game_bs_ratio;
+                break;
+          case GAME_SLOT_1:
+          case GAME_SLOT_2: 
+          case GAME_SLOT_3: 
+                $fRatio = $objMember->mb_game_sl_ratio;
+                break;
+          case GAME_EOS5_BALL:
+          case GAME_EOS3_BALL: 
+                $fRatio = $iMode<5 ? $objMember->mb_game_eo_ratio : $objMember->mb_game_eo2_ratio;
+                break;
+          case GAME_COIN5_BALL:
+          case GAME_COIN3_BALL: 
+                $fRatio = $iMode<5 ? $objMember->mb_game_co_ratio : $objMember->mb_game_co2_ratio;
+                break;
+          default: break;
+      } 
+      $fRatio = floatval($fRatio);
+      
+      if($fRatio <= 0)
+        $fRatio = 0;
+      return $fRatio;
+    } 
+
+    function isEnableN2pBet($arrStatis, $mode){
+      
+      if(is_null($arrStatis))
+        return true;
+      if(count($arrStatis) < N2P_MAX_HOLE)
+        return true;
+
+      if(count($arrStatis) > N2P_MAX_HOLE)
+        return false;
+
+      $bEnable = false;
+      foreach($arrStatis as $statis){
+        if($statis->bet_mode == $mode){
+          $bEnable = true;
+          break; 
+        }
+      }
+      return $bEnable ;
+    }
+
+    function findFollowRate($game, $arrFollow, $mb_fid){
+      $rate = 0;
+      foreach($arrFollow as $follow){
+        if($follow->fl_mb_fid == $mb_fid){
+          switch($game){
+            case GAME_POWER_BALL: 
+            case GAME_HAPPY_BALL: 
+              $rate = $follow->fl_pb_rate;
+              break;
+            case GAME_POWER_LADDER: 
+              $rate = $follow->fl_ps_rate;
+              break;
+            case GAME_BOGLE_BALL: 
+              $rate = $follow->fl_bb_rate;
+              break;
+            case GAME_BOGLE_LADDER: 
+              $rate = $follow->fl_bs_rate;
+              break;
+            case GAME_EOS5_BALL: 
+              $rate = $follow->fl_e5_rate;
+              break;
+            case GAME_EOS3_BALL: 
+              $rate = $follow->fl_e3_rate;
+              break;
+            case GAME_COIN5_BALL: 
+              $rate = $follow->fl_c5_rate;
+              break;
+            case GAME_COIN3_BALL: 
+              $rate = $follow->fl_c3_rate;
+              break;
+            default: break;
+          }
+          break; 
+        }
+      }
+      return $rate/100.0 ;
+    }
+
+    function checkApiUri($arrReqData){
+
+      if(strlen($arrReqData['game'])<1) return false;
+      else if(strlen($arrReqData['id'])<1) return  false;
+      else if(strlen($arrReqData['pwd'])<1) return  false;
+      else if(strlen($arrReqData['balance'])<1) return  false;
+
+      return true;
+      
+    }
+
+    function checkApiBalance($sBalance){
+      $arrAmount = [];
+      $arrBalance = explode('|', $sBalance);
+      foreach($arrBalance as $amount){
+        if(!is_numeric($amount))
+          break;
+
+        $arrAmount[] = $amount;
+      }
+
+      return $arrAmount;
+
+    }
+
+    function fslotErrorMsg($arrResp){
+      $msg = "";
+      if(!array_key_exists('error', $arrResp))
+        return "";
+
+      if($arrResp['error'] == INVALID_ACCESS_TOKEN){
+        $msg = "토큰정보가 유효하지 않습니다. 관리자에게 문의해주세요";
+      } else if($arrResp['error'] == INVALID_PRODUCT){
+        $msg = "게임정보가 존재하지 않습니다. 관리자에게 문의해주세요";
+      } else if($arrResp['error'] == INVALID_PARAMETER){
+        $msg = "요청이 잘못되었습니다. 관리자에게 문의해주세요 ";
+      } else if($arrResp['error'] == INVALID_USER){
+        $msg = "존재하지 않는 사용자입니다.";
+      } else if($arrResp['error'] == DOUBLE_USER){
+        $msg = "중복된 사용자입니다.";
+      } else if($arrResp['error'] == INSUFFICIENT_FUNDS){
+        $msg = "전체 보유알이 부족합니다. 관리자에게 문의해주세요";
+      } else if($arrResp['error'] == INVALID_AMOUNT){
+        $msg = "금액정보가 올바르지 않습니다.";
+      } else if($arrResp['error'] == GAME_PLAYING){
+        $msg = "게임진행중이므로 조작이 실패되었습니다.";
+      } else{
+        $msg = "조작이 실패되었습니다.";
+
+      }
+      return $msg;
+
+    }
+
+    function allMoney($member){
+      $nMoney = 0;
+      if(is_null($member))
+        return $nMoney;
+
+      $nMoney = $member->mb_money + $member->mb_live_money + $member->mb_slot_money
+       + $member->mb_fslot_money + $member->mb_kgon_money + $member->mb_gslot_money;
+      return $nMoney;
+    }
+
+    function createGameId($str){
+      $createId = $str;
+      if(array_key_exists("app.testV", $_ENV) && $_ENV['app.testV'] == 1){
+        $createId = "T".$str;
+      } 
+      return $createId;
+    }
+
+    function diffDt($dt1, $dt2){
+      return abs( strtotime($dt1) - strtotime($dt2) );
+    }
+?>

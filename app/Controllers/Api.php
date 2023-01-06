@@ -1,0 +1,1966 @@
+<?php namespace App\Controllers;
+
+use App\Models\SessLog_Model;
+use App\Models\SessTry_Model;
+use App\Models\MoneyHist_Model;
+use App\Models\Exchange_Model;
+use App\Models\Charge_Model;
+use App\Models\Reward_Model;
+use App\Models\Transfer_Model;
+use App\Models\Follow_Model;
+use App\Models\Block_Model;
+
+use App\Models\Round_Model;
+use App\Models\Bet_Model;
+
+
+class Api extends BaseController
+{
+	public function index(){
+		$this->response->redirect('/');	
+	}
+		
+	//사용자 로그인
+	public function login(){ 
+		
+		$ip = $this->request->getIPAddress();
+		
+		$user_id = $this->request->getPost('userid');
+		$user_pw = $this->request->getPost('passwd');
+
+		$modelSessTry = new SessTry_Model();
+		$sessTry = $modelSessTry->getByIp($ip);
+
+		$iTry = 5;
+		if(!is_null($sessTry)){
+			$iTry = time() - strtotime($sessTry->log_time);
+		}
+
+		$objMember = null;
+		if(strlen($user_id) > 0 && strlen($user_pw) > 0){
+			$objMember = $this->modelMember->login($user_id, $user_pw);
+		}
+
+		if($iTry < 3){
+			$arrResult['status'] = STATUS_FAIL;
+			$arrResult['code'] = RESULT_FAIL;	//대기중
+			$arrResult['msg'] = "잠시후 다시 시도해주세요. 남은시간:".(3-$iTry)."초";
+		} else if(is_null($objMember) || $objMember->mb_state_active == PERMIT_DELETE)
+		{
+			$arrResult['code'] = RESULT_FAIL;		
+			$arrResult['status'] = STATUS_FAIL;
+			$arrResult['msg'] = "잘못된 계정정보입니다.";
+			$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_FAIL);
+		} else if( $objMember->mb_level < LEVEL_ADMIN && $this->modelConfsite->IsMaintain()){
+			$arrResult['status'] = STATUS_FAIL;
+			$arrResult['code'] = RESULT_MAINTAIN;	//점검중
+			$msg = $this->modelConfsite->msgMaintain();
+			if(strlen($msg) < 1){
+				$msg = "점검중입니다.";
+				$arrResult['code'] = RESULT_FAIL;	
+			}
+			$arrResult['msg'] = $msg;
+			$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_MAINTAIN);
+		}
+		else {
+			$modelBlock = new Block_Model();
+			$this->modelSess->deleteLast();
+		
+			$sessId = $this->session->session_id;
+			$sess = $this->modelSess->getByUid($objMember->mb_uid);
+
+			if($objMember->mb_state_active == PERMIT_WAIT){
+				$arrResult['status'] = STATUS_FAIL;
+				$arrResult['code'] = RESULT_WAIT;//대기중
+                $arrResult['msg'] = "승인대기중입니다.";
+				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_WAIT);
+			}
+			else if($objMember->mb_level < LEVEL_ADMIN && $modelBlock->getByIp($ip) != null){
+				$arrResult['status'] = STATUS_FAIL;
+				$arrResult['code'] = RESULT_FAIL;	//대기중
+				$arrResult['msg'] = "차단된 아이피입니다.";
+				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPBLOCK);
+			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE &&
+			 $objMember->mb_ip_join !== $ip){
+				$arrResult['status'] = STATUS_FAIL;
+				$arrResult['code'] = RESULT_FAIL;	//대기중
+				$arrResult['msg'] = "승인된 아이피가 아닙니다.";
+				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPDENIED);
+			} else if($objMember->mb_level < LEVEL_ADMIN && !$this->modelConfsite->IsMultiLogin() && !is_null($sess) && $sess->sess_id != $sessId/*$sess->sess_ip != $ip*/){
+				$arrResult['status'] = STATUS_FAIL;
+				$arrResult['code'] = RESULT_FAIL;	//대기중
+				$arrResult['msg'] = "이미 로그인되어 있습니다.";
+				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_LOGINING);
+			}
+			else if($this->modelMember->isPermitMember($objMember)){
+				//세션 생성
+				$sessData = array('user_id' => $objMember->mb_uid, 'logged_in'=>TRUE );
+				writeLog("[login] ".$user_id." (".$sessId.")");
+
+				$this->session->set($sessData);
+				$objMember->mb_ip_last = $ip;
+				$this->modelMember->updateLogin($objMember);
+
+				$this->modelSess->add($objMember, $sessId);
+				// if($objMember->mb_level <= LEVEL_ADMIN){
+					$modelSessLog = new SessLog_Model();
+					$modelSessLog->add($objMember);
+				// }
+				//결과값 
+				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_SUCCESS);
+
+				$arrResult['status'] = STATUS_SUCCESS;
+				$arrResult['code'] = RESULT_OK;//1-성공 2-계정틀림 3-차단
+			} else{
+				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IDBLOCK);
+				$arrResult['status'] = STATUS_FAIL;
+				$arrResult['code'] = RESULT_STOP;//차단
+                $arrResult['msg'] = "차단된 계정입니다.";
+			} 			
+		}
+
+		echo json_encode($arrResult);
+
+
+	}
+	
+	public function logout(){
+		$this->sess_destroy();
+		$sess_id = $this->session->session_id;
+		writeLog("[api] logout (".$sess_id.")");
+		
+		$arrResult['status'] = "success";
+		echo json_encode($arrResult);
+	}
+
+	public function check_login(){ 
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->status = STATUS_LOGOUT;
+		}
+		else {
+			$result->status = STATUS_SUCCESS;
+		}
+		echo json_encode($result);	
+
+	}
+
+	public function check_proposer(){
+		$arrData['proposer'] = $this->request->getVar('recommender_id');
+		
+		$result = new \StdClass;
+
+		$objEmp = $this->modelMember->getByUid($arrData['proposer']);
+		$minLevel = LEVEL_MIN;
+		if(array_key_exists('app.level_limit', $_ENV) && intval($_ENV['app.level_limit']) > 0 ){
+			$minLevel = LEVEL_MAX - intval($_ENV['app.level_limit']);
+		}
+
+		if(is_null($objEmp)){
+			$result->msg = "가입자 코드가 맞지 않습니다.";
+			$result->status = STATUS_FAIL;
+		} else if($objEmp->mb_level <= $minLevel){
+			$result->msg = "승인된 가입자 코드가 아닙니다.";
+			$result->status = STATUS_FAIL;
+		} else if(!$this->modelMember->isPermitMember($objEmp)){
+			$result->msg = "승인된 가입자 코드가 아닙니다.";
+			$result->status = STATUS_FAIL;
+		} else {
+			$result->status = STATUS_SUCCESS;
+			$result->data = $objEmp->mb_uid;
+		}
+		echo json_encode($result);	
+	}
+
+	public function check_account(){
+		$arrData['member_id'] = $this->request->getVar('userid');
+		
+		$result = new \StdClass;
+		$result->status = STATUS_SUCCESS;
+		if(array_key_exists('member_id', $arrData)){
+			$objMember = $this->modelMember->getByUid($arrData['member_id']);
+			if(!is_null($objMember) ){
+				$result->status = STATUS_FAIL;
+				$result->msg = "중복된 아이디입니다.";
+			} 
+		}
+		if($result->status == STATUS_SUCCESS && array_key_exists('nickname', $arrData)){
+			$objMember = $this->modelMember->getByName($arrData['nickname']);
+			if(!is_null($objMember) ){
+				$result->status = STATUS_FAIL;
+				$result->msg = "중복된 닉네임입니다.";
+			}
+		}
+		echo json_encode($result);	
+	}
+
+	public function check_session(){
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->status = STATUS_LOGOUT;
+		}
+		else {
+
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id);
+			$sess_id = $this->session->session_id;
+			$this->modelSess->deleteLast();
+
+			$bPermit = true;
+			if(is_null($objMember)){
+				$bPermit = false;
+				writeLog("[check_session] user = null (".$user_id.")");
+			}
+			else if($objMember->mb_level < LEVEL_ADMIN && $this->modelConfsite->IsMaintain()){
+				$bPermit = false;
+			}
+			else if( !$this->modelMember->isPermitMember($objMember) ){
+				$bPermit = false;
+			}
+			else if( is_null($this->modelSess->getBySess($sess_id)) ){
+				$bPermit = false;
+				writeLog("[check_session] session = null (".$sess_id.")");
+			}
+
+			if(!$bPermit){
+				writeLog("[check_session] logout (".$sess_id.")");
+				$this->sess_destroy();
+				$result->status = STATUS_LOGOUT;                
+			} else{
+				writeLog("[check_session] ".$user_id." (".$sess_id.")");
+				$this->modelSess->updateLast($sess_id);
+
+				$objInfo = new \StdClass;
+				$objInfo->money = allMoney($objMember);
+				$objInfo->point = $objMember->mb_point;
+				$objInfo->msg = $this->modelNotice->unreadMsg($objMember->mb_uid);
+				$objInfo->cus = $this->modelNotice->unreadCus($objMember->mb_uid);
+
+				$result->data = $objInfo;
+				$result->status = STATUS_SUCCESS;
+
+			} 
+
+		}
+
+		echo json_encode($result);	
+	}
+
+	public function check_notice(){
+		
+		$result = new \StdClass;
+
+		if(!is_login())
+		{
+			$result->status = STATUS_LOGOUT;
+		} else{
+			$objConfUg = $this->modelConfsite->find(CONF_NOTICE_URGENT);
+			$objConfBk = $this->modelConfsite->find(CONF_NOTICE_BANK);
+			$objConfMn = $this->modelConfsite->find(CONF_NOTICE_MAIN);
+
+			$result->notice_main = $objConfMn->conf_active; 
+			$result->notice_urgent = $objConfUg->conf_active;
+			$result->notice_bank = $objConfBk->conf_active; 
+
+			$result->status = STATUS_SUCCESS;	
+		}
+		echo json_encode($result);
+	}
+	
+	public function check_pass(){
+		
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요."; 
+			$result->status = STATUS_LOGOUT;
+		}
+		else {
+
+			$user_id = $this->session->user_id;
+			$user_pw = $this->request->getPost('user_pw');
+
+			$objMember = $this->modelMember->login($user_id, $user_pw);
+			$bPermit = true;
+			if(is_null($objMember))
+				$bPermit = false;
+						
+			if(!$bPermit){
+				$result->msg = "비밀번호가 맞지 않습니다."; 
+				$result->status = STATUS_FAIL;                
+			} else{
+				$result->status = STATUS_SUCCESS; 
+			}
+
+		}
+
+		echo json_encode($result);	
+	}
+
+	
+	public function change_pass(){
+		
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+			$result->status = STATUS_LOGOUT;
+		}
+		else {
+
+			$user_id = $this->session->user_id;
+			$user_pw = $this->request->getPost('pwd_old');
+			$user_newPw = $this->request->getPost('pwd_new');
+
+			$objMember = $this->modelMember->login($user_id, $user_pw);
+			$bPermit = true;
+			if(is_null($objMember))
+				$bPermit = false;
+						
+			if(!$bPermit){
+				$result->msg = "현재 비밀번호가 틀림니다."; 
+				$result->status = STATUS_FAIL;                
+			} else{
+				$this->modelMember->updatePwd($user_id, $user_newPw);
+
+				$result->status = STATUS_SUCCESS; 
+			}
+		}
+
+		echo json_encode($result);	
+	}
+
+	public function change_point()
+	{
+		
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;
+        } else {
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id);
+
+			$modelMoneyhist = new MoneyHist_Model();
+
+			if($objMember->mb_point > 0 && 
+				$this->modelMember->updateAssets($objMember, $objMember->mb_point, 0-$objMember->mb_point)) 
+			{
+				$modelMoneyhist->registerPointToMoney($objMember, $objMember->mb_point);
+			}			
+
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+	public function register(){
+		$reqData['member_id'] = $this->request->getVar('userid');
+		$reqData['password'] = $this->request->getVar('passwd');
+		$reqData['nickname'] = $this->request->getVar('nickname');
+		$reqData['bank_name'] = $this->request->getVar('bank_name');
+		$reqData['name'] = $this->request->getVar('bank_owner');
+		$reqData['account_number'] = $this->request->getVar('bank_account');
+		$reqData['refund_password'] = $this->request->getVar('refund_password');
+		$reqData['proposer'] = $this->request->getVar('agent_id');
+		$reqData['contact'] = $this->request->getVar('phone');
+		
+		$result = new \StdClass;
+		$result->status = STATUS_FAIL;
+		$iResult = $this->modelMember->register($reqData);
+		if($iResult == RESULT_OK){
+			$result->status = STATUS_SUCCESS;
+		} else if($iResult == RESULT_EXIST_ID) {
+			$result->msg = '중복된 아이디 입니다.';
+		} else if($iResult == RESULT_EXIST_NAME) {
+			$result->msg = '중복된 닉네임 입니다.';
+		} else if($iResult == RESULT_EMP_ERROR) {
+			$result->msg = '승인된 추천인이 아닙니다.';
+		} else {
+			$result->msg = '회원가입에 실패하였습니다. 관리자에게 문의 바랍니다.';
+		}
+		echo json_encode($result);
+
+	}
+
+	public function register_exchange(){
+		
+		$reqData['c_price'] = intval($this->request->getPost("cash"));
+		$reqData['bank_passwd'] = $this->request->getPost("bank_passwd");
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+            $result->status = STATUS_LOGOUT;
+        } else {
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id, true);
+
+			$reqData['c_price'] = intval($reqData['c_price']);
+			$modelExchange = new Exchange_Model();
+			$this->modelConfsite->readMemConf();
+
+			if($modelExchange->wait($user_id)){
+				$result->status = STATUS_FAIL;
+				$result->msg = "출금승인 대기중 입니다.";
+			} else if($reqData['bank_passwd'] != $objMember->mb_bank_pwd) {
+				$result->status = STATUS_FAIL;
+				$result->msg = "출금비번이 틀림니다.";
+			} else if($reqData['c_price'] > allMoney($objMember)){
+				$result->status = STATUS_FAIL;
+				$result->msg = "출금금액이 보유머니를 초과하셧습니다.";
+			} else if($reqData['c_price'] < 10000){
+				$result->status = STATUS_FAIL;
+				$result->msg = "출금금액은 10,000원 이상으로 신청해주세요..";
+			} else if($_ENV['mem.withdeny_play'] &&  diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet) < DELAY_PLAYING){
+				$result->status = STATUS_FAIL;
+				$result->msg = "게임플레이중에는 출금신청을 하실수 없습니다. ".intval(11-diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet)/60)."분후 다시 해주세요.";
+			} else {
+				$iResult = 1;
+				if($reqData['c_price'] > $objMember->mb_money){
+					$iResult = $this->alltoGame($objMember, 0);
+					if($iResult == 1)
+						$objMember = $this->modelMember->getByUid($user_id, true);
+				}
+
+				if($iResult == 1){
+					if($reqData['c_price'] > $objMember->mb_money){
+						$result->msg = "게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.";
+						$result->status = STATUS_FAIL;
+					} else if($reqData['c_price'] > 0 && $this->modelMember->updateAssets($objMember, 0-$reqData['c_price'])){
+						$data =[
+							'exchange_emp_fid' => $objMember->mb_emp_fid,
+							'exchange_mb_uid' => $objMember->mb_uid,
+							'exchange_mb_phone' => $objMember->mb_phone,
+							'exchange_money' => $reqData['c_price'],
+							'exchange_time_require' => date("Y-m-d H:i:s"),
+							'exchange_action_state' => STATE_ACTIVE,
+							'exchange_bank_name' => $objMember->mb_bank_name,
+							'exchange_bank_account' => $objMember->mb_bank_own,
+							'exchange_bank_serial' => $objMember->mb_bank_num,
+							'exchange_money_before' => allMoney($objMember),
+							'exchange_money_after' => allMoney($objMember)-$reqData['c_price']
+		
+						];
+		
+						$modelExchange->register($data);
+
+						$objInfo = new \StdClass;
+						$objInfo->money = allMoney($objMember)-$reqData['c_price'];
+						$objInfo->point = $objMember->mb_point;
+				
+						$result->data = $objInfo;
+						$result->status = STATUS_SUCCESS;
+						$result->msg = "출금요청이 신청되었습니다. 관리자가 승인하는 동안 잠시 기다려주세요.";
+						
+					} else{
+						$result->msg = "출금요청이 실패되었습니다.";
+						$result->status = STATUS_FAIL;
+					}
+				} else{
+					$result->msg = "서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.";
+					$result->status = STATUS_FAIL;
+				}
+				
+			}
+			
+        }
+		
+		echo json_encode($result);
+	}
+
+	public function count_exchange()
+	{
+		$jsonData = $_REQUEST['json_'];
+		$reqData = json_decode($jsonData, true);
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['req_uid'] = $this->session->user_id;
+			$modelExchange = new Exchange_Model();
+
+			$count = $modelExchange->searchCount($reqData);
+
+			$result->data = $count;
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+
+	public function page_exchange()
+	{
+		
+		$reqData['start_at'] = $this->request->getVar('start_at');
+		$reqData['end_at'] = $this->request->getVar('end_at');
+		$reqData['count'] = $this->request->getVar('rowCount');
+		$reqData['page'] = $this->request->getVar('page');
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['req_uid'] = $this->session->user_id;
+			$modelExchange = new Exchange_Model();
+			
+			$result->totalRows = $modelExchange->searchCount($reqData);
+			$result->rows = $modelExchange->searchList($reqData);
+
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+	public function request_account()
+	{
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id, true);
+
+			$refPass = $this->request->getVar('pass');
+			if($objMember->mb_bank_pwd != $refPass){
+				$result->msg = "충환전 비밀번호가 맞지 않습니다.";
+				$result->status = STATUS_FAIL;
+			} else {
+				$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
+				$arrInfo = explode("#", trim($objConf->conf_content));
+				
+				if(count($arrInfo) < 3){
+					$arrInfo = null;
+				} else if(count($arrInfo) < 4){
+					$arrInfo[3] = "";
+				}
+
+				$result->data = $arrInfo;
+				$result->status = STATUS_SUCCESS;
+			}
+
+			
+        }
+		
+		echo json_encode($result);
+	}
+
+	
+	public function request_account2()
+	{
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+            $result->status = STATUS_LOGOUT;		
+        } else {
+
+			$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
+			$sAnswer = $objConf->conf_content;
+            $sAnswer .= "<p> <br>입금계좌 : &nbsp;";
+			$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
+			$sAnswer .= str_replace("#", " ", $objConf->conf_content)."</p>";
+
+			$data = [  
+                'notice_type' => NOTICE_CUSTOMER,
+                'notice_title' => "간편계좌문의",
+                'notice_content' => "계좌문의",
+				'notice_answer' => $sAnswer,
+                'notice_mb_uid' => $this->session->user_id,
+				'notice_read_count' => 1,
+				'notice_state_active' => 1,
+                'notice_time_create' => date("Y-m-d H:i:s")
+            ];
+
+			$bResult = $this->modelNotice->registerNotice($data);
+			
+			if($bResult){
+				$result->msg = "계좌정보가 도착하였습니다.";
+				$result->status = STATUS_SUCCESS;
+			}
+			else {
+				$result->msg = "계좌문의가 실패되었습니다.";
+				$result->status = STATUS_FAIL;
+			}
+        }
+		
+		echo json_encode($result);
+	}
+	
+	public function request_account3()
+	{
+		$reqData['title'] = $this->request->getPost('title');
+		$reqData['content'] = $this->request->getPost('content');
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+            $result->status = STATUS_LOGOUT;		
+        } else {
+
+			$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
+			$sAnswer = $objConf->conf_content;
+            $sAnswer .= "<p> <br>입금계좌 : &nbsp;";
+			$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
+			$sAnswer .= str_replace("#", " ", $objConf->conf_content)."</p>";
+
+			$data = [  
+                'notice_type' => NOTICE_CUSTOMER,
+                'notice_title' => $reqData['title'],
+                'notice_content' => $reqData['content'],
+				'notice_answer' => $sAnswer,
+                'notice_mb_uid' => $this->session->user_id,
+				'notice_read_count' => 1,
+				'notice_state_active' => 1,
+                'notice_time_create' => date("Y-m-d H:i:s")
+            ];
+
+			$bResult = $this->modelNotice->registerNotice($data);
+			
+			if($bResult){
+				$result->msg = "계좌정보가 도착하였습니다.";
+				$result->status = STATUS_SUCCESS;
+			}
+			else {
+				$result->msg = "계좌요청이 실패되었습니다.";
+				$result->status = STATUS_FAIL;
+			}
+        }
+		
+		echo json_encode($result);
+	}
+
+	public function register_charge(){
+		
+		$reqData['c_price'] = $this->request->getPost('cash');
+		
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+            $result->status = STATUS_LOGOUT;
+        } else {
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id, true);
+
+			$modelCharge = new Charge_Model();
+
+			if($modelCharge->wait($user_id)){
+				$result->status = STATUS_FAIL;
+				$result->msg = "입금승인 대기중 입니다.";
+			} else {
+				$data =[
+					'charge_emp_fid' => $objMember->mb_emp_fid,
+					'charge_mb_uid' => $objMember->mb_uid,
+					'charge_mb_realname' => $objMember->mb_bank_own,
+					'charge_mb_phone' => $objMember->mb_phone,
+					'charge_money' => $reqData['c_price'],
+					'charge_time_require' => date("Y-m-d H:i:s"),
+					'charge_action_state' => STATE_ACTIVE,
+					'charge_money_before' => allMoney($objMember)
+
+				];
+
+				if($modelCharge->register($data)){
+					$result->status = STATUS_SUCCESS;
+					$result->msg = "입금요청이 신청되었습니다. 관리자가 승인하는 동안 잠시 기다려주세요.";
+				}
+				else{
+					$result->msg = "입금요청이 실패되었습니다.";
+					$result->status = STATUS_FAIL;
+				}
+			}
+			
+        }
+		
+		echo json_encode($result);
+	}
+
+
+	public function count_charge()
+	{
+		$jsonData = $_REQUEST['json_'];
+		$reqData = json_decode($jsonData, true);
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['req_uid'] = $this->session->user_id;
+			$modelCharge = new Charge_Model();
+
+			$count = $modelCharge->searchCount($reqData);
+
+			$result->data = $count;
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+
+	public function page_charge()
+	{
+		$reqData['start_at'] = $this->request->getVar('start_at');
+		$reqData['end_at'] = $this->request->getVar('end_at');
+		$reqData['count'] = $this->request->getVar('rowCount');
+		$reqData['page'] = $this->request->getVar('page');
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['req_uid'] = $this->session->user_id;
+			$modelCharge = new Charge_Model();
+
+			$result->totalRows = $modelCharge->searchCount($reqData);
+			$result->rows = $modelCharge->searchList($reqData);
+
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+	public function count_transfer()
+	{
+		$jsonData = $_REQUEST['json_'];
+		$reqData = json_decode($jsonData, true);
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['req_uid'] = $this->session->user_id;
+			$modelTransfer = new Transfer_Model();
+
+			$count = $modelTransfer->searchCount($reqData);
+
+			$result->data = $count;
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+
+	public function page_transfer()
+	{
+		$jsonData = $_REQUEST['json_'];
+		$reqData = json_decode($jsonData, true);
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['req_uid'] = $this->session->user_id;
+			$modelTransfer = new Transfer_Model();
+
+			$arrData = $modelTransfer->searchList($reqData);
+
+			$result->data = $arrData;
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+
+	public function count_customer()
+	{
+		$jsonData = $_REQUEST['json_'];
+		$reqData = json_decode($jsonData, true);
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['send_uid'] = $this->session->user_id;
+
+			$count = $this->modelNotice->searchCusCount($reqData);
+
+			$result->data = $count;
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+
+	public function page_customer()
+	{
+		$reqData['start_at'] = $this->request->getVar('start_at');
+		$reqData['end_at'] = $this->request->getVar('end_at');
+		$reqData['count'] = $this->request->getVar('rowCount');
+		$reqData['page'] = $this->request->getVar('page');
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['send_uid'] = $this->session->user_id;
+
+			$arrNotice = $this->modelNotice->searchCusList($reqData);
+			foreach($arrNotice as $notice){
+				if($notice->notice_state_active == STATE_ACTIVE){
+					$reqData['notice_id'] = $notice->notice_fid;
+					$this->modelNotice->readCus($reqData);
+				}
+			}
+
+			$result->totalRows = $this->modelNotice->searchCusCount($reqData);
+			$result->rows = $arrNotice;
+
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+
+	public function delete_customer()
+	{
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['send_uid'] = $this->session->user_id;
+			$reqData['notice_id'] = $this->request->getVar('idx');
+			$reqData['notice_type'] = NOTICE_CUSTOMER;
+
+			$bResult = $this->modelNotice->deleteByClient($reqData);
+			
+			if($bResult)
+				$result->status = STATUS_SUCCESS;
+			else {
+				$result->msg = "삭제가 실패되었습니다.";
+				$result->status = STATUS_FAIL;
+			}
+				
+        }
+		
+		echo json_encode($result);
+
+    }
+
+	
+	public function write_customer()
+	{
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$data = [  
+                'notice_type' => NOTICE_CUSTOMER,
+                'notice_title' => $this->request->getVar('title'),
+                'notice_content' => $this->request->getVar('contents'),
+                'notice_mb_uid' => $this->session->user_id,
+                'notice_time_create' => date("Y-m-d H:i:s")
+            ];
+
+			$bResult = $this->modelNotice->registerNotice($data);
+			
+			if($bResult)
+				$result->status = STATUS_SUCCESS;
+			else {
+				$result->msg = "문의등록이 실패되었습니다.";
+				$result->status = STATUS_FAIL;
+			}
+        }
+		echo json_encode($result);
+    }
+
+	public function count_message()
+	{
+		$jsonData = $_REQUEST['json_'];
+		$reqData = json_decode($jsonData, true);
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['send_uid'] = $this->session->user_id;
+
+			$count = $this->modelNotice->searchMsgCount($reqData);
+
+			$result->data = $count;
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+
+	public function page_message()
+	{
+		$reqData['start_at'] = $this->request->getVar('start_at');
+		$reqData['end_at'] = $this->request->getVar('end_at');
+		$reqData['count'] = $this->request->getVar('rowCount');
+		$reqData['page'] = $this->request->getVar('page');
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['send_uid'] = $this->session->user_id;
+
+			$result->totalRows = $this->modelNotice->searchMsgCount($reqData);
+			$result->rows = $this->modelNotice->searchMsgList($reqData);
+            $result->unread = $this->modelNotice->unreadMsg($reqData['send_uid']);
+
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+
+	public function delete_message()
+	{
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['send_uid'] = $this->session->user_id;
+			$reqData['notice_id'] = $this->request->getVar('idx');
+
+			$bResult = $this->modelNotice->deleteByClient($reqData);
+			
+			if($bResult)
+				$result->status = STATUS_SUCCESS;
+			else {
+				$result->msg = "삭제가 실패되었습니다.";
+				$result->status = STATUS_FAIL;
+			}
+				
+        }
+		
+		echo json_encode($result);
+
+    }
+
+
+	public function check_message()
+	{
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$reqData['send_uid'] = $this->session->user_id;
+			$reqData['notice_id'] = $this->request->getVar('idx');
+
+			$bResult = $this->modelNotice->readMsg($reqData);
+			
+			if($bResult)
+				$result->status = STATUS_SUCCESS;
+			else {
+				$result->status = STATUS_FAIL;
+			}
+				
+        }
+		
+		echo json_encode($result);
+    }
+	
+	public function page_notice()
+	{
+		$reqData['start_at'] = $this->request->getVar('start_at');
+		$reqData['end_at'] = $this->request->getVar('end_at');
+		$reqData['count'] = $this->request->getVar('rowCount');
+		$reqData['page'] = $this->request->getVar('page');
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+
+			$result->totalRows = $this->modelNotice->searchBodCount($reqData);
+			$result->rows = $this->modelNotice->searchBodList($reqData);
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
+	public function round_current(){
+		$jsonData = $_REQUEST['json_'];
+		$reqData = json_decode($jsonData, true);
+				
+		if(!is_login())
+		{
+            $arrResult['status'] = STATUS_LOGOUT;		
+        } else {
+			$game_id = intval($reqData['game']);
+			$objConf = $this->modelConfgame->find($game_id);
+			if(!is_null($objConf)){
+				$objConf->bet_confirm = $this->modelConfsite->isBetConfirm();
+			}
+			$arrResult['config'] = $objConf; 
+			if(is_null($objConf)){
+				$arrResult['status'] = STATUS_FAIL;		
+			} else if($game_id == GAME_POWER_BALL){
+				if(InvalidGameTime()){
+					$arrResult['status'] = STATUS_FAIL;		
+				} else {
+					$modelRound = new Round_Model();
+					$arrRound = $modelRound->gets(1);
+					$arrRoundData = getPbRoundTimes($objConf);
+					calcRoundId($arrRound[0], $arrRoundData);
+					$arrRoundData['game'] = $game_id;
+					$arrResult['data'] = $arrRoundData;
+					$arrResult['status'] = STATUS_SUCCESS;		
+				}
+			} else if($game_id == GAME_POWER_LADDER){
+				if(InvalidGameTime()){
+					$arrResult['status'] = STATUS_FAIL;		
+				} else {
+					$arrRoundData = getPbRoundTimes($objConf);
+					$arrRoundData['game'] = $game_id;
+					$arrResult['data'] = $arrRoundData;
+					$arrResult['status'] = STATUS_SUCCESS;		
+				}
+			} else if($game_id == GAME_BOGLE_BALL ){
+				$arrRoundData = getBbRoundTimes($objConf);
+				$arrRoundData['game'] = $game_id;
+				$arrResult['data'] = $arrRoundData;
+				$arrResult['status'] = STATUS_SUCCESS;		
+			} else if($game_id == GAME_BOGLE_LADDER){
+				$arrRoundData = getBsRoundTimes($objConf);
+				$arrRoundData['game'] = $game_id;
+				$arrResult['data'] = $arrRoundData;
+				$arrResult['status'] = STATUS_SUCCESS;		
+			} else if($game_id == GAME_EOS5_BALL || $game_id == GAME_COIN5_BALL || $game_id == GAME_HAPPY_BALL){
+				$arrRoundData = getPbRoundTimes($objConf, false);
+				$arrRoundData['game'] = $game_id;
+				$arrResult['data'] = $arrRoundData;
+				$arrResult['status'] = STATUS_SUCCESS;		
+			}  else if($game_id == GAME_EOS3_BALL || $game_id == GAME_COIN3_BALL){
+				$arrRoundData = getBsRoundTimes($objConf);
+				$arrRoundData['game'] = $game_id;
+				$arrResult['data'] = $arrRoundData;
+				$arrResult['status'] = STATUS_SUCCESS;		
+			} else {
+				$arrResult['status'] = STATUS_FAIL;		
+			}
+			
+
+        }
+		
+		echo json_encode($arrResult);
+	}
+
+	public function count_round(){
+		$jsonData = $_REQUEST['json_'];
+		$reqData = json_decode($jsonData, true);
+				
+		if(!is_login())
+		{
+            $arrResult['status'] = STATUS_LOGOUT;		
+        } else {
+			$game_id = intval($reqData['game']);
+			
+			if($game_id == GAME_POWER_BALL || $game_id == GAME_POWER_LADDER 
+			 	|| $game_id == GAME_BOGLE_BALL || $game_id == GAME_BOGLE_LADDER
+				 || ($game_id >= GAME_EOS5_BALL && $game_id <= GAME_COIN3_BALL)
+				 || $game_id == GAME_HAPPY_BALL)
+			{
+				$modelRound = new Round_Model();
+				$modelRound->setType($game_id);
+				$count = $modelRound->searchCount($reqData);
+				$arrResult['data'] = $count;
+				$arrResult['status'] = STATUS_SUCCESS;		
+			} else {
+				$arrResult['status'] = STATUS_FAIL;		
+			}
+
+        }
+		
+		echo json_encode($arrResult);
+	}
+
+
+	public function page_round(){
+		$jsonData = $_REQUEST['json_'];
+		$reqData = json_decode($jsonData, true);
+				
+		if(!is_login())
+		{
+            $arrResult['status'] = STATUS_LOGOUT;		
+        } else {
+			$game_id = intval($reqData['game']);
+			$arrResult['game'] = $game_id;
+			
+			if($game_id == GAME_POWER_BALL || $game_id == GAME_POWER_LADDER 
+			 	|| $game_id == GAME_BOGLE_BALL || $game_id == GAME_BOGLE_LADDER
+				|| ($game_id >= GAME_EOS5_BALL && $game_id <= GAME_COIN3_BALL)
+				|| $game_id == GAME_HAPPY_BALL)
+			{
+				$modelRound = new Round_Model();
+				$modelRound->setType($game_id);
+				$arrRound = $modelRound->searchList($reqData);
+				$arrResult['data'] = $arrRound;
+				$arrResult['status'] = STATUS_SUCCESS;		
+			} else {
+				$arrResult['status'] = STATUS_FAIL;		
+			}
+
+        }
+		
+		echo json_encode($arrResult);
+	}
+
+	public function count_bet(){
+		$jsonData = $_REQUEST['json_'];
+		$reqData = json_decode($jsonData, true);
+				
+		if(!is_login())
+		{
+            $arrResult['status'] = STATUS_LOGOUT;		
+        } else {
+			$game_id = intval($reqData['game']);
+			$arrResult['game'] = $game_id;
+			$reqData['user_id'] = $this->session->user_id;	
+			
+			if($game_id == GAME_POWER_BALL || $game_id == GAME_POWER_LADDER 
+			 	|| $game_id == GAME_BOGLE_BALL || $game_id == GAME_BOGLE_LADDER
+				|| ($game_id >= GAME_EOS5_BALL && $game_id <= GAME_COIN3_BALL)
+				|| $game_id == GAME_HAPPY_BALL)
+			{
+				$modelBet = new Bet_Model();
+				$modelBet->setType($game_id);
+				$count = $modelBet->searchCount($reqData);
+				$arrResult['data'] = $count;
+				$arrResult['status'] = STATUS_SUCCESS;		
+			} else {
+				$arrResult['status'] = STATUS_FAIL;		
+			}
+
+        }
+		
+		echo json_encode($arrResult);
+	}
+
+	public function page_bet(){
+		$jsonData = $_REQUEST['json_'];
+		$reqData = json_decode($jsonData, true);
+				
+		if(!is_login())
+		{
+            $arrResult['status'] = STATUS_LOGOUT;		
+        } else {
+			$game_id = intval($reqData['game']);
+			$arrResult['game'] = $game_id;
+			$reqData['user_id'] = $this->session->user_id;	
+			
+			$arrResult['cancel_enable'] = $this->modelConfsite->isBetCancelEnable();
+			if($game_id == GAME_POWER_BALL || $game_id == GAME_POWER_LADDER 
+			 	|| $game_id == GAME_BOGLE_BALL || $game_id == GAME_BOGLE_LADDER
+				|| ($game_id >= GAME_EOS5_BALL && $game_id <= GAME_COIN3_BALL)
+				|| $game_id == GAME_HAPPY_BALL)
+			{
+				$modelBet = new Bet_Model();
+				$modelBet->setType($game_id);
+				$arrBet = $modelBet->searchList($reqData);
+				$arrResult['data'] = $arrBet;
+				$arrResult['status'] = STATUS_SUCCESS;		
+			} else {
+				$arrResult['status'] = STATUS_FAIL;		
+			}
+
+        }
+		
+		echo json_encode($arrResult);
+	}
+
+	
+
+	function get_follow(){
+		$jsonData = $_REQUEST['json_'];
+		$arrReqData = json_decode($jsonData, true);
+		
+		if(is_login()) {
+
+			$modelFollow = new Follow_Model();
+			$user_id = $this->session->user_id;			
+			$objUser = $this->modelMember->getByUid($user_id);
+			$arrInfo = [
+				'follow_id' => '',
+				'follow_rate' => 0,
+				'follow_stop' => 0
+			];
+
+			$objFollow = $modelFollow->getByUser($objUser->mb_fid); 
+			if(!is_null($objFollow)){
+				if($arrReqData['game'] == GAME_POWER_BALL || $arrReqData['game'] == GAME_HAPPY_BALL ){
+					$arrInfo['follow_id'] = $objFollow->fl_pb_uid;
+					$arrInfo['follow_rate'] = $objFollow->fl_pb_rate;
+					$arrInfo['follow_stop'] = $objFollow->fl_pb_stop;
+				} else if($arrReqData['game'] == GAME_POWER_LADDER){
+					$arrInfo['follow_id'] = $objFollow->fl_ps_uid;
+					$arrInfo['follow_rate'] = $objFollow->fl_ps_rate;
+					$arrInfo['follow_stop'] = $objFollow->fl_ps_stop;
+				} else if($arrReqData['game'] == GAME_BOGLE_BALL){
+					$arrInfo['follow_id'] = $objFollow->fl_bb_uid;
+					$arrInfo['follow_rate'] = $objFollow->fl_bb_rate;
+					$arrInfo['follow_stop'] = $objFollow->fl_bb_stop;
+				} else if($arrReqData['game'] == GAME_BOGLE_LADDER){
+					$arrInfo['follow_id'] = $objFollow->fl_bs_uid;
+					$arrInfo['follow_rate'] = $objFollow->fl_bs_rate;
+					$arrInfo['follow_stop'] = $objFollow->fl_bs_stop;
+				} else if($arrReqData['game'] == GAME_EOS5_BALL){
+					$arrInfo['follow_id'] = $objFollow->fl_e5_uid;
+					$arrInfo['follow_rate'] = $objFollow->fl_e5_rate;
+					$arrInfo['follow_stop'] = $objFollow->fl_e5_stop;
+				} else if($arrReqData['game'] == GAME_EOS3_BALL){
+					$arrInfo['follow_id'] = $objFollow->fl_e3_uid;
+					$arrInfo['follow_rate'] = $objFollow->fl_e3_rate;
+					$arrInfo['follow_stop'] = $objFollow->fl_e3_stop;
+				} else if($arrReqData['game'] == GAME_COIN5_BALL){
+					$arrInfo['follow_id'] = $objFollow->fl_c5_uid;
+					$arrInfo['follow_rate'] = $objFollow->fl_c5_rate;
+					$arrInfo['follow_stop'] = $objFollow->fl_c5_stop;
+				} else if($arrReqData['game'] == GAME_COIN3_BALL){
+					$arrInfo['follow_id'] = $objFollow->fl_c3_uid;
+					$arrInfo['follow_rate'] = $objFollow->fl_c3_rate;
+					$arrInfo['follow_stop'] = $objFollow->fl_c3_stop;
+				}
+			}
+
+			$arrResult['data'] = $arrInfo;
+			$arrResult['status'] = "success";
+			echo json_encode($arrResult);
+		}
+		else{//logout		
+			$arrResult['status'] = "logout";
+			echo json_encode($arrResult);	
+		}
+	}
+
+	function save_follow(){
+		$jsonData = $_REQUEST['json_'];
+		$arrReqData = json_decode($jsonData, true);
+		
+		if(is_login()) {
+
+			$modelFollow = new Follow_Model();
+			$user_id = $this->session->user_id;			
+			$objUser = $this->modelMember->getByUid($user_id);
+			$arrInfo['fl_mb_fid'] = $objUser->mb_fid;
+			$arrInfo['fl_update'] = date("Y-m-d H:i:s");
+			if($arrReqData['game'] == GAME_POWER_BALL || $arrReqData['game'] == GAME_HAPPY_BALL){
+				$arrInfo['fl_pb_uid'] = $arrReqData['uid'];
+				$arrInfo['fl_pb_rate'] = $arrReqData['rate'];
+				$arrInfo['fl_pb_stop'] = $arrReqData['stop'];
+				$modelFollow->saveByUser($arrInfo);
+			} else if($arrReqData['game'] == GAME_POWER_LADDER){
+				$arrInfo['fl_ps_uid'] = $arrReqData['uid'];
+				$arrInfo['fl_ps_rate'] = $arrReqData['rate'];
+				$arrInfo['fl_ps_stop'] = $arrReqData['stop'];
+				$modelFollow->saveByUser($arrInfo);
+			} else if($arrReqData['game'] == GAME_BOGLE_BALL){
+				$arrInfo['fl_bb_uid'] = $arrReqData['uid'];
+				$arrInfo['fl_bb_rate'] = $arrReqData['rate'];
+				$arrInfo['fl_bb_stop'] = $arrReqData['stop'];
+				$modelFollow->saveByUser($arrInfo);
+			} else if($arrReqData['game'] == GAME_BOGLE_LADDER){
+				$arrInfo['fl_bs_uid'] = $arrReqData['uid'];
+				$arrInfo['fl_bs_rate'] = $arrReqData['rate'];
+				$arrInfo['fl_bs_stop'] = $arrReqData['stop'];
+				$modelFollow->saveByUser($arrInfo);
+			} else if($arrReqData['game'] == GAME_EOS5_BALL){
+				$arrInfo['fl_e5_uid'] = $arrReqData['uid'];
+				$arrInfo['fl_e5_rate'] = $arrReqData['rate'];
+				$arrInfo['fl_e5_stop'] = $arrReqData['stop'];
+				$modelFollow->saveByUser($arrInfo);
+			} else if($arrReqData['game'] == GAME_EOS3_BALL){
+				$arrInfo['fl_e3_uid'] = $arrReqData['uid'];
+				$arrInfo['fl_e3_rate'] = $arrReqData['rate'];
+				$arrInfo['fl_e3_stop'] = $arrReqData['stop'];
+				$modelFollow->saveByUser($arrInfo);
+			} else if($arrReqData['game'] == GAME_COIN5_BALL){
+				$arrInfo['fl_c5_uid'] = $arrReqData['uid'];
+				$arrInfo['fl_c5_rate'] = $arrReqData['rate'];
+				$arrInfo['fl_c5_stop'] = $arrReqData['stop'];
+				$modelFollow->saveByUser($arrInfo);
+			} else if($arrReqData['game'] == GAME_COIN3_BALL){
+				$arrInfo['fl_c3_uid'] = $arrReqData['uid'];
+				$arrInfo['fl_c3_rate'] = $arrReqData['rate'];
+				$arrInfo['fl_c3_stop'] = $arrReqData['stop'];
+				$modelFollow->saveByUser($arrInfo);
+			}
+
+			$arrResult['status'] = "success";
+			echo json_encode($arrResult);
+		}
+		else{//logout		
+			$arrResult['status'] = "logout";
+			echo json_encode($arrResult);	
+		}
+	}
+
+	public function betting(){
+
+		$jsonData = $_REQUEST['json_'];
+		$arrBetData = json_decode($jsonData, true);
+		
+		if(is_login()) {
+			$modelMoneyhist = new MoneyHist_Model();
+			$modelReward = new Reward_Model();
+
+			$user_id = $this->session->user_id;			
+			$objUser = $this->modelMember->getByUid($user_id);
+			$objUser->emp_state_active = STATE_ACTIVE;
+
+			if(!$this->modelMember->isPermitMember($objUser, $arrBetData['game'])){
+				$objUser->emp_state_active = STATE_DISABLE;
+			}
+
+			//서버 점검상태 확인
+			if($this->modelConfsite->IsMaintain()) {
+				$objUser->emp_state_active = STATE_DISABLE;
+			}
+
+			$objConfig = $this->modelConfgame->find($arrBetData['game']);
+			$this->modelConfsite->readBetConf();
+
+			$iResult = 0;
+			$iBetId = 0;
+			if(is_null($objConfig) || $objUser->emp_state_active == STATE_DISABLE){
+				$iResult = 2;
+			} else if($arrBetData['amount'] > $objUser->mb_money && $this->alltoGame($objUser) != 1){
+				$iResult = 8;			//머니이동 실패
+			} else {
+				$modelBet = new Bet_Model();
+				$modelRound = new Round_Model();				
+				if($arrBetData['game'] == GAME_POWER_BALL){						//Powerball 
+					//round maintain time
+					if(InvalidGameTime()) {
+						$objUser->emp_state_active = STATE_DISABLE;
+					}
+					$arrRoundData = getPbRoundTimes($objConfig);
+					$iMoneyType = MONEYCHANGE_BET_PB;
+				} else if($arrBetData['game'] == GAME_POWER_LADDER){			//Powerladder
+					//round maintain time
+					if(InvalidGameTime()) {
+						$objUser->emp_state_active = STATE_DISABLE;
+					}
+					$arrRoundData = getPbRoundTimes($objConfig);
+					$iMoneyType = MONEYCHANGE_BET_PS;
+				} else if($arrBetData['game'] == GAME_BOGLE_BALL){				//Bogle Powerball 
+					$arrRoundData = getBbRoundTimes($objConfig);
+					$iMoneyType = MONEYCHANGE_BET_BB;
+				} else if($arrBetData['game'] == GAME_BOGLE_LADDER){			//Bogleladder
+					$arrRoundData = getBsRoundTimes($objConfig);
+					$iMoneyType = MONEYCHANGE_BET_BS;
+				} else if($arrBetData['game'] == GAME_EOS5_BALL){				//EOS5M
+					$arrRoundData = getPbRoundTimes($objConfig, false);
+					$iMoneyType = MONEYCHANGE_BET_EO5;
+				} else if($arrBetData['game'] == GAME_EOS3_BALL){				//EOS3M
+					$arrRoundData = getBsRoundTimes($objConfig);
+					$iMoneyType = MONEYCHANGE_BET_EO3;
+				} else if($arrBetData['game'] == GAME_COIN5_BALL){				//COIN5M
+					$arrRoundData = getPbRoundTimes($objConfig, false);
+					$iMoneyType = MONEYCHANGE_BET_CO5;
+				} else if($arrBetData['game'] == GAME_COIN3_BALL){				//COIN3M
+					$arrRoundData = getBsRoundTimes($objConfig);
+					$iMoneyType = MONEYCHANGE_BET_CO3;
+				} else if($arrBetData['game'] == GAME_HAPPY_BALL){				//Happy Powerball
+					$arrRoundData = getPbRoundTimes($objConfig, false);
+					$iMoneyType = MONEYCHANGE_BET_PB;
+				}
+				//조건체크
+				if(!is_null($modelBet)){
+					$modelBet->setType($arrBetData['game']);
+					$modelRound->setType($arrBetData['game']);
+					$nMode = (int)($arrBetData['mode']);
+					if(array_key_exists('bet.n2p_4en', $_ENV) && $_ENV['bet.n2p_4en'] && $nMode >= 31 && $nMode <= 38) {
+						$arrStatis = $modelBet->getBetStatist($objUser, $arrRoundData);
+						// writeLog("N2P Bet Statist = ".count($arrStatis));
+						if(!isEnableN2pBet($arrStatis, $nMode)){
+							$iResult = 9;
+							$modelBet = null;
+						}
+					}
+				}
+
+				if(!is_null($modelBet)){
+					
+					$arrRoundInfo = $modelRound->gets(1);
+					$arrBetData['roundid'] = count($arrRoundInfo) == 0 ? 1 : (int)($arrRoundInfo[0]->round_fid) + 1;
+					
+					$iResult = isEnableBet($arrBetData, $objUser, $objConfig, $arrRoundData);
+					if($iResult == 1){
+						$arrEmpRatio = $this->modelMember->getEmployeeRatio($objUser, $arrBetData['amount'], $arrBetData['game'], $arrBetData['mode']);
+						//베팅에 성공하면 거래내역에 반영,유저머니 변경
+						if($this->modelMember->updateAssets($objUser, 0-$arrBetData['amount'])){
+							$iBetId = $modelBet->register($arrBetData, $objUser);
+							$modelMoneyhist->registerBet($objUser, $arrBetData, $iMoneyType);
+						}
+					}
+				}
+			}
+									
+			
+			if($iResult == 1 && $iBetId > 0){			
+				// $this->modelMember->updateRewards($arrEmpRatio);			//포인트적립은 정산시 진행
+				$modelReward->register($arrBetData['game'], $iBetId, $arrEmpRatio);
+			}
+
+			$arrResult['data'] = $iResult;
+			if($iResult == 1 && $iBetId > 0){
+				$arrResult['status'] = "success";	
+				$arrResult['data'] = $iBetId;			
+			}
+			else if($iResult == 2 || $iResult == 3){
+				$arrResult['status'] = "stop";
+				$arrResult['msg'] = "베팅이 차단되었습니다.";
+			} else if($iResult == 4){
+				$arrResult['status'] = "fail";
+				$arrResult['msg'] = "최소베팅금액보다 작은 금액으로는 베팅하실 수 없습니다.";
+			} else if($iResult == 5){
+				$arrResult['status'] = "fail";
+				$arrResult['msg'] = "최대베팅금액을 초과하셨습니다.";
+			} else if($iResult == 6 || $iResult == 8){
+				$arrResult['status'] = "fail";
+				$arrResult['msg'] = "베팅금액이 보유금액을 초과하셨습니다.";
+			} else if($iResult == 7){
+				$arrResult['status'] = "fail";
+				$arrResult['msg'] = "최대적중금액을 초과하셨습니다.";
+			} else if($iResult == 9){
+				$arrResult['status'] = "fail";
+				$arrResult['msg'] = "일반볼조합 + Powerball 홀짝 배팅은 한회차에 4구멍만 가능합니다.";
+			}
+			else{
+				$arrResult['status'] = "fail";
+				$arrResult['msg'] = "베팅이 실패되었습니다.";
+			}	
+				
+
+			echo json_encode($arrResult);
+		}
+		else{//logout		
+			
+			$arrResult['status'] = "logout";
+			echo json_encode($arrResult);	
+		}
+	}
+
+	
+	public function bet_cancel(){
+
+		$jsonData = $_REQUEST['json_'];
+		$arrReqData = json_decode($jsonData, true);
+		
+		if(is_login()) {
+			$modelMoneyhist = new MoneyHist_Model();
+			$modelReward = new Reward_Model();
+
+			$user_id = $this->session->user_id;			
+			$objUser = $this->modelMember->getByUid($user_id);
+			$objConfig = $this->modelConfgame->find($arrReqData['game']);
+			
+			$cancelEnable = $this->modelConfsite->isBetCancelEnable();
+
+			$iChangeType = 0;
+			$modelBet = null;
+			if(!$cancelEnable || is_null($objConfig) || !array_key_exists('fid', $arrReqData) || !array_key_exists('game', $arrReqData)){
+				$modelBet = null;
+			}
+			else if($arrReqData['game'] == GAME_POWER_BALL){					//Powerball 
+				$modelBet = new Bet_Model();
+				$arrRoundData = getPbRoundTimes($objConfig);
+				$iChangeType = MONEYCHANGE_DENY_PB;
+			} else if($arrReqData['game'] == GAME_POWER_LADDER){				//Powerladder
+				$modelBet = new Bet_Model();
+				$arrRoundData = getPbRoundTimes($objConfig);
+				$iChangeType = MONEYCHANGE_DENY_PS;
+			} else if($arrReqData['game'] == GAME_BOGLE_BALL){					//Bogle Powerball 
+				$modelBet = new Bet_Model();
+				$arrRoundData = getBbRoundTimes($objConfig);
+				$iChangeType = MONEYCHANGE_DENY_BB;
+			} else if($arrReqData['game'] == GAME_BOGLE_LADDER){				//Bogleladder
+				$modelBet = new Bet_Model();
+				$arrRoundData = getBsRoundTimes($objConfig);
+				$iChangeType = MONEYCHANGE_DENY_BS;
+			} else if($arrReqData['game'] == GAME_EOS5_BALL || $arrReqData['game'] == GAME_COIN5_BALL){				//EOS5M
+				$modelBet = new Bet_Model();
+				$arrRoundData = getPbRoundTimes($objConfig, false);
+				$iChangeType = $arrReqData['game'] == GAME_EOS5_BALL ? MONEYCHANGE_DENY_EO5 : MONEYCHANGE_DENY_CO5;
+			} else if($arrReqData['game'] == GAME_HAPPY_BALL){					//Happy ball
+				$modelBet = new Bet_Model();
+				$arrRoundData = getPbRoundTimes($objConfig, false);
+				$iChangeType = MONEYCHANGE_DENY_PB;
+			} else if($arrReqData['game'] == GAME_EOS3_BALL || $arrReqData['game'] == GAME_COIN3_BALL){				//EOS3M
+				$modelBet = new Bet_Model();
+				$arrRoundData = getBsRoundTimes($objConfig);
+				$iChangeType = $arrReqData['game'] == GAME_EOS3_BALL ? MONEYCHANGE_DENY_EO3 : MONEYCHANGE_DENY_CO3;
+			}
+
+			$iResult = 0;
+			if(!is_null($modelBet)){
+				$modelBet->setType($arrReqData['game']);
+				$objBet = $modelBet->find($arrReqData['fid']);
+				if(is_null($objBet) || $objBet->bet_mb_uid !== $user_id ){
+					$iResult = 2;		//베팅아이디 오류
+				} else if($objBet->bet_state != 1){				//정산완료
+					$iResult = 1;
+				} else if($objBet->bet_round_no != $arrRoundData['round_no']){
+					$iResult = 3;		//베팅아이디 오류
+				} else if($objBet->bet_time < $arrRoundData['round_start'] || $objBet->bet_time > $arrRoundData['round_bet_end']){
+					$iResult = 4;		//베팅아이디 오류
+				} else if(!isEnableBetTime($arrRoundData)){
+					$iResult = 5;		//베팅 취소 불가능
+				} else {
+					if($modelBet->delete($objBet->bet_fid)){
+						if( $objBet->bet_money > 0 && $this->modelMember->updateAssets($objUser, $objBet->bet_money)){
+							$modelMoneyhist->register($objUser, $objBet->bet_money, $iChangeType);
+						}
+						$iResult = 1;		
+					}
+				}
+			}
+
+			$arrResult['data'] = $iResult;	
+
+			if($iResult == 1){
+				$arrResult['status'] = "success";	
+			} else if($iResult == 5){
+				$arrResult['status'] = "fail";	
+				$arrResult['msg'] = "베팅을 취소할수 없습니다.";	
+			} else {
+				$arrResult['status'] = "fail";	
+				$arrResult['msg'] = "거절되었습니다.";	
+			}
+			echo json_encode($arrResult);	
+
+		}
+		else{//logout		
+			
+			$arrResult['status'] = "logout";
+			echo json_encode($arrResult);	
+		}
+	}
+
+	public function bet_follow(){
+
+		$jsonData = $_REQUEST['json_'];
+		$arrReqData = json_decode($jsonData, true);
+		
+		if(is_login()) {
+			$modelMoneyhist = new MoneyHist_Model();
+			$modelReward = new Reward_Model();
+			$modelFollow = new Follow_Model();
+
+			$user_id = $this->session->user_id;			
+			$objUser = $this->modelMember->getByUid($user_id);
+			
+			$arrFollow = $modelFollow->getFollower($arrReqData['game'], $user_id);
+			
+			$fids = [];
+			foreach($arrFollow as $follow){
+				$fids[] = $follow->fl_mb_fid;
+			}
+
+			$arrMember = $this->modelMember->getByFids($fids);
+
+			$objConfig = $this->modelConfgame->find($arrReqData['game']);
+
+			$iResult = 0;
+			$iBetId = 0;
+			//서버 점검상태 확인
+			if($this->modelConfsite->IsMaintain()) {
+				$iResult = 2;
+			} else if(count($arrMember) < 1){
+				$iResult = 1;
+			} else {
+
+				$arrBetData['game'] = $arrReqData['game'];
+				$objBet = null;
+				$iMoneyChangeType = 0;
+				$modelBet = new Bet_Model();
+				$modelRound = new Round_Model();	
+				$modelBet->setType($arrBetData['game']);
+				$modelRound->setType($arrBetData['game']);
+
+				if($arrBetData['game'] == GAME_POWER_BALL){					//Powerball 
+					if(!InvalidGameTime()){
+						$objBet = $modelBet->find($arrReqData['betId']);
+						$arrRoundData = getPbRoundTimes($objConfig);
+						$iMoneyChangeType = MONEYCHANGE_BET_PB;
+					}
+				} else if($arrBetData['game'] == GAME_POWER_LADDER){					//Powerball 
+					if(!InvalidGameTime()){
+						$objBet = $modelBet->find($arrReqData['betId']);
+						$arrRoundData = getPbRoundTimes($objConfig);
+						$iMoneyChangeType = MONEYCHANGE_BET_PS;
+					}
+				} else if($arrBetData['game'] == GAME_BOGLE_BALL){					//Powerball 
+					$objBet = $modelBet->find($arrReqData['betId']);
+					$arrRoundData = getBbRoundTimes($objConfig);
+					$iMoneyChangeType = MONEYCHANGE_BET_BB;
+				} else if($arrBetData['game'] == GAME_BOGLE_LADDER){					//Powerball 
+					$objBet = $modelBet->find($arrReqData['betId']);
+					$arrRoundData = getBsRoundTimes($objConfig);
+					$iMoneyChangeType = MONEYCHANGE_BET_BS;
+				} else if($arrBetData['game'] == GAME_EOS5_BALL){					//Powerball 
+					$objBet = $modelBet->find($arrReqData['betId']);
+					$arrRoundData = getPbRoundTimes($objConfig, false);
+					$iMoneyChangeType = MONEYCHANGE_BET_EO5;
+				} else if($arrBetData['game'] == GAME_EOS3_BALL){					//Powerball 
+					$objBet = $modelBet->find($arrReqData['betId']);
+					$arrRoundData = getBsRoundTimes($objConfig);
+					$iMoneyChangeType = MONEYCHANGE_BET_EO3;
+				} else if($arrBetData['game'] == GAME_COIN5_BALL){					//Powerball 
+					$objBet = $modelBet->find($arrReqData['betId']);
+					$arrRoundData = getPbRoundTimes($objConfig, false);
+					$iMoneyChangeType = MONEYCHANGE_BET_CO5;
+				} else if($arrBetData['game'] == GAME_COIN3_BALL){					//Powerball 
+					$objBet = $modelBet->find($arrReqData['betId']);
+					$arrRoundData = getBsRoundTimes($objConfig);
+					$iMoneyChangeType = MONEYCHANGE_BET_CO3;
+				} else if($arrBetData['game'] == GAME_HAPPY_BALL){					//Powerball 
+					$objBet = $modelBet->find($arrReqData['betId']);
+					$arrRoundData = getPbRoundTimes($objConfig, false);
+					$iMoneyChangeType = MONEYCHANGE_BET_PB;
+				} 
+				
+				if(is_null($objBet)){
+					$iResult = 0;
+				} else {
+					
+					$arrBetData['roundno'] = $objBet->bet_round_no;
+					$arrBetData['roundid'] = $objBet->bet_round_fid;
+					$arrBetData['mode'] = $objBet->bet_mode;
+					$arrBetData['target'] = $objBet->bet_target;
+					$arrBetData['amount'] = $objBet->bet_money;
+					$arrBetData['ratio'] = $objBet->bet_ratio;
+					$arrBetData['fol_bet'] = $objBet->bet_fid;
+					$arrBetData['fol_user'] = $objUser->mb_fid;
+
+					foreach($arrMember as $member){
+						$member->emp_state_active = STATE_ACTIVE;
+						if(!$this->modelMember->isPermitMember($member, $arrBetData['game'])){
+							continue;
+						}
+						$rate = findFollowRate($arrBetData['game'], $arrFollow, $member->mb_fid);
+						$arrBetData['amount'] = intval($objBet->bet_money * $rate);
+
+						$iResult = isEnableBet($arrBetData, $member, $objConfig, $arrRoundData);
+						if($iResult == 1){
+							$arrEmpRatio = $this->modelMember->getEmployeeRatio($member, $arrBetData['amount'], $arrBetData['game'], $arrBetData['mode']);
+							//베팅에 성공하면 거래내역에 반영,유저머니 변경
+							if($this->modelMember->updateAssets($member, 0-$arrBetData['amount'])){
+								$iBetId = $modelBet->register($arrBetData, $member);
+								$modelMoneyhist->registerBet($member, $arrBetData, $iMoneyChangeType);
+							}
+						}
+
+						if($iResult == 1 && $iBetId > 0){	
+							// $this->modelMember->updateRewards($arrEmpRatio);
+							$modelReward->register($arrBetData['game'], $iBetId, $arrEmpRatio);
+						}
+								
+
+					}	
+
+				}
+					
+			}
+
+			$arrResult['data'] = $iResult;
+			if($iResult == 1 && $iBetId > 0){
+				$arrResult['status'] = "success";				
+			}
+			else if($iResult == 2 || $iResult == 3){
+				$arrResult['status'] = "stop";
+				// $arrResult['msg'] = "베팅이 차단되었습니다.";
+			} else if($iResult == 4){
+				$arrResult['status'] = "fail";
+				// $arrResult['msg'] = "최소베팅금액보다 작은 금액으로는 베팅하실 수 없습니다.";
+			} else if($iResult == 5){
+				$arrResult['status'] = "fail";
+				// $arrResult['msg'] = "최대베팅금액을 초과하셨습니다.";
+			} else if($iResult == 6){
+				$arrResult['status'] = "fail";
+				// $arrResult['msg'] = "베팅금액이 보유금액을 초과하셨습니다.";
+			} else if($iResult == 7){
+				$arrResult['status'] = "fail";
+				// $arrResult['msg'] = "최대적중금액을 초과하셨습니다.";
+			}
+			else{
+				$arrResult['status'] = "fail";
+				$arrResult['msg'] = "베팅이 실패되었습니다.";
+			}	
+
+			echo json_encode($arrResult);
+		}
+		else{//logout		
+			
+			$arrResult['status'] = "logout";
+			echo json_encode($arrResult);	
+		}
+	}
+
+	
+	public function follow_cancel(){
+
+		$jsonData = $_REQUEST['json_'];
+		$arrReqData = json_decode($jsonData, true);
+		
+		if(is_login()) {
+			$modelMoneyhist = new MoneyHist_Model();
+			$modelReward = new Reward_Model();
+
+			$user_id = $this->session->user_id;			
+			$objUser = $this->modelMember->getByUid($user_id);
+			$objConfig = $this->modelConfgame->find($arrReqData['game']);
+			
+			$cancelEnable = $this->modelConfsite->isBetCancelEnable();
+			$modelBet = new Bet_Model();
+			$modelBet->setType($arrReqData['game']);
+
+			$iChangeType = 0;
+			if(!$cancelEnable || is_null($objConfig) || !array_key_exists('fid', $arrReqData) || !array_key_exists('game', $arrReqData)){
+				$modelBet = null;
+			}
+			else if($arrReqData['game'] == GAME_POWER_BALL || $arrReqData['game'] == GAME_HAPPY_BALL){					//Powerball 
+				$iChangeType = MONEYCHANGE_DENY_PB;
+			} else if($arrReqData['game'] == GAME_POWER_LADDER){				//Powerladder
+				$iChangeType = MONEYCHANGE_DENY_PS;
+			} else if($arrReqData['game'] == GAME_BOGLE_BALL){					//Bogle Powerball 
+				$iChangeType = MONEYCHANGE_DENY_BB;
+			} else if($arrReqData['game'] == GAME_BOGLE_LADDER){				//Bogleladder
+				$iChangeType = MONEYCHANGE_DENY_BS;
+			} else if($arrReqData['game'] == GAME_EOS5_BALL){				//EOS5M
+				$iChangeType = MONEYCHANGE_DENY_EO5;
+			} else if($arrReqData['game'] == GAME_EOS3_BALL){				//EOS3M
+				$iChangeType = MONEYCHANGE_DENY_EO3;
+			} else if($arrReqData['game'] == GAME_COIN5_BALL){				//EOS5M
+				$iChangeType = MONEYCHANGE_DENY_CO5;
+			} else if($arrReqData['game'] == GAME_COIN3_BALL){				//EOS3M
+				$iChangeType = MONEYCHANGE_DENY_CO3;
+			} else $modelBet = null;
+
+			$iResult = 0;
+			if(!is_null($modelBet)){
+				$objBet = $modelBet->find($arrReqData['fid']);
+				if(!is_null($objBet) ){
+					$iResult = 2;		//베팅아이디 오류
+				} else {
+					$arrBet = $modelBet->followBet($arrReqData['fid']);
+
+					foreach($arrBet as $objBet){
+						if($objBet->bet_state != 1)				//정산완료
+							continue;
+						if($modelBet->delete($objBet->bet_fid)){
+							$objMember = $this->modelMember->getByUid($objBet->bet_mb_uid);
+							if(!is_null($objMember) && $objBet->bet_money > 0 && $this->modelMember->updateAssets($objMember, $objBet->bet_money)){
+								$modelMoneyhist->register($objMember, $objBet->bet_money, $iChangeType);
+							}
+						}	
+					}
+					
+					$iResult = 1;
+
+				}
+			}
+
+			$arrResult['data'] = $iResult;	
+
+			if($iResult == 1){
+				$arrResult['status'] = "success";	
+			} else if($iResult == 5){
+				$arrResult['status'] = "fail";	
+				$arrResult['msg'] = "베팅을 취소할수 없습니다.";	
+			} else {
+				$arrResult['status'] = "fail";	
+				$arrResult['msg'] = "거절되었습니다.";	
+			}
+			echo json_encode($arrResult);	
+
+		}
+		else{//logout		
+			
+			$arrResult['status'] = "logout";
+			echo json_encode($arrResult);	
+		}
+	}
+
+	public function config(){
+
+		$objConf = $this->modelConfgame->find(GAME_HAPPY_BALL);
+		$arrConf1 = array($objConf->game_ratio_1, $objConf->game_ratio_2, $objConf->game_ratio_3, $objConf->game_ratio_4);
+
+		$objConf = $this->modelConfgame->find(GAME_POWER_LADDER);
+		$arrConf2 = array($objConf->game_ratio_1, $objConf->game_ratio_2, $objConf->game_ratio_3);
+		
+		$objConf = $this->modelConfgame->find(GAME_BOGLE_BALL);
+		$arrConf3 = array($objConf->game_ratio_1, $objConf->game_ratio_2, $objConf->game_ratio_3, $objConf->game_ratio_4);
+		
+		$objConf = $this->modelConfgame->find(GAME_BOGLE_LADDER);
+		$arrConf4 = array($objConf->game_ratio_1, $objConf->game_ratio_2, $objConf->game_ratio_3);
+
+		$objConf = $this->modelConfgame->find(GAME_EOS5_BALL);
+		$arrConf5 = array($objConf->game_ratio_1, $objConf->game_ratio_2, $objConf->game_ratio_3, $objConf->game_ratio_4);
+
+		$objConf = $this->modelConfgame->find(GAME_EOS3_BALL);
+		$arrConf6 = array($objConf->game_ratio_1, $objConf->game_ratio_2, $objConf->game_ratio_3, $objConf->game_ratio_4);
+
+		$configData = array($arrConf1, $arrConf2, $arrConf3, $arrConf4, $arrConf5, $arrConf6);
+		$objResult = new \StdClass;
+		$objResult->data = $configData;			
+		$objResult->status = "success";
+	
+		echo json_encode($objResult);
+
+	}
+
+	public function balance(){
+		$jsonData = $_REQUEST['json_'];
+		$arrReqData = json_decode($jsonData, true);
+		
+		$objResult = new \StdClass;
+		if(!array_key_exists('game', $arrReqData) || empty($arrReqData['game'])){
+			$objResult->status = "fail";
+		} else {
+
+			$modelBet = null;
+			$modelBet = new Bet_Model();
+			if($arrReqData['game'] == 1){	
+				$modelBet->setType(GAME_HAPPY_BALL);
+				$objConfig = $this->modelConfgame->find(GAME_HAPPY_BALL);
+				$arrRoundData = getPbRoundTimes($objConfig, false);
+			}/*else if($arrReqData['game'] == 2){	
+				$modelBet->setType(GAME_POWER_LADDER);
+				$objConfig = $this->modelConfgame->find(GAME_POWER_LADDER);
+				$arrRoundData = getPbRoundTimes($objConfig);
+			}*/ else if($arrReqData['game'] == 3){	
+				$modelBet->setType(GAME_BOGLE_BALL);
+				$objConfig = $this->modelConfgame->find(GAME_BOGLE_BALL);
+				$arrRoundData = getBbRoundTimes($objConfig);
+			} else if($arrReqData['game'] == 4){	
+				$modelBet->setType(GAME_BOGLE_LADDER);
+				$objConfig = $this->modelConfgame->find(GAME_BOGLE_LADDER);
+				$arrRoundData = getBsRoundTimes($objConfig);
+			} else if($arrReqData['game'] == 5 ){	
+				$modelBet->setType(GAME_EOS5_BALL);
+				$objConfig = $this->modelConfgame->find(GAME_EOS5_BALL);
+				$arrRoundData = getPbRoundTimes($objConfig, false);
+			} else if($arrReqData['game'] == 6){	
+				$modelBet->setType(GAME_EOS3_BALL);
+				$objConfig = $this->modelConfgame->find(GAME_EOS3_BALL);
+				$arrRoundData = getBsRoundTimes($objConfig);
+			} else if($arrReqData['game'] == 7 ){	
+				$modelBet->setType(GAME_COIN5_BALL);
+				$objConfig = $this->modelConfgame->find(GAME_COIN5_BALL);
+				$arrRoundData = getPbRoundTimes($objConfig, false);
+			} else if($arrReqData['game'] == 8){	
+				$modelBet->setType(GAME_COIN3_BALL);
+				$objConfig = $this->modelConfgame->find(GAME_COIN3_BALL);
+				$arrRoundData = getBsRoundTimes($objConfig);
+			} else $modelBet = null;
+
+			if(is_null($modelBet)){
+				$objResult->status = "fail";
+			} else {
+				if($this->modelConfsite->IsGamePerFull()){
+					$objConfig = null;
+				}
+				$data['roundno'] = $arrRoundData['round_no'];
+				$data['balance'] = $modelBet->getBetSumByMode($arrRoundData, $objConfig);
+
+				$objResult->data = $data;
+				$objResult->status = "success";
+			}
+		}
+		echo json_encode($objResult);
+	}
+
+	public function egginfo(){
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;
+		} else {
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id, true);
+			if(array_key_exists('app.reqEg', $_ENV) && $_ENV['app.reqEg'] == 1 ){
+				if(!is_null($objMember))
+					$this->allEgg($objMember);
+			} 
+			$result->status = STATUS_SUCCESS;
+		}
+		echo json_encode($result);
+
+	}
+
+	public function myinfo(){
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->status = STATUS_LOGOUT;
+		}
+		else {
+
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id, true);
+			$sess_id = $this->session->session_id;
+
+			$objEmp = null;
+			if($objMember->mb_emp_fid > 0)
+				$objEmp = $this->modelMember->getByFid($objMember->mb_emp_fid);
+
+			$userInfo = getUserInfo($objMember, $objEmp);
+			$result->data = $userInfo;
+			$result->status = STATUS_SUCCESS;
+
+		}
+
+		echo json_encode($result);	
+	}
+
+
+}
