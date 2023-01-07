@@ -231,7 +231,7 @@ class Api extends BaseController
 				$this->sess_destroy();
 				$result->status = STATUS_LOGOUT;                
 			} else{
-				writeLog("[check_session] ".$user_id." (".$sess_id.")");
+				// writeLog("[check_session] ".$user_id." (".$sess_id.")");
 				$this->modelSess->updateLast($sess_id);
 
 				$objInfo = new \StdClass;
