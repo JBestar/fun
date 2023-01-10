@@ -139,7 +139,7 @@
                 <a data-tab="my_betting" class="item">베팅</a>  -->
                 <a data-tab="my_charge" class="item">입금내역</a>
                 <a data-tab="my_exchange" class="item">출금내역</a> 
-                <a data-tab="my_memo" class="item">쪽지</a>
+                <a data-tab="my_memo" class="item">&nbsp;&nbsp;&nbsp;&nbsp;쪽지&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 <a data-tab="my_qna" class="item">고객센터</a>
                 <a data-tab="notice" class="item">공지사항</a>
             </div>
