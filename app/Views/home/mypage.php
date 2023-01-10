@@ -118,18 +118,20 @@
             .ui.form .inline.field .input{
                 width:calc(100% - 80px);
             }
-            .ui.tabular.menu{
-                border-bottom:0px;
-            }
             #dashboard .ui.table thead th{
                 background:#24425b;
             }
+
         </style>
-        <link rel="stylesheet" href="/css/darkmode.css?v=4" />
+        <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
+            <link rel="stylesheet" href="/css/darkmode.css?v=3" />
+        <?php else : ?>
+            <link rel="stylesheet" href="/css/darkmode.css?ver=<?=time()?>" />
+        <?php endif ?>
         <script src="/js/darkmode.js"></script>
     </head>
-    <body>
-        <div id="dashboard" class="ui loading segment" style="margin: 15px;">
+    <body style="">
+        <div id="dashboard" class="ui loading segment" style="margin: 0px; ">
             <div class="ui message inverted"></div>
             <div class="ui grid top attached tabular menu grey">
                 <a data-tab="my_info" class="item ">회원정보</a> 
@@ -342,10 +344,15 @@
                 <div class="ui form">
                     <div class="fields">
                         <div class="field">
-                            <!-- <label>신청일</label> -->
                             <div class="inline field">
-                                <input type="date" v-model="start.charge"/> <span>~</span> <input type="date" v-model="end.charge"/> 
-                                <button class="ui blue button" v-on:click="getMyChargeList">검색</button>
+                                <div class="ui mini icon input">
+                                    <input type="date" v-model="start.charge"/> 
+                                </div>
+                                <span>~</span> 
+                                <div class="ui mini icon input">
+                                    <input type="date" v-model="end.charge"/> 
+                                </div>
+                                <button class="ui tiny blue button" v-on:click="getMyChargeList">검색</button>
                             </div>
                         </div>
                     </div>
@@ -374,6 +381,7 @@
                 </table>
                 <div class="pagination_box">
                     <paginate
+                        v-if="totalPageCount.charge"
                         :page-count="totalPageCount.charge"
                         :page-range="3"
                         :margin-pages="1"
@@ -391,8 +399,14 @@
                         <div class="field">
                             <!-- <label>신청일</label> -->
                             <div class="inline field">
-                                <input type="date" v-model="start.exchange"/> <span>~</span> <input type="date" v-model="end.exchange"/> 
-                                <button class="ui blue button" v-on:click="getMyExchangeList">검색</button>
+                                <div class="ui mini icon input">
+                                    <input type="date" v-model="start.exchange"/> 
+                                </div>
+                                <span>~</span> 
+                                <div class="ui mini icon input">
+                                    <input type="date" v-model="end.exchange"/> 
+                                </div>
+                                <button class="ui tiny blue button" v-on:click="getMyExchangeList">검색</button>
                             </div>
                         </div>
                     </div>
@@ -421,6 +435,7 @@
                 </table>
                 <div class="pagination_box">
                     <paginate
+                        v-if="totalPageCount.exchange"
                         :page-count="totalPageCount.exchange"
                         :page-range="3"
                         :margin-pages="1"
@@ -435,16 +450,19 @@
             <div data-tab="my_login" id="my_login" class="ui tab segment"></div>
             <div data-tab="my_memo" id="my_memo" class="ui tab segment">
                 <div class="ui form">
-                    <!-- <label>일시</label> -->
                     <div class="inline field">
-                        <input type="date" v-model="start.memo"/> <span>~</span> <input type="date" v-model="end.memo"/> 
-                        <button class="ui blue button" v-on:click="getMyMemoList">검색</button>
-
+                        <div class="ui mini icon input">
+                            <input type="date" v-model="start.memo"/> 
+                        </div>
+                        <span>~</span> 
+                        <div class="ui mini icon input">
+                            <input type="date" v-model="end.memo"/> 
+                        </div>
+                        <button class="ui tiny blue button" v-on:click="getMyMemoList">검색</button>
                         <button class="ui tiny red right floated button" onclick="deleteMemo(0)"> 전체 삭제</button>
                         <button class="ui tiny green right floated button" onclick="readMemo(0)"> 전체 읽기</button>
                     </div>
                 </div>
-                <!-- <table class="ui line table"> -->
                 <table class="ui unstackable accordion celled table">
                     <thead>
                         <tr>
@@ -476,6 +494,7 @@
                 </table>
                 <div class="pagination_box">
                     <paginate
+                        v-if="totalPageCount.memo"
                         :page-count="totalPageCount.memo"
                         :page-range="3"
                         :margin-pages="1"
@@ -490,10 +509,17 @@
             <div data-tab="my_qna" id="my_qna" class="ui tab segment">
                 <div class="ui form">
                     <div class="inline field">
-                        <input type="date" v-model="start.qna"/> <span>~</span> <input type="date" v-model="end.qna"/> 
-                        <button class="ui blue button" v-on:click="getMyQnaList" style="margin-bottom:10px" >검색</button>
-                        <button uk-toggle="target:#qnaWriteModal" class="ui tiny blue right floated button" aria-expanded="false"><i class="pencil alternate icon"></i> 1:1 문의하기</button>
-                        <button class="ui tiny green right floated button" onclick="requestAccount()"><i class="ui question circle icon"></i> 계좌 문의하기</button>
+                        <div class="ui mini icon input">
+                            <input type="date" v-model="start.qna"/>
+                        </div>
+                        <span>~</span> 
+                        <div class="ui mini icon input">
+                            <input type="date" v-model="end.qna"/> 
+                        </div>
+                        <button class="ui tiny blue button" v-on:click="getMyQnaList" style="margin-bottom:10px" >검색</button>
+                        <button class="ui tiny red right floated button" onclick="deleteCus(0)"><i class="ui times circle icon"></i> 전체 삭제</button>
+                        <button uk-toggle="target:#qnaWriteModal" class="ui tiny blue right floated button" aria-expanded="false"><i class="pencil alternate icon"></i> 1:1 문의</button>
+                        <button class="ui tiny green right floated button" onclick="requestAccount()"><i class="ui question circle icon"></i> 계좌 문의</button>
                     </div>
                 </div>
                 <table class="ui unstackable accordion celled table">
@@ -503,6 +529,7 @@
                             <th>문의제목</th>
                             <th>문의일시</th>
                             <th>답변</th>
+                            <th>삭제</th>
                         </tr>
                     </thead>
                     <tbody v-for="item in qnaList">
@@ -511,6 +538,7 @@
                             <td><span>{{ item.notice_title }}</span> <i class="ui dropdown icon"></i></td>
                             <td><span>{{ item.notice_time_create }}</span></td>
                             <td v-html="strQnaCheck(item.notice_state_active)"> </td>
+                            <td><div class="ui orange horizontal label" v-on:click="deleteCus(item.notice_fid)">삭제</div></td>
                         </tr>
                         <tr>
                             <td colspan="100%" class="full-width transition hidden">
@@ -529,6 +557,7 @@
                 </table>
                 <div class="pagination_box">
                     <paginate
+                        v-if="totalPageCount.qna"
                         :page-count="totalPageCount.qna"
                         :page-range="3"
                         :margin-pages="1"
@@ -544,10 +573,15 @@
                 <div class="ui form">
                     <div class="fields">
                         <div class="field">
-                            <!-- <label>작성일시</label> -->
                             <div class="inline field">
-                                <input type="date" v-model="start.notice"/> <span>~</span> <input type="date" v-model="end.notice"/> 
-                                <button class="ui blue button" v-on:click="getNoticeList">검색</button>
+                                <div class="ui mini icon input">
+                                    <input type="date" v-model="start.notice"/> 
+                                </div>
+                                <span>~</span> 
+                                <div class="ui mini icon input">
+                                    <input type="date" v-model="end.notice"/> 
+                                </div>
+                                <button class="ui tiny blue button" v-on:click="getNoticeList">검색</button>
                             </div>
                         </div>
                     </div>
@@ -579,6 +613,7 @@
                 </table>
                 <div class="pagination_box">
                     <paginate
+                        v-if="totalPageCount.notice"
                         :page-count="totalPageCount.notice"
                         :page-range="3"
                         :margin-pages="1"
@@ -933,12 +968,16 @@
                 );
             }
             function deleteMemo(idx) {
-                if(objDashBoard.unreadMemo > 0){
+                if(idx==0 && objDashBoard.unreadMemo > 0){
                     alert("미확인 쪽지가 있습니다.\n확인후 삭제해주세요.");
                     return;
                 }
 
-                UIkit.modal.confirm("전체 삭제를 하시겠습니까?", {labels: {'ok': '확인', 'cancel': '취소'}}).then(
+                let msg = "삭제하시겠습니까?";
+                if(idx == 0)
+                    msg = "전체 삭제를 하시겠습니까?";
+
+                UIkit.modal.confirm(msg, {labels: {'ok': '확인', 'cancel': '취소'}}).then(
                     function () {
                         $.post(
                             "/api/delete_message",
@@ -959,6 +998,32 @@
                 );
             }
 
+            function deleteCus(idx) {
+
+                let msg = "삭제하시겠습니까?";
+                if(idx == 0)
+                    msg = "전체 삭제를 하시겠습니까?";
+
+                UIkit.modal.confirm(msg, {labels: {'ok': '확인', 'cancel': '취소'}}).then(
+                    function () {
+                        $.post(
+                            "/api/delete_customer",
+                            {
+                                idx: idx,
+                            },
+                            function (response) {
+                                if (response.status == "success") {
+                                    objDashBoard.getMyQnaList();
+                                } else {
+                                    alert(response.msg);
+                                }
+                            },
+                            "json"
+                        );
+                    },
+                    function () {}
+                );
+            }
         </script>
 
         <script>
@@ -1335,6 +1400,27 @@
                                     function (response) {
                                         if (response.status == "success") {
                                             objDashBoard.getMyMemoList();
+                                        } else {
+                                            alert(response.msg);
+                                        }
+                                    },
+                                    "json"
+                                );
+                            },
+                            function () {}
+                        );
+                    },
+                    deleteCus: function (idx) {
+                        UIkit.modal.confirm("삭제하시겠습니까?", {labels: {'ok': '확인', 'cancel': '취소'}}).then(
+                            function () {
+                                $.post(
+                                    "/api/delete_customer",
+                                    {
+                                        idx: idx,
+                                    },
+                                    function (response) {
+                                        if (response.status == "success") {
+                                            objDashBoard.getMyQnaList();
                                         } else {
                                             alert(response.msg);
                                         }

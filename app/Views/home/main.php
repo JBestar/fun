@@ -31,7 +31,7 @@
             <script type="text/javascript" src="/js/script.php.js?ver=1"></script>
             <script type="text/javascript" src="/js/lib.js?ver=1"></script>
             <script type="text/javascript" src="/js/common.js?ver=1"></script>
-            <script type="text/javascript" src="/js/SLB.js?ver=3"></script>
+            <script type="text/javascript" src="/js/SLB.js?ver=4"></script>
             <script type="text/javascript" src="/js/main.js?ver=2"></script>
             <link rel="stylesheet" type="text/css" href="/css/devel.css?v=3" />
         <?php else : ?>
@@ -56,7 +56,7 @@
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=4" />
         <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=2" />
-        <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=2" />
+        <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=3" />
     <?php else : ?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=<?=time()?>" />
         <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=<?=time()?>" />
@@ -91,11 +91,11 @@
         <div
             id="SLB_film"
             onclick="SLB();"
-            style="z-index: 1000; position: absolute; display: none; width: 100%; height: 100%; background-color: #000000; filter: Alpha(opacity=60); opacity: 0.6; -moz-opacity: 0.6; -webkit-opacity: 0.6;"
+            style="z-index: 1000; position: absolute; display: none; width: 100%; height: 100%; background-color: #000000; filter: Alpha(opacity=60); opacity: 0.6; -moz-opacity: 0.6; -webkit-opacity: 0.6; "
         ></div>
         <div class="ui centered doubling stackable grid">
             <div id="SLB_wide" class="six wide column">
-                <div id="SLB_content" style="z-index: 99999; position: absolute; background-color: white;"></div>
+                <div id="SLB_content" style="z-index: 99999; position: absolute; background-color: #000000; filter: Alpha(opacity=95); opacity: 0.95; -moz-opacity: 0.95; -webkit-opacity: 0.95; "></div>
             </div>
         </div>
         <div id="SLB_loading"></div>

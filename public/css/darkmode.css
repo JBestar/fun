@@ -51,6 +51,12 @@ html, body {
     background: #334155;
     border: 1px solid white;
     color: white;
+    border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+    margin-right: 3px;
+}
+
+.ui.top.attached.menu > .item:first-child {
+    border-radius: 0.28571429rem 0.28571429rem 0em 0em;
 }
 
 .ui.tabular.menu .item.active, .ui.tabular.menu .item:hover {
@@ -72,6 +78,8 @@ html, body {
     font-size: 26px;
     color:#cccccc;
     text-align: center;
+    border:2px solid rgb(255 213 0);
+    border-bottom: 1px solid rgb(109 99 52);
 }
 
 .SLB_close {

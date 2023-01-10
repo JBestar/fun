@@ -63,7 +63,7 @@ function SLB(url, option)
 		ifr_width = '100%';//'99%';
 		ifr_height = '95%';//'90%';
 		SLB_content.innerHTML +="<iframe id='SLB_iframe' src=" + url + " width="+ ifr_width +" height="+ ifr_height +" " +
-			"class='SLB_center' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' allowTransparency=false'/></iframe>";
+			"class='SLB_center' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' allowTransparency=false style='border:2px solid rgb(255 213 0); border-top:0px;'/></iframe>";
 
 		//SLB_content.style.width = settings.width+ 'px';
 		SLB_content.style.width = '100%'; //'99%'
