@@ -589,7 +589,7 @@ class ServiceLogic
 
 			if($bet['txn_type'] === "credit")			//청산
 			{	
-				if(!is_null($betting) &&  intval($betting['bet_win_money']) == $bet['win'])
+				if(!is_null($betting) &&  intval($betting['bet_win_money']) == $bet['win_money'])
 					continue;
 				
 				$arrMemBet[$objMember->mb_fid] = strToLocal($bet['created_at']);
@@ -607,17 +607,17 @@ class ServiceLogic
 					writeLog($this->fLog, $logHead."Update ACCId=".$betId."=>Result-".$bResult);
 				}
 			} else {								//베팅
-				if(!is_null($betting) &&  intval($betting['bet_money']) == $bet['bet'])
+				if(!is_null($betting) &&  intval($betting['bet_money']) == $bet['bet_money'])
 					continue;
 				
 				$bBlank = false;
 				$nBlankPt = 0;
 
-				$arrEmpRatio = calcEmpPoint($objMember->ratio, $bet['bet'], strToLocal($bet['created_at']));
+				$arrEmpRatio = calcEmpPoint($objMember->ratio, $bet['bet_money'], strToLocal($bet['created_at']));
 				if($objMember->mb_blank_count > 0 && intval($objMember->mb_blank_current) >= intval($objMember->mb_blank_count)-1 ){
 					$objMember->mb_blank_current = 0;
 					$bBlank = true;
-					$nBlankPt = calcCompPoint($objMember->ratio, $bet['bet']);
+					$nBlankPt = calcCompPoint($objMember->ratio, $bet['bet_money']);
 					$arrMemBlank[$objMember->mb_fid] = $objMember->mb_blank_current;
 					writeLog($this->fLog, $logHead."Blank Cross Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current." Comp=".$nBlankPt);
 				} else {

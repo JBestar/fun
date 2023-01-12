@@ -251,19 +251,19 @@ class SlotBet_Model {
 		$strSql.= " '".strToLocal($bet['created_at'])."', "; //Local "2022-03-15 08:30:27"
 		if($bet['txn_type'] === "debit"){
 			//bet_money
-			$strSql.= " '".$bet['bet']."', ";
+			$strSql.= " '".$bet['bet_money']."', ";
 			//bet_win_money
 			$strSql.= " '0', ";
 		} else if($bet['txn_type'] === "credit") {
 			//bet_money
 			$strSql.= " '0', ";
 			//bet_win_money
-			$strSql.= " '".$bet['win']."', ";
+			$strSql.= " '".$bet['win_money']."', ";
 		} else{
 			//bet_money
-			$strSql.= " '".$bet['bet']."', ";
+			$strSql.= " '".$bet['bet_money']."', ";
 			//bet_win_money
-			$strSql.= " '".$bet['win']."', ";
+			$strSql.= " '".$bet['win_money']."', ";
 		}
 		
 		//bet_agent_id
@@ -302,15 +302,15 @@ class SlotBet_Model {
 		$strSql = "UPDATE ".$this->mTableName." SET ";	
 		if($bet['txn_type'] === "debit"){
 			//bet_money
-			$strSql.= " bet_money = '".$bet['bet']."' ";
+			$strSql.= " bet_money = '".$bet['bet_money']."' ";
 		} else if($bet['txn_type'] === "credit") {
 			//bet_win_money
-			$strSql.= " bet_win_money = '".$bet['win']."' ";
+			$strSql.= " bet_win_money = '".$bet['win_money']."' ";
 		} else{
 			//bet_money
-			$strSql.= " bet_money = '".$bet['bet']."', ";
+			$strSql.= " bet_money = '".$bet['bet_money']."', ";
 			//bet_win_money
-			$strSql.= " bet_win_money = '".$bet['win']."' ";
+			$strSql.= " bet_win_money = '".$bet['win_money']."' ";
 		}
 
 		if($bBlank){
