@@ -251,7 +251,7 @@ class SlotBet_Model {
 		$strSql.= " '".strToLocal($bet['created_at'])."', "; //Local "2022-03-15 08:30:27"
 		if($bet['txn_type'] === "debit"){
 			//bet_money
-			$strSql.= " '".$bet['bet_money']."', ";
+			$strSql.= " '".$bet['bet']."', ";
 			//bet_win_money
 			$strSql.= " '0', ";
 		} else if($bet['txn_type'] === "credit") {
@@ -302,7 +302,7 @@ class SlotBet_Model {
 		$strSql = "UPDATE ".$this->mTableName." SET ";	
 		if($bet['txn_type'] === "debit"){
 			//bet_money
-			$strSql.= " bet_money = '".$bet['bet_money']."' ";
+			$strSql.= " bet_money = '".$bet['bet']."' ";
 		} else if($bet['txn_type'] === "credit") {
 			//bet_win_money
 			$strSql.= " bet_win_money = '".$bet['win']."' ";
