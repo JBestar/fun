@@ -258,12 +258,12 @@ class SlotBet_Model {
 			//bet_money
 			$strSql.= " '0', ";
 			//bet_win_money
-			$strSql.= " '".$bet['win_money']."', ";
+			$strSql.= " '".$bet['win']."', ";
 		} else{
 			//bet_money
-			$strSql.= " '".$bet['bet_money']."', ";
+			$strSql.= " '".$bet['bet']."', ";
 			//bet_win_money
-			$strSql.= " '".$bet['win_money']."', ";
+			$strSql.= " '".$bet['win']."', ";
 		}
 		
 		//bet_agent_id
@@ -305,12 +305,12 @@ class SlotBet_Model {
 			$strSql.= " bet_money = '".$bet['bet_money']."' ";
 		} else if($bet['txn_type'] === "credit") {
 			//bet_win_money
-			$strSql.= " bet_win_money = '".$bet['win_money']."' ";
+			$strSql.= " bet_win_money = '".$bet['win']."' ";
 		} else{
 			//bet_money
-			$strSql.= " bet_money = '".$bet['bet_money']."', ";
+			$strSql.= " bet_money = '".$bet['bet']."', ";
 			//bet_win_money
-			$strSql.= " bet_win_money = '".$bet['win_money']."' ";
+			$strSql.= " bet_win_money = '".$bet['win']."' ";
 		}
 
 		if($bBlank){
