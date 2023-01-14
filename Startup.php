@@ -116,7 +116,7 @@
 					// writeLog($fLog, $result);
 					$bInsert = $objServLogic->registerGslotBets($result);
 				}
-			} else {
+			} else if($appType == APPTYPE_1 || $appType == APPTYPE_2 ){
 				if($hFslot == null){
 					$hFslot = curl_multi_init();
 					$curl = $objServLogic->curlFslotBets($ordFsl);
