@@ -248,7 +248,7 @@ class ApiSlot_Lib {
         $arrPost['key'] = $this->mAgCode;
         $arrPost['secret'] = $this->mAgToken;
         $arrPost['userID'] = $id;
-        $arrPost['amount'] = intval($balance);
+        $arrPost['amount'] = floatval($balance);
         $post = json_encode($arrPost);
 
         $header =  ['Content-Type: application/json',

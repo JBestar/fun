@@ -22,7 +22,7 @@
         <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
         <link rel="stylesheet" href="/css/bootstrap.min.css?ver=1" />
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/js/semantic-ui/semantic.js"></script>
+        <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=1"></script>
         <script src="/js/worker.js?v=1"></script>
         <!--순서중요-->
 
@@ -1237,23 +1237,23 @@
                         {
                             type: "empty",
                         },
-                        {
-                            type: "minLength[4]",
-                        },
-                        {
-                            type: "maxLength[16]",
-                        },
+                        // {
+                        //     type: "minLength[2]",
+                        // },
+                        // {
+                        //     type: "maxLength[16]",
+                        // },
                     ],
                 },
                 passwd: {
-                    identifier: "password",
+                    identifier: "passwd",
                     rules: [
                         {
                             type: "empty",
                         },
-                        {
-                            type: "minLength[4]",
-                        },
+                        // {
+                        //     type: "minLength[2]",
+                        // },
                     ],
                 },
             };

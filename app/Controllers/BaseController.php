@@ -494,7 +494,7 @@ class BaseController extends Controller
 					usleep(500000);
 					$amount = $arrResult['balance'];
 					$arrResp =  $this->libApislot->subBalance($objMember->mb_slot_uid, $amount);
-					writeLog($logHead." ".$objMember->mb_uid."-Withdraw resultCode=".$arrResult['resultCode']);
+					writeLog($logHead." ".$objMember->mb_uid."-Withdraw resultCode=".$arrResp['resultCode']);
 				} else {
 					$objMember->mb_slot_money = $arrResult['balance'];
 					$this->modelMember->updateSlotMoney($objMember);
@@ -593,7 +593,7 @@ class BaseController extends Controller
 					usleep(500000);
 					$amount = $arrResult['balance'];
 					$arrResp =  $this->libApigslot->subBalance($objMember->mb_gslot_uid, $amount);
-					writeLog($logHead." ".$objMember->mb_uid."-Withdraw status=".$arrResult['status']);
+					writeLog($logHead." ".$objMember->mb_uid."-Withdraw status=".$arrResp['status']);
 				} else {
 					$objMember->mb_gslot_money = $arrResult['balance'];
 					$this->modelMember->updateGslotMoney($objMember);

@@ -1749,7 +1749,7 @@ $.fn.form.settings = {
   },
 
   prompt: {
-    empty                : '{name} must have a value',
+    empty                : '{name}를 입력해주세요',
     checked              : '{name} must be checked',
     email                : '{name} must be a valid e-mail',
     url                  : '{name} must be a valid url',

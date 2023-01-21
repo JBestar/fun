@@ -217,7 +217,7 @@ class ApiGslot_Lib  {
         $arrPost['agent_code'] = $this->mAgCode;
         $arrPost['agent_token'] = $this->mAgToken;
         $arrPost['user_code'] = $id;
-        $arrPost['amount'] = intval($balance);
+        $arrPost['amount'] = floatval($balance);
         $arrPost['game_type'] = "slot";
         $post = json_encode($arrPost);
 
