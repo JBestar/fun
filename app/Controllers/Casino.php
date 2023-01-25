@@ -51,7 +51,7 @@ class Casino extends BaseController
 			else if($objMember->mb_live_id == 0){
 				//플레이어 창조
 				$createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
-				$arrResult = $this->libApicas->createUser($createId, $objMember->mb_nickname);
+				$arrResult = $this->libApiCas->createUser($createId, $objMember->mb_nickname);
                 
                 if($arrResult['status'] == 1){
                     $objMember->mb_live_id = $arrResult['user_id'];
@@ -63,7 +63,7 @@ class Casino extends BaseController
                 } else {
                     if(array_key_exists('error', $arrResult) && $arrResult['error'] == DOUBLE_USER){
                         usleep(500000);
-						$arrResult = $this->libApicas->getUserInfo($createId);
+						$arrResult = $this->libApiCas->getUserInfo($createId);
 						writeLog($logHead.$objMember->mb_uid."-Double UserInfo Status=".$arrResult['status']);
                         if($arrResult['status'] == 1){
 							$objMember->mb_live_id = $arrResult['user_id'];
@@ -104,7 +104,7 @@ class Casino extends BaseController
 				else $iResult = 1;
 
 				if($iResult == 1){
-                    $arrResult = $this->libApicas->auth($objMember->mb_live_uid, $objMember->mb_nickname, $objMember->mb_live_money);
+                    $arrResult = $this->libApiCas->auth($objMember->mb_live_uid, $objMember->mb_nickname, $objMember->mb_live_money);
                     if($arrResult['status'] == 1){
                         writeLog($logHead.$objMember->mb_uid."-Login Sucess !!");
                         writeLog($logHead.$arrResult['launch_url']);
@@ -171,7 +171,7 @@ class Casino extends BaseController
 			else if($objMember->mb_kgon_id == 0){
 				//플레이어 창조
                 $createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
-				$arrResult = $this->libApikgon->createUser($createId, $objMember->mb_nickname, $objMember->mb_uid);
+				$arrResult = $this->libApiKgon->createUser($createId, $objMember->mb_nickname, $objMember->mb_uid);
                 
                 if($arrResult['status'] == 1){
                     $objMember->mb_kgon_id = $arrResult['id'];
@@ -217,7 +217,7 @@ class Casino extends BaseController
                 if($iResult != 1){
                     print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
                 } else {
-                    $arrResult = $this->libApikgon->auth($objMember->mb_kgon_uid, $objMember->mb_nickname, $objMember->mb_uid, $objCas->key, $objCas->lobby);
+                    $arrResult = $this->libApiKgon->auth($objMember->mb_kgon_uid, $objMember->mb_nickname, $objMember->mb_uid, $objCas->key, $objCas->lobby);
                     if($arrResult['status'] == 1){
                         writeLog($logHead.$objMember->mb_uid."-Login Sucess !!");
                         writeLog($logHead.$arrResult['url']);

@@ -219,10 +219,10 @@ class Member_Model extends Model {
          return $this->updateBatch($batch, 'mb_fid');    //return updated Count
     }
 
-    public function updateAssets(&$objUser, $inMoney , $inPoint = 0, $slEgg=0, $fslEgg=0){
+    public function updateAssets(&$objUser, $inMoney , $inPoint = 0){
 
-        if($inMoney == 0 && $inPoint == 0 && $slEgg == 0 && $fslEgg==0)
-            return;
+        if($inMoney == 0 && $inPoint == 0)
+            return true;
 
         $strSql = "UPDATE ".$this->table." SET ";
         if($inMoney != 0){
@@ -239,21 +239,6 @@ class Member_Model extends Model {
             $strSql.= $inPoint;
         }
 
-        if($slEgg != 0){
-            $strSql.= $inMoney != 0 ? " , ":" ";
-
-            $strSql.= "mb_slot_money = mb_slot_money";
-            $strSql.= $slEgg > 0 ? " + ":" ";
-            $strSql.= $slEgg;
-        }
-
-        if($fslEgg != 0){
-            $strSql.= ($inMoney != 0 || $slEgg !=0) ? " , ":" ";
-
-            $strSql.= "mb_fslot_money = mb_fslot_money";
-            $strSql.= $fslEgg > 0 ? " + ":" ";
-            $strSql.= $fslEgg;
-        }
         $strSql.= " WHERE mb_fid=".$objUser->mb_fid;
 
         $this->db->transBegin();
