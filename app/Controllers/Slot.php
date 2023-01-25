@@ -671,20 +671,27 @@ class Slot extends BaseController
 			else if(!is_null($sess))
 				$iCreated = 9;
 			else if($objMember->mb_hslot_token == ""){
+				writeLog($logHead.$objMember->mb_uid."-1");
 				//플레이어 창조
 				$arrResult = $this->libApiHslot->createUser($objMember->mb_uid, $objMember->mb_nickname);
+
 				if($arrResult['status'] == 1){
-					$objMember->mb_hslot_token = $arrResult['token'];
+
+					$objMember->mb_hslot_token = $arrResult['data']['token'];
                     $objMember->mb_hslot_money = 0;
                     $this->modelMember->updateHslotInfo($objMember);
                     $iCreated = 1;
 
                     writeLog($logHead.$objMember->mb_uid."-CreateUser Sucess !!");
 				} else {
+					writeLog($logHead.$objMember->mb_uid."-2");
+
 					$iCreated = 2;								//회원창조실패
 					if(array_key_exists('description', $arrResult))
 						writeLog($logHead.$objMember->mb_uid."-CreateUser Error description=".$arrResult['description']); 
 				}
+				writeLog($logHead.$objMember->mb_uid."-3");
+
 			} else {
 				$iCreated = 1;
 			}

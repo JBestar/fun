@@ -86,6 +86,8 @@ $routes->get('fslotlist', 'Slot::fslotlist');
 $routes->get('xslot', 'Slot::xslot');
 $routes->get('xslotf', 'Slot::xslotf');
 $routes->get('xslotg', 'Slot::xslotg');
+$routes->get('xslotk', 'Slot::xslotk');
+$routes->get('xsloth', 'Slot::xsloth');
 
 $routes->get('evl', 'Casino::evl');
 $routes->get('cas', 'Casino::cas');

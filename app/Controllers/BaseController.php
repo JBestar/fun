@@ -661,6 +661,7 @@ class BaseController extends Controller
 		} else {
             $iResult = 1;
         }
+
 		return $iResult;
 	}
 
@@ -839,6 +840,7 @@ class BaseController extends Controller
 		$iResult = 0;
 
 		$logHead = "<MbtoHsl> ";
+
 		//슬롯 <= 보유머니넘기기
 		if($objMember->mb_hslot_token !== "" && $objMember->mb_money > 0){
 			//슬롯머니 요청
@@ -860,6 +862,7 @@ class BaseController extends Controller
 		} else {
             $iResult = 1;
         }
+
 		return $iResult;
 	}
 }

@@ -122,7 +122,7 @@ class ApiHslot_Lib  {
                 // "description": "Success",
                 // "memberBalance": 10000,
                 // "thirdPartyBalance": 0
-                $arrResult['balance'] = $arrResult['memberBalance'];
+                $arrResult['balance'] = $arrResult['memberBalance']+$arrResult['thirdPartyBalance'];
             } else { 
                 $arrResult['status'] = 0;
                 //"state": 1,
