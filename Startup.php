@@ -49,7 +49,7 @@
 	$ordFsl = 0;
 	$logHead = "<Oive>";
 	
-	$secSleep = 5;
+	$secSleep = 11;
 	$secRepeat = 1;
 
 	writeLog($fLog, $logHead."==============START==============");
@@ -63,7 +63,7 @@
 		$nSec = date("s",$tmNow);
 
 		//로그파일 
-		if($nHour == 0 && $nMin == 0 && $nSec < 5){
+		if($nHour == 0 && $nMin == 0 && $nSec < $secSleep){
 
 			$strDate = date( 'Y-m-d', $tmNow );
 			if($fName !== $strDate){

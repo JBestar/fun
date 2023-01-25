@@ -797,16 +797,16 @@ class ServiceLogic
 
 			$lastIdx = $bet['utcCreatedAt'];
 			
-			writeLog($this->fLog, $logHead."Bet1-".$bet['refId']."=>".$bet['cash']);
+			// writeLog($this->fLog, $logHead."Bet1-".$bet['refId']."=>".$bet['cash']);
 			
 			if($bet['gameCategory'] !== "slot")
 				continue;
-			writeLog($this->fLog, $logHead."Bet2-".$bet['refId']."=>".$bet['cash']);
+			// writeLog($this->fLog, $logHead."Bet2-".$bet['refId']."=>".$bet['cash']);
 
 			$objMember = findMemberByLiveId($arrMember, $bet['siteUsername'], $gameId);
 			if(is_null($objMember))
 				continue;
-			writeLog($this->fLog, $logHead."Bet3-".$bet['refId']."=>".$bet['cash']);
+			writeLog($this->fLog, $logHead."Bet-".$bet['refId']."=>".$bet['cash']);
 
 			$bet['game_id'] = $gameId;
 			$bet['agent_id'] = $arrInfo[1];			//agent code			
