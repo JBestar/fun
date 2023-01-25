@@ -84,7 +84,7 @@
 				
 		//슬롯1 게임결과 기록
 		if(!$bSlDeny && !$bSlReg){
-			if($appType == APPTYPE_1 || $appType == APPTYPE_3 || $appType == APPTYPE_4){
+			if($appType == APPTYPE_1 || $appType == APPTYPE_3 || $appType == APPTYPE_4 || $appType == APPTYPE_6 || $appType == APPTYPE_8){
 				if($hSlot == null){
 					$hSlot = curl_multi_init();
 					$curl = $objServLogic->curlSlotBets();
@@ -103,20 +103,7 @@
 		
 		//슬롯2 게임결과 기록
 		if(!$bSlDeny && !$bFslReg){
-			if($appType == APPTYPE_4 || $appType == APPTYPE_5){
-				if($hFslot == null){
-					$hFslot = curl_multi_init();
-					$curl = $objServLogic->curlGslotBets();
-					curl_multi_add_handle($hFslot, $curl);
-					writeLog($fLog, $logHead."GSLOT-REQ-".$hFslot);
-				}
-				$result = curlProc($hFslot, $fLog );
-				if($result != null){
-					$bFslReg = true;
-					// writeLog($fLog, $result);
-					$bInsert = $objServLogic->registerGslotBets($result);
-				}
-			} else if($appType == APPTYPE_1 || $appType == APPTYPE_2 ){
+			if($appType == APPTYPE_1 || $appType == APPTYPE_2 ){
 				if($hFslot == null){
 					$hFslot = curl_multi_init();
 					$curl = $objServLogic->curlFslotBets($ordFsl);
@@ -129,7 +116,46 @@
 					// writeLog($fLog, $result);
 					$bInsert = $objServLogic->registerFslotBets($result, $ordFsl);
 				}
-			}
+			} else if($appType == APPTYPE_4 || $appType == APPTYPE_5){
+				if($hFslot == null){
+					$hFslot = curl_multi_init();
+					$curl = $objServLogic->curlGslotBets();
+					curl_multi_add_handle($hFslot, $curl);
+					writeLog($fLog, $logHead."GSLOT-REQ-".$hFslot);
+				}
+				$result = curlProc($hFslot, $fLog );
+				if($result != null){
+					$bFslReg = true;
+					// writeLog($fLog, $result);
+					$bInsert = $objServLogic->registerGslotBets($result);
+				}
+			} else if($appType == APPTYPE_6 || $appType == APPTYPE_7){
+				if($hFslot == null){
+					$hFslot = curl_multi_init();
+					$curl = $objServLogic->curlKslotBets();
+					curl_multi_add_handle($hFslot, $curl);
+					writeLog($fLog, $logHead."KSLOT-REQ-".$hFslot);
+				}
+				$result = curlProc($hFslot, $fLog );
+				if($result != null){
+					$bFslReg = true;
+					// writeLog($fLog, $result);
+					$bInsert = $objServLogic->registerKslotBets($result);
+				}
+			} else if($appType == APPTYPE_8 || $appType == APPTYPE_9){
+				if($hFslot == null){
+					$hFslot = curl_multi_init();
+					$curl = $objServLogic->curlHslotBets();
+					curl_multi_add_handle($hFslot, $curl);
+					writeLog($fLog, $logHead."HSLOT-REQ-".$hFslot);
+				}
+				$result = curlProc($hFslot, $fLog );
+				if($result != null){
+					$bFslReg = true;
+					// writeLog($fLog, $result);
+					$bInsert = $objServLogic->registerHslotBets($result);
+				}
+			} 
 			
 		}  
 		

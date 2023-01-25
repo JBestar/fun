@@ -1,6 +1,5 @@
 <?php
     
-
     function findMemberByLiveId($arrMember, $liveId, $gameId){
 
       $findMember = null;
@@ -25,7 +24,7 @@
             $findMember = $objMember;
             break;
           }
-        } else if($gameId == GAME_CASINO_KGON){
+        } else if($gameId == GAME_CASINO_KGON || $gameId == GAME_SLOT_4 || $gameId == GAME_SLOT_5 ){
           if($objMember->mb_uid == $liveId){
             $findMember = $objMember;
             break;
@@ -58,6 +57,8 @@
           case GAME_SLOT_1:
           case GAME_SLOT_2: 
           case GAME_SLOT_3: 
+          case GAME_SLOT_4: 
+          case GAME_SLOT_5: 
                 $fRatio = $objMember->mb_game_sl_ratio;
                 break;
           default: break;

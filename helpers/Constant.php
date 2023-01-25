@@ -1,6 +1,6 @@
 <?php
 
-define("FID_OFFSET", 2000);
+define("FID_OFFSET", 5000);
 
 define('LEVEL_COMPANY', 99);
 
@@ -9,6 +9,10 @@ define('APPTYPE_2', 2);
 define('APPTYPE_3', 3); 
 define('APPTYPE_4', 4); 
 define('APPTYPE_5', 5); 
+define('APPTYPE_6', 6); 
+define('APPTYPE_7', 7); 
+define('APPTYPE_8', 8); 
+define('APPTYPE_9', 9); 
 
 define('GAME_POWER_BALL', 1);
 define('GAME_POWER_LADDER', 2);
@@ -19,6 +23,8 @@ define('GAME_BOGLE_LADDER', 6);
 define('GAME_SLOT_1', 7);
 define('GAME_SLOT_2', 8);
 define('GAME_SLOT_3', 13);
+define('GAME_SLOT_4', 15);
+define('GAME_SLOT_5', 16);
 
 define('ROUND_5MIN', 5);
 define('ROUND_3MIN', 3);
@@ -48,7 +54,7 @@ define('CONF_NPG_DENY', 26);
 define('CONF_BPG_DENY', 27);
 define('CONF_CAS_DENY', 28);
 define('CONF_SLOT_DENY', 29);
-define('CONF_IMG_TYPE', 30);
+define('CONF_SLOT_HI', 30);
 define('CONF_KGON_ENABLE', 31);
 
 

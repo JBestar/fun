@@ -76,7 +76,9 @@ class Member_Model {
             $where = " WHERE mb_fslot_id IN ( ".$whereIn.")";
         } else if($iGame == GAME_SLOT_3){
             $where = " WHERE mb_gslot_uid IN ( ".$whereIn.")";
-        } else if($iGame == GAME_CASINO_KGON){
+        } else if($iGame == GAME_CASINO_KGON || $iGame == GAME_SLOT_4){
+            $where = " WHERE mb_uid IN ( ".$whereIn.")";
+        } else if($iGame == GAME_SLOT_5){
             $where = " WHERE mb_uid IN ( ".$whereIn.")";
         } else return $arrMember; 
         
