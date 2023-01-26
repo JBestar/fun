@@ -816,7 +816,7 @@
         return $nMoney;
 
       $nMoney = $member->mb_money + $member->mb_live_money + $member->mb_slot_money
-       + $member->mb_fslot_money + $member->mb_kgon_money + $member->mb_gslot_money + $member->mb_hslot_money;
+       + $member->mb_fslot_money + $member->mb_kgon_money + $member->mb_gslot_money;
       return $nMoney;
     }
 

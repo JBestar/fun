@@ -266,11 +266,20 @@ class Slot extends BaseController
 
 
 	public function xslotf(){
+		$prdCode = trim($this->request->getVar('prd'));
+		$slotId = trim($this->request->getVar('game'));
+			
 		if(!is_login())
 		{
 			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
 
-        } else {
+        } else if($_ENV['app.type'] == APPTYPE_5){
+			$this->response->redirect('/slot/xslotg?prd='.$prdCode.'&game='.$slotId);	
+		} else if($_ENV['app.type'] == APPTYPE_7){
+			$this->response->redirect('/slot/xslotk?prd='.$prdCode.'&game='.$slotId);	
+		} else if($_ENV['app.type'] == APPTYPE_9){
+			$this->response->redirect('/slot/xsloth?prd='.$prdCode.'&game='.$slotId);	
+		} else {
 			$modelSlotgame = new SlotGame_Model();
 
 			$gameId = GAME_SLOT_2;
@@ -280,8 +289,6 @@ class Slot extends BaseController
 			$objMember = $this->modelMember->getByUid($user_id);
 			$objConfig = $this->modelConfgame->find($gameId);  //슬롯2
 
-			$prdCode = trim($this->request->getVar('prd'));
-			$slotId = trim($this->request->getVar('game'));
 			$objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
 			$objSlot = $modelSlotgame->getById($gameId, $prdCode, $slotId);
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
@@ -670,16 +677,16 @@ class Slot extends BaseController
 				$iCreated = 8;
 			else if(!is_null($sess))
 				$iCreated = 9;
-			else if($objMember->mb_hslot_token == ""){
+			else if($objMember->mb_fslot_uid == ""){
 				writeLog($logHead.$objMember->mb_uid."-1");
 				//플레이어 창조
 				$arrResult = $this->libApiHslot->createUser($objMember->mb_uid, $objMember->mb_nickname);
 
 				if($arrResult['status'] == 1){
 
-					$objMember->mb_hslot_token = $arrResult['data']['token'];
-                    $objMember->mb_hslot_money = 0;
-                    $this->modelMember->updateHslotInfo($objMember);
+					$objMember->mb_fslot_uid = $arrResult['data']['token'];
+                    $objMember->mb_fslot_money = 0;
+                    $this->modelMember->updateFslotInfo($objMember);
                     $iCreated = 1;
 
                     writeLog($logHead.$objMember->mb_uid."-CreateUser Sucess !!");
@@ -719,7 +726,7 @@ class Slot extends BaseController
 
 				$iResult = $this->alltoGame($objMember, $gameId);
 				if($iResult == 1){
-					$arrResult = $this->libApiHslot->auth($objMember->mb_hslot_token, $objSlot);
+					$arrResult = $this->libApiHslot->auth($objMember->mb_fslot_uid, $objSlot);
 					if($arrResult['status'] == 1){
 						writeLog($logHead.$objMember->mb_uid."-Login Sucess !!");
 						writeLog($logHead.$arrResult['url']);
