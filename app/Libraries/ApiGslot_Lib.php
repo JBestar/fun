@@ -56,8 +56,7 @@ class ApiGslot_Lib  {
                 // "status": 1,
                 // "msg": "SUCCESS",
                 // "user_code": "Lu_1",
-                // "user_slot_balance": 0,
-                // "user_casino_balance": 0
+                // "user_balance": 0,
             } else { 
                 // "status": 0,
                 // "msg": "DUPLICATE_USER"
@@ -72,7 +71,7 @@ class ApiGslot_Lib  {
     }
 
     
-    public function getUserInfo($id)
+    public function getUserInfo($id="")
     {
         if(strlen($this->mHost) < 1){
             return array('status' => 0, 'msg'=>CONNECT_ERROR);
@@ -83,7 +82,8 @@ class ApiGslot_Lib  {
         $arrPost['method'] = "money_info";
         $arrPost['agent_code'] = $this->mAgCode;
         $arrPost['agent_token'] = $this->mAgToken;
-        $arrPost['user_code'] = $id;
+        if(strlen($id) > 0)
+            $arrPost['user_code'] = $id;
         $post = json_encode($arrPost);
 
         $header =  $this->getHeader($post);
@@ -98,15 +98,17 @@ class ApiGslot_Lib  {
                 // "msg": "SUCCESS",
                 // "agent": {
                 //     "agent_code": "ace1",
-                //     "slot_balance": 0,
-                //     "casino_balance": 0
+                //     "balance": 0,
                 // },
                 // "user": {
                 //     "user_code": "Lu_1",
-                //     "slot_balance": 0,
-                //     "casino_balance": 0
+                //     "balance": 0,
                 // }
-                $arrResult['balance'] = $arrResult['user']['slot_balance'];
+                if(strlen($id) > 0)
+                    $arrResult['balance'] = $arrResult['user']['balance'];
+                else 
+                    $arrResult['balance'] = $arrResult['agent']['balance'];
+                    
             } else { //
                 // "status": 0,
                 // "msg": "DUPLICATE_USER"
@@ -187,9 +189,8 @@ class ApiGslot_Lib  {
 			if($arrResult['status'] == 1){
                 // "status": 1, 
                 // "msg": "success",
-                // "agent_slot_balance": 990000,
-                // "user_slot_balance": 10000,
-                $arrResult['balance'] = $arrResult['user_slot_balance'];
+                // "user_balance": 10000,
+                $arrResult['balance'] = $arrResult['user_balance'];
             } else { //
                 // "status": 0,
                 // "msg": "INSUFFICIENT_FUNDS"
@@ -231,9 +232,8 @@ class ApiGslot_Lib  {
 			if($arrResult['status'] == 1){
                 // "status": 1,
                 // "msg": "success"
-                // "agent_slot_balance": 100000,
-                // "user_slot_balance": 10000,        
-                $arrResult['balance'] = $arrResult['user_slot_balance'];
+                // "user_balance": 10000,        
+                $arrResult['balance'] = $arrResult['user_balance'];
             } else { //
                 $arrResult['status'] = 0;
                 // "status": 0,

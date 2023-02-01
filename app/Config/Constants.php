@@ -69,12 +69,6 @@ defined('ENV_PRODUCTION')   || define('ENV_PRODUCTION', 'production');
 defined('ENV_DEVELOPMENT')  || define('ENV_DEVELOPMENT', 'development');
 
 
-$base_url = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://'.$_SERVER['HTTP_HOST'] : 'http://'.$_SERVER['HTTP_HOST']."".str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
-defined('BASEURL') || define('BASEURL', $base_url);
-
-defined('LOG_WRITE')            || define('LOG_WRITE', true);
-defined('LOG_FILE')             || define('LOG_FILE', ROOTPATH."logs".DIRECTORY_SEPARATOR);
-
 defined('APPTYPE_0')        || define('APPTYPE_0', 0);      //Premier
 defined('APPTYPE_1')        || define('APPTYPE_1', 1);      //Slot + FSlot
 defined('APPTYPE_2')        || define('APPTYPE_2', 2);      //FSlot
@@ -85,6 +79,24 @@ defined('APPTYPE_6')        || define('APPTYPE_6', 6);      //Slot + KGON
 defined('APPTYPE_7')        || define('APPTYPE_7', 7);      //KGON Slot
 defined('APPTYPE_8')        || define('APPTYPE_8', 8);      //Slot + HI
 defined('APPTYPE_9')        || define('APPTYPE_9', 9);      //HI Slot
+
+defined('EXIT_SUCCESS')        || define('EXIT_SUCCESS', 0); // no errors
+defined('EXIT_ERROR')          || define('EXIT_ERROR', 1); // generic error
+defined('EXIT_CONFIG')         || define('EXIT_CONFIG', 3); // configuration error
+defined('EXIT_UNKNOWN_FILE')   || define('EXIT_UNKNOWN_FILE', 4); // file not found
+defined('EXIT_UNKNOWN_CLASS')  || define('EXIT_UNKNOWN_CLASS', 5); // unknown class
+defined('EXIT_UNKNOWN_METHOD') || define('EXIT_UNKNOWN_METHOD', 6); // unknown class member
+defined('EXIT_USER_INPUT')     || define('EXIT_USER_INPUT', 7); // invalid user input
+defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8); // database error
+defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
+defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+
+$base_url = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://'.$_SERVER['HTTP_HOST'] : 'http://'.$_SERVER['HTTP_HOST']."".str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
+defined('BASEURL') || define('BASEURL', $base_url);
+
+defined('LOG_WRITE')            || define('LOG_WRITE', true);
+defined('LOG_FILE')             || define('LOG_FILE', ROOTPATH."logs".DIRECTORY_SEPARATOR);
 
 //config site index
 defined('CONF_SITENAME')       || define('CONF_SITENAME', 1);
