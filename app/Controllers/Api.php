@@ -617,9 +617,9 @@ class Api extends BaseController
 
 			$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
 			$sAnswer = $objConf->conf_content;
-            $sAnswer .= "<p> <br>입금계좌 : &nbsp;";
+			$sAnswer .= "<p> <br>입금계좌 : &nbsp;<b style='color:#ffff00'>";
 			$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
-			$sAnswer .= str_replace("#", " ", $objConf->conf_content)."</p>";
+			$sAnswer .= str_replace("#", "&nbsp;&nbsp;", $objConf->conf_content)."</b></p>";
 
 			$data = [  
                 'notice_type' => NOTICE_CUSTOMER,

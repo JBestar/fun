@@ -95,7 +95,7 @@
         ></div>
         <div class="ui centered doubling stackable grid">
             <div id="SLB_wide" class="six wide column">
-                <div id="SLB_content" style="z-index: 99999; position: absolute; background-color: #000000; filter: Alpha(opacity=95); opacity: 0.95; -moz-opacity: 0.95; -webkit-opacity: 0.95; "></div>
+                <div id="SLB_content" style="z-index: 99999; position: absolute; background-color: #000000; filter: Alpha(opacity=97); opacity: 0.97; -moz-opacity: 0.97; -webkit-opacity: 0.97; "></div>
             </div>
         </div>
         <div id="SLB_loading"></div>
