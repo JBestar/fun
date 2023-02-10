@@ -36,7 +36,7 @@ class Casino extends BaseController
 				$iCreated = 0;
 			else if($objConfig->game_bet_permit != PERMIT_OK)
 				$iCreated = 4;									//준비중
-            else if($headInfo['cas_deny'])
+            else if($headInfo['evol_deny'])
                 $iCreated = 3;
 			else if(is_null($objCas))
 				$iCreated = 7;									//게임정보오류
@@ -160,7 +160,7 @@ class Casino extends BaseController
 				$iCreated = 7;
 			else if($objConfig->game_bet_permit != PERMIT_OK)
 				$iCreated = 4;									//준비중
-            else if(!$headInfo['kgon_enable'])
+            else if($headInfo['cas_deny'])
                 $iCreated = 3;									//차단
 			else if(!$this->modelMember->isPermitMember($objMember, GAME_CASINO_KGON))
 				$iCreated = 3;									//차단

@@ -220,7 +220,7 @@
                         </li>
                         <?php endif ?>
                         
-                        <?php if (!$cas_deny || $kgon_enable):?>
+                        <?php if (!$evol_deny || !$cas_deny):?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('live-casino');">
                             <a><i class="ui life ring icon"></i> 카지노</a>
                         </li>
@@ -232,7 +232,7 @@
                         </li>
                         <?php endif ?>
                         
-                        <?php if(!$bpg_deny || $eos5_enable || $eos3_enable || $coin5_enable || $coin3_enable || $hpg_enable) :?>
+                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$hpg_deny) :?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('mini');">
                             <a><i class="ui bowling ball icon"></i> 미니게임</a>
                         </li>
@@ -382,7 +382,7 @@
                             <div class="categories categories-desktop js-games-categories-slider slick-initialized slick-slider">
                                 <div class="ui two column centered grid">
                                     <div class="four column centered row">
-                                        <?php if (!$cas_deny || $kgon_enable):?>
+                                        <?php if (!$evol_deny || !$cas_deny):?>
                                             <div class="column first">
                                                 <img src="/images/common/tab_casino_select.png?v=1" onclick="javascript:showTabMenu('live-casino');" id="img_casino" style="cursor: pointer;" />
                                             </div>
@@ -392,7 +392,7 @@
                                                 <img src="/images/common/tab_slot.png?v=1" onclick="javascript:showTabMenu('slots');" id="img_slots" style="cursor: pointer;" />
                                             </div>
                                          <?php endif ?>
-                                        <?php if(!$bpg_deny || $eos5_enable || $eos3_enable || $coin5_enable || $coin3_enable || $hpg_enable) :?>
+                                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$hpg_deny) :?>
                                         <div class="column first">
                                             <?php if ($apps_enable):?>
                                             <img src="/images/common/tab_mini.png?v=1" 
@@ -459,7 +459,7 @@
                         </section>
                         <?php endif ?>
 
-                        <?php if (!$cas_deny || $kgon_enable):?>
+                        <?php if (!$evol_deny || !$cas_deny):?>
                         <section class="uk-section" id="live-casino">
                             <div class="uk-container">
                                 <h2 style="margin-bottom: 20px; text-align: center;">
@@ -540,7 +540,7 @@
                         </section>
                         <?php endif ?>
 
-                        <?php if($hpg_enable || !$bpg_deny || $eos5_enable || $eos3_enable || $coin5_enable || $coin3_enable || $hpg_enable) :?>
+                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$hpg_deny) :?>
                         <section class="uk-section" id="mini" style="display: none;">
                             <div class="uk-container">
                                 <h2 style="margin-bottom: 20px; text-align: center;">MINI GAMES
@@ -554,7 +554,7 @@
                                 </h2>
                                 <div class="uk-grid uk-grid-small uk-child-width-1-3 uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-grid-match" data-uk-lightbox="toggle:a.uk-position-cover" data-uk-grid="">
                                     <!-- item -->
-                                    <?php if($hpg_enable) :?>
+                                    <?php if(!$hpg_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
@@ -615,7 +615,7 @@
                                             </div>
                                         </div>
                                     <?php endif ?>
-                                    <?php if($eos5_enable) :?>
+                                    <?php if(!$eos5_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
@@ -636,7 +636,7 @@
                                             </div>
                                         </div>
                                     <?php endif ?>
-                                    <?php if($eos3_enable) :?>
+                                    <?php if(!$eos3_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
@@ -657,7 +657,7 @@
                                             </div>
                                         </div>
                                     <?php endif ?>
-                                    <?php if($coin5_enable) :?>
+                                    <?php if(!$coin5_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
@@ -678,7 +678,7 @@
                                             </div>
                                         </div>
                                     <?php endif ?>
-                                    <?php if($coin3_enable) :?>
+                                    <?php if(!$coin3_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">

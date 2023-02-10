@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <ul class="gamezone-menu result_menu">
-                    <?php if($hpg_enable) :?>
+                    <?php if(!$hpg_deny) :?>
                     <li class="dropdown">
                         <a class="<?=$gm_hpb?>" href="/mini?gm=HPB">해피게임</a>
                     </li>
@@ -81,28 +81,28 @@
                     </li>
                     <?php endif ?>
 
-                    <?php if($eos5_enable || $eos3_enable) :?>
+                    <?php if(!$eos5_deny || !$eos3_deny) :?>
                     <li class="dropdown">
                         <button class="dropbtn <?=$gm_eos?>">EOS게임</button>
                         <div class="dropdown-content">
-                        <?php if($eos3_enable) :?>
+                        <?php if(!$eos3_deny) :?>
                             <a class="<?=$gm_e3?>" href="/mini?gm=EOS3">EOS3분파워볼</a>
                         <?php endif ?>
-                        <?php if($eos5_enable) :?>
+                        <?php if(!$eos5_deny) :?>
                             <a class="<?=$gm_e5?>" href="/mini?gm=EOS5">EOS5분파워볼</a>
                         <?php endif ?>
                         </div>
                     </li>
                     <?php endif ?>
 
-                    <?php if($coin5_enable || $coin3_enable) :?>
+                    <?php if(!$coin5_deny || !$coin3_deny) :?>
                     <li class="dropdown">
                         <button class="dropbtn <?=$gm_co?>">코인게임</button>
                         <div class="dropdown-content">
-                        <?php if($coin3_enable) :?>
+                        <?php if(!$coin3_deny) :?>
                             <a class="<?=$gm_c3?>" href="/mini?gm=COIN3">코인3분 파워볼</a>
                         <?php endif ?>
-                        <?php if($coin5_enable) :?>
+                        <?php if(!$coin5_deny) :?>
                             <a class="<?=$gm_c5?>" href="/mini?gm=COIN5">코인5분 파워볼</a>
                         <?php endif ?>
                         </div>

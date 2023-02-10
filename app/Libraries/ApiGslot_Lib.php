@@ -13,7 +13,7 @@ class ApiGslot_Lib  {
     {
         $modelConfsite = new ConfSite_Model();
       
-        $objConf = $modelConfsite->find(CONF_SLOT_3);
+        $objConf = $modelConfsite->find(CONF_API_GOLD);
         if(!is_null($objConf)){
             $arrInfo = explode("#", $objConf->conf_content);
             if(count($arrInfo) >= 3){	//0-host, 1-ag_code, 2-ag_token

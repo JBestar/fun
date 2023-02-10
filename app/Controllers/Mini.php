@@ -32,31 +32,31 @@ class Mini extends BaseController
                 $navInfo['gm_bg'] = 'active';
             } else if($game === "EOS5"){
                 $gameId = GAME_EOS5_BALL;
-                if(!$headInfo['eos5_enable'])
+                if($headInfo['eos5_deny'])
     				$bPermit = false;
                 $navInfo['gm_e5'] = 'active';
                 $navInfo['gm_eos'] = 'active';
             } else if($game === "EOS3"){
                 $gameId = GAME_EOS3_BALL;
-                if(!$headInfo['eos3_enable'])
+                if($headInfo['eos3_deny'])
     				$bPermit = false;
                 $navInfo['gm_e3'] = 'active';
                 $navInfo['gm_eos'] = 'active';
             } else if($game === "COIN5"){
                 $gameId = GAME_COIN5_BALL;
-                if(!$headInfo['coin5_enable'])
+                if($headInfo['coin5_deny'])
     				$bPermit = false;
                 $navInfo['gm_c5'] = 'active';
                 $navInfo['gm_co'] = 'active';
             } else if($game === "COIN3"){
                 $gameId = GAME_COIN3_BALL;
-                if(!$headInfo['coin3_enable'])
+                if($headInfo['coin3_deny'])
     				$bPermit = false;
                 $navInfo['gm_c3'] = 'active';
                 $navInfo['gm_co'] = 'active';
             } else if($game === "HPB"){
                 $gameId = GAME_HAPPY_BALL;
-                if(!$headInfo['hpg_enable'])
+                if($headInfo['hpg_deny'])
     				$bPermit = false;
                 $navInfo['gm_hpb'] = 'active';
             } else 

@@ -80,6 +80,17 @@ defined('APPTYPE_7')        || define('APPTYPE_7', 7);      //KGON Slot
 defined('APPTYPE_8')        || define('APPTYPE_8', 8);      //Slot + HI
 defined('APPTYPE_9')        || define('APPTYPE_9', 9);      //HI Slot
 
+defined('APP_TYPE_1')        || define('APP_TYPE_1', 1);      //Slot + FSlot
+defined('APP_TYPE_2')        || define('APP_TYPE_2', 2);      //FSlot
+defined('APP_TYPE_3')        || define('APP_TYPE_3', 3);      //Slot
+//Genuine
+defined('APP_SLOT_THEPLUS')  || define('APP_SLOT_THEPLUS', 1); 
+defined('APP_SLOT_KGON')     || define('APP_SLOT_KGON', 2); 
+defined('APP_SLOT_STAR')     || define('APP_SLOT_STAR', 3); 
+
+//Natural 
+defined('APP_FSLOT_GSPLAY')  || define('APP_FSLOT_GSPLAY', 1); 
+defined('APP_FSLOT_GOLD')    || define('APP_FSLOT_GOLD', 2); 
 defined('EXIT_SUCCESS')        || define('EXIT_SUCCESS', 0); // no errors
 defined('EXIT_ERROR')          || define('EXIT_ERROR', 1); // generic error
 defined('EXIT_CONFIG')         || define('EXIT_CONFIG', 3); // configuration error
@@ -115,26 +126,26 @@ defined('CONF_SOUND_1')        || define('CONF_SOUND_1', 15);
 defined('CONF_SOUND_2')        || define('CONF_SOUND_2', 16);
 defined('CONF_SOUND_3')        || define('CONF_SOUND_3', 17);
 defined('CONF_SOUND_4')        || define('CONF_SOUND_4', 18);
-defined('CONF_SLOT_3')          || define('CONF_SLOT_3', 19);
-defined('CONF_CASINO_KGON')     || define('CONF_CASINO_KGON', 20);
-defined('CONF_CASINO_EVOL')     || define('CONF_CASINO_EVOL', 21);
-defined('CONF_SLOT_1')          || define('CONF_SLOT_1', 22);
-defined('CONF_SLOT_2')          || define('CONF_SLOT_2', 23);
+defined('CONF_API_GOLD')       || define('CONF_API_GOLD', 19);
+defined('CONF_API_KGON')       || define('CONF_API_KGON', 20);
+defined('CONF_API_HPPLAY')     || define('CONF_API_HPPLAY', 21);
+defined('CONF_API_THEPLUS')    || define('CONF_API_THEPLUS', 22);
+defined('CONF_API_GSPLAY')     || define('CONF_API_GSPLAY', 23);
+defined('CONF_API_STAR')       || define('CONF_API_STAR', 30);
 
 defined('CONF_CHARGE_MANUAL')  || define('CONF_CHARGE_MANUAL', 24);
 defined('CONF_DISCHA_MANUAL')  || define('CONF_DISCHA_MANUAL', 25);
 
 defined('CONF_NPG_DENY')        || define('CONF_NPG_DENY', 26);
 defined('CONF_BPG_DENY')        || define('CONF_BPG_DENY', 27);
-defined('CONF_CAS_DENY')        || define('CONF_CAS_DENY', 28);
+defined('CONF_EVOL_DENY')       || define('CONF_EVOL_DENY', 28);
 defined('CONF_SLOT_DENY')       || define('CONF_SLOT_DENY', 29);
-defined('CONF_SLOT_HI')         || define('CONF_SLOT_HI', 30);
-defined('CONF_KGON_ENABLE')     || define('CONF_KGON_ENABLE', 31);
-defined('CONF_EOS5_ENABLE')     || define('CONF_EOS5_ENABLE', 32);
-defined('CONF_EOS3_ENABLE')     || define('CONF_EOS3_ENABLE', 33);
-defined('CONF_HPG_ENABLE')      || define('CONF_HPG_ENABLE', 34);
-defined('CONF_COIN5_ENABLE')    || define('CONF_COIN5_ENABLE', 45);
-defined('CONF_COIN3_ENABLE')    || define('CONF_COIN3_ENABLE', 46);
+defined('CONF_KGON_DENY')       || define('CONF_KGON_DENY', 31);
+defined('CONF_EOS5_DENY')       || define('CONF_EOS5_DENY', 32);
+defined('CONF_EOS3_DENY')       || define('CONF_EOS3_DENY', 33);
+defined('CONF_HPG_DENY')        || define('CONF_HPG_DENY', 34);
+defined('CONF_COIN5_DENY')      || define('CONF_COIN5_DENY', 45);
+defined('CONF_COIN3_DENY')      || define('CONF_COIN3_DENY', 46);
 
 defined('CONF_BET_CANCEL')      || define('CONF_BET_CANCEL', 35);
 defined('CONF_BET_NL_DENY')     || define('CONF_BET_NL_DENY', 36);
@@ -209,16 +220,17 @@ defined('GAME_CASINO_KGON')      || define('GAME_CASINO_KGON', 3);
 defined('GAME_CASINO_EVOL')      || define('GAME_CASINO_EVOL', 4);
 defined('GAME_BOGLE_BALL')       || define('GAME_BOGLE_BALL', 5);
 defined('GAME_BOGLE_LADDER')     || define('GAME_BOGLE_LADDER', 6);
-defined('GAME_SLOT_1')           || define('GAME_SLOT_1', 7);
-defined('GAME_SLOT_2')           || define('GAME_SLOT_2', 8);
+defined('GAME_SLOT_THEPLUS')     || define('GAME_SLOT_THEPLUS', 7);
+defined('GAME_SLOT_GSPLAY')      || define('GAME_SLOT_GSPLAY', 8);
 defined('GAME_EOS5_BALL')        || define('GAME_EOS5_BALL', 9);
 defined('GAME_EOS3_BALL')        || define('GAME_EOS3_BALL', 10);
 defined('GAME_COIN5_BALL')       || define('GAME_COIN5_BALL', 11);
 defined('GAME_COIN3_BALL')       || define('GAME_COIN3_BALL', 12);
-defined('GAME_SLOT_3')           || define('GAME_SLOT_3', 13);  //Gold slot
+defined('GAME_SLOT_GOLD')        || define('GAME_SLOT_GOLD', 13);  //Gold slot
 defined('GAME_HAPPY_BALL')       || define('GAME_HAPPY_BALL', 14);
-defined('GAME_SLOT_4')           || define('GAME_SLOT_4', 15);  //KGON slot
-defined('GAME_SLOT_5')           || define('GAME_SLOT_5', 16);  //HI slot
+defined('GAME_SLOT_KGON')        || define('GAME_SLOT_KGON', 15);  //KGON slot
+defined('GAME_SLOT_STAR')        || define('GAME_SLOT_STAR', 16);  //STAR slot
+defined('GAME_CASINO_STAR')      || define('GAME_CASINO_STAR', 16);  //STAR casino
 
 defined('N2P_MAX_HOLE')          || define('N2P_MAX_HOLE', 4);
 

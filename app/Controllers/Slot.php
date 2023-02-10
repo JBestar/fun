@@ -22,7 +22,7 @@ class Slot extends BaseController
         } else if($_ENV['app.type'] == APPTYPE_2 || $_ENV['app.type'] == APPTYPE_5 || $_ENV['app.type'] == APPTYPE_7 || $_ENV['app.type'] == APPTYPE_9 ){
 			$this->response->redirect('/fslotlist?prd='.$prdCode);	
 		}  else {
-			$gameId = GAME_SLOT_1;
+			$gameId = GAME_SLOT_THEPLUS;
 
 			$modelSlotgame = new SlotGame_Model();
             $prdCode = trim($this->request->getVar('prd'));
@@ -90,7 +90,7 @@ class Slot extends BaseController
 
 			$modelSlotgame = new SlotGame_Model();
 
-			$gameId = GAME_SLOT_1;
+			$gameId = GAME_SLOT_THEPLUS;
 			$logHead = "<XSLOT>";
 			
 			$user_id = $this->session->user_id;
@@ -126,17 +126,17 @@ class Slot extends BaseController
 
 					if($objSlot->act >= STATE_ACTIVE){
 						if($_ENV['app.type'] == APPTYPE_1 && $objSlot->ref_prd > 0){
-							$objFslot = $modelSlotgame->getById(GAME_SLOT_2, $objSlot->ref_prd, $objSlot->ref_uuid);
+							$objFslot = $modelSlotgame->getById(GAME_SLOT_GSPLAY, $objSlot->ref_prd, $objSlot->ref_uuid);
 						}
 
 						if($objFslot == null){
-							$fgameId = GAME_SLOT_2;
+							$fgameId = GAME_SLOT_GSPLAY;
 							if($_ENV['app.type'] == APPTYPE_4)
-								$fgameId = GAME_SLOT_3;
+								$fgameId = GAME_SLOT_GOLD;
 							else if($_ENV['app.type'] == APPTYPE_6)
-								$fgameId = GAME_SLOT_4;
+								$fgameId = GAME_SLOT_KGON;
 							else if($_ENV['app.type'] == APPTYPE_8)
-								$fgameId = GAME_SLOT_5;
+								$fgameId = GAME_SLOT_STAR;
 
 							$refPrds = $this->modelSlotprd->getByRef($fgameId, $objSlot->prd_code); 
 							writeLog($logHead.$objMember->mb_uid." PRD=".$objSlot->prd_code." REF=".count($refPrds)." ACT=".$objSlot->act);
@@ -282,7 +282,7 @@ class Slot extends BaseController
 		} else {
 			$modelSlotgame = new SlotGame_Model();
 
-			$gameId = GAME_SLOT_2;
+			$gameId = GAME_SLOT_GSPLAY;
 			$logHead = "<FSLOT>";
 			
 			$user_id = $this->session->user_id;
@@ -411,7 +411,7 @@ class Slot extends BaseController
         } else {
 			$modelSlotgame = new SlotGame_Model();
 
-			$gameId = GAME_SLOT_3;
+			$gameId = GAME_SLOT_GOLD;
 			$logHead = "<GSLOT>";
 			
 			$user_id = $this->session->user_id;
@@ -533,7 +533,7 @@ class Slot extends BaseController
         } else {
 			$modelSlotgame = new SlotGame_Model();
 
-			$gameId = GAME_SLOT_4;
+			$gameId = GAME_SLOT_KGON;
 			$logHead = "<KSLOT>";
 			
 			$user_id = $this->session->user_id;
@@ -645,7 +645,7 @@ class Slot extends BaseController
         } else {
 			$modelSlotgame = new SlotGame_Model();
 
-			$gameId = GAME_SLOT_5;
+			$gameId = GAME_SLOT_STAR;
 			$logHead = "<HSLOT>";
 			
 			$user_id = $this->session->user_id;
@@ -758,9 +758,9 @@ class Slot extends BaseController
 			$this->response->redirect('/xslotlist');	
 		}  else {
 			if($_ENV['app.type'] == APPTYPE_2)
-				$gameId = GAME_SLOT_2;
+				$gameId = GAME_SLOT_GSPLAY;
 			else
-				$gameId = GAME_SLOT_3;
+				$gameId = GAME_SLOT_GOLD;
 
 			$modelSlotgame = new SlotGame_Model();
             $prdCode = trim($this->request->getVar('prd'));

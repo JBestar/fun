@@ -96,9 +96,9 @@ class BaseController extends Controller
     
 	protected function getSiteConf(){
 		
-		$confs = ['site_name'=>"", "npg_deny"=>false, "bpg_deny"=>false, "cas_deny"=>false, 
-			"slot_deny"=>false, "kgon_enable"=>false, "eos5_enable"=>false, "eos3_enable"=>false,
-			"coin5_enable"=>false, "coin3_enable"=>false, "hpg_enable"=>false, "apps_enable"=>false];
+		$confs = ['site_name'=>"", "npg_deny"=>false, "bpg_deny"=>false, "evol_deny"=>false, 
+			"slot_deny"=>false, "cas_deny"=>false, "eos5_deny"=>false, "eos3_deny"=>false,
+			"coin5_deny"=>false, "coin3_deny"=>false, "hpg_deny"=>false, "apps_enable"=>false];
 		$arrConf = $this->modelConfsite->getSiteConf();  
 		
 		foreach($arrConf as $objConf){
@@ -109,21 +109,21 @@ class BaseController extends Controller
 					break;
 				case CONF_BPG_DENY:	$confs['bpg_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_CAS_DENY: $confs['cas_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_EVOL_DENY: $confs['evol_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
 				case CONF_SLOT_DENY: $confs['slot_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_KGON_ENABLE:	$confs['kgon_enable'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_KGON_DENY:	$confs['cas_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_EOS5_ENABLE:	$confs['eos5_enable'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_EOS5_DENY:	$confs['eos5_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_EOS3_ENABLE:	$confs['eos3_enable'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_EOS3_DENY:	$confs['eos3_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_COIN5_ENABLE:	$confs['coin5_enable'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_COIN5_DENY:	$confs['coin5_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_COIN3_ENABLE:	$confs['coin3_enable'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_COIN3_DENY:	$confs['coin3_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_HPG_ENABLE:	$confs['hpg_enable'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_HPG_DENY:	$confs['hpg_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
 				case CONF_AUTOAPPS:	$confs['apps_enable'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					if($confs['apps_enable']){
@@ -165,12 +165,12 @@ class BaseController extends Controller
 
 	protected function casinoPrd($confs){
 		$navInfo['cas_evol'] = [];
-		if(!$confs['cas_deny']){
+		if(!$confs['evol_deny']){
 			$navInfo['cas_evol'] = $this->modelCasprd->gets(GAME_CASINO_EVOL);
 		}
 		$navInfo['cas_cnt'] = count($navInfo['cas_evol']);
 		$navInfo['cas_kgon'] = [];
-		if($confs['kgon_enable']){
+		if(!$confs['cas_deny']){
 			$navInfo['cas_kgon'] = $this->modelCasprd->gets(GAME_CASINO_KGON);
 		}
 		$navInfo['cas_cnt'] += count($navInfo['cas_kgon']);
@@ -182,15 +182,15 @@ class BaseController extends Controller
 		if(!$confs['slot_deny']){
 			if($_ENV['app.type'] == APPTYPE_1 || $_ENV['app.type'] == APPTYPE_3 || $_ENV['app.type'] == APPTYPE_4
 			|| $_ENV['app.type'] == APPTYPE_6 || $_ENV['app.type'] == APPTYPE_8)
-				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_1);
+				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_THEPLUS);
 			else if($_ENV['app.type'] == APPTYPE_2)	
-				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_2);
+				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_GSPLAY);
 			else if($_ENV['app.type'] == APPTYPE_5)	
-				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_3);
+				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_GOLD);
 			else if($_ENV['app.type'] == APPTYPE_7)	
-				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_4);
+				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_KGON);
 			else if($_ENV['app.type'] == APPTYPE_9)	
-				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_5);
+				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_STAR);
 					
 		}
 		return $navInfo;
@@ -198,11 +198,11 @@ class BaseController extends Controller
 
 	protected function allEgg(&$objMember){
 		$confs = $this->getSiteConf();
-		if(!$confs["cas_deny"]){
+		if(!$confs["evol_deny"]){
 			$this->evEgg($objMember);
 			usleep(100000);
 		}
-		if($confs["kgon_enable"] || $_ENV['app.type'] == APPTYPE_6 || $_ENV['app.type'] == APPTYPE_7){
+		if(!$confs["cas_deny"] || $_ENV['app.type'] == APPTYPE_6 || $_ENV['app.type'] == APPTYPE_7){
 			$this->kgonEgg($objMember);
 			usleep(100000);
 		}
@@ -367,27 +367,27 @@ class BaseController extends Controller
 				$this->kgtoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 ){
 					$iResult = $this->mbtoEv($objMember);
 			}
-		} else if($iGame == GAME_SLOT_1){
+		} else if($iGame == GAME_SLOT_THEPLUS){
 			if($this->evtoMb($objMember) == 1 && $this->fsltoMb($objMember) == 1 &&
 				$this->kgtoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 ) {
 					$iResult = $this->mbtoSl($objMember);
 			}
-		} else if($iGame == GAME_SLOT_2){
+		} else if($iGame == GAME_SLOT_GSPLAY){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->kgtoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 ) {
 					$iResult = $this->mbtoFsl($objMember);
 			}
-		} else if($iGame == GAME_SLOT_3){
+		} else if($iGame == GAME_SLOT_GOLD){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->kgtoMb($objMember) == 1 && $this->fsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1) {
 					$iResult = $this->mbtoGsl($objMember);
 			}
-		} else if($iGame == GAME_CASINO_KGON || $iGame == GAME_SLOT_4){
+		} else if($iGame == GAME_CASINO_KGON || $iGame == GAME_SLOT_KGON){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 ) {
 					$iResult = $this->mbtoKg($objMember);
 			}
-		} else if($iGame == GAME_SLOT_5){
+		} else if($iGame == GAME_SLOT_STAR){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->kgtoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 ) {
 					$iResult = $this->mbtoHsl($objMember);
@@ -407,7 +407,7 @@ class BaseController extends Controller
 		$iResult = 0;
 		$logHead = "<EvtoMb> ";
 		$confs = $this->getSiteConf();
-		if($confs["cas_deny"]){
+		if($confs["evol_deny"]){
 			return 1;
 		}
 		//에볼 => 지갑 머니넘기기
@@ -460,7 +460,7 @@ class BaseController extends Controller
 		$iResult = 0;
 		$logHead = "<KgtoMb> ";
 		$confs = $this->getSiteConf();
-		if(!$confs["kgon_enable"]){
+		if($confs["cas_deny"]){
 			return 1;
 		}
 		//카지노 => 지갑 머니넘기기
