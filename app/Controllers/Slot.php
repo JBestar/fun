@@ -19,10 +19,14 @@ class Slot extends BaseController
 		{
 			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
 
-        } else if($_ENV['app.type'] == APPTYPE_2 || $_ENV['app.type'] == APPTYPE_5 || $_ENV['app.type'] == APPTYPE_7 || $_ENV['app.type'] == APPTYPE_9 ){
+        } else if($_ENV['app.type'] == APP_TYPE_2){
 			$this->response->redirect('/fslotlist?prd='.$prdCode);	
 		}  else {
 			$gameId = GAME_SLOT_THEPLUS;
+			if($_ENV['app.slot'] == APP_SLOT_KGON)
+				$gameId = GAME_SLOT_KGON;
+			else if($_ENV['app.slot'] == APP_SLOT_STAR)
+				$gameId = GAME_SLOT_STAR;
 
 			$modelSlotgame = new SlotGame_Model();
             $prdCode = trim($this->request->getVar('prd'));
@@ -78,19 +82,17 @@ class Slot extends BaseController
 		if(!is_login())
 		{
 			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
-        } else if($_ENV['app.type'] == APPTYPE_2){
+        } else if($_ENV['app.type'] == APP_TYPE_2){
 			$this->response->redirect('/slot/xslotf?prd='.$prdCode.'&game='.$slotId);	
-		} else if($_ENV['app.type'] == APPTYPE_5){
-			$this->response->redirect('/slot/xslotg?prd='.$prdCode.'&game='.$slotId);	
-		} else if($_ENV['app.type'] == APPTYPE_7){
-			$this->response->redirect('/slot/xslotk?prd='.$prdCode.'&game='.$slotId);	
-		} else if($_ENV['app.type'] == APPTYPE_9){
-			$this->response->redirect('/slot/xsloth?prd='.$prdCode.'&game='.$slotId);	
 		} else {
 
 			$modelSlotgame = new SlotGame_Model();
 
 			$gameId = GAME_SLOT_THEPLUS;
+			if($_ENV['app.slot'] == APP_SLOT_KGON)
+				$gameId = GAME_SLOT_KGON;
+			else if($_ENV['app.slot'] == APP_SLOT_STAR)
+				$gameId = GAME_SLOT_STAR;
 			$logHead = "<XSLOT>";
 			
 			$user_id = $this->session->user_id;
@@ -113,8 +115,8 @@ class Slot extends BaseController
 				$iCreated = 3;									//차단
 			else if(is_null($objSlot) || is_null($objPrd))
 				$iCreated = 6;
-			else if($objSlot->maintain == STATE_ACTIVE)
-				$iCreated = 7;
+			// else if($objSlot->maintain == STATE_ACTIVE)
+			// 	$iCreated = 7;
 			else if($diffDt < DELAY_GAME)
 				$iCreated = 8;	
 			else if(!is_null($sess))
@@ -122,44 +124,49 @@ class Slot extends BaseController
 			else {
 				$objFslot  = null;
 					
-				if($_ENV['app.type'] == APPTYPE_1 || $_ENV['app.type'] == APPTYPE_4 || $_ENV['app.type'] == APPTYPE_6 || $_ENV['app.type'] == APPTYPE_8) {
+				if($_ENV['app.type'] == APP_TYPE_1) {
+					$fgameId = GAME_SLOT_GSPLAY;
+					if($_ENV['app.fslot'] == APP_FSLOT_GOLD)
+						$fgameId = GAME_SLOT_GOLD;
 
-					if($objSlot->act >= STATE_ACTIVE){
-						if($_ENV['app.type'] == APPTYPE_1 && $objSlot->ref_prd > 0){
-							$objFslot = $modelSlotgame->getById(GAME_SLOT_GSPLAY, $objSlot->ref_prd, $objSlot->ref_uuid);
-						}
+					$objFslot = $modelSlotgame->getByRef($fgameId, $objSlot->prd_code, $objSlot->uuid);
 
-						if($objFslot == null){
-							$fgameId = GAME_SLOT_GSPLAY;
-							if($_ENV['app.type'] == APPTYPE_4)
-								$fgameId = GAME_SLOT_GOLD;
-							else if($_ENV['app.type'] == APPTYPE_6)
-								$fgameId = GAME_SLOT_KGON;
-							else if($_ENV['app.type'] == APPTYPE_8)
-								$fgameId = GAME_SLOT_STAR;
+					// if($objSlot->act >= STATE_ACTIVE){
+					// 	if($_ENV['app.type'] == APP_TYPE_1 && $objSlot->ref_prd > 0){
+					// 		$objFslot = $modelSlotgame->getById(GAME_SLOT_GSPLAY, $objSlot->ref_prd, $objSlot->ref_uuid);
+					// 	}
 
-							$refPrds = $this->modelSlotprd->getByRef($fgameId, $objSlot->prd_code); 
-							writeLog($logHead.$objMember->mb_uid." PRD=".$objSlot->prd_code." REF=".count($refPrds)." ACT=".$objSlot->act);
+					// 	if($objFslot == null){
+					// 		$fgameId = GAME_SLOT_GSPLAY;
+					// 		if($_ENV['app.type'] == APPTYPE_4)
+					// 			$fgameId = GAME_SLOT_GOLD;
+					// 		else if($_ENV['app.type'] == APPTYPE_6)
+					// 			$fgameId = GAME_SLOT_KGON;
+					// 		else if($_ENV['app.type'] == APPTYPE_8)
+					// 			$fgameId = GAME_SLOT_STAR;
 
-							if(count($refPrds) > 1){
+					// 		$refPrds = $this->modelSlotprd->getByRef($fgameId, $objSlot->prd_code); 
+					// 		writeLog($logHead.$objMember->mb_uid." PRD=".$objSlot->prd_code." REF=".count($refPrds)." ACT=".$objSlot->act);
 
-								if($objSlot->act == STATE_ACTIVE + 1)
-									$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[1]->code, $objSlot->name );
-								else {
-									$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[0]->code, $objSlot->name );
-									if($objFslot == null)									
-										$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[1]->code, $objSlot->name );
-								}
-							}
-							else {
-								if($_ENV['app.type'] == APPTYPE_4)
-									$objFslot = $modelSlotgame->getByNameKo($fgameId, $refPrds[0]->code, $objSlot->name_ko );
-								else 
-									$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[0]->code, $objSlot->name );
-							}
-						}
+					// 		if(count($refPrds) > 1){
+
+					// 			if($objSlot->act == STATE_ACTIVE + 1)
+					// 				$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[1]->code, $objSlot->name );
+					// 			else {
+					// 				$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[0]->code, $objSlot->name );
+					// 				if($objFslot == null)									
+					// 					$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[1]->code, $objSlot->name );
+					// 			}
+					// 		}
+					// 		else {
+					// 			if($_ENV['app.type'] == APPTYPE_4)
+					// 				$objFslot = $modelSlotgame->getByNameKo($fgameId, $refPrds[0]->code, $objSlot->name_ko );
+					// 			else 
+					// 				$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[0]->code, $objSlot->name );
+					// 		}
+					// 	}
 						
-					}
+					// }
 				}
 
 				if(!is_null($objFslot)){
@@ -167,7 +174,9 @@ class Slot extends BaseController
 					$iCreated = 100;
 				} else if($objConfig->game_bet_permit != PERMIT_OK){			//준비중
 						$iCreated = 4;									
-				} else if($objMember->mb_slot_uid == ""){
+				} else if($_ENV['app.slot'] == APP_SLOT_KGON || $_ENV['app.slot'] == APP_SLOT_STAR)
+					$iCreated = 101;
+				else if($objMember->mb_slot_uid == ""){
 					//플레이어 창조
 					$createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 					$arrResult =  $this->libApiSlot->createUser($createId);
@@ -217,14 +226,15 @@ class Slot extends BaseController
 			}  else if($iCreated == 9){
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 100){
-				if($_ENV['app.type'] == APPTYPE_1)
-					$this->response->redirect('/xslotf?prd='.$objFslot->prd_code.'&game='.$objFslot->uuid);	
-				else if($_ENV['app.type'] == APPTYPE_4)
+				if($_ENV['app.fslot'] == APP_FSLOT_GOLD)
 					$this->response->redirect('/xslotg?prd='.$objFslot->prd_code.'&game='.$objFslot->uuid);	
-				else if($_ENV['app.type'] == APPTYPE_6)
-					$this->response->redirect('/xslotk?prd='.$objFslot->prd_code.'&game='.$objFslot->uuid);	
-				else if($_ENV['app.type'] == APPTYPE_8)
-					$this->response->redirect('/xsloth?prd='.$objFslot->prd_code.'&game='.$objFslot->uuid);	
+				else 
+					$this->response->redirect('/xslotf?prd='.$objFslot->prd_code.'&game='.$objFslot->uuid);	
+			} else if($iCreated == 101){
+				if($_ENV['app.slot'] == APP_SLOT_KGON)
+					$this->response->redirect('/xslotk?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid);	
+				else if($_ENV['app.slot'] == APP_SLOT_STAR)
+					$this->response->redirect('/xsloth?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid);	
 			} else if($iCreated == 1){
 				writeLog($logHead.$objMember->mb_uid."-Slot Game=>".$objSlot->name ); 
 				$iResult = $this->alltoGame($objMember, $gameId);
@@ -273,12 +283,8 @@ class Slot extends BaseController
 		{
 			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
 
-        } else if($_ENV['app.type'] == APPTYPE_5){
+        } else if($_ENV['app.fslot'] == APP_FSLOT_GOLD){
 			$this->response->redirect('/slot/xslotg?prd='.$prdCode.'&game='.$slotId);	
-		} else if($_ENV['app.type'] == APPTYPE_7){
-			$this->response->redirect('/slot/xslotk?prd='.$prdCode.'&game='.$slotId);	
-		} else if($_ENV['app.type'] == APPTYPE_9){
-			$this->response->redirect('/slot/xsloth?prd='.$prdCode.'&game='.$slotId);	
 		} else {
 			$modelSlotgame = new SlotGame_Model();
 
@@ -300,12 +306,12 @@ class Slot extends BaseController
 			else if($objConfig->game_bet_permit != PERMIT_OK){
 				$iCreated = 4;									//준비중
 			}
-			else if($_ENV['app.type'] == APPTYPE_2 && !$this->modelMember->isPermitMember($objMember, $gameId))
+			else if($_ENV['app.type'] == APP_TYPE_2 && !$this->modelMember->isPermitMember($objMember, $gameId))
 				$iCreated = 3;									//차단
 			else if(is_null($objSlot) || is_null($objPrd)){
 				$iCreated = 6;
 			} 
-			else if($_ENV['app.type'] == APPTYPE_2 && $objSlot->maintain == STATE_ACTIVE){
+			else if($_ENV['app.type'] == APP_TYPE_2 && $objSlot->maintain == STATE_ACTIVE){
 				$iCreated = 7;
 			} 
 			else if($diffDt < DELAY_GAME)
@@ -343,13 +349,13 @@ class Slot extends BaseController
 				}
 			} else {
 				$iCreated = 1;
-				if($_ENV['app.type'] == APPTYPE_2 && $objSlot->prd_code == 200 && $objSlot->act ==  1){
-					$prdCode = 215;
-					$objNSlot = $modelSlotgame->getByCode($gameId, $prdCode, $objSlot->game_code);
-					if(!is_null($objNSlot)) {
-						$objSlot = $objNSlot;
-					}
-				}
+				// if($_ENV['app.type'] == APP_TYPE_2 && $objSlot->prd_code == 200 && $objSlot->act ==  1){
+				// 	$prdCode = 215;
+				// 	$objNSlot = $modelSlotgame->getByCode($gameId, $prdCode, $objSlot->game_code);
+				// 	if(!is_null($objNSlot)) {
+				// 		$objSlot = $objNSlot;
+				// 	}
+				// }
 			}
 
 			if($iCreated == 0){
@@ -431,12 +437,12 @@ class Slot extends BaseController
 			else if($objConfig->game_bet_permit != PERMIT_OK){
 				$iCreated = 4;									//준비중
 			}
-			else if($_ENV['app.type'] == APPTYPE_5 && !$this->modelMember->isPermitMember($objMember, $gameId))
+			else if($_ENV['app.type'] == APP_TYPE_2 && !$this->modelMember->isPermitMember($objMember, $gameId))
 				$iCreated = 3;									//차단
 			else if(is_null($objSlot) || is_null($objPrd)){
 				$iCreated = 6;
 			} 
-			else if($_ENV['app.type'] == APPTYPE_5 && $objSlot->maintain == STATE_ACTIVE){
+			else if($_ENV['app.type'] == APP_TYPE_2 && $objSlot->maintain == STATE_ACTIVE){
 				$iCreated = 7;
 			} 
 			else if($diffDt < DELAY_GAME)
@@ -553,14 +559,14 @@ class Slot extends BaseController
 			else if($objConfig->game_bet_permit != PERMIT_OK){
 				$iCreated = 4;									//준비중
 			}
-			else if($_ENV['app.type'] == APPTYPE_7 && !$this->modelMember->isPermitMember($objMember, $gameId))
-				$iCreated = 3;									//차단
+			// else if($_ENV['app.type'] == APP_TYPE_3 && !$this->modelMember->isPermitMember($objMember, $gameId))
+			// 	$iCreated = 3;									//차단
 			else if(is_null($objSlot) || is_null($objPrd)){
 				$iCreated = 6;
 			} 
-			else if($_ENV['app.type'] == APPTYPE_7 && $objSlot->maintain == STATE_ACTIVE){
-				$iCreated = 7;
-			} 
+			// else if($_ENV['app.type'] == APP_TYPE_3 && $objSlot->maintain == STATE_ACTIVE){
+			// 	$iCreated = 7;
+			// } 
 			else if($diffDt < DELAY_GAME)
 				$iCreated = 8;
 			else if(!is_null($sess))
@@ -665,28 +671,28 @@ class Slot extends BaseController
 			else if($objConfig->game_bet_permit != PERMIT_OK){
 				$iCreated = 4;									//준비중
 			}
-			else if($_ENV['app.type'] == APPTYPE_9 && !$this->modelMember->isPermitMember($objMember, $gameId))
-				$iCreated = 3;									//차단
+			// else if($_ENV['app.type'] == APP_TYPE_3 && !$this->modelMember->isPermitMember($objMember, $gameId))
+			// 	$iCreated = 3;									//차단
 			else if(is_null($objSlot) || is_null($objPrd)){
 				$iCreated = 6;
 			} 
-			else if($_ENV['app.type'] == APPTYPE_9 && $objSlot->maintain == STATE_ACTIVE){
-				$iCreated = 7;
-			} 
+			// else if($_ENV['app.type'] == APP_TYPE_3 && $objSlot->maintain == STATE_ACTIVE){
+			// 	$iCreated = 7;
+			// } 
 			else if($diffDt < DELAY_GAME)
 				$iCreated = 8;
 			else if(!is_null($sess))
 				$iCreated = 9;
-			else if($objMember->mb_fslot_uid == ""){
+			else if($objMember->mb_hslot_token == ""){
 				writeLog($logHead.$objMember->mb_uid."-1");
 				//플레이어 창조
 				$arrResult = $this->libApiHslot->createUser($objMember->mb_uid, $objMember->mb_nickname);
 
 				if($arrResult['status'] == 1){
 
-					$objMember->mb_fslot_uid = $arrResult['data']['token'];
-                    $objMember->mb_fslot_money = 0;
-                    $this->modelMember->updateFslotInfo($objMember);
+					$objMember->mb_hslot_token = $arrResult['data']['token'];
+                    $objMember->mb_hslot_money = 0;
+                    $this->modelMember->updateHslotInfo($objMember);
                     $iCreated = 1;
 
                     writeLog($logHead.$objMember->mb_uid."-CreateUser Sucess !!");
@@ -726,7 +732,7 @@ class Slot extends BaseController
 
 				$iResult = $this->alltoGame($objMember, $gameId);
 				if($iResult == 1){
-					$arrResult = $this->libApiHslot->auth($objMember->mb_fslot_uid, $objSlot);
+					$arrResult = $this->libApiHslot->auth($objMember->mb_hslot_token, $objSlot);
 					if($arrResult['status'] == 1){
 						writeLog($logHead.$objMember->mb_uid."-Login Sucess !!");
 						writeLog($logHead.$arrResult['url']);
@@ -749,21 +755,20 @@ class Slot extends BaseController
 
 	public function fslotlist()
 	{
+		$prdCode = trim($this->request->getVar('prd'));
 						
 		if(!is_login())
 		{
 			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
 
-        } else if($_ENV['app.type'] == APPTYPE_1 || $_ENV['app.type'] == APPTYPE_3 || $_ENV['app.type'] == APPTYPE_4){
-			$this->response->redirect('/xslotlist');	
+        } else if($_ENV['app.type'] == APP_TYPE_1){
+			$this->response->redirect('/xslot_list?prd='.$prdCode);	
 		}  else {
-			if($_ENV['app.type'] == APPTYPE_2)
-				$gameId = GAME_SLOT_GSPLAY;
-			else
+			$gameId = GAME_SLOT_GSPLAY;
+			if($_ENV['app.fslot'] == APP_FSLOT_GOLD)
 				$gameId = GAME_SLOT_GOLD;
 
 			$modelSlotgame = new SlotGame_Model();
-            $prdCode = trim($this->request->getVar('prd'));
             $objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
 
 			$user_id = $this->session->user_id;

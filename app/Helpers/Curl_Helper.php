@@ -1,8 +1,8 @@
 <?php
 
-function getCurlRequest($url, $headers = null, $post = null){
+function getCurlRequest($url, $headers = null, $post = null, $timeout = 10){
     
-    $timeout = 3;
+    $timeoutConnect = 5;
 
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -23,8 +23,10 @@ function getCurlRequest($url, $headers = null, $post = null){
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
     }
     curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
-    curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
-
+    curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeoutConnect);
+    curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+    curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
+    
     $response = curl_exec($curl);
 
     $result['error'] = "";

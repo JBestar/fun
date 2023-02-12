@@ -328,8 +328,9 @@
           case GAME_POWER_BALL: 
           case GAME_HAPPY_BALL: return $objMember->mb_game_pb;
           case GAME_POWER_LADDER: return $objMember->mb_game_ps;
+          case GAME_CASINO_EVOL:
           case GAME_CASINO_KGON:
-          case GAME_CASINO_EVOL: return $objMember->mb_game_cs;
+          case GAME_CASINO_STAR: return $objMember->mb_game_cs;
           case GAME_BOGLE_BALL: return $objMember->mb_game_bb;
           case GAME_BOGLE_LADDER: return $objMember->mb_game_bs;
           case GAME_SLOT_THEPLUS: 
@@ -666,6 +667,8 @@
                 $fRatio = $objMember->mb_game_ps_ratio;
                 break;
           case GAME_CASINO_EVOL: 
+          case GAME_CASINO_KGON: 
+          case GAME_CASINO_STAR: 
                 $fRatio = $objMember->mb_game_cs_ratio;
                 break;
           case GAME_BOGLE_BALL: 
@@ -816,7 +819,7 @@
         return $nMoney;
 
       $nMoney = $member->mb_money + $member->mb_live_money + $member->mb_slot_money
-       + $member->mb_fslot_money + $member->mb_kgon_money + $member->mb_gslot_money;
+       + $member->mb_fslot_money + $member->mb_kgon_money + $member->mb_gslot_money+ $member->mb_hslot_money ;
       return $nMoney;
     }
 

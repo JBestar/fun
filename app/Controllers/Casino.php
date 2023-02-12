@@ -130,20 +130,22 @@ class Casino extends BaseController
 
     public function cas()
 	{
+		$prdId = trim($this->request->getVar('prd'));
 						
 		if(!is_login())
 		{
 			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
 
-        } else {
+        } else if($_ENV['app.casino'] == APP_CASINO_STAR){
+			$this->response->redirect('/cas_h?prd='.$prdId);	
+		} else {
 			$gameId = GAME_CASINO_KGON;
             $logHead = "<CAS_KGON>";
 
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
-			$objConfig = $this->modelConfgame->find(GAME_CASINO_KGON);  //카지노 설정
+			$objConfig = $this->modelConfgame->find($gameId);  //카지노 설정
 			$headInfo = $this->getSiteConf();
-			$prdId = trim($this->request->getVar('prd'));
 			$objCas = $this->modelCasprd->getById($gameId, $prdId);
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
             $sess = null;
@@ -162,7 +164,7 @@ class Casino extends BaseController
 				$iCreated = 4;									//준비중
             else if($headInfo['cas_deny'])
                 $iCreated = 3;									//차단
-			else if(!$this->modelMember->isPermitMember($objMember, GAME_CASINO_KGON))
+			else if(!$this->modelMember->isPermitMember($objMember, $gameId))
 				$iCreated = 3;									//차단
 			else if($diffDt < DELAY_GAME)
 				$iCreated = 8;	
@@ -212,7 +214,7 @@ class Casino extends BaseController
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 1){
 				if(array_key_exists('app.transEg', $_ENV) && $_ENV['app.transEg'] == 1)
-					$iResult = $this->alltoGame($objMember, GAME_CASINO_KGON);
+					$iResult = $this->alltoGame($objMember, $gameId);
 				else $iResult = 1;
                 if($iResult != 1){
                     print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
@@ -222,7 +224,7 @@ class Casino extends BaseController
                         writeLog($logHead.$objMember->mb_uid."-Login Sucess !!");
                         writeLog($logHead.$arrResult['url']);
 						$this->modelMember->updateBetTm($objMember);
-						// echo view('slot/game', array("game" => GAME_CASINO_KGON, "launch_url" => $arrResult['url']));	
+						// echo view('slot/game', array("game" => $gameId, "launch_url" => $arrResult['url']));	
                         $this->response->redirect($arrResult['url']);
                     } else {
                         if(array_key_exists('code', $arrResult)){
@@ -241,4 +243,108 @@ class Casino extends BaseController
 
     }
 
+	public function cas_h()
+	{
+						
+		if(!is_login())
+		{
+			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+
+        } else {
+			$gameId = GAME_CASINO_STAR;
+            $logHead = "<CAS_HI>";
+
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id);
+			$objConfig = $this->modelConfgame->find($gameId);  //카지노 설정
+			$headInfo = $this->getSiteConf();
+			$prdId = trim($this->request->getVar('prd'));
+			$objCas = $this->modelCasprd->getById($gameId, $prdId);
+			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
+			$sess = $this->modelSess->getByUid($objMember->mb_uid, SESS_TYPE_APP);
+            
+            $iCreated = 0;
+			if(is_null($objMember) || is_null($objConfig))
+				$iCreated = 0;
+            else if(is_null($objCas))
+				$iCreated = 6;									//게임정보오류
+            else if($objCas->maintain == STATE_ACTIVE || $objCas->hidden == STATE_ACTIVE)
+				$iCreated = 7;
+			else if($objConfig->game_bet_permit != PERMIT_OK)
+				$iCreated = 4;									//준비중
+            else if($headInfo['cas_deny'])
+                $iCreated = 3;									//차단
+			else if(!$this->modelMember->isPermitMember($objMember, $gameId))
+				$iCreated = 3;									//차단
+			else if($diffDt < DELAY_GAME)
+				$iCreated = 8;	
+			else if(!is_null($sess))
+				$iCreated = 9;	
+			else if($objMember->mb_hslot_token == ""){
+				//플레이어 창조
+				$arrResult = $this->libApiHslot->createUser($objMember->mb_uid, $objMember->mb_nickname);
+                
+                if($arrResult['status'] == 1){
+                    $objMember->mb_hslot_token = $arrResult['data']['token'];
+                    $objMember->mb_hslot_money = 0;
+                    $this->modelMember->updateHslotInfo($objMember);
+                    $iCreated = 1;
+
+                    writeLog($logHead.$objMember->mb_uid."-CreateUser Sucess !!");
+                } else {
+                    $iCreated = 2;								//회원창조실패
+					if(array_key_exists('description', $arrResult))
+						writeLog($logHead.$objMember->mb_uid."-CreateUser Error description=".$arrResult['description']); 
+                }
+			} else{
+				$iCreated = 1;
+			}
+
+			if($iCreated == 0){
+				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+			} else if($iCreated == 2){
+				print "<script language=javascript> alert('계정창조중 오류가 발생하였습니다.'); self.close(); </script>";
+			} else if($iCreated == 3){
+				print "<script language=javascript> alert('실행이 중지되었습니다.'); self.close(); </script>";
+			} else if($iCreated == 4){
+				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+			} else if($iCreated == 5){
+				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+			} else if($iCreated == 6){
+				print "<script language=javascript> alert('게임을 정확히 선택해주세요.'); self.close(); </script>";
+			} else if($iCreated == 7){
+				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
+			} else if($iCreated == 8){
+				print "<script language=javascript> alert('".(DELAY_GAME-$diffDt)."초후 다시 시도해주세요.'); self.close(); </script>";
+			} else if($iCreated == 9){
+				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
+			} else if($iCreated == 1){
+				if(array_key_exists('app.transEg', $_ENV) && $_ENV['app.transEg'] == 1)
+					$iResult = $this->alltoGame($objMember, $gameId);
+				else $iResult = 1;
+
+                if($iResult != 1){
+                    print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
+                } else {
+                    $arrResult = $this->libApiHslot->auth($objMember->mb_hslot_token, null, $objCas);
+                    if($arrResult['status'] == 1){
+                        writeLog($logHead.$objMember->mb_uid."-Login Sucess !!");
+                        writeLog($logHead.$arrResult['url']);
+						$this->modelMember->updateBetTm($objMember);
+						// echo view('slot/game', array("game" => GAME_CASINO_KGON, "launch_url" => $arrResult['url']));	
+                        $this->response->redirect($arrResult['url']);
+                    } else {
+                        if(array_key_exists('description', $arrResult)){
+							$log = $logHead.$objMember->mb_uid."-Auth Error description=".$arrResult['description'];
+							writeLog($log);  
+						}
+                        print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
+                    }
+                }
+				
+			}
+			
+        }
+
+    }
 }

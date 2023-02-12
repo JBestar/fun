@@ -136,6 +136,8 @@ class ApiGslot_Lib  {
         $arrPost['game_type'] = "slot";
         $arrPost['provider_code'] = $provider;
         $arrPost['game_code'] = $gameCode;
+        $arrPost['lang'] = "ko";
+        
         $post = json_encode($arrPost);
 
         $header =  $this->getHeader($post);
@@ -181,7 +183,7 @@ class ApiGslot_Lib  {
 
         $header =  $this->getHeader($post);
 
-        $response = getCurlRequest($url, $header, $post);
+        $response = getCurlRequest($url, $header, $post, CURL_TIMEOUT_MAX);
         
         $arrResult = json_decode($response, true);
 		
@@ -224,7 +226,7 @@ class ApiGslot_Lib  {
 
         $header =  $this->getHeader($post);
 
-        $response = getCurlRequest($url, $header, $post);
+        $response = getCurlRequest($url, $header, $post, CURL_TIMEOUT_MAX);
         
         $arrResult = json_decode($response, true);
 		

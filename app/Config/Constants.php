@@ -68,18 +68,6 @@ defined('DECADE') || define('DECADE', 315360000);
 defined('ENV_PRODUCTION')   || define('ENV_PRODUCTION', 'production');
 defined('ENV_DEVELOPMENT')  || define('ENV_DEVELOPMENT', 'development');
 
-
-defined('APPTYPE_0')        || define('APPTYPE_0', 0);      //Premier
-defined('APPTYPE_1')        || define('APPTYPE_1', 1);      //Slot + FSlot
-defined('APPTYPE_2')        || define('APPTYPE_2', 2);      //FSlot
-defined('APPTYPE_3')        || define('APPTYPE_3', 3);      //Slot
-defined('APPTYPE_4')        || define('APPTYPE_4', 4);      //Slot + Gold
-defined('APPTYPE_5')        || define('APPTYPE_5', 5);      //Gold Slot
-defined('APPTYPE_6')        || define('APPTYPE_6', 6);      //Slot + KGON
-defined('APPTYPE_7')        || define('APPTYPE_7', 7);      //KGON Slot
-defined('APPTYPE_8')        || define('APPTYPE_8', 8);      //Slot + HI
-defined('APPTYPE_9')        || define('APPTYPE_9', 9);      //HI Slot
-
 defined('APP_TYPE_1')        || define('APP_TYPE_1', 1);      //Slot + FSlot
 defined('APP_TYPE_2')        || define('APP_TYPE_2', 2);      //FSlot
 defined('APP_TYPE_3')        || define('APP_TYPE_3', 3);      //Slot
@@ -91,6 +79,12 @@ defined('APP_SLOT_STAR')     || define('APP_SLOT_STAR', 3);
 //Natural 
 defined('APP_FSLOT_GSPLAY')  || define('APP_FSLOT_GSPLAY', 1); 
 defined('APP_FSLOT_GOLD')    || define('APP_FSLOT_GOLD', 2); 
+
+//Casino
+defined('APP_CASINO_KGON')      || define('APP_CASINO_KGON', 2); 
+defined('APP_CASINO_STAR')     || define('APP_CASINO_STAR', 3); 
+
+
 defined('EXIT_SUCCESS')        || define('EXIT_SUCCESS', 0); // no errors
 defined('EXIT_ERROR')          || define('EXIT_ERROR', 1); // generic error
 defined('EXIT_CONFIG')         || define('EXIT_CONFIG', 3); // configuration error
@@ -212,6 +206,8 @@ defined('ADVANCE_SEC')    	   || define('ADVANCE_SEC', 20);
 defined('SESS_TYPE_SITE')       || define('SESS_TYPE_SITE', 0);
 defined('SESS_TYPE_APP')       || define('SESS_TYPE_APP', 1);
 
+defined('CURL_TIMEOUT_MIN')       || define('CURL_TIMEOUT_MIN', 5);
+defined('CURL_TIMEOUT_MAX')       || define('CURL_TIMEOUT_MAX', 100);
 
 //game type
 defined('GAME_POWER_BALL')       || define('GAME_POWER_BALL', 1);
@@ -230,7 +226,7 @@ defined('GAME_SLOT_GOLD')        || define('GAME_SLOT_GOLD', 13);  //Gold slot
 defined('GAME_HAPPY_BALL')       || define('GAME_HAPPY_BALL', 14);
 defined('GAME_SLOT_KGON')        || define('GAME_SLOT_KGON', 15);  //KGON slot
 defined('GAME_SLOT_STAR')        || define('GAME_SLOT_STAR', 16);  //STAR slot
-defined('GAME_CASINO_STAR')      || define('GAME_CASINO_STAR', 16);  //STAR casino
+defined('GAME_CASINO_STAR')      || define('GAME_CASINO_STAR', 17);  //STAR casino
 
 defined('N2P_MAX_HOLE')          || define('N2P_MAX_HOLE', 4);
 

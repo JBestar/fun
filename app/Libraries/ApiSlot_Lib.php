@@ -213,7 +213,7 @@ class ApiSlot_Lib {
                 'Content-Length: ' . strlen($post),
                 'Accept: */*'];
         
-        $response = getCurlRequest($url, $header, $post);
+        $response = getCurlRequest($url, $header, $post, CURL_TIMEOUT_MAX);
         
         $arrResult = json_decode($response, true);
 		
@@ -255,7 +255,7 @@ class ApiSlot_Lib {
                 'Content-Length: ' . strlen($post),
                 'Accept: */*'];
         
-        $response = getCurlRequest($url, $header, $post);
+        $response = getCurlRequest($url, $header, $post, CURL_TIMEOUT_MAX);
         
         $arrResult = json_decode($response, true);
 		

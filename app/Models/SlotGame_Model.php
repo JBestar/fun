@@ -54,13 +54,24 @@ class SlotGame_Model extends Model {
         return $this->where($where)->first();
     }
 
-    public function getByRef($cat, $name){
+    public function getByRef($cat, $prd, $uuid){
         $where = [
             'cat' => $cat,
-            'name' => trim($name),
-            'open' => PERMIT_OK
+            'ref_prd' => $prd,
+            'ref_uuid' => $uuid,
+            'open' => PERMIT_OK,
+            'hidden' => STATE_DISABLE
         ];
-        return $this->where($where)->first();
+
+        $gameFslot = null;
+        $games = $this->where($where)->findAll();
+        foreach($games as $game){
+            if($game->act == STATE_ACTIVE){
+                $gameFslot = $game;
+                break;
+            }
+        }
+        return $gameFslot;
     }
 
 }

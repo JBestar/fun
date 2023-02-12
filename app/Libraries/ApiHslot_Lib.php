@@ -137,7 +137,7 @@ class ApiHslot_Lib  {
         return $arrResult;
     }
 
-    public function auth($token, $game)
+    public function auth($token, $slot, $casino=null)
     {
         if(strlen($this->mHost) < 1){
             return array('status' => 0, 'description'=>INTERNAL_ERROR);
@@ -145,8 +145,13 @@ class ApiHslot_Lib  {
 
         $url = $this->mHost."/GetGameURL";
         $url.= "?Token=".$token;
-        $url.= "&ProviderCode=".$game->prd_code;
-        $url.= "&GameSeq=".$game->uuid;
+        if(is_null($casino)){
+            $url.= "&ProviderCode=".$slot->prd_code;
+            $url.= "&GameSeq=".$slot->uuid;
+        } else {
+            $url.= "&ProviderCode=".$casino->vendor_id;
+            $url.= "&GameSeq=".$casino->lobby;
+        }
         $url.= "&Platform=".(is_Mobile()?"mobile":"desktop");
 
         $header =  $this->getHeader();
@@ -187,7 +192,7 @@ class ApiHslot_Lib  {
 
         $header =  $this->getHeader();
         
-        $response = getCurlRequest($url, $header);
+        $response = getCurlRequest($url, $header, null, CURL_TIMEOUT_MAX);
         
         $arrResult = json_decode($response, true);
 		
@@ -226,7 +231,7 @@ class ApiHslot_Lib  {
 
         $header =  $this->getHeader();
         
-        $response = getCurlRequest($url, $header);
+        $response = getCurlRequest($url, $header, null, CURL_TIMEOUT_MAX);
         
         $arrResult = json_decode($response, true);
 		

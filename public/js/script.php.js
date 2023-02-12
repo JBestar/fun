@@ -43,10 +43,11 @@ function openCasinoGame(cid, gameid) {
     if(!check_login()){
         return;
     }
-    if(gameid == 3)
-        window.open("/cas?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
-    else if(gameid == 4)
+    if(gameid == 4)
         window.open("/evl", "games", "width=1200, height=800, left=100, top=50");
+    else
+        window.open("/cas?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
+    
 }
 
 function openSlotGame(cid, cname) {

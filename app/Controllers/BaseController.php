@@ -171,7 +171,10 @@ class BaseController extends Controller
 		$navInfo['cas_cnt'] = count($navInfo['cas_evol']);
 		$navInfo['cas_kgon'] = [];
 		if(!$confs['cas_deny']){
-			$navInfo['cas_kgon'] = $this->modelCasprd->gets(GAME_CASINO_KGON);
+			$gameId = GAME_CASINO_KGON;
+			if($_ENV['app.casino'] == APP_CASINO_STAR)
+				$gameId = GAME_CASINO_STAR;
+			$navInfo['cas_kgon'] = $this->modelCasprd->gets($gameId);
 		}
 		$navInfo['cas_cnt'] += count($navInfo['cas_kgon']);
 		return $navInfo;
@@ -180,17 +183,20 @@ class BaseController extends Controller
 	protected function slotPrd($confs){
 		$navInfo['slot_plus'] = [];
 		if(!$confs['slot_deny']){
-			if($_ENV['app.type'] == APPTYPE_1 || $_ENV['app.type'] == APPTYPE_3 || $_ENV['app.type'] == APPTYPE_4
-			|| $_ENV['app.type'] == APPTYPE_6 || $_ENV['app.type'] == APPTYPE_8)
-				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_THEPLUS);
-			else if($_ENV['app.type'] == APPTYPE_2)	
-				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_GSPLAY);
-			else if($_ENV['app.type'] == APPTYPE_5)	
-				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_GOLD);
-			else if($_ENV['app.type'] == APPTYPE_7)	
-				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_KGON);
-			else if($_ENV['app.type'] == APPTYPE_9)	
-				$navInfo['slot_plus'] = $this->modelSlotprd->gets(GAME_SLOT_STAR);
+			$gameId = 0;
+			
+			if($_ENV['app.type'] == APP_TYPE_2 ){
+				$gameId = GAME_SLOT_GSPLAY;
+				if($_ENV['app.fslot'] == APP_FSLOT_GOLD)
+					$gameId = GAME_SLOT_GOLD;
+			} else if($_ENV['app.type'] == APP_TYPE_1 || $_ENV['app.type'] == APP_TYPE_3){
+				$gameId = GAME_SLOT_THEPLUS;
+				if($_ENV['app.slot'] == APP_SLOT_KGON)
+					$gameId = GAME_SLOT_KGON;
+				else if($_ENV['app.slot'] == APP_SLOT_STAR)
+					$gameId =GAME_SLOT_STAR;
+			}	
+			$navInfo['slot_plus'] = $this->modelSlotprd->gets($gameId);
 					
 		}
 		return $navInfo;
@@ -202,18 +208,34 @@ class BaseController extends Controller
 			$this->evEgg($objMember);
 			usleep(100000);
 		}
-		if(!$confs["cas_deny"] || $_ENV['app.type'] == APPTYPE_6 || $_ENV['app.type'] == APPTYPE_7){
-			$this->kgonEgg($objMember);
+		$bHcasino = false;
+		$bKcasino = false;
+		if(!$confs["cas_deny"]){
+			if($_ENV['app.casino'] == APP_CASINO_STAR){
+				$this->hslEgg($objMember);
+				$bHcasino = true;
+			}
+			else {
+				$this->kgonEgg($objMember);
+				$bKcasino = true;
+			}
 			usleep(100000);
 		}
-		$this->slEgg($objMember);
-		usleep(100000);
-		if($_ENV['app.type'] == APPTYPE_1 || $_ENV['app.type'] == APPTYPE_2)
-			$this->fslEgg($objMember);
-		else if($_ENV['app.type'] == APPTYPE_4 || $_ENV['app.type'] == APPTYPE_5)
-			$this->gslEgg($objMember);
-		else if($_ENV['app.type'] == APPTYPE_8 || $_ENV['app.type'] == APPTYPE_9)
-			$this->hslEgg($objMember);
+		if($_ENV['app.type'] == APP_TYPE_1 || $_ENV['app.type'] == APP_TYPE_3){
+			if($_ENV['app.slot'] == APP_SLOT_THEPLUS)
+				$this->slEgg($objMember);
+			else if($_ENV['app.slot'] == APP_SLOT_KGON && !$bKcasino)
+				$this->kgonEgg($objMember);
+			else if($_ENV['app.slot'] == APP_SLOT_STAR && !$bHcasino)
+				$this->hslEgg($objMember);
+		}
+		if($_ENV['app.type'] == APP_TYPE_1 || $_ENV['app.type'] == APP_TYPE_2){
+			usleep(100000);
+			if($_ENV['app.fslot'] == APP_FSLOT_GSPLAY)
+				$this->fslEgg($objMember);
+			else if($_ENV['app.fslot'] == APP_FSLOT_GOLD)
+				$this->gslEgg($objMember);
+		}
 	}
 	
 	protected function evEgg(&$objMember){
@@ -335,15 +357,15 @@ class BaseController extends Controller
 		$iResult = 0;
 		$logHead = "<HslEgg> ";
 		//슬롯 머니조회
-		if($objMember->mb_fslot_uid !== ""){
+		if($objMember->mb_hslot_token !== ""){
 			//슬롯머니 요청
-			$arrResult = $this->libApiHslot->getUserInfo($objMember->mb_fslot_uid);
+			$arrResult = $this->libApiHslot->getUserInfo($objMember->mb_hslot_token);
 			writeLog($logHead.$objMember->mb_uid."-UserInfo status=".$arrResult['status']);
 			if($arrResult['status'] == 1)
 			{
 				writeLog($logHead.$objMember->mb_uid."-UserInfo Balance=".$arrResult['balance']." Money=".$objMember->mb_money);
-				$objMember->mb_fslot_money = $arrResult['balance'];
-				$this->modelMember->updateFslotMoney($objMember);   
+				$objMember->mb_hslot_money = $arrResult['balance'];
+				$this->modelMember->updateHslotMoney($objMember);   
 				$iResult = 1;
 			}
 		} else {
@@ -387,7 +409,7 @@ class BaseController extends Controller
 				$this->fsltoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 ) {
 					$iResult = $this->mbtoKg($objMember);
 			}
-		} else if($iGame == GAME_SLOT_STAR){
+		} else if($iGame == GAME_CASINO_STAR || $iGame == GAME_SLOT_STAR){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->kgtoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 ) {
 					$iResult = $this->mbtoHsl($objMember);
@@ -406,10 +428,10 @@ class BaseController extends Controller
 	protected function evtoMb(&$objMember){
 		$iResult = 0;
 		$logHead = "<EvtoMb> ";
-		$confs = $this->getSiteConf();
-		if($confs["evol_deny"]){
-			return 1;
-		}
+		// $confs = $this->getSiteConf();
+		// if($confs["evol_deny"]){
+		// 	return 1;
+		// }
 		//에볼 => 지갑 머니넘기기
 		if($objMember->mb_live_id > 0){
 			//에볼 머니 요청
@@ -459,10 +481,10 @@ class BaseController extends Controller
 	protected function kgtoMb(&$objMember){
 		$iResult = 0;
 		$logHead = "<KgtoMb> ";
-		$confs = $this->getSiteConf();
-		if($confs["cas_deny"]){
-			return 1;
-		}
+		// $confs = $this->getSiteConf();
+		// if($confs["cas_deny"]){
+		// 	return 1;
+		// }
 		//카지노 => 지갑 머니넘기기
 		if($objMember->mb_kgon_id > 0){
 			$arrResult = $this->libApiKgon->getUserInfo($objMember->mb_kgon_uid);
@@ -563,8 +585,6 @@ class BaseController extends Controller
 		$iResult = 0;
 		$logHead = "<FsltoMb> ";
 
-		if($_ENV['app.type'] != APPTYPE_1 && $_ENV['app.type'] != APPTYPE_2)
-			return 1;
 		//네츄럴 => 지갑 머니넘기기
 		if($objMember->mb_fslot_id > 0){
 			//네츄럴 머니 요청
@@ -664,22 +684,19 @@ class BaseController extends Controller
 
 	protected function hsltoMb(&$objMember){
 		$iResult = 0;
-
-		if($_ENV['app.type'] != APPTYPE_8 && $_ENV['app.type'] != APPTYPE_9)
-			return 1;
 		$logHead = "<HsltoMb> ";
 		//골드슬롯 => 보유머니넘기기
-		if($objMember->mb_fslot_uid !== ""){
+		if($objMember->mb_hslot_token !== ""){
 			//슬롯머니 요청
-			$arrResult = $this->libApiHslot->subBalance($objMember->mb_fslot_uid);
+			$arrResult = $this->libApiHslot->subBalance($objMember->mb_hslot_token);
 			writeLog($logHead." ".$objMember->mb_uid."-UserInfo status=".$arrResult['status']);
 			if($arrResult['status'] == 1)
 			{
 				$amount = $arrResult['amount'];
 
 				writeLog($logHead.$objMember->mb_uid."-Withdraw amount=".$arrResult['amount']);
-				$objMember->mb_fslot_money = $arrResult['balance'];
-				$this->modelMember->updateFslotMoney($objMember);
+				$objMember->mb_hslot_money = $arrResult['balance'];
+				$this->modelMember->updateHslotMoney($objMember);
 
 				if($this->modelMember->updateAssets($objMember, $amount)){
 					$objMember->mb_money += $amount;   
@@ -687,7 +704,7 @@ class BaseController extends Controller
 					$iResult = 1;
 				}
 			} else {
-				// if($objMember->mb_fslot_money == 0)
+				// if($objMember->mb_hslot_money == 0)
 					$iResult = 1;
 			}
 		} else {
@@ -784,8 +801,6 @@ class BaseController extends Controller
 		$iResult = 0;
 		$logHead = "<MbtoFsl> ";
 
-		if($_ENV['app.type'] != APPTYPE_1 && $_ENV['app.type'] != APPTYPE_2 )
-			return 1;
 		//네츄럴 => 지갑 머니넘기기
 		if($objMember->mb_fslot_id > 0 && $objMember->mb_money > 0){
 			//네츄럴 머니 요청
@@ -811,7 +826,6 @@ class BaseController extends Controller
 
 	protected function mbtoGsl(&$objMember){
 		$iResult = 0;
-
 		$logHead = "<MbtoGsl> ";
 		//슬롯 <= 보유머니넘기기
 		if($objMember->mb_gslot_uid !== "" && $objMember->mb_money > 0){
@@ -839,15 +853,12 @@ class BaseController extends Controller
 
 	protected function mbtoHsl(&$objMember){
 		$iResult = 0;
-
-		if($_ENV['app.type'] != APPTYPE_8 && $_ENV['app.type'] != APPTYPE_9)
-			return 1;
 		$logHead = "<MbtoHsl> ";
 
 		//슬롯 <= 보유머니넘기기
-		if($objMember->mb_fslot_uid !== "" && $objMember->mb_money > 0){
+		if($objMember->mb_hslot_token !== "" && $objMember->mb_money > 0){
 			//슬롯머니 요청
-			$arrResult = $this->libApiHslot->addBalance($objMember->mb_fslot_uid, $objMember->mb_money);
+			$arrResult = $this->libApiHslot->addBalance($objMember->mb_hslot_token, $objMember->mb_money);
 			writeLog($logHead." ".$objMember->mb_uid."-Deposit status=".$arrResult['status']);
 			
 			if($arrResult['status'] == 1)
@@ -856,8 +867,8 @@ class BaseController extends Controller
 
 				writeLog($logHead.$objMember->mb_uid."-Deposit Amount=".$arrResult['amount']);
 				if($this->modelMember->updateAssets($objMember, 0-$arrResult['amount'])){
-					$objMember->mb_fslot_money += $arrResult['amount'];
-					$this->modelMember->updateFslotMoney($objMember);
+					$objMember->mb_hslot_money += $arrResult['amount'];
+					$this->modelMember->updateHslotMoney($objMember);
 					$objMember->mb_money -= $arrResult['amount'];   
 					$iResult = 1;
 				}
