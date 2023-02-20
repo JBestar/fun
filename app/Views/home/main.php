@@ -510,7 +510,7 @@
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-card-media-top">
                                                     <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                        <img src="/images/casino/<?=$item->img?>.png" />
+                                                        <img src="/images/casino/<?=$item->img?>.png?v=1" />
                                                         <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                                 <button class="uk-button uk-button-primary playBtn" id="playBtn" data-cid="<?=$item->cas_id?>" data-gameid="<?=$item->cat?>"
