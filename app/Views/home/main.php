@@ -22,7 +22,7 @@
         <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
         <link rel="stylesheet" href="/css/bootstrap.min.css?ver=1" />
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=1"></script>
+        <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=1?>"></script>
         <script src="/js/worker.js?v=1"></script>
         <!--순서중요-->
 
@@ -46,9 +46,12 @@
 
         <!-- JS FILES -->
 
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/uikit@latest/dist/css/uikit.min.css" />
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/uikit@latest/dist/css/uikit.min.css" />
         <script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit-icons.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit-icons.min.js"></script> -->
+        <link rel="stylesheet" type="text/css" href="/js/uikit/uikit.min.css" />
+        <script src="/js/uikit/uikit.min.js"></script>
+        <script src="/js/uikit/uikit-icons.min.js"></script>
 
         <script src="/js/jquery.bgswitcher.js"></script>
         <script type="text/javascript" src="/js/jquery-ui/marquee.js"></script>
@@ -728,7 +731,7 @@
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-card-media-top">
                                                     <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                        <img src="/images/app/<?=$item->ename?>.png?v=<?=time()?>" />
+                                                        <img src="/images/app/<?=$item->ename?>.png?v=1" />
                                                         <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
 
