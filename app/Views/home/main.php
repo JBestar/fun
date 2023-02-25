@@ -22,7 +22,7 @@
         <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
         <link rel="stylesheet" href="/css/bootstrap.min.css?ver=1" />
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=1?>"></script>
+        <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=1"></script>
         <script src="/js/worker.js?v=1"></script>
         <!--순서중요-->
 
@@ -32,7 +32,7 @@
             <script type="text/javascript" src="/js/lib.js?ver=1"></script>
             <script type="text/javascript" src="/js/common.js?ver=1"></script>
             <script type="text/javascript" src="/js/SLB.js?ver=4"></script>
-            <script type="text/javascript" src="/js/main.js?ver=2"></script>
+            <script type="text/javascript" src="/js/main.js?ver=3"></script>
             <link rel="stylesheet" type="text/css" href="/css/devel.css?v=3" />
         <?php else : ?>
             <script type="text/javascript" src="/js/vue.js"></script>
@@ -150,29 +150,24 @@
                         </div>
                         <div class="MainMenu-Right">
                             <?php if(is_login()) :?>
-                                <!-- <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_name"  onclick="">
-                                    <span> <img src="/images/upload/veda_<?=$user_grade?>_icon.png" class="user_level_icon" /> <?=$user_name?> </span>
-                                </button> -->
                             
                                 <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="margin-right:10px">
-                                    <!-- <img src="/images/common/won.png?v=1" style="width:20px; " class="user_money_icon" /> -->
                                     보유머니 <span class="_has_cash" style="padding:12px 3px; color:#ff9600;"><?=$user_money?></span>
                                 </button>
                             
                                 <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-right:10px">
-                                <!-- <img src="/images/common/point.png?v=1" style="width:20px; " class="user_money_icon" /> -->
                                     포인트 <span class="_has_point" style="padding:12px 3px; color:#ff9600;"  ><?=$user_point?></span>
-                                    <!-- <i class="ui sync icon" style="padding-left:1px;"></i> -->
                                 </button>
                             <?php endif ?>
                         </div>
 
                         <?php if(!is_login()) :?>
-                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" uk-toggle="target: #agentCheckModal" aria-expanded="false">
+                            <!-- uk-toggle="target: #agentCheckModal"  -->
+                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showAgentCheckModal();">
                                 <span>가입</span>
                             </button>
-
-                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" uk-toggle="target: #loginModal" aria-expanded="false">
+                            <!-- uk-toggle="target: #loginModal" -->
+                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showLoginModal();"  >
                                 <span>로그인</span>
                             </button>
                         <?php else :?>
@@ -1739,6 +1734,22 @@
                     },
                     "json"
                 );
+            }
+
+            function showAgentCheckModal() {
+                // if(check_login()){
+                //     return;
+                // }
+                SLB(); 
+                UIkit.modal("#agentCheckModal").show();
+            }
+            
+            function showLoginModal() {
+                // if(check_login()){
+                //     return;
+                // }
+                SLB(); 
+                UIkit.modal("#loginModal").show();
             }
 
             function requestCharge() {
