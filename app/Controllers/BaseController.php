@@ -538,7 +538,7 @@ class BaseController extends Controller
 		//슬롯 => 보유머니넘기기
 		if($objMember->mb_slot_uid !== ""){
 			//슬롯머니 요청
-			$arrResult = $this->libApiSlot->getUserInfo($objMember->mb_slot_uid);
+			$arrResult = $this->libApiSlot->getUserInfo($objMember->mb_slot_uid, true);
 			writeLog($logHead." ".$objMember->mb_uid."-UserInfo resultCode=".$arrResult['resultCode']);
 			if($arrResult['status'] == 1)
 			{

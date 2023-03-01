@@ -47,7 +47,7 @@ class ApiSlot_Lib {
         $arrResult = json_decode($response, true);
 		
 		if(!is_null($arrResult) && array_key_exists("resultCode", $arrResult)) {
-			if($arrResult['resultCode'] <= 1){
+			if($arrResult['resultCode'] == 0){
                 $arrResult['status'] = 1;
                 // "status": 1,
                 // "resultCode": "0",
@@ -65,7 +65,7 @@ class ApiSlot_Lib {
     }
 
 
-    public function getUserInfo($id)
+    public function getUserInfo($id, $renew=false)
     {
 
         if(strlen($this->mHost) < 1){
@@ -77,7 +77,7 @@ class ApiSlot_Lib {
         $arrPost['key'] = $this->mAgCode;
         $arrPost['secret'] = $this->mAgToken;
         $arrPost['userID'] = $id;
-        $arrPost['isRenew'] = "false";
+        $arrPost['isRenew'] = $renew?"true":"false";
         $post = json_encode($arrPost);
 
         $header =  ['Content-Type: application/json',
@@ -89,7 +89,7 @@ class ApiSlot_Lib {
         $arrResult = json_decode($response, true);
 		
 		if(!is_null($arrResult) && array_key_exists("resultCode", $arrResult)) {
-			if($arrResult['resultCode'] <= 1){
+			if($arrResult['resultCode'] == 0){
                 $arrResult['status'] = 1;
                 // "resultCode": "0",
                 // "resultMessage": "OK",
@@ -106,7 +106,48 @@ class ApiSlot_Lib {
         return $arrResult;
     }
 
+    public function getAgentInfo()
+    {
 
+        if(strlen($this->mHost) < 1){
+            return array('status' => 0, 'resultCode'=>-1);
+        }
+
+        $url = $this->mHost."/custom/api/agent/GetCurrentEgg";
+
+        $arrPost['key'] = $this->mAgCode;
+        $arrPost['secret'] = $this->mAgToken;
+        $post = json_encode($arrPost);
+
+        $header =  ['Content-Type: application/json',
+                'Content-Length: ' . strlen($post),
+                'Accept: */*'];
+        
+        $response = getCurlRequest($url, $header, $post);
+        
+        $arrResult = json_decode($response, true);
+		$balance = -1;
+		
+		if(!is_null($arrResult) && array_key_exists("resultCode", $arrResult)) {
+			if($arrResult['resultCode'] == 0){
+                $arrResult['status'] = 1;
+                // "resultCode": "0",
+                // "resultMessage": "OK",
+                // "currentEgg": 0
+                $balance = $arrResult['currentEgg'];
+                $arrResult['balance'] = $balance;
+
+            } else { //
+                $arrResult['status'] = 0;
+                //"status": 0,
+            }
+		} else {
+            $arrResult['status'] = 0;
+            $arrResult['resultCode'] = CONNECT_ERROR;
+        }
+
+        return $arrResult;
+    }
 
     public function createSess($id)
     {
@@ -131,7 +172,7 @@ class ApiSlot_Lib {
         $arrResult = json_decode($response, true);
 		
 		if(!is_null($arrResult) && array_key_exists("resultCode", $arrResult)) {
-			if($arrResult['resultCode'] <= 1){
+			if($arrResult['resultCode'] == 0){
                 $arrResult['status'] = 1;
                 // "resultCode": "0",
                 // "resultMessage": "OK",
@@ -175,7 +216,7 @@ class ApiSlot_Lib {
         $arrResult = json_decode($response, true);
 		
 		if(!is_null($arrResult) && array_key_exists("resultCode", $arrResult)) {
-			if($arrResult['resultCode'] <= 1){
+			if($arrResult['resultCode'] == 0){
                 $arrResult['status'] = 1;
                 // "resultCode": "0",
                 // "resultMessage": "OK",
@@ -218,7 +259,7 @@ class ApiSlot_Lib {
         $arrResult = json_decode($response, true);
 		
 		if(!is_null($arrResult) && array_key_exists("resultCode", $arrResult)) {
-			if($arrResult['resultCode'] <= 1){
+			if($arrResult['resultCode'] == 0){
                 $arrResult['status'] = 1;
                 // "resultCode": "0",
                 // "resultMessage": "OK",
@@ -243,12 +284,12 @@ class ApiSlot_Lib {
             return array('status' => 0, 'resultCode'=>-1);
         }
 
-        $url = $this->mHost."/custom/api/user/Withdraw";
+        $url = $this->mHost."/custom/api/user/WithdrawAll";
 
         $arrPost['key'] = $this->mAgCode;
         $arrPost['secret'] = $this->mAgToken;
         $arrPost['userID'] = $id;
-        $arrPost['amount'] = floatval($balance);
+        // $arrPost['amount'] = floatval($balance);
         $post = json_encode($arrPost);
 
         $header =  ['Content-Type: application/json',
@@ -260,7 +301,7 @@ class ApiSlot_Lib {
         $arrResult = json_decode($response, true);
 		
 		if(!is_null($arrResult) && array_key_exists("resultCode", $arrResult)) {
-			if($arrResult['resultCode'] <= 1 ){
+			if($arrResult['resultCode'] == 0 ){
                 $arrResult['status'] = 1;
                 // "resultCode": "0",
                 // "resultMessage": "OK",

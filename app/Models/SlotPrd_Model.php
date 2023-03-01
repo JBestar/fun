@@ -15,6 +15,7 @@ class SlotPrd_Model extends Model {
         $where = [
             'cat' => $cat,
             'code' => $prd,
+            'maintain' => STATE_DISABLE,
             'hidden' => STATE_DISABLE
         ];
         return $this->where($where)->first();
@@ -24,13 +25,14 @@ class SlotPrd_Model extends Model {
         $where = [
             'cat' => $cat,
             'ref_code' => $prd,
+            'maintain' => STATE_DISABLE,
             'hidden' => STATE_DISABLE
         ];
         return $this->where($where)->orderBy('code ASC')->findAll();
     }
     
     public function gets($cat){
-        $where = "cat = '".$cat."' AND hidden = '".STATE_DISABLE."' ";
+        $where = "cat = '".$cat."' AND hidden = '".STATE_DISABLE."' AND maintain = '".STATE_DISABLE."'";
         return $this->where($where)
                     ->orderBy('idx ASC, id ASC')
                     ->findAll(); 
