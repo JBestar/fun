@@ -22,9 +22,21 @@
 	    die("Connection failed: ");
 	} 
 
-	$appType = APPTYPE_1;
+	$appType = 0;
 	if(array_key_exists('app_type', $arrConfig)){
 		$appType=intval($arrConfig['app_type']);
+	}
+	$appSlot = 0;
+	if(array_key_exists('app_slot', $arrConfig)){
+		$appSlot=$arrConfig['app_slot'];
+	}
+	$appFslot = 0;
+	if(array_key_exists('app_fslot', $arrConfig)){
+		$appFslot=$arrConfig['app_fslot'];
+	}
+	$appCasino = 0;
+	if(array_key_exists('app_casino', $arrConfig)){
+		$appCasino=$arrConfig['app_casino'];
 	}
 
 	$tRootDir = dirname(__FILE__);
@@ -38,15 +50,53 @@
 	sleep(1);
 
 	$objServLogic = new ServiceLogic($dbConn, $fLog);
-	//정산상태 
 	$bSlDeny = $objServLogic->getSiteConf(CONF_SLOT_DENY);
+	$bCsDeny = $objServLogic->getSiteConf(CONF_KGON_DENY);
 	
-	$hSlot = null;
-	$hFslot = null;
-	$bSlReg = false; 
-	$bFslReg = false; 
+	//정산상태 
+	$bPlus = false;
+	$bKgon = false;
+	$bStar = false;
+	$bGsplay = false;
+	$bGold = false;
 
-	$ordFsl = 0;
+	if(!$bSlDeny){
+		if($appType == APP_TYPE_1 || $appType == APP_TYPE_3){
+			if($appSlot == APP_SLOT_THEPLUS)
+				$bPlus = true;
+			else if($appSlot == APP_SLOT_KGON)
+				$bKgon = true;
+			else if($appSlot == APP_SLOT_STAR)
+				$bStar = true;
+		}
+		if($appType == APP_TYPE_1 || $appType == APP_TYPE_2){
+			if($appFslot == APP_FSLOT_GSPLAY)
+				$bGsplay = true;
+			else if($appFslot == APP_FSLOT_GOLD)
+				$bGold = true;
+		}
+	}
+	if(!$bCsDeny){
+		if($appCasino == APP_CASINO_KGON)
+			$bKgon = true;
+		else if($appCasino == APP_CASINO_STAR)
+			$bStar = true;
+	}
+	
+
+	$hGold = null;
+	$hKgon = null;
+	$hPlus = null;
+	$hGsplay = null;
+	$hStar = null;
+
+	$bGoldReg = false;
+	$bKgonReg = false;
+	$bPlusReg = false;
+	$bGsplayReg = false;
+	$bStarReg = false;
+
+	$ordGsplay = 0;
 	$logHead = "<Oive>";
 	
 	$secSleep = 11;
@@ -54,6 +104,7 @@
 
 	writeLog($fLog, $logHead."==============START==============");
 
+	writeLog($fLog, $logHead."ThePlus=".$bPlus." KGON=".$bKgon." GSPlay=".$bGsplay." STAR=".$bStar." GOLD=".$bGold );
 
 	while(true){
 
@@ -82,87 +133,128 @@
 		
 		$bInsert = false;
 				
-		//슬롯1 게임결과 기록
-		if(!$bSlDeny && !$bSlReg){
-			if($appType == APPTYPE_1 || $appType == APPTYPE_3 || $appType == APPTYPE_4 || $appType == APPTYPE_6 || $appType == APPTYPE_8){
-				if($hSlot == null){
-					$hSlot = curl_multi_init();
-					$curl = $objServLogic->curlSlotBets();
-					curl_multi_add_handle($hSlot, $curl);
-					writeLog($fLog, $logHead."SLOT-REQ-".$hSlot);
+		//THE PLUS
+		if($bPlus && !$bPlusReg){
+			if($hPlus == null){
+				$hPlus = curl_multi_init();
+				$curl = $objServLogic->curlSlotBets();
+				if($curl)
+					curl_multi_add_handle($hPlus, $curl);
+				else {
+					$hPlus = null;
+					$bPlusReg = true;
 				}
-				$result = curlProc($hSlot, $fLog );
+				writeLog($fLog, $logHead."THEPLUS-REQ-".$hPlus);
+			}
+
+			if($hPlus){
+				$result = curlProc($hPlus, $fLog );
 				if($result != null){
-					$bSlReg = true;
+					$bPlusReg = true;
 					// writeLog($fLog, $result);
 					$bInsert = $objServLogic->registerSlotBets($result);
 				}
 			}
-			
 		}  
 		
-		//슬롯2 게임결과 기록
-		if(!$bSlDeny && !$bFslReg){
-			if($appType == APPTYPE_1 || $appType == APPTYPE_2 ){
-				if($hFslot == null){
-					$hFslot = curl_multi_init();
-					$curl = $objServLogic->curlFslotBets($ordFsl);
-					curl_multi_add_handle($hFslot, $curl);
-					writeLog($fLog, $logHead."FSLOT-REQ-".$hFslot);
+		//KGON
+		if($bKgon && !$bKgonReg){
+			if($hKgon == null){
+				$hKgon = curl_multi_init();
+				$curl = $objServLogic->curlKgontBets();
+				if($curl)
+					curl_multi_add_handle($hKgon, $curl);
+				else {
+					$hKgon = null;
+					$bKgonReg = true;
 				}
-				$result = curlProc($hFslot, $fLog );
+				writeLog($fLog, $logHead."KGON-REQ-".$hKgon);
+			}
+			if($hKgon){
+				$result = curlProc($hKgon, $fLog );
 				if($result != null){
-					$bFslReg = true;
+					$bKgonReg = true;
 					// writeLog($fLog, $result);
-					$bInsert = $objServLogic->registerFslotBets($result, $ordFsl);
+					$bInsert = $objServLogic->registerKgonBets($result);
 				}
-			} else if($appType == APPTYPE_4 || $appType == APPTYPE_5){
-				if($hFslot == null){
-					$hFslot = curl_multi_init();
-					$curl = $objServLogic->curlGslotBets();
-					curl_multi_add_handle($hFslot, $curl);
-					writeLog($fLog, $logHead."GSLOT-REQ-".$hFslot);
+			}
+		} 
+
+		//GSPLAY
+		if($bGsplay && !$bGsplayReg){
+			if($hGsplay == null){
+				$hGsplay = curl_multi_init();
+				$curl = $objServLogic->curlFslotBets($ordGsplay);
+				if($curl)
+					curl_multi_add_handle($hGsplay, $curl);
+				else {
+					$hGsplay = null;
+					$bGsplayReg = true;
 				}
-				$result = curlProc($hFslot, $fLog );
+				writeLog($fLog, $logHead."GSPLAY-REQ-".$hGsplay);
+			}
+			if($hGsplay){
+				$result = curlProc($hGsplay, $fLog );
 				if($result != null){
-					$bFslReg = true;
+					$bGsplayReg = true;
+					// writeLog($fLog, $result);
+					$bInsert = $objServLogic->registerFslotBets($result, $ordGsplay);
+				}
+			}
+		} 
+
+		//Star
+		if($bStar && !$bStarReg){
+			if($hStar == null){
+				$hStar = curl_multi_init();
+				$curl = $objServLogic->curlStarBets();
+				if($curl)
+					curl_multi_add_handle($hStar, $curl);
+				else {
+					$hStar = null;
+					$bStarReg = true;
+				}
+				writeLog($fLog, $logHead."STAR-REQ-".$hStar);
+			}
+			if($hStar){
+				$result = curlProc($hStar, $fLog );
+				if($result != null){
+					$bStarReg = true;
+					// writeLog($fLog, $result);
+					$bInsert = $objServLogic->registerStarBets($result);
+				}
+			}
+		} 
+
+		//Gold
+		if($bGold && !$bGoldReg){
+			if($hGold == null){
+				$hGold = curl_multi_init();
+				$curl = $objServLogic->curlGslotBets();
+				if($curl)
+					curl_multi_add_handle($hGold, $curl);
+				else {
+					$hGold = null;
+					$bGoldReg = true;
+				}
+				writeLog($fLog, $logHead."GOLD-REQ-".$hGold);
+			}
+			if($hGold){
+				$result = curlProc($hGold, $fLog );
+				if($result != null){
+					$bGoldReg = true;
 					// writeLog($fLog, $result);
 					$bInsert = $objServLogic->registerGslotBets($result);
 				}
-			} else if($appType == APPTYPE_6 || $appType == APPTYPE_7){
-				if($hFslot == null){
-					$hFslot = curl_multi_init();
-					$curl = $objServLogic->curlKslotBets();
-					curl_multi_add_handle($hFslot, $curl);
-					writeLog($fLog, $logHead."KSLOT-REQ-".$hFslot);
-				}
-				$result = curlProc($hFslot, $fLog );
-				if($result != null){
-					$bFslReg = true;
-					// writeLog($fLog, $result);
-					$bInsert = $objServLogic->registerKslotBets($result);
-				}
-			} else if($appType == APPTYPE_8 || $appType == APPTYPE_9){
-				if($hFslot == null){
-					$hFslot = curl_multi_init();
-					$curl = $objServLogic->curlHslotBets();
-					curl_multi_add_handle($hFslot, $curl);
-					writeLog($fLog, $logHead."HSLOT-REQ-".$hFslot);
-				}
-				$result = curlProc($hFslot, $fLog );
-				if($result != null){
-					$bFslReg = true;
-					// writeLog($fLog, $result);
-					$bInsert = $objServLogic->registerHslotBets($result);
-				}
-			} 
-			
-		}  
-		
-		
-		if($hSlot == null && $hFslot == null){
-			$bSlReg = false;
-			$bFslReg = false;
+			}
+		} 
+
+		if($hGold == null && $hKgon == null && $hPlus == null && $hGsplay == null && $hStar == null){
+			$bGoldReg = false;
+			$bKgonReg = false;
+			$bPlusReg = false;
+			$bGsplayReg = false;
+			$bStarReg = false;
 
 			if(!$bInsert)
 				sleep($secSleep);
@@ -171,6 +263,6 @@
 		
 	}
 	
-	sleep(1000);
+	sleep(100);
 	
 ?>

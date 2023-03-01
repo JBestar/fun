@@ -1,18 +1,21 @@
 <?php
 
 include_once('models/SlotBet_Model.php');
+include_once('models/CasinoBet_Model.php');
 
 include_once('models/ConfSite_Model.php');
 include_once('models/SlotPrd_Model.php');
+include_once('models/CasinoPrd_Model.php');
 
 include_once('models/Member_Model.php');
 include_once('models/Reward_Model.php');
 
 class ServiceLogic
 {
-	private $mSnoopy ;
+	// private $mSnoopy ;
 
 	private $modelSlotBet;
+	private $modelCasinoBet;
 
 	private $modelMember;
 	private $modelReward;
@@ -23,13 +26,15 @@ class ServiceLogic
 	public $fLog;
 	
 	function __construct($dbConn, $fLog){
-		$this->mSnoopy = new Snoopy();
+		// $this->mSnoopy = new Snoopy();
 		$this->fLog = $fLog;
 
+		$this->modelCasinoBet = new CasinoBet_Model($dbConn);
 		$this->modelSlotBet = new SlotBet_Model($dbConn);
 
 		$this->modelConfSite = new ConfSite_Model($dbConn);
 		$this->modelSlotPrd = new SlotPrd_Model($dbConn);
+		$this->modelCasinoPrd = new CasinoPrd_Model($dbConn);
 
 		$this->modelMember = new Member_Model($dbConn);
 		$this->modelReward = new Reward_Model($dbConn);
@@ -51,8 +56,8 @@ class ServiceLogic
 	//===========슬롯게임================
 	
 	public function curlSlotBets(){
-		$gameId = GAME_SLOT_1;
-		$confId = CONF_SLOT_1;
+		$gameId = GAME_SLOT_THEPLUS;
+		$confId = CONF_API_THEPLUS;
 		$logHead = "<SLOT> ";
 
 		$objConf = $this->modelConfSite->getById($confId);
@@ -85,8 +90,8 @@ class ServiceLogic
 	}
 
 	public function registerSlotBets($response){
-		$gameId = GAME_SLOT_1;
-		$confId = CONF_SLOT_1;
+		$gameId = GAME_SLOT_THEPLUS;
+		$confId = CONF_API_THEPLUS;
 		$logHead = "<SLOT> ";
 
 		$arrPrd = $this->modelSlotPrd->getByCat($gameId);
@@ -178,8 +183,6 @@ class ServiceLogic
 				$arrMemBet[$objMember->mb_fid] = strToLocal($bet['Date']);
 				if(is_null($betting)){
 					$objPrd = getPrd($arrPrd, $bet['ThirdParty']);
-					if(!is_null($objPrd))
-						$bet['GameID'] = $objPrd->spec."_".$bet['GameID'];
 					$betId = $this->modelSlotBet->insertXslot($objMember, $bet);
 					writeLog($this->fLog, $logHead."Insert ACCId=".$betId);
 					if($betId > 0)
@@ -223,8 +226,6 @@ class ServiceLogic
 				$betId = 0;
 				if(is_null($betting)){
 					$objPrd = getPrd($arrPrd, $bet['ThirdParty']);
-					if(!is_null($objPrd))
-						$bet['GameID'] = $objPrd->spec."_".$bet['GameID'];
 					$betId = $this->modelSlotBet->insertXslot($objMember, $bet, $bBlank, $nBlankPt);
 					writeLog($this->fLog, $logHead."Insert BetId=".$betId);
 					if($betId > 0)
@@ -262,8 +263,8 @@ class ServiceLogic
 	//===========네츄럴 슬롯 게임=================
 	
 	public function curlFslotBets(&$order) {
-		$gameId = GAME_SLOT_2;
-		$confId = CONF_SLOT_2;
+		$gameId = GAME_SLOT_GSPLAY;
+		$confId = CONF_API_GSPLAY;
 		$logHead = "<FSLOT> ";
 
 		$arrPrd = $this->modelSlotPrd->getByCat($gameId);
@@ -304,8 +305,8 @@ class ServiceLogic
 	}
 
 	public function registerFslotBets($response, $order) {
-		$gameId = GAME_SLOT_2;
-		$confId = CONF_SLOT_2;
+		$gameId = GAME_SLOT_GSPLAY;
+		$confId = CONF_API_GSPLAY;
 		$logHead = "<FSLOT> ";
 
 		$arrPrd = $this->modelSlotPrd->getByCat($gameId);
@@ -448,8 +449,8 @@ class ServiceLogic
 	//===========골드슬롯게임================
 		
 	public function curlGslotBets(){
-		$gameId = GAME_SLOT_3;
-		$confId = CONF_SLOT_3;
+		$gameId = GAME_SLOT_GOLD;
+		$confId = CONF_API_GOLD;
 		$logHead = "<GSLOT> ";
 
 		$objConf = $this->modelConfSite->getById($confId);
@@ -501,8 +502,8 @@ class ServiceLogic
 	}
 
 	public function registerGslotBets($response){
-		$gameId = GAME_SLOT_3;
-		$confId = CONF_SLOT_3;
+		$gameId = GAME_SLOT_GOLD;
+		$confId = CONF_API_GOLD;
 		$logHead = "<GSLOT> ";
 
 		$arrPrd = $this->modelSlotPrd->getByCat($gameId);
@@ -663,6 +664,20 @@ class ServiceLogic
 			// writeLog($this->fLog, $logHead."BET-".$bet['user_code']."=>".$bet['bet_money']);
 		}
 
+		if(strlen($lastIdx) == 0){
+			if(strlen($arrIdx['idx']) > 0){
+				$strStart = $arrIdx['idx'];
+				$startAt = strtotime($strStart);
+				$lastIdx = date('Y-m-d H:i:s', strtotime("+1 month", $startAt));
+
+				$tmNow = time();
+				$strStart = date("Y-m-d H:i:s", $tmNow);     
+				$strEnd = date('Y-m-d H:i:s', strtotime("-1 month", $tmNow));
+
+				if($lastIdx > $strEnd)
+					$lastIdx = $strEnd;
+			}
+		}
 		if(strlen($lastIdx) > 0)
 			$this->modelConfSite->updateLastIdx($objConf->conf_id, $lastIdx."#".$arrIdx['fid']);
 
@@ -677,14 +692,11 @@ class ServiceLogic
 
 	//===========KGON슬롯게임================
 		
-	public function curlKslotBets(){
-		$gameId = GAME_SLOT_4;
-		$confId = CONF_CASINO_KGON;
-		$confId2 = CONF_KGON_ENABLE;
-		$logHead = "<KSLOT> ";
+	public function curlKgontBets(){
+		$confId = CONF_API_KGON;
+		$logHead = "<KGON> ";
 
 		$objConf = $this->modelConfSite->getById($confId);
-		$objConf2 = $this->modelConfSite->getById($confId2);
 		
 		if(is_null($objConf))
 			return null;
@@ -694,9 +706,12 @@ class ServiceLogic
 			return null;
 
 		$url = $arrInfo[0]."/transaction";
-		$arrIdx = getHistoryDate($objConf2->conf_idx);
+		$arrIdx = getHistoryDate($objConf->conf_idx);
 		
 		$post = "limmit=300";
+		// if($arrIdx['idx'] == ""){
+		// 	$arrIdx['idx'] = date('Y-m-d\TH:i:s', strtotime("-10 hours", time())); 
+		// } 
 		if($arrIdx['idx'] !== "")
         	$post.= "&sdate=".$arrIdx['idx'];
 
@@ -713,16 +728,15 @@ class ServiceLogic
 		return getCurl($url, $header, $post);
 	}
 
-	public function registerKslotBets($response){
-		$gameId = GAME_SLOT_4;
-		$confId = CONF_CASINO_KGON;
-		$confId2 = CONF_KGON_ENABLE;
-		$logHead = "<KSLOT> ";
+	public function registerKgonBets($response){
+		$gameSlotId = GAME_SLOT_KGON;
+		$gameCasId = GAME_CASINO_KGON;
+		$confId = CONF_API_KGON;
+		$logHead = "<KGON> ";
 
 		$objConf = $this->modelConfSite->getById($confId);
-		$objConf2 = $this->modelConfSite->getById($confId2);
 		
-		$arrPrd = $this->modelSlotPrd->getByCat($gameId);
+		// $arrPrd = $this->modelSlotPrd->getByCat($gameSlotId);
 		
 		if(is_null($response))
 			return false;
@@ -732,10 +746,10 @@ class ServiceLogic
 
 		$arrInfo = explode("#", $objConf->conf_content);
 
-		if(count($arrInfo) < 3 || count($arrPrd) < 1)	//0-host, 1-ag_code, 2-ag_token
+		if(count($arrInfo) < 3)	//0-host, 1-ag_code, 2-ag_token
 			return false;
 
-		$arrIdx = getHistoryDate($objConf2->conf_idx);
+		$arrIdx = getHistoryDate($objConf->conf_idx);
 		
 		$arrBet = null;
 		$arrResult = json_decode($response, true);
@@ -764,11 +778,15 @@ class ServiceLogic
 		writeLog($this->fLog, $logHead."Bet Count-".count($arrBet));
 
 		$lastIdx = $arrIdx['idx'];
-		$lastFid = 0;
+		$lastSlFid = 0;
 		if($arrIdx['fid'] > FID_OFFSET){
-			$lastFid = $arrIdx['fid'] - FID_OFFSET;
+			$lastSlFid = $arrIdx['fid'] - FID_OFFSET;
+		}
+		$lastCsFid = 0;
+		if($arrIdx['fid2'] > FID_OFFSET){
+			$lastCsFid = $arrIdx['fid2'] - FID_OFFSET;
 		} 
-		writeLog($this->fLog, $logHead."Last Fid-".$lastFid);
+		writeLog($this->fLog, $logHead."Last Fid-".$lastSlFid);
 
 		$objMember = null;
 		$arrEmpPoint = array();
@@ -776,127 +794,177 @@ class ServiceLogic
 		$arrMemBet = array();
 		
 		$arrLiveUids = [];
+		$slExist = false;
+		$csExist = false;
 		foreach ($arrBet as $bet) {
+			if($bet['gameCategory'] === "casino")
+				$csExist = true;
+			else if($bet['gameCategory'] === "slot")
+				$slExist = true;
 			if(!in_array($bet['siteUsername'], $arrLiveUids))
 				array_push($arrLiveUids, $bet['siteUsername']);
 		}
-		$arrMember = $this->modelMember->getMembersByLiveUids($arrLiveUids, $gameId);
+		$arrMember = $this->modelMember->getMembersByLiveUids($arrLiveUids, $gameSlotId);
 		if(count($arrMember) > 0)
 			writeLog($this->fLog, $logHead."***Member Count-".count($arrMember));
 		foreach ($arrMember as $member) {
-			$member->ratio = $this->modelMember->getEmployeeRatio($member, $gameId);
+			if($slExist)
+				$member->ratio_sl = $this->modelMember->getEmployeeRatio($member, $gameSlotId);
+			if($csExist)
+				$member->ratio_cs = $this->modelMember->getEmployeeRatio($member, $gameCasId);
 		}
 		$bInsert = false;
-		$rwLastFid = $this->modelReward->getLastFid($gameId);
-		writeLog($this->fLog, $logHead."Reward LastFid=".$rwLastFid);
-		if($rwLastFid > FID_OFFSET*3){
-			$rwLastFid = $rwLastFid - FID_OFFSET*3;
+		$rwSlLastFid = $this->modelReward->getLastFid($gameSlotId);
+		writeLog($this->fLog, $logHead."Reward LastFid=".$rwSlLastFid);
+		if($rwSlLastFid > FID_OFFSET*3){
+			$rwSlLastFid = $rwSlLastFid - FID_OFFSET*3;
+		}
+
+		$rwCsLastFid = $this->modelReward->getLastFid(GAME_CASINO_EVOL);
+		writeLog($this->fLog, $logHead."Reward LastFid=".$rwCsLastFid);
+		if($rwCsLastFid > FID_OFFSET*3){
+			$rwCsLastFid = $rwCsLastFid - FID_OFFSET*3;
 		}
 
 		foreach ($arrBet as $bet) {
 
 			$lastIdx = $bet['utcCreatedAt'];
 			
-			// writeLog($this->fLog, $logHead."Bet1-".$bet['refId']."=>".$bet['cash']);
-			
-			if($bet['gameCategory'] !== "slot")
-				continue;
-			// writeLog($this->fLog, $logHead."Bet2-".$bet['refId']."=>".$bet['cash']);
-
-			$objMember = findMemberByLiveId($arrMember, $bet['siteUsername'], $gameId);
+			$objMember = findMemberByLiveId($arrMember, $bet['siteUsername'], $gameSlotId);
 			if(is_null($objMember))
 				continue;
-			writeLog($this->fLog, $logHead."Bet-".$bet['refId']."=>".$bet['cash']);
 
-			$bet['game_id'] = $gameId;
 			$bet['agent_id'] = $arrInfo[1];			//agent code			
 			$bet['user_id'] = $objMember->mb_kgon_id;
-			
-			$betting = $this->modelSlotBet->getByKslot($gameId, $bet, $lastFid);	//베팅내역체크
 
-			if($bet['type'] !== "turn_bet")			//청산
-			{	
-				if(is_null($betting)){
-					writeLog($this->fLog, $logHead."ACC-Not Found-".$bet['refId']."=>".$bet['cash']);
-					continue;
-				}
+			if($bet['gameCategory'] === "casino"){
+				$logHead = "<KGON> CAS>> ";
+				// writeLog($this->fLog, $logHead."bet-".$bet['refId']."=>".$bet['cash']);
+				$bet['txn_id'] = $bet['refId'];
+				$betting = $this->modelCasinoBet->getByBet($bet, $lastCsFid);	//베팅내역체크
 
-				if(strlen(trim($betting['bet_result'])) > 0 ){
-					writeLog($this->fLog, $logHead."ACC-Already-".$bet['refId']."=>".$bet['cash']);
-					continue;
-				}
-				
-				$arrMemBet[$objMember->mb_fid] = $bet['createdAt'];
-				// if(is_null($betting)){
-					
-				// 	$betId = $this->modelSlotBet->insertKslot($objMember, $bet);
-				// 	writeLog($this->fLog, $logHead."Insert ACCId=".$betId);
-				// 	if($betId > 0)
-				// 		$arrIdx['fid'] = $betId;
-				// } else {
-				$betId = $betting['bet_fid'];
-				$bResult = $this->modelSlotBet->updateKslot($betId, $bet);
-				writeLog($this->fLog, $logHead."Update ACCId=".$betId."=>Result-".$bResult);
-				// }
-			} else {								//베팅
-				if(!is_null($betting)){
-					writeLog($this->fLog, $logHead."BET-Exist-".$bet['refId']."=>".$bet['cash']);
-					continue;
-				}
-				
-				$bBlank = false;
-				$nBlankPt = 0;
-
-				$arrEmpRatio = calcEmpPoint($objMember->ratio, $bet['cash'], $bet['createdAt']);
-				if($objMember->mb_blank_count > 0 && intval($objMember->mb_blank_current) >= intval($objMember->mb_blank_count)-1 ){
-					$objMember->mb_blank_current = 0;
-					$bBlank = true;
-					$nBlankPt = calcCompPoint($objMember->ratio, $bet['cash']);
-					$arrMemBlank[$objMember->mb_fid] = $objMember->mb_blank_current;
-					writeLog($this->fLog, $logHead."Blank Cross Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current." Comp=".$nBlankPt);
-				} else {
-					foreach($arrEmpRatio as $ratio){
-						
-						if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
-							$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
-						else 
-							$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
+				if($bet['type'] !== "turn_bet")			//청산
+				{		
+					if(is_null($betting)){
+						writeLog($this->fLog, $logHead."ACC-Not Found-".$bet['refId']."=>".$bet['cash']);
+						continue;
 					}
-					if($objMember->mb_blank_count > 0){
-						$objMember->mb_blank_current ++;
+
+					if(strlen(trim($betting['bet_result'])) > 0 ){
+						writeLog($this->fLog, $logHead."ACC-Already-".$bet['refId']."=>".$bet['cash']);
+						continue;
+					}
+
+					$betId = $betting['bet_fid'];
+					$this->modelCasinoBet->updateK($betId, $bet);
+					writeLog($this->fLog, $logHead."Update ACCId=".$betId);
+					$arrMemBet[$objMember->mb_fid] = $bet['createdAt'];
+					
+					if($bet['type'] !== "turn_draw"){	//타이가 아니라면
+						$arrEmpRatio = calcEmpPoint($objMember->ratio_cs, $betting['bet_money'], $betting['bet_time']);
+						foreach($arrEmpRatio as $ratio){
+							if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
+								$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
+							else 
+								$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
+						}
+						$this->modelReward->insert(GAME_CASINO_EVOL, $betId, $arrEmpRatio, $rwCsLastFid);
+					}
+
+				} else	//베팅
+				{
+					if(!is_null($betting)){
+						writeLog($this->fLog, $logHead."BET-Exist-".$bet['refId']."=>".$bet['cash']);
+						continue;
+					}
+					
+					$betId = $this->modelCasinoBet->insertK($objMember, $bet);
+					writeLog($this->fLog, $logHead."Insert BetId=".$betId);
+					$arrMemBet[$objMember->mb_fid] = $bet['createdAt'];
+					if($betId > 0){
+						$arrIdx['fid2'] = $betId;
+						$bInsert = true;
+						writeLog($this->fLog, $logHead."BET-INSERT-".$bet['type']."-".$bet['_id']."=>".$bet['cash']);
+					}
+					
+				}
+			} else if($bet['gameCategory'] === "slot"){
+				$logHead = "<KGON> SLOT>> ";
+
+				// writeLog($this->fLog, $logHead."bet-".$bet['refId']."=>".$bet['cash']);
+				$bet['game_id'] = $gameSlotId;
+				$betting = $this->modelSlotBet->getByKslot($gameSlotId, $bet, $lastSlFid);	//베팅내역체크
+				
+				if($bet['type'] !== "turn_bet")			//청산
+				{	
+					if(is_null($betting)){
+						writeLog($this->fLog, $logHead."ACC-Not Found-".$bet['refId']."=>".$bet['cash']);
+						continue;
+					}
+
+					if(strlen(trim($betting['bet_result'])) > 0 ){
+						writeLog($this->fLog, $logHead."ACC-Already-".$bet['refId']."=>".$bet['cash']);
+						continue;
+					}
+					
+					$arrMemBet[$objMember->mb_fid] = $bet['createdAt'];
+
+					$betId = $betting['bet_fid'];
+					$bResult = $this->modelSlotBet->updateKslot($betId, $bet);
+					writeLog($this->fLog, $logHead."Update ACCId=".$betId."=>Result-".$bResult);
+				} else {								//베팅
+					if(!is_null($betting)){
+						writeLog($this->fLog, $logHead."BET-Exist-".$bet['refId']."=>".$bet['cash']);
+						continue;
+					}
+					
+					$bBlank = false;
+					$nBlankPt = 0;
+
+					$arrEmpRatio = calcEmpPoint($objMember->ratio_sl, $bet['cash'], $bet['createdAt']);
+					if($objMember->mb_blank_count > 0 && intval($objMember->mb_blank_current) >= intval($objMember->mb_blank_count)-1 ){
+						$objMember->mb_blank_current = 0;
+						$bBlank = true;
+						$nBlankPt = calcCompPoint($objMember->ratio_sl, $bet['cash']);
 						$arrMemBlank[$objMember->mb_fid] = $objMember->mb_blank_current;
-						writeLog($this->fLog, $logHead."Blank Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current);
+						writeLog($this->fLog, $logHead."Blank Cross Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current." Comp=".$nBlankPt);
+					} else {
+						foreach($arrEmpRatio as $ratio){
+							
+							if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
+								$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
+							else 
+								$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
+						}
+						if($objMember->mb_blank_count > 0){
+							$objMember->mb_blank_current ++;
+							$arrMemBlank[$objMember->mb_fid] = $objMember->mb_blank_current;
+							writeLog($this->fLog, $logHead."Blank Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current);
+						}
+						
 					}
-					
-				}
 
-				$arrMemBet[$objMember->mb_fid] = $bet['createdAt'];
-				$betId = 0;
-				// if(is_null($betting)){
-					
+					$arrMemBet[$objMember->mb_fid] = $bet['createdAt'];
+					$betId = 0;
+						
 					$betId = $this->modelSlotBet->insertKslot($objMember, $bet, $bBlank, $nBlankPt);
 					writeLog($this->fLog, $logHead."Insert BetId=".$betId);
 					if($betId > 0)
 						$arrIdx['fid'] = $betId;
-				// } 
-				// else {
-				// 	$betId = $betting['bet_fid'];
-				// 	$bResult = $this->modelSlotBet->updateKslot($betId, $bet, $bBlank, $nBlankPt);
-				// 	writeLog($this->fLog, $logHead."Update BetId=".$betId."=>Result-".$bResult);
-				// }
-					
-				if($betId > 0){
-					$this->modelReward->insert($gameId, $betId, $arrEmpRatio, $rwLastFid, $bBlank);
-					$bInsert = true;
-					writeLog($this->fLog, $logHead."Insert Reward Count=".count($arrEmpRatio));
+						
+					if($betId > 0){
+						$this->modelReward->insert($gameSlotId, $betId, $arrEmpRatio, $rwSlLastFid, $bBlank);
+						$bInsert = true;
+						writeLog($this->fLog, $logHead."Insert Reward Count=".count($arrEmpRatio));
+					}
 				}
-			}
 
-			// writeLog($this->fLog, $logHead."BET-".$bet['user_code']."=>".$bet['bet_money']);
+			}
+			
 		}
 
 		if(strlen($lastIdx) > 0)
-			$this->modelConfSite->updateLastIdx($objConf2->conf_id, $lastIdx."#".$arrIdx['fid']);
+			$this->modelConfSite->updateLastIdx($objConf->conf_id, $lastIdx."#".$arrIdx['fid']."#".$arrIdx['fid2']);
 
 		$this->modelMember->updateMemberBetTm($arrMemBet);
 		$bResult = $this->modelMember->updateMemberBlank($arrMemBlank);
@@ -908,12 +976,11 @@ class ServiceLogic
 	}
 
 
-	//===========하이 슬롯 게임=================
+	//===========STAR API=================
 	
-	public function curlHslotBets() {
-		$gameId = GAME_SLOT_5;
-		$confId = CONF_SLOT_HI;
-		$logHead = "<HSLOT> ";
+	public function curlStarBets() {
+		$confId = CONF_API_STAR;
+		$logHead = "<STAR> ";
 
 		$objConf = $this->modelConfSite->getById($confId);
 		$arrInfo = explode("#", $objConf->conf_content);
@@ -948,16 +1015,18 @@ class ServiceLogic
 		
 	}
 
-	public function registerHslotBets($response) {
-		$gameId = GAME_SLOT_5;
-		$confId = CONF_SLOT_HI;
-		$logHead = "<HSLOT> ";
+	public function registerStarBets($response) {
+		$gameSlotId = GAME_SLOT_STAR;
+		$gameCasId = GAME_CASINO_STAR;
+		$confId = CONF_API_STAR;
+		$logHead = "<STAR> ";
 
-		$arrPrd = $this->modelSlotPrd->getByCat($gameId);
+		$arrCasPrd = $this->modelCasinoPrd->getByCat($gameCasId);
+		$arrSlotPrd = $this->modelSlotPrd->getByCat($gameSlotId);
 		$objConf = $this->modelConfSite->getById($confId);
 		
 		$arrInfo = explode("#", $objConf->conf_content);
-		if(count($arrInfo) < 3 || count($arrPrd) < 1)	//0-host, 1-ag_code, 2-ag_token
+		if(count($arrInfo) < 3)	//0-host, 1-ag_code, 2-ag_token
 			return null;
 
 		$arrIdx = getHistoryDate($objConf->conf_idx);
@@ -992,13 +1061,18 @@ class ServiceLogic
 		}
 
 		writeLog($this->fLog, $logHead."Bet Count-".count($arrBet));
+		// writeLog($this->fLog, $logHead."CsPrd Count-".count($arrCasPrd));
 
 		$lastIdx = "";
-		$lastFid = 0;
+		$lastSlFid = 0;
 		if($arrIdx['fid'] > FID_OFFSET){
-			$lastFid = $arrIdx['fid'] - FID_OFFSET;
+			$lastSlFid = $arrIdx['fid'] - FID_OFFSET;
 		} 
-		writeLog($this->fLog, $logHead."Last Fid-".$lastFid);
+		$lastCsFid = 0;
+		if($arrIdx['fid2'] > FID_OFFSET){
+			$lastCsFid = $arrIdx['fid2'] - FID_OFFSET;
+		} 
+		writeLog($this->fLog, $logHead."Last Fid-".$lastSlFid);
 
 		$objMember = null;
 		$arrEmpPoint = array();
@@ -1006,22 +1080,37 @@ class ServiceLogic
 		$arrMemBet = array();
 		
 		$arrLiveUids = [];
+		$slExist = false;
+		$csExist = false;
 		foreach ($arrBet as $bet) {
+			if($bet['gameType'] != "slot")
+				$csExist = true;
+			else if($bet['gameType'] == "slot")
+				$slExist = true;
 			if(!in_array($bet['playerID'], $arrLiveUids))
 				array_push($arrLiveUids, $bet['playerID']);
 		}
 
-		$arrMember = $this->modelMember->getMembersByLiveUids($arrLiveUids, $gameId);
+		$arrMember = $this->modelMember->getMembersByLiveUids($arrLiveUids, $gameSlotId);
 		if(count($arrMember) > 0)
 			writeLog($this->fLog, $logHead."***Member Count-".count($arrMember));
 		foreach ($arrMember as $member) {
-			$member->ratio = $this->modelMember->getEmployeeRatio($member, $gameId);
+			if($slExist)
+				$member->ratio_sl = $this->modelMember->getEmployeeRatio($member, $gameSlotId);
+			if($csExist)
+				$member->ratio_cs = $this->modelMember->getEmployeeRatio($member, $gameCasId);
 		}
 		$bInsert = false;
-		$rwLastFid = $this->modelReward->getLastFid($gameId);
-		writeLog($this->fLog, $logHead."Reward LastFid=".$rwLastFid);
-		if($rwLastFid > FID_OFFSET){
-			$rwLastFid = $rwLastFid - FID_OFFSET;
+		$rwSlLastFid = $this->modelReward->getLastFid($gameSlotId);
+		writeLog($this->fLog, $logHead."Reward LastFid=".$rwSlLastFid);
+		if($rwSlLastFid > FID_OFFSET*3){
+			$rwSlLastFid = $rwSlLastFid - FID_OFFSET*3;
+		}
+
+		$rwCsLastFid = $this->modelReward->getLastFid(GAME_CASINO_EVOL);
+		writeLog($this->fLog, $logHead."Reward LastFid=".$rwCsLastFid);
+		if($rwCsLastFid > FID_OFFSET*3){
+			$rwCsLastFid = $rwCsLastFid - FID_OFFSET*3;
 		}
 
 		$objPrd = null;
@@ -1030,62 +1119,104 @@ class ServiceLogic
 
 			$bet = $arrBet[$i];
 			
-			$objMember = findMemberByLiveId($arrMember, $bet['playerID'], $gameId);
+			$objMember = findMemberByLiveId($arrMember, $bet['playerID'], $gameSlotId);
 			if(is_null($objMember))
 				continue;
 
-			$objPrd = getPrdByName($arrPrd, $bet['providerName']);
-			if(is_null($objPrd))
-				continue;
+			if($bet['gameType'] != "slot"){
+				$logHead = "<STAR> cas>>";
+				
+				$objPrd = getPrdByKey($arrCasPrd, $bet['providerName']);
+				if(is_null($objPrd))
+					continue;
 
-			$betting = $this->modelSlotBet->getByHslot($gameId, $bet, $lastFid);	//베팅내역체크
-			if(!is_null($betting))
-				continue;
-			
-			if($lastIdx === "" || $lastIdx < $bet['regdate'])
-				$lastIdx = $bet['regdate'];
+				$betting = $this->modelCasinoBet->getByIdx($objPrd->vendor_id, $bet['transactionID'], $lastCsFid);	//베팅내역체크
 
-			$bet['agent_code'] = $arrInfo[1];		//agend id
-			$bet['prd_id'] = $objPrd->code;			//provider code
-			$bet['game_id'] = $gameId;				//game id
+				if(!is_null($betting))
+					continue;
 
-			writeLog($this->fLog, $logHead."BET-".$bet['transactionID']."=>".$bet['bet']);
-
-			$bBlank = false;
-			$nBlankPt = 0;
-
-			$arrEmpRatio = calcEmpPoint($objMember->ratio, $bet['bet'], $bet['regdate']);
-			if($objMember->mb_blank_count > 0 && intval($objMember->mb_blank_current) >= intval($objMember->mb_blank_count)-1 ){
-				$objMember->mb_blank_current = 0;
-				$bBlank = true;
-				$nBlankPt = calcCompPoint($objMember->ratio, $bet['bet_money']);
-				$arrMemBlank[$objMember->mb_fid] = $objMember->mb_blank_current;
-				writeLog($this->fLog, $logHead."Blank Cross Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current." Comp=".$nBlankPt);
-			} else {
-				foreach($arrEmpRatio as $ratio){
+				if($lastIdx === "" || $lastIdx < $bet['regdate'])
+					$lastIdx = $bet['regdate'];
 					
-					if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
-						$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
-					else 
-						$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
-				}
-				if($objMember->mb_blank_count > 0){
-					$objMember->mb_blank_current ++;
-					$arrMemBlank[$objMember->mb_fid] = $objMember->mb_blank_current;
-					writeLog($this->fLog, $logHead."Blank Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current);
-				}
-			}
-			$bet['game_id'] = $gameId;
-			$arrMemBet[$objMember->mb_fid] = $bet['regdate'];
-
-			$betId = $this->modelSlotBet->insertHslot($objMember, $bet, $bBlank, $nBlankPt);
-			if($betId > 0){
-				$this->modelReward->insert($gameId, $betId, $arrEmpRatio, $rwLastFid, $bBlank);
-				$bInsert = true;
-				$arrIdx['fid'] = $betId;
-			}
-			writeLog($this->fLog, $logHead."Insert BetId=".$betId);
+				$bet['agent_id'] = $arrInfo[1];					//agend id
+				$bet['prd_id'] = $objPrd->vendor_id;			//provider code
+				$arrMemBet[$objMember->mb_fid] = $bet['regdate'];
+	
+				writeLog($this->fLog, $logHead."BET-".$bet['gameType']." transactionID=".$bet['transactionID']."=> bet=".$bet['bet']." win=".$bet['win']);
+	
+				$betId = $this->modelCasinoBet->insertH($objMember, $bet);
+				if($betId > 0){
+					writeLog($this->fLog, $logHead."Insert BetId=".$betId);
+					$arrIdx['fid2'] = $betId;
+					$bInsert = true;
+	
+					if($bet['bet'] > 0 && $bet['bet'] !== $bet['win']){
+						$arrEmpRatio = calcEmpPoint($objMember->ratio_cs, $bet['bet'], $bet['regdate']);
+						foreach($arrEmpRatio as $ratio){
+							if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
+								$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
+							else 
+								$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
+						}
+						$this->modelReward->insert(GAME_CASINO_EVOL, $betId, $arrEmpRatio, $rwCsLastFid);
 			
+					}
+				}
+			} else if($bet['gameType'] == "slot"){
+				$logHead = "<STAR> slot>>";
+				// writeLog($this->fLog, $logHead."BET-".$bet['transactionID']."=>".$bet['bet']);
+
+				$objPrd = getPrdByName($arrSlotPrd, $bet['providerName']);
+				if(is_null($objPrd))
+					continue;
+
+				$betting = $this->modelSlotBet->getByHslot($gameSlotId, $bet, $lastSlFid);	//베팅내역체크
+				if(!is_null($betting))
+					continue;
+				
+				if($lastIdx === "" || $lastIdx < $bet['regdate'])
+					$lastIdx = $bet['regdate'];
+
+				$bet['agent_code'] = $arrInfo[1];		//agend id
+				$bet['prd_id'] = $objPrd->code;			//provider code
+				$bet['game_id'] = $gameSlotId;				//game id
+
+
+				$bBlank = false;
+				$nBlankPt = 0;
+
+				$arrEmpRatio = calcEmpPoint($objMember->ratio_sl, $bet['bet'], $bet['regdate']);
+				if($objMember->mb_blank_count > 0 && intval($objMember->mb_blank_current) >= intval($objMember->mb_blank_count)-1 ){
+					$objMember->mb_blank_current = 0;
+					$bBlank = true;
+					$nBlankPt = calcCompPoint($objMember->ratio_sl, $bet['bet_money']);
+					$arrMemBlank[$objMember->mb_fid] = $objMember->mb_blank_current;
+					writeLog($this->fLog, $logHead."Blank Cross Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current." Comp=".$nBlankPt);
+				} else {
+					foreach($arrEmpRatio as $ratio){
+						
+						if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
+							$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
+						else 
+							$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
+					}
+					if($objMember->mb_blank_count > 0){
+						$objMember->mb_blank_current ++;
+						$arrMemBlank[$objMember->mb_fid] = $objMember->mb_blank_current;
+						writeLog($this->fLog, $logHead."Blank Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current);
+					}
+				}
+				$bet['game_id'] = $gameSlotId;
+				$arrMemBet[$objMember->mb_fid] = $bet['regdate'];
+
+				$betId = $this->modelSlotBet->insertHslot($objMember, $bet, $bBlank, $nBlankPt);
+				if($betId > 0){
+					$this->modelReward->insert($gameSlotId, $betId, $arrEmpRatio, $rwSlLastFid, $bBlank);
+					$bInsert = true;
+					$arrIdx['fid'] = $betId;
+				}
+				writeLog($this->fLog, $logHead."Insert BetId=".$betId);
+			}
 		}
 
 		if(strlen($lastIdx) == 0){
@@ -1098,7 +1229,7 @@ class ServiceLogic
 
 		writeLog($this->fLog, $logHead."lastIdx=".$arrIdx['idx']);
 
-		$this->modelConfSite->updateLastIdx($objConf->conf_id, $arrIdx['idx']."#".$arrIdx['fid']);
+		$this->modelConfSite->updateLastIdx($objConf->conf_id, $arrIdx['idx']."#".$arrIdx['fid']."#".$arrIdx['fid2']);
 
 		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
 		// writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);

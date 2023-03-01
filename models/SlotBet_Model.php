@@ -146,7 +146,8 @@ class SlotBet_Model {
 	}
     public function insertFslot($objMember, $bet, $bBlank = false, $nBlankPt = 0){
     	
-		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		// $strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, ";
 		$strSql.= " bet_money, bet_win_money, bet_agent_id, bet_player_id, bet_game_id, bet_game_type, bet_table_code, ";
 		$strSql.= " point_amount, company_amount, obj_id ) VALUES "; 
 		
@@ -155,7 +156,7 @@ class SlotBet_Model {
 		//bet_emp_fid
 		$strSql.= " '".$objMember->mb_emp_fid."', ";
 		//bet_mb_fid
-		$strSql.= " '".$objMember->mb_fid."', ";
+		// $strSql.= " '".$objMember->mb_fid."', ";
 		//bet_mb_uid
 		$strSql.= " '".$objMember->mb_uid."', ";
 		//bet_round_no
@@ -199,7 +200,8 @@ class SlotBet_Model {
     } 
 	public function insertHslot($objMember, $bet, $bBlank = false, $nBlankPt = 0){
     	
-		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		// $strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, ";
 		$strSql.= " bet_money, bet_win_money, bet_agent_id, bet_player_id, bet_game_id, bet_game_type, bet_table_code, ";
 		$strSql.= " point_amount, company_amount, obj_id ) VALUES "; 
 		
@@ -208,7 +210,7 @@ class SlotBet_Model {
 		//bet_emp_fid
 		$strSql.= " '".$objMember->mb_emp_fid."', ";
 		//bet_mb_fid
-		$strSql.= " '".$objMember->mb_fid."', ";
+		// $strSql.= " '".$objMember->mb_fid."', ";
 		//bet_mb_uid
 		$strSql.= " '".$objMember->mb_uid."', ";
 		//bet_round_no
@@ -247,7 +249,8 @@ class SlotBet_Model {
     } 
 	public function insertXslot($objMember, $bet, $bBlank = false, $nBlankPt = 0){
     	
-		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		// $strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, ";
 		$strSql.= " bet_money, bet_win_money, bet_agent_id, bet_player_id, bet_game_id, bet_game_type, bet_table_code, ";
 		$strSql.= " point_amount, company_amount, obj_id ) VALUES "; 
 		
@@ -256,7 +259,7 @@ class SlotBet_Model {
 		//bet_emp_fid
 		$strSql.= " '".$objMember->mb_emp_fid."', ";
 		//bet_mb_fid
-		$strSql.= " '".$objMember->mb_fid."', ";
+		// $strSql.= " '".$objMember->mb_fid."', ";
 		//bet_mb_uid
 		$strSql.= " '".$objMember->mb_uid."', ";
 		//bet_round_no
@@ -284,7 +287,7 @@ class SlotBet_Model {
 		//bet_game_type
 		$strSql.= " '".$bet['ThirdParty']."', ";
 		//bet_table_code
-		$strSql.= " '".$bet['GameID']."', ";
+		$strSql.= " '".$bet['GameSymbol']."', ";
 		//Blank point
 		if($bBlank){
 			$strSql.= " '1', ";
@@ -330,7 +333,8 @@ class SlotBet_Model {
 	
 	public function insertGslot($objMember, $bet, $bBlank = false, $nBlankPt = 0){
     	
-		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		// $strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, ";
 		$strSql.= " bet_money, bet_win_money, bet_agent_id, bet_player_id, bet_game_id, bet_game_type, bet_table_code, ";
 		$strSql.= " bet_choice, bet_result, point_amount, company_amount, obj_id ) VALUES "; 
 		
@@ -339,7 +343,7 @@ class SlotBet_Model {
 		//bet_emp_fid
 		$strSql.= " '".$objMember->mb_emp_fid."', ";
 		//bet_mb_fid
-		$strSql.= " '".$objMember->mb_fid."', ";
+		// $strSql.= " '".$objMember->mb_fid."', ";
 		//bet_mb_uid
 		$strSql.= " '".$objMember->mb_uid."', ";
 		//bet_round_no
@@ -421,8 +425,8 @@ class SlotBet_Model {
 	}
 	
 	public function insertKslot($objMember, $bet, $bBlank = false, $nBlankPt = 0){
-    	
-		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		// $strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, ";
 		$strSql.= " bet_money, bet_win_money, bet_agent_id, bet_player_id, bet_game_id, bet_game_type, bet_table_code, ";
 		$strSql.= " bet_choice, bet_result, point_amount, company_amount, obj_id ) VALUES "; 
 		
@@ -431,7 +435,7 @@ class SlotBet_Model {
 		//bet_emp_fid
 		$strSql.= " '".$objMember->mb_emp_fid."', ";
 		//bet_mb_fid
-		$strSql.= " '".$objMember->mb_fid."', ";
+		// $strSql.= " '".$objMember->mb_fid."', ";
 		//bet_mb_uid
 		$strSql.= " '".$objMember->mb_uid."', ";
 		//bet_round_no

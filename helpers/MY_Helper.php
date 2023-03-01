@@ -9,22 +9,23 @@
             $findMember = $objMember;
             break;
           }
-        } else if($gameId == GAME_SLOT_1){
+        } else if($gameId == GAME_SLOT_THEPLUS){
           if($objMember->mb_slot_uid === $liveId){
             $findMember = $objMember;
             break;
           }
-        } else if($gameId == GAME_SLOT_2){
+        } else if($gameId == GAME_SLOT_GSPLAY){
           if($objMember->mb_fslot_id == $liveId){
             $findMember = $objMember;
             break;
           }
-        } else if($gameId == GAME_SLOT_3){
+        } else if($gameId == GAME_SLOT_GOLD){
           if($objMember->mb_gslot_uid === $liveId){
             $findMember = $objMember;
             break;
           }
-        } else if($gameId == GAME_CASINO_KGON || $gameId == GAME_SLOT_4 || $gameId == GAME_SLOT_5 ){
+        } else if($gameId == GAME_CASINO_KGON || $gameId == GAME_SLOT_KGON 
+            || $gameId == GAME_CASINO_STAR || $gameId == GAME_SLOT_STAR ){
           if($objMember->mb_uid == $liveId){
             $findMember = $objMember;
             break;
@@ -45,6 +46,7 @@
                 $fRatio = $objMember->mb_game_ps_ratio;
                 break;
           case GAME_CASINO_KGON: 
+          case GAME_CASINO_STAR: 
           case GAME_CASINO_EVOL: 
                 $fRatio = $objMember->mb_game_cs_ratio;
                 break;
@@ -54,11 +56,11 @@
           case GAME_BOGLE_LADDER: 
                 $fRatio = $objMember->mb_game_bs_ratio;
                 break;
-          case GAME_SLOT_1:
-          case GAME_SLOT_2: 
-          case GAME_SLOT_3: 
-          case GAME_SLOT_4: 
-          case GAME_SLOT_5: 
+          case GAME_SLOT_THEPLUS:
+          case GAME_SLOT_GSPLAY: 
+          case GAME_SLOT_GOLD: 
+          case GAME_SLOT_KGON: 
+          case GAME_SLOT_STAR: 
                 $fRatio = $objMember->mb_game_sl_ratio;
                 break;
           default: break;
@@ -88,22 +90,28 @@
 
     function getPrd($arrPrd, $code){
       foreach ($arrPrd as $prd) {
-        if($prd->code === $code){
+        if(strcmp($prd->code, $code) == 0)
           return $prd;
-        }
       }
       return null;
     }
 
     function getPrdByName($arrPrd, $name){
       foreach ($arrPrd as $prd) {
-        if($prd->name === $name){
+        if(strcasecmp($prd->name, $name) == 0)
           return $prd;
-        }
       }
       return null;
     }
 
+    function getPrdByKey($arrPrd, $key){
+      foreach ($arrPrd as $prd) {
+        if(strcasecmp($prd->key, $key) == 0)
+          return $prd;
+      }
+      return null;
+    }
+    
     function getHistoryIdx($idx){
 
       $arrIdx = array("idx"=>0, "fid"=>0);
@@ -120,7 +128,7 @@
 
     function getHistoryDate($idx){
 
-      $arrIdx = array("idx"=>"", "fid"=>0);
+      $arrIdx = array("idx"=>"", "fid"=>0, "fid2"=>0);
       
       $arrInfo = explode("#", $idx);
       if(count($arrInfo) >= 1){
@@ -129,6 +137,9 @@
       } 
       if(count($arrInfo) >= 2){
         $arrIdx['fid'] = intval($arrInfo[1]);
+      }
+      if(count($arrInfo) >= 3){
+        $arrIdx['fid2'] = intval($arrInfo[2]);
       }
       return $arrIdx;
     }

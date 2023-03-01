@@ -52,6 +52,8 @@
 		}
 		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
 		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
+		curl_setopt($curl, CURLOPT_TIMEOUT, $timeout*2);
+		curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
 	
 		return $curl;
 	}

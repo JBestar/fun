@@ -70,15 +70,15 @@ class Member_Model {
         $where = "";
         if($iGame == GAME_CASINO_EVOL){
             $where = " WHERE mb_live_id IN ( ".$whereIn.")"; 
-        } else if($iGame == GAME_SLOT_1){
+        } else if($iGame == GAME_SLOT_THEPLUS){
             $where = " WHERE mb_slot_uid IN ( ".$whereIn.")"; 
-        } else if($iGame == GAME_SLOT_2){
+        } else if($iGame == GAME_SLOT_GSPLAY){
             $where = " WHERE mb_fslot_id IN ( ".$whereIn.")";
-        } else if($iGame == GAME_SLOT_3){
+        } else if($iGame == GAME_SLOT_GOLD){
             $where = " WHERE mb_gslot_uid IN ( ".$whereIn.")";
-        } else if($iGame == GAME_CASINO_KGON || $iGame == GAME_SLOT_4){
+        } else if($iGame == GAME_CASINO_KGON || $iGame == GAME_SLOT_KGON){
             $where = " WHERE mb_uid IN ( ".$whereIn.")";
-        } else if($iGame == GAME_SLOT_5){
+        } else if($iGame == GAME_SLOT_STAR){
             $where = " WHERE mb_uid IN ( ".$whereIn.")";
         } else return $arrMember; 
         
