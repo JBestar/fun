@@ -619,7 +619,22 @@ class Api extends BaseController
 			$sAnswer = $objConf->conf_content;
 			$sAnswer .= "<p> <br>입금계좌 : &nbsp;<b style='color:#ffff00'>";
 			$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
-			$sAnswer .= str_replace("#", "&nbsp;&nbsp;", $objConf->conf_content)."</b></p>";
+			
+			$arrInfo = explode("#", $objConf->conf_content);
+			if(count($arrInfo) >= 1){
+				if(strpos($arrInfo[0], 'http') !== false){
+					$sAnswer .= "<a style='color:#ffff00' href='".trim($arrInfo[0])."' target='_blank'>".$arrInfo[0]."</a>";
+				} else {
+					$sAnswer .= "<b style='color:#ffff00'>".$arrInfo[0]."</b>";
+				}
+			}
+			if(count($arrInfo) >= 2){
+				$sAnswer .= "&nbsp;&nbsp;<b style='color:#ffff00'>".$arrInfo[1]."</b>";
+			}
+			if(count($arrInfo) >= 3){
+				$sAnswer .= "&nbsp;&nbsp;<b style='color:#ffff00'>".$arrInfo[2]."</b>";
+			} 
+			$sAnswer .= "</p>";
 
 			$data = [  
                 'notice_type' => NOTICE_CUSTOMER,

@@ -927,7 +927,7 @@
 
                 let title = "[빠른문의] 입금계좌요청";
                 let content = "빠른문의 : 입금계좌요청";
-                if (confirm(title + " \n\n를 보내시겠습니까?") == false) return false;
+                if (confirm(title + " \n\n을(를) 보내시겠습니까?") == false) return false;
 
                 $.post(
                     "/api/request_account3",
@@ -937,7 +937,7 @@
                     },
                     function (response) {
                         if (response.status == "success") {
-                            UIkit.modal.alert("계좌해답이 도착하였습니다.", {labels: {'ok': '확인'}}).then(function () {
+                            UIkit.modal.alert("계좌회답이 도착하였습니다.", {labels: {'ok': '확인'}}).then(function () {
                                 objDashBoard.getMyQnaList();
                             });
                         } else {
@@ -1297,6 +1297,9 @@
                                     objDashBoard.qnaList = response.rows;
                                     objDashBoard.countAll.qna = response.totalRows;
                                     objDashBoard.totalPageCount.qna = Math.ceil(response.totalRows / objDashBoard.rowCount);
+
+                                    setTimeout(openFirstNotice, 500);
+
                                 } else {
                                     // alert(response.message);
                                 }

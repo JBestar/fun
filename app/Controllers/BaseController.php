@@ -125,7 +125,7 @@ class BaseController extends Controller
 					break;
 				case CONF_HPG_DENY:	$confs['hpg_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_AUTOAPPS:	$confs['apps_enable'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_AUTOAPPS:	$confs['apps_enable'] = $objConf->conf_idx == STATE_ACTIVE?true:false;
 					if($confs['apps_enable']){
 						if(strlen($objConf->conf_content) < 1 ){
 							$confs['apps_enable'] = false;

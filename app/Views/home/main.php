@@ -1717,7 +1717,7 @@
 
                 let title = "[빠른문의] 입금계좌요청";
                 let content = "빠른문의 : 입금계좌요청";
-                if (confirm(title + " \n\n를 보내시겠습니까?\n\n(입금계좌 답변은  1:1 문의에서 확인하세요)") == false) return false;
+                if (confirm(title + " \n\n을(를) 보내시겠습니까?\n\n(입금계좌 답변은  1:1 문의에서 확인하세요)") == false) return false;
 
                 $.post(
                     "/api/request_account3",
