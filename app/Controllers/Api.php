@@ -615,9 +615,7 @@ class Api extends BaseController
             $result->status = STATUS_LOGOUT;		
         } else {
 
-			$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
-			$sAnswer = $objConf->conf_content;
-			$sAnswer .= "<p> <br>입금계좌 : &nbsp;<b style='color:#ffff00'>";
+			$sAnswer = "<p> 입금계좌 : &nbsp;";
 			$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
 			
 			$arrInfo = explode("#", $objConf->conf_content);
@@ -635,6 +633,9 @@ class Api extends BaseController
 				$sAnswer .= "&nbsp;&nbsp;<b style='color:#ffff00'>".$arrInfo[2]."</b>";
 			} 
 			$sAnswer .= "</p>";
+
+			$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
+			$sAnswer.= $objConf->conf_content;
 
 			$data = [  
                 'notice_type' => NOTICE_CUSTOMER,
