@@ -80,7 +80,7 @@ class Api extends BaseController
 				$arrResult['code'] = RESULT_FAIL;	//대기중
 				$arrResult['msg'] = "차단된 아이피입니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPBLOCK);
-			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE &&
+			} else if($objMember->mb_level >= LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE &&
 			 $objMember->mb_ip_join !== $ip){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	//대기중
