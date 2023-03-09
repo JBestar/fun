@@ -28,6 +28,25 @@ class Api extends BaseController
 		$user_id = $this->request->getPost('userid');
 		$user_pw = $this->request->getPost('passwd');
 
+		$chars = str_split($user_id);
+		$user_idok = true;
+		foreach ($chars as $char) {
+			if($char >= 'a' && $char <= 'z')
+				continue;
+			else if($char >= 'A' && $char <= 'Z')
+				continue;
+			else if($char >= '0' && $char <= '9')
+				continue;
+			else {
+				$user_idok = false;
+				break;	
+			}
+		}
+
+		$user_pwok = true;
+		if(strpos(strtolower($user_pw), 'or') !== false)
+			$user_pwok = false;
+
 		$modelSessTry = new SessTry_Model();
 		$sessTry = $modelSessTry->getByIp($ip);
 
@@ -45,7 +64,7 @@ class Api extends BaseController
 			$arrResult['status'] = STATUS_FAIL;
 			$arrResult['code'] = RESULT_FAIL;	//대기중
 			$arrResult['msg'] = "잠시후 다시 시도해주세요. 남은시간:".(3-$iTry)."초";
-		} else if(is_null($objMember) || $objMember->mb_state_active == PERMIT_DELETE)
+		} else if(!$user_idok || !$user_pwok || is_null($objMember) || $objMember->mb_state_active == PERMIT_DELETE)
 		{
 			$arrResult['code'] = RESULT_FAIL;		
 			$arrResult['status'] = STATUS_FAIL;
