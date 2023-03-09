@@ -28,8 +28,24 @@ class Api extends BaseController
 		$user_id = $this->request->getPost('userid');
 		$user_pw = $this->request->getPost('passwd');
 
+
+		$modelSessTry = new SessTry_Model();
+
+		$sessTry = $modelSessTry->getByIp($ip);
+		$iTry = 5;
+		if(!is_null($sessTry)){
+			$iTry = time() - strtotime($sessTry->log_time);
+		}
+		if($iTry < 3){
+			$arrResult['status'] = STATUS_FAIL;
+			$arrResult['code'] = RESULT_FAIL;	//대기중
+			$arrResult['msg'] = "잠시후 다시 시도해주세요. 남은시간:".(3-$iTry)."초";
+			echo json_encode($arrResult);
+			return;
+		}
+
 		$chars = str_split($user_id);
-		$user_idok = true;
+		$user_ok = true;
 		foreach ($chars as $char) {
 			if($char >= 'a' && $char <= 'z')
 				continue;
@@ -37,34 +53,37 @@ class Api extends BaseController
 				continue;
 			else if($char >= '0' && $char <= '9')
 				continue;
+			else if($char == '_')
+				continue;
 			else {
-				$user_idok = false;
+				$user_ok = false;
 				break;	
 			}
 		}
 
-		$user_pwok = true;
-		if(strpos(strtolower($user_pw), 'or') !== false)
-			$user_pwok = false;
+		if($user_ok){
+			$pwd = str_replace(' ', '', $user_pw);
+			$pwd = str_replace('\t', '', $pwd);
+			if(strpos(strtolower($pwd), '\'or') !== false)
+				$user_ok = false;
+		}
 
-		$modelSessTry = new SessTry_Model();
-		$sessTry = $modelSessTry->getByIp($ip);
+		if(!$user_ok){
+			$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_FAIL);
 
-		$iTry = 5;
-		if(!is_null($sessTry)){
-			$iTry = time() - strtotime($sessTry->log_time);
+			$arrResult['code'] = RESULT_FAIL;		
+			$arrResult['status'] = STATUS_FAIL;
+			$arrResult['msg'] = "잘못된 계정정보입니다.";
+			echo json_encode($arrResult);
+			return;
 		}
 
 		$objMember = null;
 		if(strlen($user_id) > 0 && strlen($user_pw) > 0){
 			$objMember = $this->modelMember->login($user_id, $user_pw);
 		}
-
-		if($iTry < 3){
-			$arrResult['status'] = STATUS_FAIL;
-			$arrResult['code'] = RESULT_FAIL;	//대기중
-			$arrResult['msg'] = "잠시후 다시 시도해주세요. 남은시간:".(3-$iTry)."초";
-		} else if(!$user_idok || !$user_pwok || is_null($objMember) || $objMember->mb_state_active == PERMIT_DELETE)
+		 
+		if(is_null($objMember) || $objMember->mb_state_active == PERMIT_DELETE)
 		{
 			$arrResult['code'] = RESULT_FAIL;		
 			$arrResult['status'] = STATUS_FAIL;
@@ -99,7 +118,7 @@ class Api extends BaseController
 				$arrResult['code'] = RESULT_FAIL;	//대기중
 				$arrResult['msg'] = "차단된 아이피입니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPBLOCK);
-			} else if($objMember->mb_level >= LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE &&
+			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE &&
 			 $objMember->mb_ip_join !== $ip){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	//대기중
