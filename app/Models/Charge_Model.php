@@ -39,9 +39,9 @@ class Charge_Model extends Model {
 
     public function searchCount($reqData){
 
-        $where = " WHERE charge_time_require >= '".$reqData['start_at']."' ";
-        $where.= " AND charge_time_require <= '".$reqData['end_at']."' ";
-        $where.= " AND charge_mb_uid = '".$reqData['req_uid']."' ";
+        $where = " WHERE charge_time_require >= ".$this->db->escape($reqData['start_at']);
+        $where.= " AND charge_time_require <= ".$this->db->escape($reqData['end_at']);
+        $where.= " AND charge_mb_uid = ".$this->db->escape($reqData['req_uid']);
 
         $strSql = "SELECT count('charge_fid') as count FROM ".$this->table;
         $strSql .= $where;
@@ -59,9 +59,9 @@ class Charge_Model extends Model {
             'charge_money_before', 'charge_money_after' ]; 
         $strTbColum = " ".implode(", ", $getFields);
         
-        $where= " WHERE charge_time_require >= '".$reqData['start_at']."' ";
-        $where.= " AND charge_time_require <= '".$reqData['end_at']."' ";
-        $where.= " AND charge_mb_uid = '".$reqData['req_uid']."' ";
+        $where= " WHERE charge_time_require >= ".$this->db->escape($reqData['start_at']);
+        $where.= " AND charge_time_require <= ".$this->db->escape($reqData['end_at']);
+        $where.= " AND charge_mb_uid = ".$this->db->escape($reqData['req_uid']);
 
         $strSql = " SELECT ".$strTbColum." FROM ".$this->table;
         $strSql .= $where;

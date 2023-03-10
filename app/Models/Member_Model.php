@@ -237,32 +237,36 @@ class Member_Model extends Model {
 
     public function updateAssets(&$objUser, $inMoney , $inPoint = 0){
 
+        $inMoney = floatval($inMoney);
+        $inPoint = floatval($inPoint);
+
         if($inMoney == 0 && $inPoint == 0)
             return true;
+        $strSql1 = 'SELECT mb_money FROM '.$this->table;
+        $strSql1 .= ' WHERE mb_fid='.$objUser->mb_fid;
 
-        $strSql = "UPDATE ".$this->table." SET ";
+        $strSql2 = "UPDATE ".$this->table." SET ";
         if($inMoney != 0){
-            $strSql.= "mb_money = mb_money";
-            $strSql.= $inMoney > 0 ? " + ":" ";
-            $strSql.= $inMoney;            
+            $strSql2.= "mb_money = mb_money";
+            $strSql2.= $inMoney > 0 ? " + ":" ";
+            $strSql2.= $inMoney;            
         }
         
         if($inPoint != 0){
-            $strSql.= $inMoney != 0 ? " , ":" ";
+            $strSql2.= $inMoney != 0 ? " , ":" ";
 
-            $strSql.= "mb_point = mb_point";
-            $strSql.= $inPoint > 0 ? " + ":" ";
-            $strSql.= $inPoint;
+            $strSql2.= "mb_point = mb_point";
+            $strSql2.= $inPoint > 0 ? " + ":" ";
+            $strSql2.= $inPoint;
         }
 
-        $strSql.= " WHERE mb_fid=".$objUser->mb_fid;
+        $strSql2.= " WHERE mb_fid=".$objUser->mb_fid;
 
         $this->db->transBegin();
-        $strSql2 = 'SELECT mb_money FROM '.$this->table;
-        $strSql2 .= ' WHERE mb_fid='.$objUser->mb_fid;
-        $objResult = $this->db->query($strSql2)->getRow();
 
-        $this->db->query($strSql);
+        $objResult = $this->db->query($strSql1)->getRow();
+
+        $this->db->query($strSql2);
 
         $bResult = false;
 
@@ -284,10 +288,19 @@ class Member_Model extends Model {
     }
 
     public function login($uid, $pwd){
-        
-            $where = "mb_uid = '".$uid."' AND mb_pwd = '".$pwd."' ";
-            return $this->where($where)
-                        ->first();      
+
+        // $where = " mb_uid = ".$this->db->escape($uid)." AND ".$this->db->escape($pwd)." ";
+        // $result = $this->where($where)
+        //     ->first();   
+
+        // $query = $this->db->getLastQuery();
+        // writeLog($query);
+
+        // return $result;
+        return $this->where([
+            'mb_uid' => $uid,
+            'mb_pwd' => $pwd ])
+            ->first();    
     }
     
     
@@ -305,8 +318,6 @@ class Member_Model extends Model {
         $strSQL .=  " ORDER BY mb_level DESC ";
         return $this->db->query($strSQL)->getResult();
     }
-
-
 
     public function isPermitMember($objMember, $iGame = 0){
 
@@ -489,7 +500,7 @@ class Member_Model extends Model {
 
         if($this->insert($data))   //if success, return true
             return RESULT_OK;
-        return RESULT_FAIL;
+        return RESULT_ERROR;
     }
 
     

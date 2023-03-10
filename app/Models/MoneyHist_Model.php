@@ -61,7 +61,7 @@ class MoneyHist_Model extends Model {
 
             return $this->insert($data);
         } catch (\Exception $e) {  
-            // $query = $this->db->getLastQuery();
+            
             return false;
         }
         return false;
@@ -83,7 +83,7 @@ class MoneyHist_Model extends Model {
 
             return $this->insert($data);
         } catch (\Exception $e) {  
-            // $query = $this->db->getLastQuery();
+            
             return false;
         }
         return false;

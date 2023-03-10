@@ -63,13 +63,13 @@ class Notice_Model extends Model {
 
     public function deleteByClient($reqData){
         
-        $where = " notice_mb_uid = '".$reqData['send_uid']."' ";
+        $where = " notice_mb_uid = ".$this->db->escape($reqData['send_uid'])." ";
         
         if($reqData['notice_id'] > 0)
-            $where.= " AND notice_fid = '".$reqData['notice_id']."' ";
+            $where.= " AND notice_fid = ".$this->db->escape($reqData['notice_id'])." ";
         else {
             if(array_key_exists('notice_type', $reqData)){
-                $where.= " AND notice_type = '".$reqData['notice_type']."' ";
+                $where.= " AND notice_type = ".$this->db->escape($reqData['notice_type'])." ";
             }
             else $where.= " AND (notice_type = '".NOTICE_MSG_ALL."' OR notice_type = '".NOTICE_MSG."') ";
         }
@@ -81,9 +81,9 @@ class Notice_Model extends Model {
 
     
     public function readMsg($reqData){
-        $where = " notice_mb_uid = '".$reqData['send_uid']."' ";
+        $where = " notice_mb_uid = ".$this->db->escape($reqData['send_uid'])." ";
         if($reqData['notice_id'] > 0)
-            $where.= " AND notice_fid = '".$reqData['notice_id']."' ";
+            $where.= " AND notice_fid = ".$this->db->escape($reqData['notice_id'])." ";
         $where.= " AND (notice_type = '".NOTICE_MSG_ALL."' OR notice_type = '".NOTICE_MSG."') ";
 
         return $this->set('notice_read_count', STATE_ACTIVE)
@@ -108,8 +108,8 @@ class Notice_Model extends Model {
 
     public function readCus($reqData){
         
-        $where = " notice_fid = '".$reqData['notice_id']."' ";
-        $where .= " AND notice_mb_uid = '".$reqData['send_uid']."' ";
+        $where = " notice_fid = ".$this->db->escape($reqData['notice_id'])." ";
+        $where .= " AND notice_mb_uid = ".$this->db->escape($reqData['send_uid'])." ";
         $where.= " AND notice_type = '".NOTICE_CUSTOMER."' ";
 
         return $this->set('notice_state_active', STATE_VERIFY)
@@ -177,7 +177,7 @@ class Notice_Model extends Model {
         $where = "notice_type = '".NOTICE_CUSTOMER."' ";
         $where.= "AND notice_client_delete = '".STATE_DISABLE."' ";
         if(array_key_exists('send_uid', $reqData) ){
-            $where.= "AND notice_mb_uid = '".$reqData['send_uid']."' ";
+            $where.= "AND notice_mb_uid = ".$this->db->escape($reqData['send_uid'])." ";
         }
         $data = $this->select($getFields)
                     ->join($joinTable, $joinTable.'.mb_uid = '.$this->table.'.notice_mb_uid')  
@@ -196,7 +196,7 @@ class Notice_Model extends Model {
         $where = "notice_type = '".NOTICE_CUSTOMER."' ";
         $where.= "AND notice_client_delete = '".STATE_DISABLE."' ";
         if(array_key_exists('send_uid', $reqData) ){
-            $where.= "AND notice_mb_uid = '".$reqData['send_uid']."' ";
+            $where.= "AND notice_mb_uid = ".$this->db->escape($reqData['send_uid'])." ";
         }
         $page = $reqData['page'];
         $count = $reqData['count'];
@@ -224,7 +224,7 @@ class Notice_Model extends Model {
         $where.= "AND notice_client_delete = '".STATE_DISABLE."' ";
         $where.= "AND notice_state_active = '".STATE_ACTIVE."' ";
         if(array_key_exists('send_uid', $reqData) ){
-            $where.= "AND notice_mb_uid = '".$reqData['send_uid']."' ";
+            $where.= "AND notice_mb_uid = ".$this->db->escape($reqData['send_uid'])." ";
         }
         $data = $this->select($getFields)
                     ->join($joinTable, $joinTable.'.mb_uid = '.$this->table.'.notice_mb_uid')  
@@ -244,7 +244,7 @@ class Notice_Model extends Model {
         $where.= "AND notice_client_delete = '".STATE_DISABLE."' ";
         $where.= "AND notice_state_active = '".STATE_ACTIVE."' ";
         if(array_key_exists('send_uid', $reqData) ){
-            $where.= "AND notice_mb_uid = '".$reqData['send_uid']."' ";
+            $where.= "AND notice_mb_uid = ".$this->db->escape($reqData['send_uid'])." ";
         }
         $page = $reqData['page'];
         $count = $reqData['count'];

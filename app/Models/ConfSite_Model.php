@@ -29,7 +29,7 @@ class ConfSite_Model extends Model {
     public function getSiteName(){
 
         $objConf = $this->find(CONF_SITENAME);
-        // $last_query = $this->db->getLastQuery();
+        
         if(!is_null($objConf)){
             return $objConf->conf_content;
         }

@@ -28,7 +28,6 @@ class Api extends BaseController
 		$user_id = $this->request->getPost('userid');
 		$user_pw = $this->request->getPost('passwd');
 
-
 		$modelSessTry = new SessTry_Model();
 
 		$sessTry = $modelSessTry->getByIp($ip);
@@ -43,33 +42,14 @@ class Api extends BaseController
 			echo json_encode($arrResult);
 			return;
 		}
+		
+		$checkOk = preg_match("/^[A-Za-z0-9_+]*$/", $user_id);
+		if($checkOk)
+			$checkOk = !preg_match("/(\')+(\s)*(or)+/i", $user_pw); //i-Ignore Case 
 
-		$chars = str_split($user_id);
-		$user_ok = true;
-		foreach ($chars as $char) {
-			if($char >= 'a' && $char <= 'z')
-				continue;
-			else if($char >= 'A' && $char <= 'Z')
-				continue;
-			else if($char >= '0' && $char <= '9')
-				continue;
-			else if($char == '_')
-				continue;
-			else {
-				$user_ok = false;
-				break;	
-			}
-		}
-
-		if($user_ok){
-			$pwd = str_replace(' ', '', $user_pw);
-			$pwd = str_replace('\t', '', $pwd);
-			if(strpos(strtolower($pwd), '\'or') !== false)
-				$user_ok = false;
-		}
-
-		if(!$user_ok){
+		if(!$checkOk){
 			$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_FAIL);
+			writeLog("[login] check:".$user_id." ,".$user_pw." ");
 
 			$arrResult['code'] = RESULT_FAIL;		
 			$arrResult['status'] = STATUS_FAIL;
@@ -118,13 +98,12 @@ class Api extends BaseController
 				$arrResult['code'] = RESULT_FAIL;	//대기중
 				$arrResult['msg'] = "차단된 아이피입니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPBLOCK);
-			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE &&
-			 $objMember->mb_ip_join !== $ip){
+			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE && $objMember->mb_ip_join !== $ip){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	//대기중
 				$arrResult['msg'] = "승인된 아이피가 아닙니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPDENIED);
-			} else if($objMember->mb_level < LEVEL_ADMIN && !$this->modelConfsite->IsMultiLogin() && !is_null($sess) && $sess->sess_id != $sessId/*$sess->sess_ip != $ip*/){
+			} else if(/*$objMember->mb_level < LEVEL_ADMIN &&*/ !$this->modelConfsite->IsMultiLogin() && !is_null($sess) && $sess->sess_id != $sessId/*$sess->sess_ip != $ip*/){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	//대기중
 				$arrResult['msg'] = "이미 로그인되어 있습니다.";
@@ -217,7 +196,12 @@ class Api extends BaseController
 		
 		$result = new \StdClass;
 		$result->status = STATUS_SUCCESS;
-		if(array_key_exists('member_id', $arrData)){
+
+		$checkOk = preg_match("/^[A-Za-z0-9_+]{4,16}$/", $arrData['member_id']);
+		if(!$checkOk){
+			$result->status = STATUS_FAIL;
+			$result->msg = "아이디는 4자~16자, 영문 또는 숫자만 사용 가능합니다.";
+		} else {
 			$objMember = $this->modelMember->getByUid($arrData['member_id']);
 			if(!is_null($objMember) ){
 				$result->status = STATUS_FAIL;
@@ -411,7 +395,24 @@ class Api extends BaseController
 		
 		$result = new \StdClass;
 		$result->status = STATUS_FAIL;
-		$iResult = $this->modelMember->register($reqData);
+		$iResult = RESULT_FAIL;
+
+		$checkOk = preg_match("/^[A-Za-z0-9_+]{4,16}$/", $reqData['member_id']);
+		if(!$checkOk){
+			$result->msg = "아이디는 4자~16자, 영문 또는 숫자만 사용 가능합니다.";
+		} else {
+			$pwdLen = strlen($reqData['password']);
+			if($pwdLen < 8 || $pwdLen > 20 )
+				$checkOk = false;
+			else $checkOk = preg_match("/^[A-Za-z0-9]*[\W]+[A-Za-z0-9]*$/", $reqData['password']);
+
+			if(!$checkOk)
+				$result->msg = "비밀번호는 8자~20자, 특수문자 한개 이상 입력하셔야 합니다.";
+		}
+
+		if($checkOk)
+			$iResult = $this->modelMember->register($reqData);
+
 		if($iResult == RESULT_OK){
 			$result->status = STATUS_SUCCESS;
 		} else if($iResult == RESULT_EXIST_ID) {
@@ -421,7 +422,8 @@ class Api extends BaseController
 		} else if($iResult == RESULT_EMP_ERROR) {
 			$result->msg = '승인된 추천인이 아닙니다.';
 		} else {
-			$result->msg = '회원가입에 실패하였습니다. 관리자에게 문의 바랍니다.';
+			if(!property_exists($result, 'msg'))
+				$result->msg = '회원가입에 실패하였습니다. 관리자에게 문의 바랍니다.';
 		}
 		echo json_encode($result);
 

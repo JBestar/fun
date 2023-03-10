@@ -14,7 +14,7 @@ class Block_Model extends Model {
     
     public function getByIp($ip){
 
-        $where = "block_ip = '".$ip."' AND block_state = '1' ";
+        $where = "block_ip = ".$this->db->escape($ip)." AND block_state = '1' ";
 
         return $this->where($where)
                     ->first(); 

@@ -80,8 +80,8 @@ class Bet_Model extends Model {
 
         //3구멍베팅 회수
         $strSql = " SELECT bet_fid, bet_mode FROM ".$this->table;
-        $strSql.= " WHERE bet_time > '".$arrRoundData['round_date']."' ";
-        $strSql.= " AND bet_mb_uid = '".$objUser->mb_uid."' AND bet_round_no = ".$arrRoundData['round_no'];
+        $strSql.= " WHERE bet_time > ".$this->db->escape($arrRoundData['round_date']);
+        $strSql.= " AND bet_mb_uid = '".$objUser->mb_uid."' AND bet_round_no = ".$this->db->escape($arrRoundData['round_no']);
         $strSql.= " AND bet_state = '".STATE_ACTIVE."' AND bet_mode >= '31' AND bet_mode <= '38' ";
         $strSql.= " GROUP BY bet_mode ";
 
@@ -93,11 +93,11 @@ class Bet_Model extends Model {
 
     public function searchCount($reqData){
 
-        $where = " WHERE bet_mb_uid = '".$reqData['user_id']."' ";
-        $where.= "AND user_view_state = '0' ";
+        $where = " WHERE bet_mb_uid = ".$this->db->escape($reqData['user_id']);
+        $where.= " AND user_view_state = '0' ";
         if(array_key_exists('date', $reqData) ){
-            $where.= "AND bet_time >= '".$reqData['date']." 00:00:00' ";
-            $where.= "AND bet_time <= '".$reqData['date']." 23:59:59' ";
+            $where.= "AND bet_time >= ".$this->db->escape($reqData['date']." 00:00:00");
+            $where.= "AND bet_time <= ".$this->db->escape($reqData['date']." 23:59:59");
         } else {
             $where.= "AND bet_time >= '".date("Y-m-d H:i:s", strtotime("-1 day", time()))."' ";
         }
@@ -118,11 +118,11 @@ class Bet_Model extends Model {
 
         $strTbColum = " ".implode(", ", $getFields);
 
-        $where = " WHERE bet_mb_uid = '".$reqData['user_id']."' ";
-        $where.= "AND user_view_state = '0' ";
+        $where = " WHERE bet_mb_uid = ".$this->db->escape($reqData['user_id']);
+        $where.= " AND user_view_state = '0' ";
         if(array_key_exists('date', $reqData) ){
-            $where.= "AND bet_time >= '".$reqData['date']." 00:00:00' ";
-            $where.= "AND bet_time <= '".$reqData['date']." 23:59:59' ";
+            $where.= "AND bet_time >= ".$this->db->escape($reqData['date']." 00:00:00");
+            $where.= "AND bet_time <= ".$this->db->escape($reqData['date']." 23:59:59");
         } else {
             $where.= "AND bet_time >= '".date("Y-m-d H:i:s", strtotime("-1 day", time()))."' ";
         }
@@ -177,8 +177,8 @@ class Bet_Model extends Model {
             
             $strSql .= ' SELECT bet_mb_uid, bet_mode, bet_target, bet_ratio, SUM(bet_money) AS bet_money_sum, '.$fidPct.' FROM '.$this->table;
             $strSql .= ' JOIN '.$this->mMemberTable.' ON '.$this->mMemberTable.'.mb_uid = '.$this->table.'.bet_mb_uid ';
-            $strSql .= " WHERE bet_round_no='".$arrRoundInfo['round_no']."' AND bet_state = '1' ";
-            $strSql .= " AND bet_time > '".$arrRoundInfo['round_start']."' AND bet_time < '".$arrRoundInfo['round_end']."' ";
+            $strSql .= " WHERE bet_round_no=".$this->db->escape($arrRoundInfo['round_no'])." AND bet_state = '1' ";
+            $strSql .= " AND bet_time > ".$this->db->escape($arrRoundInfo['round_start'])." AND bet_time < ".$this->db->escape($arrRoundInfo['round_end']);
             $strSql .= " AND bet_mode='".$iMode."' AND bet_target='P' GROUP BY bet_mb_uid ";
             $strSql .= ' ) tb_sum ';
             $objResult = $this->db->query($strSql)->getRow();
@@ -198,8 +198,8 @@ class Bet_Model extends Model {
             else $strSql = ' SELECT SUM(bet_money_sum * '.$fidPct.' DIV 100) AS bet_money_allsum FROM ( ';
             $strSql .= ' SELECT bet_mb_uid, bet_mode, bet_target, bet_ratio, SUM(bet_money) AS bet_money_sum, '.$fidPct.' FROM '.$this->table;
             $strSql .= ' JOIN '.$this->mMemberTable.' ON '.$this->mMemberTable.'.mb_uid = '.$this->table.'.bet_mb_uid ';
-            $strSql .= " WHERE bet_round_no='".$arrRoundInfo['round_no']."' AND bet_state = '1' ";
-            $strSql .= " AND bet_time > '".$arrRoundInfo['round_start']."' AND bet_time < '".$arrRoundInfo['round_end']."' ";
+            $strSql .= " WHERE bet_round_no=".$this->db->escape($arrRoundInfo['round_no'])." AND bet_state = '1' ";
+            $strSql .= " AND bet_time > ".$this->db->escape($arrRoundInfo['round_start'])." AND bet_time < ".$this->db->escape($arrRoundInfo['round_end']);
             $strSql .= " AND bet_mode='".$iMode."' AND bet_target='B' GROUP BY bet_mb_uid ";
             $strSql .= ' ) tb_sum ';
             $objResult = $this->db->query($strSql)->getRow();

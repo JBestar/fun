@@ -38,9 +38,9 @@ class Exchange_Model extends Model {
 
     public function searchCount($reqData){
 
-        $where = " WHERE exchange_time_require >= '".$reqData['start_at']."' ";
-        $where.= " AND exchange_time_require <= '".$reqData['end_at']."' ";
-        $where.= " AND exchange_mb_uid = '".$reqData['req_uid']."' ";
+        $where = " WHERE exchange_time_require >= ".$this->db->escape($reqData['start_at']);
+        $where.= " AND exchange_time_require <= ".$this->db->escape($reqData['end_at']);
+        $where.= " AND exchange_mb_uid = ".$this->db->escape($reqData['req_uid']);
         
         $strSql = "SELECT count('exchange_fid') as count FROM ".$this->table;
         $strSql .= $where;
@@ -58,9 +58,9 @@ class Exchange_Model extends Model {
             'exchange_bank_name', 'exchange_bank_account', 'exchange_bank_serial',
             'exchange_money_before', 'exchange_money_after' ]; 
         
-        $where = " WHERE exchange_time_require >= '".$reqData['start_at']."' ";
-        $where.= " AND exchange_time_require <= '".$reqData['end_at']."' ";
-        $where.= " AND exchange_mb_uid = '".$reqData['req_uid']."' ";
+        $where = " WHERE exchange_time_require >= ".$this->db->escape($reqData['start_at']);
+        $where.= " AND exchange_time_require <= ".$this->db->escape($reqData['end_at']);
+        $where.= " AND exchange_mb_uid = ".$this->db->escape($reqData['req_uid']);
         
         $strTbColum = " ".implode(", ", $getFields);
         

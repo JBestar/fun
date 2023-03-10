@@ -993,7 +993,7 @@
                         <div class="fields">
                             <div class="twelve wide field">
                                 <label>회원아이디 </label>
-                                <input type="text" name="userid" id="userid" placeholder="4자~16자, 영문또는숫자" minlength="4" maxlength="16" />
+                                <input type="text" name="userid" id="userid" placeholder="4자~16자, 영문 또는 숫자" minlength="4" maxlength="16" />
                             </div>
                             <div class="two wide field">
                                 <label>&nbsp;</label>
@@ -1004,18 +1004,13 @@
                         <div class="two fields">
                             <div class="field">
                                 <label>비밀번호 </label>
-                                <input type="password" name="passwd" id="passwd" placeholder="password" />
+                                <input type="password" name="passwd" id="passwd" placeholder="8자~20자, 특수문자 한개 이상" />
                             </div>
                             <div class="field">
                                 <label>비밀번호 확인 </label>
                                 <input type="password" name="passwd_re" id="passwd_re" placeholder="confirm password" />
                             </div>
                         </div>
-
-                        <!--<div class="field ">
-                    <label>이름 </label>
-                    <input type="text" name="name" id="name" placeholder="name">
-                </div>-->
 
                         <div class="field">
                             <label>닉네임 </label>
