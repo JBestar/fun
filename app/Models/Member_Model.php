@@ -3,6 +3,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 use Config\Database;
+use CodeIgniter\Database\Query;
 
 class Member_Model extends Model {
 
@@ -274,14 +275,9 @@ class Member_Model extends Model {
             $this->db->transRollback();
             $bResult = false;
         } else {
-            // if($inMoney != 0 && (intval($objResult->mb_money) + $inMoney) < 0) {
-            //     $this->db->transRollback();
-            //     $bResult = false;
-            // } else {
-                $this->db->transCommit();
-                $objUser->mb_money = $objResult->mb_money;
-                $bResult = true;
-            // }
+            $this->db->transCommit();
+            $objUser->mb_money = $objResult->mb_money;
+            $bResult = true;
         }
 
         return $bResult;
@@ -297,6 +293,23 @@ class Member_Model extends Model {
         // writeLog($query);
 
         // return $result;
+
+        // $sql = "SELECT * FROM ".$this->table." WHERE mb_uid = :id: AND mb_pwd = :pwd:";
+        // $query = $this->db->query($sql, [
+        //     'id'     => $uid,
+        //     'pwd'   => $pwd,
+        // ]);
+        // return $query -> getRow();
+
+        // $db = $this->db;
+        // $sql = "SELECT * FROM ".$this->table." WHERE mb_uid = :id: AND mb_pwd = :pwd:";
+        // $query = $db->prepare(static function ($db) {
+        //         $sql = "SELECT * FROM ".$this->table." WHERE mb_uid = ? AND mb_pwd = ?";
+        //         return (new Query($db))->setQuery($sql);
+        //     }
+        // );
+        // return $query -> getRow();
+
         return $this->where([
             'mb_uid' => $uid,
             'mb_pwd' => $pwd ])

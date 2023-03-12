@@ -37,7 +37,7 @@ class Round_Model extends Model {
 
         $where = "round_fid > '0' ";
         if(array_key_exists('date', $reqData) ){
-            $where.= "AND round_date = '".$reqData['date']."' ";
+            $where.= " AND round_date = ".$this->db->escape($reqData['date']);
         }
         $max = 1000;
         $data = $this->where($where)
@@ -49,7 +49,7 @@ class Round_Model extends Model {
         
         $where = "round_fid > 0 ";
         if(array_key_exists('date', $reqData) ){
-            $where.= "AND round_date = '".$reqData['date']."' ";
+            $where.= " AND round_date = ".$this->db->escape($reqData['date']);
         }
         
         $page = $reqData['page'];

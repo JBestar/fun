@@ -43,10 +43,8 @@ class Api extends BaseController
 			return;
 		}
 		
-		$checkOk = preg_match("/^[A-Za-z0-9_+]*$/", $user_id);
-		if($checkOk)
-			$checkOk = !preg_match("/(\')+(\s)*(or)+/i", $user_pw); //i-Ignore Case 
-
+		$checkOk = validLoginValue($user_id, $user_pw);
+		
 		if(!$checkOk){
 			$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_FAIL);
 			writeLog("[login] check:".$user_id." ,".$user_pw." ");
@@ -197,7 +195,7 @@ class Api extends BaseController
 		$result = new \StdClass;
 		$result->status = STATUS_SUCCESS;
 
-		$checkOk = preg_match("/^[A-Za-z0-9_+]{4,16}$/", $arrData['member_id']);
+		$checkOk = validUserId($arrData['member_id']);
 		if(!$checkOk){
 			$result->status = STATUS_FAIL;
 			$result->msg = "아이디는 4자~16자, 영문 또는 숫자만 사용 가능합니다.";
@@ -342,8 +340,11 @@ class Api extends BaseController
 			$bPermit = true;
 			if(is_null($objMember))
 				$bPermit = false;
-						
-			if(!$bPermit){
+				
+			if(!validUserPw($user_newPw)){
+				$result->msg = "새 비밀번호는 8자~20자, 특수문자 한개 이상 입력하셔야 합니다."; 
+				$result->status = STATUS_FAIL;
+			} else if(!$bPermit){
 				$result->msg = "현재 비밀번호가 틀림니다."; 
 				$result->status = STATUS_FAIL;                
 			} else{
@@ -397,15 +398,11 @@ class Api extends BaseController
 		$result->status = STATUS_FAIL;
 		$iResult = RESULT_FAIL;
 
-		$checkOk = preg_match("/^[A-Za-z0-9_+]{4,16}$/", $reqData['member_id']);
+		$checkOk = validUserId($reqData['member_id']);
 		if(!$checkOk){
 			$result->msg = "아이디는 4자~16자, 영문 또는 숫자만 사용 가능합니다.";
 		} else {
-			$pwdLen = strlen($reqData['password']);
-			if($pwdLen < 8 || $pwdLen > 20 )
-				$checkOk = false;
-			else $checkOk = preg_match("/^[A-Za-z0-9]*[\W]+[A-Za-z0-9]*$/", $reqData['password']);
-
+			$checkOk = validUserPw($reqData['password']);
 			if(!$checkOk)
 				$result->msg = "비밀번호는 8자~20자, 특수문자 한개 이상 입력하셔야 합니다.";
 		}

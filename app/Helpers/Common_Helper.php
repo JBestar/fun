@@ -834,4 +834,26 @@
     function diffDt($dt1, $dt2){
       return abs( strtotime($dt1) - strtotime($dt2) );
     }
+
+    function validLoginValue($userId, $userPw){
+      $checkOk = preg_match("/^[A-Za-z0-9_]+$/", $userId);
+      if($checkOk)
+        $checkOk = !preg_match("/^\'+\s*or+.*$/i", $userPw); //i-Ignore Case 
+      return $checkOk;
+    }
+
+    function validUserId($userId){
+      return preg_match("/^[A-Za-z0-9_]{4,16}$/", $userId);
+    }
+
+    function validUserPw($userPw){
+      $checkOk = true;
+			$pwdLen = strlen($userPw);
+      if($pwdLen < 8 || $pwdLen > 20 )
+				$checkOk = false;
+
+      if($checkOk)
+        $checkOk = preg_match("/^[A-Za-z0-9]*[\W]+[A-Za-z0-9]*$/", $userPw);
+        return $checkOk;
+    }
 ?>
