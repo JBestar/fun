@@ -34,19 +34,19 @@ class Slot extends BaseController
 
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
-			$objConfig = $this->modelConfgame->find($gameId);  //슬롯1
+			$objConfig = $this->modelConfgame->find($gameId);  //Slot 1
 			$headInfo = $this->getSiteConf();
 
             $iCreated = 0;
 			if(is_null($objMember) || is_null($objConfig) || is_null($objPrd))
 				$iCreated = 0;
 			// else if($objConfig->game_bet_permit != PERMIT_OK){
-			// 	$iCreated = 4;									//준비중
+			// 	$iCreated = 4;									//Praparing
 			// }
 			else if($headInfo['slot_deny'])
-                $iCreated = 3;									//차단
+                $iCreated = 3;									//Stop
 			else if(!$this->modelMember->isPermitMember($objMember, $gameId))
-				$iCreated = 3;									//차단
+				$iCreated = 3;									//Stop
 			else {
 				$iCreated = 1;
 			}
@@ -97,7 +97,7 @@ class Slot extends BaseController
 			
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id, true);
-			$objConfig = $this->modelConfgame->find($gameId);  //슬롯1
+			$objConfig = $this->modelConfgame->find($gameId);  //slot 1
 
 			
 			$objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
@@ -110,9 +110,9 @@ class Slot extends BaseController
 			if(is_null($objMember) || is_null($objConfig))
 				$iCreated = 0;
 			else if($headInfo['slot_deny'])
-                $iCreated = 3;									//차단
+                $iCreated = 3;									//Stop
 			else if(!$this->modelMember->isPermitMember($objMember, $gameId))
-				$iCreated = 3;									//차단
+				$iCreated = 3;									//Stop
 			else if(is_null($objSlot) || is_null($objPrd))
 				$iCreated = 6;
 			// else if($objSlot->maintain == STATE_ACTIVE)
@@ -131,53 +131,17 @@ class Slot extends BaseController
 
 					$objFslot = $modelSlotgame->getByRef($fgameId, $objSlot->prd_code, $objSlot->uuid);
 
-					// if($objSlot->act >= STATE_ACTIVE){
-					// 	if($_ENV['app.type'] == APP_TYPE_1 && $objSlot->ref_prd > 0){
-					// 		$objFslot = $modelSlotgame->getById(GAME_SLOT_GSPLAY, $objSlot->ref_prd, $objSlot->ref_uuid);
-					// 	}
-
-					// 	if($objFslot == null){
-					// 		$fgameId = GAME_SLOT_GSPLAY;
-					// 		if($_ENV['app.type'] == APPTYPE_4)
-					// 			$fgameId = GAME_SLOT_GOLD;
-					// 		else if($_ENV['app.type'] == APPTYPE_6)
-					// 			$fgameId = GAME_SLOT_KGON;
-					// 		else if($_ENV['app.type'] == APPTYPE_8)
-					// 			$fgameId = GAME_SLOT_STAR;
-
-					// 		$refPrds = $this->modelSlotprd->getByRef($fgameId, $objSlot->prd_code); 
-					// 		writeLog($logHead.$objMember->mb_uid." PRD=".$objSlot->prd_code." REF=".count($refPrds)." ACT=".$objSlot->act);
-
-					// 		if(count($refPrds) > 1){
-
-					// 			if($objSlot->act == STATE_ACTIVE + 1)
-					// 				$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[1]->code, $objSlot->name );
-					// 			else {
-					// 				$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[0]->code, $objSlot->name );
-					// 				if($objFslot == null)									
-					// 					$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[1]->code, $objSlot->name );
-					// 			}
-					// 		}
-					// 		else {
-					// 			if($_ENV['app.type'] == APPTYPE_4)
-					// 				$objFslot = $modelSlotgame->getByNameKo($fgameId, $refPrds[0]->code, $objSlot->name_ko );
-					// 			else 
-					// 				$objFslot = $modelSlotgame->getByName($fgameId, $refPrds[0]->code, $objSlot->name );
-					// 		}
-					// 	}
-						
-					// }
 				}
 
 				if(!is_null($objFslot)){
 					writeLog("<FSLOT>".$objMember->mb_uid." PRD=".$objFslot->prd_code." NAME=".$objFslot->name_ko);
 					$iCreated = 100;
-				} else if($objConfig->game_bet_permit != PERMIT_OK){			//준비중
+				} else if($objConfig->game_bet_permit != PERMIT_OK){			//Preparing
 						$iCreated = 4;									
 				} else if($_ENV['app.slot'] == APP_SLOT_KGON || $_ENV['app.slot'] == APP_SLOT_STAR)
 					$iCreated = 101;
 				else if($objMember->mb_slot_uid == ""){
-					//플레이어 창조
+					//Creation of Player
 					$createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 					$arrResult =  $this->libApiSlot->createUser($createId);
 					if($arrResult['status'] == 1){
@@ -197,9 +161,9 @@ class Slot extends BaseController
 								$this->modelMember->updateSlotInfo($objMember);
 								$iCreated = 1;
 	
-							} else $iCreated = 5;								//중복
+							} else $iCreated = 5;								//Duplicated User
 						}
-						else $iCreated = 2;								//회원창조실패
+						else $iCreated = 2;								//Fail in Creation of user
 						writeLog($logHead.$objMember->mb_uid."-CreateUser resultCode=".$arrResult['resultCode']); 
 					}
 				} else {
@@ -239,7 +203,7 @@ class Slot extends BaseController
 				writeLog($logHead.$objMember->mb_uid."-Slot Game=>".$objSlot->name ); 
 				$iResult = $this->alltoGame($objMember, $gameId);
 
-				if($iResult != 1){ //머니이동 실패경우
+				if($iResult != 1){ //Fail in transfering of money
 					print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
 				} else {
 					$arrResult =  $this->libApiSlot->createSess($objMember->mb_slot_uid);
@@ -293,7 +257,7 @@ class Slot extends BaseController
 			
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
-			$objConfig = $this->modelConfgame->find($gameId);  //슬롯2
+			$objConfig = $this->modelConfgame->find($gameId);  //Slot 2
 
 			$objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
 			$objSlot = $modelSlotgame->getById($gameId, $prdCode, $slotId);
@@ -304,10 +268,10 @@ class Slot extends BaseController
 			if(is_null($objMember) || is_null($objConfig))
 				$iCreated = 0;
 			else if($objConfig->game_bet_permit != PERMIT_OK){
-				$iCreated = 4;									//준비중
+				$iCreated = 4;									//Preparing
 			}
 			else if($_ENV['app.type'] == APP_TYPE_2 && !$this->modelMember->isPermitMember($objMember, $gameId))
-				$iCreated = 3;									//차단
+				$iCreated = 3;									//Stop
 			else if(is_null($objSlot) || is_null($objPrd)){
 				$iCreated = 6;
 			} 
@@ -319,7 +283,7 @@ class Slot extends BaseController
 			else if(!is_null($sess))
 				$iCreated = 9;
 			else if($objMember->mb_fslot_id == 0){
-				//플레이어 창조
+				//Create Player
 				$createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 				$arrResult = $this->libApiFslot->createUser($createId, $objMember->mb_nickname);
 				if($arrResult['status'] == 1){
@@ -342,20 +306,13 @@ class Slot extends BaseController
 							$iCreated = 1;
 
 						} else 
-							$iCreated = 5;								//중복
-					} else $iCreated = 2;								//회원창조실패
+							$iCreated = 5;								//Duplicated User
+					} else $iCreated = 2;								//Fail in Creation of User
 					if(array_key_exists('error', $arrResult))
 						writeLog($logHead.$objMember->mb_uid."-CreateUser Error=".$arrResult['error']); 
 				}
 			} else {
 				$iCreated = 1;
-				// if($_ENV['app.type'] == APP_TYPE_2 && $objSlot->prd_code == 200 && $objSlot->act ==  1){
-				// 	$prdCode = 215;
-				// 	$objNSlot = $modelSlotgame->getByCode($gameId, $prdCode, $objSlot->game_code);
-				// 	if(!is_null($objNSlot)) {
-				// 		$objSlot = $objNSlot;
-				// 	}
-				// }
 			}
 
 			if($iCreated == 0){
@@ -399,7 +356,7 @@ class Slot extends BaseController
 							print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
 						} 
 					}
-				} else { //머니이동 실패경우
+				} else { //Fail in Transfering of money
 					print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
 				}
 				 
@@ -422,7 +379,7 @@ class Slot extends BaseController
 			
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
-			$objConfig = $this->modelConfgame->find($gameId);  //슬롯2
+			$objConfig = $this->modelConfgame->find($gameId);  //Slot 2
 
 			$prdCode = trim($this->request->getVar('prd'));
 			$slotId = trim($this->request->getVar('game'));
@@ -435,10 +392,10 @@ class Slot extends BaseController
 			if(is_null($objMember) || is_null($objConfig))
 				$iCreated = 0;
 			else if($objConfig->game_bet_permit != PERMIT_OK){
-				$iCreated = 4;									//준비중
+				$iCreated = 4;									//Preparing
 			}
 			else if($_ENV['app.type'] == APP_TYPE_2 && !$this->modelMember->isPermitMember($objMember, $gameId))
-				$iCreated = 3;									//차단
+				$iCreated = 3;									//Stop
 			else if(is_null($objSlot) || is_null($objPrd)){
 				$iCreated = 6;
 			} 
@@ -450,7 +407,7 @@ class Slot extends BaseController
 			else if(!is_null($sess))
 				$iCreated = 9;
 			else if($objMember->mb_gslot_uid == ""){
-				//플레이어 창조
+				//Create Player
 				$createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 				$arrResult = $this->libApiGslot->createUser($createId);
 				if($arrResult['status'] == 1){
@@ -472,8 +429,8 @@ class Slot extends BaseController
 							$iCreated = 1;
 
 						} else 
-							$iCreated = 5;								//중복
-					} else $iCreated = 2;								//회원창조실패
+							$iCreated = 5;								//Duplicated User
+					} else $iCreated = 2;								//Fail in Creation of User
 					if(array_key_exists('msg', $arrResult))
 						writeLog($logHead.$objMember->mb_uid."-CreateUser msg=".$arrResult['msg']); 
 				}
@@ -522,7 +479,7 @@ class Slot extends BaseController
 							print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
 						} 
 					}
-				} else { //머니이동 실패경우
+				} else { //Fail in Transfering of money
 					print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
 				}
 				 
@@ -544,7 +501,7 @@ class Slot extends BaseController
 			
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
-			$objConfig = $this->modelConfgame->find($gameId);  //슬롯2
+			$objConfig = $this->modelConfgame->find($gameId);  //Slot 3
 
 			$prdCode = trim($this->request->getVar('prd'));
 			$slotId = trim($this->request->getVar('game'));
@@ -557,10 +514,10 @@ class Slot extends BaseController
 			if(is_null($objMember) || is_null($objConfig))
 				$iCreated = 0;
 			else if($objConfig->game_bet_permit != PERMIT_OK){
-				$iCreated = 4;									//준비중
+				$iCreated = 4;									//Preparing
 			}
 			// else if($_ENV['app.type'] == APP_TYPE_3 && !$this->modelMember->isPermitMember($objMember, $gameId))
-			// 	$iCreated = 3;									//차단
+			// 	$iCreated = 3;									//Stop
 			else if(is_null($objSlot) || is_null($objPrd)){
 				$iCreated = 6;
 			} 
@@ -572,7 +529,7 @@ class Slot extends BaseController
 			else if(!is_null($sess))
 				$iCreated = 9;
 			else if($objMember->mb_kgon_id == 0){
-				//플레이어 창조
+				//Create Player
 				$createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 				$arrResult = $this->libApiKgon->createUser($createId, $objMember->mb_nickname, $objMember->mb_uid);
 				if($arrResult['status'] == 1){
@@ -584,9 +541,9 @@ class Slot extends BaseController
                     writeLog($logHead.$objMember->mb_uid."-CreateUser Sucess !!");
 				} else {
 					if(array_key_exists('code', $arrResult) && $arrResult['code'] == -500){
-						$iCreated = 5;								//중복 
+						$iCreated = 5;								//Duplicated User 
 					} else {
-						$iCreated = 2;								//회원창조실패
+						$iCreated = 2;								//Fail in Creation of User
 					}
 
 					if(array_key_exists('code', $arrResult))
@@ -634,7 +591,7 @@ class Slot extends BaseController
 						} 
                         print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
 					}
-				} else { //머니이동 실패경우
+				} else { //Fail in Transfering of money
 					print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
 				}
 				 
@@ -656,7 +613,7 @@ class Slot extends BaseController
 			
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
-			$objConfig = $this->modelConfgame->find($gameId);  //슬롯2
+			$objConfig = $this->modelConfgame->find($gameId);  //Slot 4
 
 			$prdCode = trim($this->request->getVar('prd'));
 			$slotId = trim($this->request->getVar('game'));
@@ -669,10 +626,10 @@ class Slot extends BaseController
 			if(is_null($objMember) || is_null($objConfig))
 				$iCreated = 0;
 			else if($objConfig->game_bet_permit != PERMIT_OK){
-				$iCreated = 4;									//준비중
+				$iCreated = 4;									//Preparing
 			}
 			// else if($_ENV['app.type'] == APP_TYPE_3 && !$this->modelMember->isPermitMember($objMember, $gameId))
-			// 	$iCreated = 3;									//차단
+			// 	$iCreated = 3;									//Stop
 			else if(is_null($objSlot) || is_null($objPrd)){
 				$iCreated = 6;
 			} 
@@ -685,7 +642,7 @@ class Slot extends BaseController
 				$iCreated = 9;
 			else if($objMember->mb_hslot_token == ""){
 				writeLog($logHead.$objMember->mb_uid."-1");
-				//플레이어 창조
+				//Create Player
 				$arrResult = $this->libApiHslot->createUser($objMember->mb_uid, $objMember->mb_nickname);
 
 				if($arrResult['status'] == 1){
@@ -699,7 +656,7 @@ class Slot extends BaseController
 				} else {
 					writeLog($logHead.$objMember->mb_uid."-2");
 
-					$iCreated = 2;								//회원창조실패
+					$iCreated = 2;								//Fail in Creation of User
 					if(array_key_exists('description', $arrResult))
 						writeLog($logHead.$objMember->mb_uid."-CreateUser Error description=".$arrResult['description']); 
 				}
@@ -745,7 +702,7 @@ class Slot extends BaseController
 						} 
                         print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
 					}
-				} else { //머니이동 실패경우
+				} else { //Fail in Transfering of money
 					print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.'); self.close(); </script>";
 				}
 				 
@@ -773,7 +730,7 @@ class Slot extends BaseController
 
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
-			$objConfig = $this->modelConfgame->find($gameId);  //슬롯1
+			$objConfig = $this->modelConfgame->find($gameId);  //Slot 1
 			$headInfo = $this->getSiteConf();
 			writeLog("<SLOT PRD> Code:".$objPrd->code." Game:".$gameId);
 
@@ -781,12 +738,12 @@ class Slot extends BaseController
 			if(is_null($objMember) || is_null($objConfig) || is_null($objPrd))
 				$iCreated = 0;
 			// else if($objConfig->game_bet_permit != PERMIT_OK){
-			// 	$iCreated = 4;									//준비중
+			// 	$iCreated = 4;									//Preparing
 			// }
 			else if($headInfo['slot_deny'])
-                $iCreated = 3;									//차단
+                $iCreated = 3;									//Stop
 			else if(!$this->modelMember->isPermitMember($objMember, $gameId))
-				$iCreated = 3;									//차단
+				$iCreated = 3;									//Stop
 			else
 				$iCreated = 1;
 

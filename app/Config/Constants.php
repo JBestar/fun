@@ -126,6 +126,7 @@ defined('CONF_API_HPPLAY')     || define('CONF_API_HPPLAY', 21);
 defined('CONF_API_THEPLUS')    || define('CONF_API_THEPLUS', 22);
 defined('CONF_API_GSPLAY')     || define('CONF_API_GSPLAY', 23);
 defined('CONF_API_STAR')       || define('CONF_API_STAR', 30);
+defined('CONF_API_HOLD')        || define('CONF_API_HOLD', 68);
 
 defined('CONF_CHARGE_MANUAL')  || define('CONF_CHARGE_MANUAL', 24);
 defined('CONF_DISCHA_MANUAL')  || define('CONF_DISCHA_MANUAL', 25);
@@ -140,6 +141,7 @@ defined('CONF_EOS3_DENY')       || define('CONF_EOS3_DENY', 33);
 defined('CONF_HPG_DENY')        || define('CONF_HPG_DENY', 34);
 defined('CONF_COIN5_DENY')      || define('CONF_COIN5_DENY', 45);
 defined('CONF_COIN3_DENY')      || define('CONF_COIN3_DENY', 46);
+defined('CONF_HOLD_DENY')       || define('CONF_HOLD_DENY', 69);
 
 defined('CONF_BET_CANCEL')      || define('CONF_BET_CANCEL', 35);
 defined('CONF_BET_NL_DENY')     || define('CONF_BET_NL_DENY', 36);
@@ -227,6 +229,7 @@ defined('GAME_HAPPY_BALL')       || define('GAME_HAPPY_BALL', 14);
 defined('GAME_SLOT_KGON')        || define('GAME_SLOT_KGON', 15);  //KGON slot
 defined('GAME_SLOT_STAR')        || define('GAME_SLOT_STAR', 16);  //STAR slot
 defined('GAME_CASINO_STAR')      || define('GAME_CASINO_STAR', 17);  //STAR casino
+defined('GAME_HOLD_CMS')         || define('GAME_HOLD_CMS', 18);  //HOLDEM
 
 defined('N2P_MAX_HOLE')          || define('N2P_MAX_HOLE', 4);
 

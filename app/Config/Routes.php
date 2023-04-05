@@ -92,6 +92,7 @@ $routes->get('xsloth', 'Slot::xsloth');
 $routes->get('evl', 'Casino::evl');
 $routes->get('cas', 'Casino::cas');
 $routes->get('cas_h', 'Casino::cas_h');
+$routes->get('holdem', 'Casino::holdem');
 
 /**
  * --------------------------------------------------------------------

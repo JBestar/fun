@@ -230,6 +230,12 @@
                         </li>
                         <?php endif ?>
                         
+                        <?php if (!$hold_deny):?>
+                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('holdem');">
+                            <a><i class="ui hockey puck icon"></i> 홀덤</a>
+                        </li>
+                        <?php endif ?>
+
                         <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$hpg_deny) :?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('mini');">
                             <a><i class="ui bowling ball icon"></i> 미니게임</a>
@@ -239,6 +245,11 @@
                         <?php if ($apps_enable):?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('auto');">
                             <a><i class="ui life ring outline icon"></i> 오토앱</a>
+                        </li>
+                        <?php endif ?>
+                        <?php if (!$hold_deny):?>
+                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('holdem');">
+                            <a><i class="ui life ring outline icon"></i> 홀덤</a>
                         </li>
                         <?php endif ?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="requestCharge();">
@@ -285,17 +296,6 @@
                                                         <div class="BannerSlider-bgDesktop">
                                                             <div class="bg-img field_decoupled_block_bg_image_category_video_slots" style="/*background: none;*/"></div>
                                                         </div>
-                                                        <!-- <div id="wingRight">
-                                                            <table class="ui table jackpot" style="background: transparent; border: none;">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td id="jackpotWrap">
-                                                                            <span id="jackpot">17,254,274</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div> -->
                                                         <div class="star-container">
                                                             <img src="./images/common/star1.png">
                                                             <img src="./images/common/star2.png">
@@ -344,6 +344,8 @@
                                 $("#mini").hide();
                                 $("#slots").hide();
                                 $("#auto").hide();
+                                $("#holdem").hide();
+
                                 $("#img_casino").attr("src", "/images/common/tab_casino.png?v=1");
                                 if($("#auto").length > 0)
                                     $("#img_mini").attr("src", "/images/common/tab_mini.png?v=1");
@@ -352,6 +354,7 @@
 
                                 $("#img_slots").attr("src", "/images/common/tab_slot.png?v=1");
                                 $("#img_auto").attr("src", "/images/common/tab_auto.png?v=1");
+                                $("#img_holdem").attr("src", "/images/common/tab_holdem.png?v=1");
 
                                 if (menu == "slots") {
                                     $("#slots").fadeIn("slow");
@@ -365,6 +368,9 @@
                                 } else if (menu == "auto") {
                                     $("#auto").fadeIn("slow");
                                     $("#img_auto").attr("src", "/images/common/tab_auto_select.png?v=1");
+                                } else if (menu == "holdem") {
+                                    $("#holdem").fadeIn("slow");
+                                    $("#img_holdem").attr("src", "/images/common/tab_holdem_select.png?v=1");
                                 } else {
                                     $("#live-casino").fadeIn("slow");
                                     $("#img_casino").attr("src", "/images/common/tab_casino_select.png?v=1");
@@ -379,7 +385,7 @@
                         <div class="seoCategoryPage-category categories-wrapper js-seo-category-page-categories">
                             <div class="categories categories-desktop js-games-categories-slider slick-initialized slick-slider">
                                 <div class="ui two column centered grid">
-                                    <div class="four column centered row">
+                                    <div class="five column centered row">
                                         <?php if (!$evol_deny || !$cas_deny):?>
                                             <div class="column first">
                                                 <img src="/images/common/tab_casino_select.png?v=1" onclick="javascript:showTabMenu('live-casino');" id="img_casino" style="cursor: pointer;" />
@@ -389,7 +395,12 @@
                                             <div class="column first">
                                                 <img src="/images/common/tab_slot.png?v=1" onclick="javascript:showTabMenu('slots');" id="img_slots" style="cursor: pointer;" />
                                             </div>
-                                         <?php endif ?>
+                                        <?php endif ?>
+                                        <?php if (!$hold_deny):?>
+                                            <div class="column first">
+                                                <img src="/images/common/tab_holdem.png?v=1" onclick="javascript:showTabMenu('holdem');" id="img_holdem" style="cursor: pointer;" />
+                                            </div>
+                                        <?php endif ?>
                                         <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$hpg_deny) :?>
                                         <div class="column first">
                                             <?php if ($apps_enable):?>
@@ -704,6 +715,45 @@
                         </section>
                         <?php endif ?>
                         
+                        <?php if (!$hold_deny):?>
+                        <section class="uk-section" id="holdem"  style="display: none;">
+                            <div class="uk-container">
+                                <h2 style="margin-bottom: 20px; text-align: center;">HOLDEM GAME
+                                    <div class="star-title">
+                                        <img src="./images/common/star1.png">
+                                        <img src="./images/common/star2.png">
+                                        <img src="./images/common/star3.png">
+                                        <img src="./images/common/star4.png">
+                                        <img src="./images/common/star1.png">
+                                    </div>
+                                </h2>
+                                <div class="uk-grid uk-grid-small uk-child-width-1-3 uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-grid-match" data-uk-lightbox="toggle:a.uk-position-cover" data-uk-grid="">
+                                    <!-- item -->
+                                    <div>
+                                            <div class="uk-card uk-card-default uk-card-small">
+                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                    <img src="/images/mini/btn_hold.png?v=1" />
+                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="홀덤" data-onoff="on" data-cid="Holdem">Play </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-card-header">
+                                                    <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
+                                                        <div class="uk-width-expand uk-first-column">
+                                                            <span class="game_title blue">홀덤</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- item -->
+                                </div>
+                            </div>
+                        </section>
+                        <?php endif ?>
+
                         <?php if($apps_enable):?>
                         <!-- Auto Apps -->
                         <section class="uk-section" id="auto" style="display: none;">
@@ -1501,7 +1551,17 @@
                         alert("점검중입니다.");
                     }
                 });
-
+                $("#holdem .openGameBtn, #holdem .playBtn").click(function () {
+                    if(!check_login()){
+                        return;
+                    }
+                    var onoff = $(this).data("onoff");
+                    if (onoff == "on") {
+                        window.open("/holdem", "games", "width=1200, height=800, left=100, top=50");
+                    } else {
+                        alert("점검중입니다.");
+                    }
+                });
                 $("#auto .openGameBtn, #auto .playBtn").click(function () {
                     if(!check_login()){
                         return;

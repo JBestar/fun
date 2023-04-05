@@ -338,6 +338,7 @@
           case GAME_SLOT_GOLD:     
           case GAME_SLOT_KGON:     
           case GAME_SLOT_STAR: return $objMember->mb_game_sl;
+          case GAME_HOLD_CMS: return $objMember->mb_game_hl;
           case GAME_EOS5_BALL: 
           case GAME_EOS3_BALL:  return $objMember->mb_game_eo;
           case GAME_COIN5_BALL: 
@@ -684,6 +685,9 @@
           case GAME_SLOT_STAR: 
                 $fRatio = $objMember->mb_game_sl_ratio;
                 break;
+          case GAME_HOLD_CMS: 
+                  $fRatio = $objMember->mb_game_hl_ratio;
+                  break;
           case GAME_EOS5_BALL:
           case GAME_EOS3_BALL: 
                 $fRatio = $iMode<5 ? $objMember->mb_game_eo_ratio : $objMember->mb_game_eo2_ratio;
@@ -818,8 +822,8 @@
       if(is_null($member))
         return $nMoney;
 
-      $nMoney = $member->mb_money + $member->mb_live_money + $member->mb_slot_money
-       + $member->mb_fslot_money + $member->mb_kgon_money + $member->mb_gslot_money+ $member->mb_hslot_money ;
+      $nMoney = $member->mb_money + $member->mb_live_money + $member->mb_slot_money + $member->mb_fslot_money +
+        $member->mb_kgon_money + $member->mb_gslot_money+ $member->mb_hslot_money + $member->mb_hold_money;
       return $nMoney;
     }
 

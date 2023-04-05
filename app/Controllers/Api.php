@@ -20,7 +20,7 @@ class Api extends BaseController
 		$this->response->redirect('/');	
 	}
 		
-	//사용자 로그인
+	//User Login
 	public function login(){ 
 		
 		$ip = $this->request->getIPAddress();
@@ -37,7 +37,7 @@ class Api extends BaseController
 		}
 		if($iTry < 3){
 			$arrResult['status'] = STATUS_FAIL;
-			$arrResult['code'] = RESULT_FAIL;	//대기중
+			$arrResult['code'] = RESULT_FAIL;	//Waiting 
 			$arrResult['msg'] = "잠시후 다시 시도해주세요. 남은시간:".(3-$iTry)."초";
 			echo json_encode($arrResult);
 			return;
@@ -69,7 +69,7 @@ class Api extends BaseController
 			$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_FAIL);
 		} else if( $objMember->mb_level < LEVEL_ADMIN && $this->modelConfsite->IsMaintain()){
 			$arrResult['status'] = STATUS_FAIL;
-			$arrResult['code'] = RESULT_MAINTAIN;	//점검중
+			$arrResult['code'] = RESULT_MAINTAIN;	//Maintain
 			$msg = $this->modelConfsite->msgMaintain();
 			if(strlen($msg) < 1){
 				$msg = "점검중입니다.";
@@ -87,23 +87,23 @@ class Api extends BaseController
 
 			if($objMember->mb_state_active == PERMIT_WAIT){
 				$arrResult['status'] = STATUS_FAIL;
-				$arrResult['code'] = RESULT_WAIT;//대기중
+				$arrResult['code'] = RESULT_WAIT;
                 $arrResult['msg'] = "승인대기중입니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_WAIT);
 			}
 			else if($objMember->mb_level < LEVEL_ADMIN && $modelBlock->getByIp($ip) != null){
 				$arrResult['status'] = STATUS_FAIL;
-				$arrResult['code'] = RESULT_FAIL;	//대기중
+				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "차단된 아이피입니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPBLOCK);
 			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE && $objMember->mb_ip_join !== $ip){
 				$arrResult['status'] = STATUS_FAIL;
-				$arrResult['code'] = RESULT_FAIL;	//대기중
+				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "승인된 아이피가 아닙니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPDENIED);
 			} else if(/*$objMember->mb_level < LEVEL_ADMIN &&*/ !$this->modelConfsite->IsMultiLogin() && !is_null($sess) && $sess->sess_id != $sessId/*$sess->sess_ip != $ip*/){
 				$arrResult['status'] = STATUS_FAIL;
-				$arrResult['code'] = RESULT_FAIL;	//대기중
+				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "이미 로그인되어 있습니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_LOGINING);
 			}
@@ -125,11 +125,11 @@ class Api extends BaseController
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_SUCCESS);
 
 				$arrResult['status'] = STATUS_SUCCESS;
-				$arrResult['code'] = RESULT_OK;//1-성공 2-계정틀림 3-차단
+				$arrResult['code'] = RESULT_OK;//1-Success 2-Mistake 3-Stop
 			} else{
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IDBLOCK);
 				$arrResult['status'] = STATUS_FAIL;
-				$arrResult['code'] = RESULT_STOP;//차단
+				$arrResult['code'] = RESULT_STOP;//Stop
                 $arrResult['msg'] = "차단된 계정입니다.";
 			} 			
 		}
@@ -1410,7 +1410,7 @@ class Api extends BaseController
 				$objUser->emp_state_active = STATE_DISABLE;
 			}
 
-			//서버 점검상태 확인
+			//Check maintain
 			if($this->modelConfsite->IsMaintain()) {
 				$objUser->emp_state_active = STATE_DISABLE;
 			}
@@ -1423,7 +1423,7 @@ class Api extends BaseController
 			if(is_null($objConfig) || $objUser->emp_state_active == STATE_DISABLE){
 				$iResult = 2;
 			} else if($arrBetData['amount'] > $objUser->mb_money && $this->alltoGame($objUser) != 1){
-				$iResult = 8;			//머니이동 실패
+				$iResult = 8;			//Fail in transfering money
 			} else {
 				$modelBet = new Bet_Model();
 				$modelRound = new Round_Model();				
@@ -1463,7 +1463,7 @@ class Api extends BaseController
 					$arrRoundData = getPbRoundTimes($objConfig, false);
 					$iMoneyType = MONEYCHANGE_BET_PB;
 				}
-				//조건체크
+				//check condition
 				if(!is_null($modelBet)){
 					$modelBet->setType($arrBetData['game']);
 					$modelRound->setType($arrBetData['game']);
@@ -1486,7 +1486,7 @@ class Api extends BaseController
 					$iResult = isEnableBet($arrBetData, $objUser, $objConfig, $arrRoundData);
 					if($iResult == 1){
 						$arrEmpRatio = $this->modelMember->getEmployeeRatio($objUser, $arrBetData['amount'], $arrBetData['game'], $arrBetData['mode']);
-						//베팅에 성공하면 거래내역에 반영,유저머니 변경
+						//Success in Betting
 						if($this->modelMember->updateAssets($objUser, 0-$arrBetData['amount'])){
 							$iBetId = $modelBet->register($arrBetData, $objUser);
 							$modelMoneyhist->registerBet($objUser, $arrBetData, $iMoneyType);
@@ -1497,7 +1497,7 @@ class Api extends BaseController
 									
 			
 			if($iResult == 1 && $iBetId > 0){			
-				// $this->modelMember->updateRewards($arrEmpRatio);			//포인트적립은 정산시 진행
+				// $this->modelMember->updateRewards($arrEmpRatio);			//Add Point 
 				$modelReward->register($arrBetData['game'], $iBetId, $arrEmpRatio);
 			}
 
@@ -1596,15 +1596,15 @@ class Api extends BaseController
 				$modelBet->setType($arrReqData['game']);
 				$objBet = $modelBet->find($arrReqData['fid']);
 				if(is_null($objBet) || $objBet->bet_mb_uid !== $user_id ){
-					$iResult = 2;		//베팅아이디 오류
-				} else if($objBet->bet_state != 1){				//정산완료
+					$iResult = 2;		//Error of Bet Id
+				} else if($objBet->bet_state != 1){				//Finish Account
 					$iResult = 1;
 				} else if($objBet->bet_round_no != $arrRoundData['round_no']){
-					$iResult = 3;		//베팅아이디 오류
+					$iResult = 3;		//Error of Bet Id
 				} else if($objBet->bet_time < $arrRoundData['round_start'] || $objBet->bet_time > $arrRoundData['round_bet_end']){
-					$iResult = 4;		//베팅아이디 오류
+					$iResult = 4;		//Error of Bet Id
 				} else if(!isEnableBetTime($arrRoundData)){
-					$iResult = 5;		//베팅 취소 불가능
+					$iResult = 5;		//Can't Cancel
 				} else {
 					if($modelBet->delete($objBet->bet_fid)){
 						if( $objBet->bet_money > 0 && $this->modelMember->updateAssets($objUser, $objBet->bet_money)){
@@ -1840,12 +1840,12 @@ class Api extends BaseController
 			if(!is_null($modelBet)){
 				$objBet = $modelBet->find($arrReqData['fid']);
 				if(!is_null($objBet) ){
-					$iResult = 2;		//베팅아이디 오류
+					$iResult = 2;		//Error of Bet Id
 				} else {
 					$arrBet = $modelBet->followBet($arrReqData['fid']);
 
 					foreach($arrBet as $objBet){
-						if($objBet->bet_state != 1)				//정산완료
+						if($objBet->bet_state != 1)				//Finsih Account
 							continue;
 						if($modelBet->delete($objBet->bet_fid)){
 							$objMember = $this->modelMember->getByUid($objBet->bet_mb_uid);
