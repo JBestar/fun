@@ -150,18 +150,18 @@ defined('CONF_BET_N2P_DENY')    || define('CONF_BET_N2P_DENY', 38);
 defined('CONF_BET_PN_DENY')     || define('CONF_BET_PN_DENY', 39);
 defined('CONF_BET_N2P_4EN')     || define('CONF_BET_N2P_4EN', 40);
 defined('CONF_BET_PAN_TYPE')    || define('CONF_BET_PAN_TYPE', 41);
-defined('CONF_BET_CONFIRM_DENY')|| define('CONF_BET_CONFIRM_DENY', 42); //베팅시 확인창 제거
-defined('CONF_BET_BLANK_EN')    || define('CONF_BET_BLANK_EN', 43); //공배팅 절삭
-defined('CONF_TRANS_DENY')      || define('CONF_TRANS_DENY', 44);   //이송 금지
-defined('CONF_RETURN_DENY')     || define('CONF_RETURN_DENY', 47);  //환수 금지
-defined('CONF_TRANS_LV1')       || define('CONF_TRANS_LV1', 48);    //이송 1단계만 적용
-defined('CONF_RETURN_LV1')      || define('CONF_RETURN_LV1', 49);   //환수 1단계만 적용
+defined('CONF_BET_CONFIRM_DENY')|| define('CONF_BET_CONFIRM_DENY', 42); //betting without cofirmation
+defined('CONF_BET_BLANK_EN')    || define('CONF_BET_BLANK_EN', 43); //blank betting
+defined('CONF_TRANS_DENY')      || define('CONF_TRANS_DENY', 44);   //disable transfer of money between users
+defined('CONF_RETURN_DENY')     || define('CONF_RETURN_DENY', 47);  //disable withdraw of money between users
+defined('CONF_TRANS_LV1')       || define('CONF_TRANS_LV1', 48);    //enable transfer of money between only 1-level difference users 
+defined('CONF_RETURN_LV1')      || define('CONF_RETURN_LV1', 49);   //enable withdraw of money between only 1-level difference users
 defined('CONF_NOTICE_DT')       || define('CONF_NOTICE_DT', 50);
-defined('CONF_TRANS_LVS')       || define('CONF_TRANS_LVS', 51);    //이송,환수 가능 레벨
-defined('CONF_DEPOSIT_PLAY')    || define('CONF_DEPOSIT_PLAY', 52);   //게임중 충전, 이송 금지
-defined('CONF_WITHDRAW_PLAY')   || define('CONF_WITHDRAW_PLAY', 53);   //게임중 환전 금지
-defined('CONF_MAIN_GAMEIMG')    || define('CONF_MAIN_GAMEIMG', 54);   //메인홈 게임이미지
-defined('CONF_AUTOAPPS')        || define('CONF_AUTOAPPS', 62);   //메인홈 게임이미지
+defined('CONF_TRANS_LVS')       || define('CONF_TRANS_LVS', 51);    //level that is enable to transfer and withdraw
+defined('CONF_DEPOSIT_PLAY')    || define('CONF_DEPOSIT_PLAY', 52);   //disable deposit during play 
+defined('CONF_WITHDRAW_PLAY')   || define('CONF_WITHDRAW_PLAY', 53);   //disable withdraw during play
+defined('CONF_MAIN_GAMEIMG')    || define('CONF_MAIN_GAMEIMG', 54);   //game images for main page 
+defined('CONF_AUTOAPPS')        || define('CONF_AUTOAPPS', 62);   //auto app images
 
 defined('LEVEL_MAX')           || define('LEVEL_MAX', 100);
 defined('LEVEL_ADMIN')         || define('LEVEL_ADMIN', 100);
@@ -236,7 +236,7 @@ defined('N2P_MAX_HOLE')          || define('N2P_MAX_HOLE', 4);
 defined('DELAY_GAME')            || define('DELAY_GAME', 10);
 defined('DELAY_TRANSFER')        || define('DELAY_TRANSFER', 5);
 defined('DELAY_APIBET')          || define('DELAY_APIBET', 2);
-defined('DELAY_PLAYING')         || define('DELAY_PLAYING', 600); //게임 플레이 만료시간 (초)
+defined('DELAY_PLAYING')         || define('DELAY_PLAYING', 600); //expiration time of game play (seconds)
 
 //money change type
 defined('MONEYCHANGE_CHARGE')    || define('MONEYCHANGE_CHARGE', 1);   
@@ -258,18 +258,18 @@ defined('MONEYCHANGE_BET_BS')    || define('MONEYCHANGE_BET_BS', 16);
 defined('MONEYCHANGE_DENY_BS')    || define('MONEYCHANGE_DENY_BS', 17);
 defined('MONEYCHANGE_WIN_BS')    || define('MONEYCHANGE_WIN_BS', 18);
 
-defined('MONEYCHANGE_CHARGE_DEC')   || define('MONEYCHANGE_TRANS_DEC', 19);     //하부이송
-defined('MONEYCHANGE_CHARGE_INC')   || define('MONEYCHANGE_TRANS_INC', 20);     //상부이송
-defined('MONEYCHANGE_EXCHANGE_INC') || define('MONEYCHANGE_EXCHANGE_INC', 27);  //하부환수
-defined('MONEYCHANGE_EXCHANGE_DEC') || define('MONEYCHANGE_EXCHANGE_DEC', 28);  //상부환수
+defined('MONEYCHANGE_CHARGE_DEC')   || define('MONEYCHANGE_TRANS_DEC', 19);     //Transfer to lower level
+defined('MONEYCHANGE_CHARGE_INC')   || define('MONEYCHANGE_TRANS_INC', 20);     //Transfer from upper level
+defined('MONEYCHANGE_EXCHANGE_INC') || define('MONEYCHANGE_EXCHANGE_INC', 27);  //withdraw lower level
+defined('MONEYCHANGE_EXCHANGE_DEC') || define('MONEYCHANGE_EXCHANGE_DEC', 28);  //withdraw by upper level
 
-defined('MONEYCANCEL_CHARGE')    || define('MONEYCANCEL_CHARGE', 21);   //충전취소
-defined('MONEYCANCEL_EXCHANGE')  || define('MONEYCANCEL_EXCHANGE', 22); //환전취소
+defined('MONEYCANCEL_CHARGE')    || define('MONEYCANCEL_CHARGE', 21);   //cancel deposit
+defined('MONEYCANCEL_EXCHANGE')  || define('MONEYCANCEL_EXCHANGE', 22); //cancel withdraw
 
-defined('MONEYCHANGE_INC')       || define('MONEYCHANGE_INC', 23);     //직충전
-defined('MONEYCHANGE_DEC')       || define('MONEYCHANGE_DEC', 26);     //직환전
-defined('MONEYCHANGE_WITHDRAW')  || define('MONEYCHANGE_WITHDRAW', 24); //머니회수
-defined('POINTHANGE_WITHDRAW')   || define('POINTHANGE_WITHDRAW', 25);  //포인트회수
+defined('MONEYCHANGE_INC')       || define('MONEYCHANGE_INC', 23);     //deposit directly 
+defined('MONEYCHANGE_DEC')       || define('MONEYCHANGE_DEC', 26);     //withdraw directly 
+defined('MONEYCHANGE_WITHDRAW')  || define('MONEYCHANGE_WITHDRAW', 24); //withdraw all money
+defined('POINTHANGE_WITHDRAW')   || define('POINTHANGE_WITHDRAW', 25);  //withdraw all point
 
 defined('MONEYCHANGE_BET_EO5')    || define('MONEYCHANGE_BET_EO5', 31);
 defined('MONEYCHANGE_DENY_EO5')   || define('MONEYCHANGE_DENY_EO5', 32);
@@ -328,6 +328,8 @@ defined('SLOTCODE_USER_NONE')       || define('SLOTCODE_USER_NONE', 98);     //�
 defined('SLOTCODE_PARAMETER_NO')    || define('SLOTCODE_PARAMETER_NO', 99);    //API 호출을 위한 매개변수 부족 
 defined('SLOTCODE_API_FAIL')        || define('SLOTCODE_API_FAIL', 100);    //API 요청 실패 - 시스템 관리자 문의 
 
+defined('PLAY_FAIL_TRANSFER')       || define('PLAY_FAIL_TRANSFER', 1);    //play failure due to failing of transfer
+defined('PLAY_FAIL_RESPONSE')       || define('PLAY_FAIL_RESPONSE', 2);    //play failure due to no response
 
 
 defined('TRYLOG_SUCCESS')           || define('TRYLOG_SUCCESS', "Success");    

@@ -469,7 +469,7 @@ class Api extends BaseController
 
 				if($iResult == 1){
 					if($reqData['c_price'] > $objMember->mb_money){
-						$result->msg = "게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.";
+						$result->msg = "게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요(".PLAY_FAIL_TRANSFER.").";
 						$result->status = STATUS_FAIL;
 					} else if($reqData['c_price'] > 0 && $this->modelMember->updateAssets($objMember, 0-$reqData['c_price'])){
 						$data =[
