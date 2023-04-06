@@ -328,8 +328,8 @@ defined('SLOTCODE_USER_NONE')       || define('SLOTCODE_USER_NONE', 98);     //�
 defined('SLOTCODE_PARAMETER_NO')    || define('SLOTCODE_PARAMETER_NO', 99);    //API 호출을 위한 매개변수 부족 
 defined('SLOTCODE_API_FAIL')        || define('SLOTCODE_API_FAIL', 100);    //API 요청 실패 - 시스템 관리자 문의 
 
-defined('PLAY_FAIL_TRANSFER')       || define('PLAY_FAIL_TRANSFER', 1);    //play failure due to failing of transfer
-defined('PLAY_FAIL_RESPONSE')       || define('PLAY_FAIL_RESPONSE', 2);    //play failure due to no response
+defined('PLAY_FAIL_TRANSFER')       || define('PLAY_FAIL_TRANSFER', "1001");    //play failure due to failing of transfer
+defined('PLAY_FAIL_RESPONSE')       || define('PLAY_FAIL_RESPONSE', "1002");    //play failure due to no response
 
 
 defined('TRYLOG_SUCCESS')           || define('TRYLOG_SUCCESS', "Success");    
