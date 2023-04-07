@@ -68,6 +68,9 @@ defined('DECADE') || define('DECADE', 315360000);
 defined('ENV_PRODUCTION')   || define('ENV_PRODUCTION', 'production');
 defined('ENV_DEVELOPMENT')  || define('ENV_DEVELOPMENT', 'development');
 
+defined('APP_PHANTOM')        || define('APP_PHANTOM', 'Phantom');
+
+
 defined('APP_TYPE_1')        || define('APP_TYPE_1', 1);      //Slot + FSlot
 defined('APP_TYPE_2')        || define('APP_TYPE_2', 2);      //FSlot
 defined('APP_TYPE_3')        || define('APP_TYPE_3', 3);      //Slot

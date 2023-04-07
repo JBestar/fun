@@ -218,6 +218,12 @@
                         </li>
                         <?php endif ?>
                         
+                        <?php if (!$hold_deny):?>
+                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('holdem');">
+                            <a><i class="ui hospital symbol icon"></i> 홀덤</a>
+                        </li>
+                        <?php endif ?>
+
                         <?php if (!$evol_deny || !$cas_deny):?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('live-casino');">
                             <a><i class="ui life ring icon"></i> 카지노</a>
@@ -227,12 +233,6 @@
                         <?php if (!$slot_deny):?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('slots');">
                             <a><i class="ui hockey puck icon"></i> 슬롯</a>
-                        </li>
-                        <?php endif ?>
-                        
-                        <?php if (!$hold_deny):?>
-                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('holdem');">
-                            <a><i class="ui hockey puck icon"></i> 홀덤</a>
                         </li>
                         <?php endif ?>
 
@@ -247,11 +247,7 @@
                             <a><i class="ui life ring outline icon"></i> 오토앱</a>
                         </li>
                         <?php endif ?>
-                        <?php if (!$hold_deny):?>
-                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('holdem');">
-                            <a><i class="ui life ring outline icon"></i> 홀덤</a>
-                        </li>
-                        <?php endif ?>
+
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="requestCharge();">
                             <a><i class="ui cloud download icon"></i> 입금</a>
                         </li>
@@ -333,7 +329,12 @@
                         
                         <script type="text/javascript">
                             $(".BannerSlider-bgDesktop .field_decoupled_block_bg_image_category_video_slots").bgswitcher({
-                                images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
+                                <?php if($_ENV['app.name'] == APP_PHANTOM) :?>
+                                    images: ["/images/main/banner11.png", "/images/main/banner12.png", "/images/main/banner13.png", "/images/main/banner14.png"],
+                                <?php else: ?>
+                                    images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
+                                <?php endif ?>
+                                
                                 effect: "clip",
                             });
 
@@ -346,12 +347,16 @@
                                 $("#auto").hide();
                                 $("#holdem").hide();
 
-                                $("#img_casino").attr("src", "/images/common/tab_casino.png?v=1");
+                                if($("#holdem").length > 0)
+                                    $("#img_casino").attr("src", "/images/common/tab_casino_mid.png?v=1");
+                                else
+                                    $("#img_casino").attr("src", "/images/common/tab_casino.png?v=1");
+
                                 if($("#auto").length > 0)
                                     $("#img_mini").attr("src", "/images/common/tab_mini.png?v=1");
                                 else 
                                     $("#img_mini").attr("src", "/images/common/tab_mini_rit.png?v=1");
-
+                                
                                 $("#img_slots").attr("src", "/images/common/tab_slot.png?v=1");
                                 $("#img_auto").attr("src", "/images/common/tab_auto.png?v=1");
                                 $("#img_holdem").attr("src", "/images/common/tab_holdem.png?v=1");
@@ -373,7 +378,10 @@
                                     $("#img_holdem").attr("src", "/images/common/tab_holdem_select.png?v=1");
                                 } else {
                                     $("#live-casino").fadeIn("slow");
-                                    $("#img_casino").attr("src", "/images/common/tab_casino_select.png?v=1");
+                                    if($("#holdem").length > 0)
+                                        $("#img_casino").attr("src", "/images/common/tab_casino_select_mid.png?v=1");
+                                    else
+                                        $("#img_casino").attr("src", "/images/common/tab_casino_select.png?v=1");
                                 }
                             }
 
@@ -386,9 +394,20 @@
                             <div class="categories categories-desktop js-games-categories-slider slick-initialized slick-slider">
                                 <div class="ui two column centered grid">
                                     <div class="five column centered row">
+                                        <?php if (!$hold_deny):?>
+                                            <div class="column first">
+                                                <img src="/images/common/tab_holdem_select.png?v=1" onclick="javascript:showTabMenu('holdem');" id="img_holdem" style="cursor: pointer;" />
+                                            </div>
+                                        <?php endif ?>
                                         <?php if (!$evol_deny || !$cas_deny):?>
                                             <div class="column first">
-                                                <img src="/images/common/tab_casino_select.png?v=1" onclick="javascript:showTabMenu('live-casino');" id="img_casino" style="cursor: pointer;" />
+                                                <img 
+                                                    <?php if (!$hold_deny):?>
+                                                        src="/images/common/tab_casino_mid.png?v=1" 
+                                                    <?php else :?>
+                                                        src="/images/common/tab_casino_select.png?v=1" 
+                                                    <?php endif ?>
+                                                    onclick="javascript:showTabMenu('live-casino');" id="img_casino" style="cursor: pointer;" />
                                             </div>
                                         <?php endif ?>
                                         <?php if (!$slot_deny):?>
@@ -396,17 +415,14 @@
                                                 <img src="/images/common/tab_slot.png?v=1" onclick="javascript:showTabMenu('slots');" id="img_slots" style="cursor: pointer;" />
                                             </div>
                                         <?php endif ?>
-                                        <?php if (!$hold_deny):?>
-                                            <div class="column first">
-                                                <img src="/images/common/tab_holdem.png?v=1" onclick="javascript:showTabMenu('holdem');" id="img_holdem" style="cursor: pointer;" />
-                                            </div>
-                                        <?php endif ?>
+                                        
                                         <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$hpg_deny) :?>
                                         <div class="column first">
+                                            <img     
                                             <?php if ($apps_enable):?>
-                                            <img src="/images/common/tab_mini.png?v=1" 
+                                                src="/images/common/tab_mini.png?v=1" 
                                             <?php else:?>
-                                            <img src="/images/common/tab_mini_rit.png?v=1" 
+                                                src="/images/common/tab_mini_rit.png?v=1" 
                                             <?php endif ?>
                                             onclick="javascript:showTabMenu('mini');" id="img_mini" style="cursor: pointer;" />
                                         </div>
@@ -469,7 +485,12 @@
                         <?php endif ?>
 
                         <?php if (!$evol_deny || !$cas_deny):?>
-                        <section class="uk-section" id="live-casino">
+                        <section class="uk-section" id="live-casino"  
+                            <?php if (!$hold_deny):?>
+                                style="display: none;"
+                            <?php endif ?>
+                            >
+
                             <div class="uk-container">
                                 <h2 style="margin-bottom: 20px; text-align: center;">
                                     LIVE CASINO
@@ -716,7 +737,7 @@
                         <?php endif ?>
                         
                         <?php if (!$hold_deny):?>
-                        <section class="uk-section" id="holdem"  style="display: none;">
+                        <section class="uk-section" id="holdem">
                             <div class="uk-container">
                                 <h2 style="margin-bottom: 20px; text-align: center;">HOLDEM GAME
                                     <div class="star-title">
