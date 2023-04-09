@@ -129,9 +129,12 @@
                         <div class="MainMenu-Left">
 
                             <?php if(is_login()) :?>
-                            <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_app"  onclick="$('html, body').animate({scrollTop : 450}, 300); showTabMenu('auto');">
-                                    <span style="padding:0px;"> <img src="/images/common/logo_app.gif" class="app_icon" /> </span>
-                                </button>
+                                <?php if ($apps_enable):?>
+                                    <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_app"  onclick="$('html, body').animate({scrollTop : 450}, 300); showTabMenu('auto');">
+                                        <span style="padding:0px;"> <img src="/images/common/logo_app.gif" class="app_icon" /> </span>
+                                    </button>
+                                <?php endif?>
+
                             <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestCharge();"><i class="ui cloud download icon"></i><span>입금</span></button>
                             <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestWithdraw();"><i class="ui cloud upload icon"></i><span>출금</span></button>
                             <!-- <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestAccount()"><i class="ui question circle icon"></i><span>계좌문의</span></button> -->
