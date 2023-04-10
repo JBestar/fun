@@ -86,7 +86,7 @@
             }
             
             .MainMenu-open-wrapper .MainMenu-LogoSlogan {
-                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=5);
+                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=6);
             }
         </style>
     </head>
