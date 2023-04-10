@@ -94,6 +94,9 @@ class ApiHold_Lib {
 			if($arrResult['error'] == 0){
                 $arrResult['status'] = 1;
                 $arrResult['balance'] = $arrResult['result']['balance'];
+
+                if(array_key_exists("playing_balance", $arrResult['result']) && $arrResult['result']['playing_balance'] > 0)
+                    $arrResult['balance'] += $arrResult['result']['playing_balance'];
                 // "result": {
                 //     "balance": 100000,
                 //     "playing_balance": 0
