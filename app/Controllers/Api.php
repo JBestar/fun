@@ -503,7 +503,7 @@ class Api extends BaseController
 						$result->status = STATUS_FAIL;
 					}
 				} else{
-					$result->msg = "서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.";
+					$result->msg = "게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_TRANSFER.")";
 					$result->status = STATUS_FAIL;
 				}
 				
