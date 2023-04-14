@@ -97,6 +97,7 @@ class ApiHold_Lib {
 
                 if(array_key_exists("playing_balance", $arrResult['result']) && $arrResult['result']['playing_balance'] > 0)
                     $arrResult['balance'] += $arrResult['result']['playing_balance'];
+                
                 // "result": {
                 //     "balance": 100000,
                 //     "playing_balance": 0
@@ -261,7 +262,7 @@ class ApiHold_Lib {
         $arrResult = json_decode($response, true);
 		
 		if(!is_null($arrResult) && array_key_exists("error", $arrResult)) {
-			if($arrResult['error'] == 0){
+			if($arrResult['error'] == 0 && $arrResult['result']['after'] > 0){
                 $arrResult['status'] = 1;
                 $arrResult['balance'] = $arrResult['result']['after'];
                 // "result": {
@@ -306,7 +307,7 @@ class ApiHold_Lib {
         $arrResult = json_decode($response, true);
 		
 		if(!is_null($arrResult) && array_key_exists("error", $arrResult)) {
-			if($arrResult['error'] == 0 ){
+			if($arrResult['error'] == 0 && $arrResult['result']['balance'] < 0 ){
                 $arrResult['status'] = 1;
                 $arrResult['balance'] = $arrResult['result']['after'];
                 // "result": {

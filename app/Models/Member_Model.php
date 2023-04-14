@@ -205,6 +205,18 @@ class Member_Model extends Model {
         return $this->update($member->mb_fid, $data);
     }
 
+    public function getByHoldId($id, $fid = 0){
+        
+        $where = "mb_hold_uid = '".$id."' ";
+        if($fid > 0)
+            $where.= "AND mb_fid != '".$fid."' ";
+
+        return $this->select($this->getFields)
+                    ->where($where)
+                    ->first(); 
+        
+    }
+
     public function updateBetTm($member){
         $data = [
             'mb_time_bet' => date("Y-m-d H:i:s"),
