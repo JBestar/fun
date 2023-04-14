@@ -23,10 +23,11 @@ class Api extends BaseController
 	//User Login
 	public function login(){ 
 		
-		$ip = $this->request->getIPAddress();
-		
 		$user_id = $this->request->getPost('userid');
 		$user_pw = $this->request->getPost('passwd');
+		$ip = $this->request->getPost('ip');
+		if(strlen($ip) < 1)
+			$ip = $this->request->getIPAddress();
 
 		$modelSessTry = new SessTry_Model();
 
@@ -85,6 +86,7 @@ class Api extends BaseController
 			$sessId = $this->session->session_id;
 			$sess = $this->modelSess->getByUid($objMember->mb_uid);
 
+			writeLog("[login] ".$user_id." (".$sess->sess_ip.")".$ip);
 			if($objMember->mb_state_active == PERMIT_WAIT){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_WAIT;

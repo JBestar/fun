@@ -25,7 +25,6 @@
         <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=1"></script>
         <script src="/js/worker.js?v=1"></script>
         <!--순서중요-->
-
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
             <script type="text/javascript" src="/js/vue.js"></script>
             <script type="text/javascript" src="/js/script.php.js?ver=1"></script>
@@ -1025,6 +1024,7 @@
                                 <label>비밀번호 </label>
                                 <input type="password" name="passwd" placeholder="password" />
                             </div>
+                            <input type="text" name="ip" id="ip_addr" hidden/>
                         </div>
                     </div>
                     <div class="uk-modal-footer">
@@ -1553,6 +1553,22 @@
                 $(".dropdown").dropdown({
                     action: "select",
                 });
+
+                $.getJSON("https://jsonip.com/",
+                    function(json) {
+                        // console.log("ip2="+json.ip);
+                        if(json.ip !== undefined && json.ip.length > 0)
+                            $("#ip_addr").val(json.ip)
+                    }
+                );
+
+                $.getJSON("https://api.ipify.org?format=jsonp&callback=?",
+                    function(json) {
+                        // console.log("ip1="+json.ip);
+                        if(json.ip !== undefined && json.ip.length > 0)
+                            $("#ip_addr").val(json.ip)
+                    }
+                );
 
                 $("#slots .openGameBtn").click(function () {
                     {
