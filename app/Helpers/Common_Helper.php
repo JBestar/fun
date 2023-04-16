@@ -860,4 +860,14 @@
         $checkOk = preg_match("/^[A-Za-z0-9]*[\W]+[A-Za-z0-9]*$/", $userPw);
         return $checkOk;
     }
+
+    function isValidIp($strIps, $logIp){
+      $arrIp = explode(";", $strIps);
+      foreach($arrIp as $ip){
+        if(trim($ip) === $logIp){
+          return true;
+        }
+      }
+      return false;
+    }
 ?>

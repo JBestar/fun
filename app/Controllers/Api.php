@@ -6,7 +6,6 @@ use App\Models\MoneyHist_Model;
 use App\Models\Exchange_Model;
 use App\Models\Charge_Model;
 use App\Models\Reward_Model;
-use App\Models\Transfer_Model;
 use App\Models\Follow_Model;
 use App\Models\Block_Model;
 
@@ -98,7 +97,8 @@ class Api extends BaseController
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "차단된 아이피입니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPBLOCK);
-			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE && $objMember->mb_ip_join !== $ip){
+			} else if($objMember->mb_level >= LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE && 
+				!isValidIp($objMember->mb_ip_join, $ip)){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "승인된 아이피가 아닙니다.";
@@ -798,54 +798,6 @@ class Api extends BaseController
 		echo json_encode($result);
 
     }
-
-	public function count_transfer()
-	{
-		$jsonData = $_REQUEST['json_'];
-		$reqData = json_decode($jsonData, true);
-
-		$result = new \StdClass;
-		if(!is_login())
-		{
-            $result->status = STATUS_LOGOUT;		
-        } else {
-			$reqData['req_uid'] = $this->session->user_id;
-			$modelTransfer = new Transfer_Model();
-
-			$count = $modelTransfer->searchCount($reqData);
-
-			$result->data = $count;
-			$result->status = STATUS_SUCCESS;
-        }
-		
-		echo json_encode($result);
-
-    }
-
-
-	public function page_transfer()
-	{
-		$jsonData = $_REQUEST['json_'];
-		$reqData = json_decode($jsonData, true);
-
-		$result = new \StdClass;
-		if(!is_login())
-		{
-            $result->status = STATUS_LOGOUT;		
-        } else {
-			$reqData['req_uid'] = $this->session->user_id;
-			$modelTransfer = new Transfer_Model();
-
-			$arrData = $modelTransfer->searchList($reqData);
-
-			$result->data = $arrData;
-			$result->status = STATUS_SUCCESS;
-        }
-		
-		echo json_encode($result);
-
-    }
-
 
 	public function count_customer()
 	{

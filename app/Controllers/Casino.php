@@ -1,7 +1,5 @@
 <?php namespace App\Controllers;
 
-use App\Models\Transfer_Model;
-
 class Casino extends BaseController
 {
     public function index()

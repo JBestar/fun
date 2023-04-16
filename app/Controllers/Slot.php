@@ -2,7 +2,6 @@
 
 use App\Models\SlotPrd_Model;
 use App\Models\SlotGame_Model;
-use App\Models\Transfer_Model;
 
 class Slot extends BaseController
 {

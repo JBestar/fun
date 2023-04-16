@@ -25,6 +25,7 @@ use App\Models\Notice_Model;
 use App\Models\ConfGame_Model;
 use App\Models\CasPrd_Model;
 use App\Models\SlotPrd_Model;
+use App\Models\Transfer_Model;
 
 use App\Libraries\ApiCas_Lib;
 use App\Libraries\ApiKgon_Lib;
@@ -54,6 +55,7 @@ class BaseController extends Controller
 	protected $modelNotice;
 	protected $modelCasprd;
 	protected $modelSlotprd;
+	protected $modelTransfer;
 
 	protected $libApiCas;
 	protected $libApiKgon;
@@ -86,6 +88,7 @@ class BaseController extends Controller
 		$this->modelNotice = new Notice_Model();
 		$this->modelCasprd = new CasPrd_Model();
         $this->modelSlotprd = new SlotPrd_Model();
+        $this->modelTransfer = new Transfer_Model();
 		
 		$this->libApiCas = new ApiCas_Lib();
 		$this->libApiKgon = new ApiKgon_Lib();
@@ -505,6 +508,7 @@ class BaseController extends Controller
 					$this->modelMember->updateLiveMoney($objMember);   
 						
 					if($this->modelMember->updateAssets($objMember, $amount)){
+						$this->modelTransfer->register(TRANS_EVOL_SITE, $objMember, $objMember->mb_live_money+$amount, 0-$amount);
                         $objMember->mb_money += $amount;   
 						writeLog($logHead.$objMember->mb_uid."-Withdraw Money=".$objMember->mb_money);
 						$iResult = 1;
@@ -556,6 +560,7 @@ class BaseController extends Controller
 					$this->modelMember->updateKgonMoney($objMember);   
 						
 					if( $this->modelMember->updateAssets($objMember, $amount)){
+						$this->modelTransfer->register(TRANS_KGON_SITE, $objMember, $objMember->mb_kgon_money+$amount, 0-$amount);
 						$objMember->mb_money += $amount;   
 						writeLog($logHead.$objMember->mb_uid."-Withdraw Money=".$objMember->mb_money);
 						$iResult = 1;
@@ -606,6 +611,7 @@ class BaseController extends Controller
 					$this->modelMember->updateSlotMoney($objMember);
 					
 					if($this->modelMember->updateAssets($objMember, $amount)){
+						$this->modelTransfer->register(TRANS_PLUS_SITE, $objMember, $objMember->mb_slot_money+$amount, 0-$amount);
                         $objMember->mb_money += $amount;   
 						writeLog($logHead.$objMember->mb_uid."-Withdraw Money=".$objMember->mb_money);
                         $iResult = 1;
@@ -656,6 +662,7 @@ class BaseController extends Controller
 					$this->modelMember->updateFslotMoney($objMember);   
 						
 					if($this->modelMember->updateAssets($objMember, $amount)){
+						$this->modelTransfer->register(TRANS_GSPL_SITE, $objMember, $objMember->mb_fslot_money+$amount, 0-$amount);
                         $objMember->mb_money += $amount;   
 						writeLog($logHead.$objMember->mb_uid."-Withdraw Money=".$objMember->mb_money);
                         $iResult = 1;
@@ -705,6 +712,7 @@ class BaseController extends Controller
 					$this->modelMember->updateGslotMoney($objMember);
 
                     if($this->modelMember->updateAssets($objMember, $amount)){
+						$this->modelTransfer->register(TRANS_GOLD_SITE, $objMember, $objMember->mb_gslot_money+$amount, 0-$amount);
 						$objMember->mb_money += $amount;   
 						writeLog($logHead.$objMember->mb_uid."-Withdraw Money=".$objMember->mb_money);
 						$iResult = 1;
@@ -736,6 +744,7 @@ class BaseController extends Controller
 				$this->modelMember->updateHslotMoney($objMember);
 
 				if($this->modelMember->updateAssets($objMember, $amount)){
+					$this->modelTransfer->register(TRANS_STAR_SITE, $objMember, $objMember->mb_hslot_money+$amount, 0-$amount);
 					$objMember->mb_money += $amount;   
 					writeLog($logHead.$objMember->mb_uid."-Withdraw Money=".$objMember->mb_money);
 					$iResult = 1;
@@ -783,7 +792,8 @@ class BaseController extends Controller
 					$this->modelMember->updateHoldMoney($objMember);
 					
 					if($this->modelMember->updateAssets($objMember, $amount)){
-                        $objMember->mb_money += $amount;   
+						$this->modelTransfer->register(TRANS_HOLD_SITE, $objMember, $objMember->mb_hold_money+$amount, 0-$amount);
+						$objMember->mb_money += $amount;   
 						writeLog($logHead.$objMember->mb_uid."-Withdraw Money=".$objMember->mb_money);
                         $iResult = 1;
                     }
@@ -814,6 +824,8 @@ class BaseController extends Controller
 				writeLog($logHead.$objMember->mb_uid."-Deposit Balance=".$arrResult['balance']);
 				if($this->modelMember->updateAssets($objMember, 0-$arrResult['amount'])){
 					$objMember->mb_live_money = $arrResult['balance'];
+					$amount = $arrResult['amount'];
+					$this->modelTransfer->register(TRANS_SITE_EVOL, $objMember, $objMember->mb_live_money-$amount, $amount);
 					$this->modelMember->updateLiveMoney($objMember);   
 					$objMember->mb_money -= $arrResult['amount'];   
 					$iResult = 1;
@@ -842,6 +854,8 @@ class BaseController extends Controller
 				writeLog($logHead.$objMember->mb_uid."-Deposit Balance=".$arrResult['balance']);
 				if($this->modelMember->updateAssets($objMember, 0-$arrResult['amount'])){
 					$objMember->mb_kgon_money = $arrResult['balance'];
+					$amount = $arrResult['amount'];
+					$this->modelTransfer->register(TRANS_SITE_KGON, $objMember, $objMember->mb_kgon_money-$amount, $amount);
 					$this->modelMember->updateKgonMoney($objMember);   
 					$objMember->mb_money -= $arrResult['amount'];   
 					$iResult = 1;
@@ -871,6 +885,8 @@ class BaseController extends Controller
 				writeLog($logHead.$objMember->mb_uid."-Deposit Balance=".$arrResult['balance']);
 				if($this->modelMember->updateAssets($objMember, 0-$arrResult['amount'])){
 					$objMember->mb_slot_money = $arrResult['balance'];
+					$amount = $arrResult['amount'];
+					$this->modelTransfer->register(TRANS_SITE_PLUS, $objMember, $objMember->mb_slot_money-$amount, $amount);
 					$this->modelMember->updateSlotMoney($objMember);
 					$objMember->mb_money -= $arrResult['amount'];   
 					$iResult = 1;
@@ -898,6 +914,8 @@ class BaseController extends Controller
 				writeLog($logHead.$objMember->mb_uid."-Deposit Balance=".$arrResult['balance']);
 				if($this->modelMember->updateAssets($objMember, 0-$arrResult['amount'])){
 					$objMember->mb_fslot_money = $arrResult['balance'];
+					$amount = $arrResult['amount'];
+					$this->modelTransfer->register(TRANS_SITE_GSPL, $objMember, $objMember->mb_fslot_money-$amount, $amount);
 					$this->modelMember->updateFslotMoney($objMember);   
 					$objMember->mb_money -= $arrResult['amount'];   
 					$iResult = 1;
@@ -926,6 +944,8 @@ class BaseController extends Controller
 				writeLog($logHead.$objMember->mb_uid."-Deposit Balance=".$arrResult['balance']);
 				if($this->modelMember->updateAssets($objMember, 0-$arrResult['amount'])){
 					$objMember->mb_gslot_money = $arrResult['balance'];
+					$amount = $arrResult['amount'];
+					$this->modelTransfer->register(TRANS_SITE_GOLD, $objMember, $objMember->mb_gslot_money-$amount, $amount);
 					$this->modelMember->updateGslotMoney($objMember);
 					$objMember->mb_money -= $arrResult['amount'];   
 					$iResult = 1;
@@ -953,6 +973,8 @@ class BaseController extends Controller
 				writeLog($logHead.$objMember->mb_uid."-Deposit Amount=".$arrResult['amount']);
 				if($this->modelMember->updateAssets($objMember, 0-$arrResult['amount'])){
 					$objMember->mb_hslot_money += $arrResult['amount'];
+					$amount = $arrResult['amount'];
+					$this->modelTransfer->register(TRANS_SITE_STAR, $objMember, $objMember->mb_hslot_money-$amount, $amount);
 					$this->modelMember->updateHslotMoney($objMember);
 					$objMember->mb_money -= $arrResult['amount'];   
 					$iResult = 1;
@@ -980,6 +1002,8 @@ class BaseController extends Controller
 				writeLog($logHead.$objMember->mb_uid."-Deposit Amount=".$arrResult['amount']);
 				if($this->modelMember->updateAssets($objMember, 0-$arrResult['amount'])){
 					$objMember->mb_hold_money += $arrResult['amount'];
+					$amount = $arrResult['amount'];
+					$this->modelTransfer->register(TRANS_SITE_HOLD, $objMember, $objMember->mb_hold_money-$amount, $amount);
 					$this->modelMember->updateHoldMoney($objMember);
 					$objMember->mb_money -= $arrResult['amount'];   
 					$iResult = 1;
