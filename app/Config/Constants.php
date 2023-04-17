@@ -164,6 +164,7 @@ defined('CONF_TRANS_LVS')       || define('CONF_TRANS_LVS', 51);    //level that
 defined('CONF_DEPOSIT_PLAY')    || define('CONF_DEPOSIT_PLAY', 52);   //disable deposit during play 
 defined('CONF_WITHDRAW_PLAY')   || define('CONF_WITHDRAW_PLAY', 53);   //disable withdraw during play
 defined('CONF_MAIN_GAMEIMG')    || define('CONF_MAIN_GAMEIMG', 54);   //game images for main page 
+defined('CONF_DELAY_PLAY')      || define('CONF_DELAY_PLAY', 55);   //delay of play
 defined('CONF_AUTOAPPS')        || define('CONF_AUTOAPPS', 62);   //auto app images
 
 defined('LEVEL_MAX')           || define('LEVEL_MAX', 100);
@@ -239,7 +240,7 @@ defined('N2P_MAX_HOLE')          || define('N2P_MAX_HOLE', 4);
 defined('DELAY_GAME')            || define('DELAY_GAME', 10);
 defined('DELAY_TRANSFER')        || define('DELAY_TRANSFER', 5);
 defined('DELAY_APIBET')          || define('DELAY_APIBET', 2);
-defined('DELAY_PLAYING')         || define('DELAY_PLAYING', 600); //expiration time of game play (seconds)
+defined('DELAY_PLAYING')         || define('DELAY_PLAYING', 300); //expiration time of game play (seconds)
 
 //money change type
 defined('MONEYCHANGE_CHARGE')    || define('MONEYCHANGE_CHARGE', 1);   

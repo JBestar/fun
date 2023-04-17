@@ -85,7 +85,6 @@ class Api extends BaseController
 			$sessId = $this->session->session_id;
 			$sess = $this->modelSess->getByUid($objMember->mb_uid);
 
-			writeLog("[login] ".$user_id." (".$sess->sess_ip.")".$ip);
 			if($objMember->mb_state_active == PERMIT_WAIT){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_WAIT;
@@ -459,9 +458,9 @@ class Api extends BaseController
 			} else if($reqData['c_price'] < 10000){
 				$result->status = STATUS_FAIL;
 				$result->msg = "출금금액은 10,000원 이상으로 신청해주세요..";
-			} else if($_ENV['mem.withdeny_play'] &&  diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet) < DELAY_PLAYING){
+			} else if($_ENV['mem.delay_play'] > 0 && $_ENV['mem.withdeny_play'] &&  diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet) < $_ENV['mem.delay_play']){
 				$result->status = STATUS_FAIL;
-				$result->msg = "게임플레이중에는 출금신청을 하실수 없습니다. ".intval(11-diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet)/60)."분후 다시 해주세요.";
+				$result->msg = "게임플레이중에는 출금신청을 하실수 없습니다. ".intval($_ENV['mem.delay_play']/60-diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet)/60)."분후 다시 해주세요.";
 			} else {
 				$iResult = 1;
 				if($reqData['c_price'] > $objMember->mb_money){

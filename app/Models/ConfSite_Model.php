@@ -168,6 +168,7 @@ class ConfSite_Model extends Model {
         $_ENV['mem.depodeny_play'] = false;
         $_ENV['mem.withdeny_play'] = false;
         $_ENV['mem.trans_lvs'] = [];
+        $_ENV['mem.delay_play'] = DELAY_PLAYING;
 
         foreach($arrConf as $objConf){
 			switch($objConf->conf_id){
@@ -191,6 +192,8 @@ class ConfSite_Model extends Model {
                             array_push($_ENV['mem.trans_lvs'], intval($lv));
                     }
                     break;
+                case CONF_DELAY_PLAY:	$_ENV['mem.delay_play'] = intval($objConf->conf_active);
+					break;
 				default:break;
 			}
 		}
