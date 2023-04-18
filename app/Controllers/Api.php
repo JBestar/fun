@@ -25,10 +25,9 @@ class Api extends BaseController
 		$user_id = $this->request->getPost('userid');
 		$user_pw = $this->request->getPost('passwd');
 		$ip = $this->request->getPost('ip');
+		writeLog("[login] param:".$user_id.", ".$user_pw.", ".$ip);
 		if(strlen($ip) < 1)
 			$ip = $this->request->getIPAddress();
-		else 
-			writeLog("[login] check:".$user_id.", ".$user_pw.", ".$ip);
 
 		$modelSessTry = new SessTry_Model();
 
@@ -99,19 +98,24 @@ class Api extends BaseController
 				$arrResult['msg'] = "차단된 아이피입니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPBLOCK);
 			} else if($objMember->mb_level >= LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE && 
-				!isValidIp($objMember->mb_ip_join, $ip)){
+					!isValidIp($objMember->mb_ip_join, $ip)){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "승인된 아이피가 아닙니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPDENIED);
-			} else if(!$this->modelConfsite->IsMultiLogin() && !is_null($sess) && $sess->sess_id != $sessId && 
-				$objMember->mb_level < LEVEL_ADMIN /*(|| ($objMember->mb_level >= LEVEL_ADMIN && $sess->sess_ip != $ip))*/ ){
+			} else if($objMember->mb_level < LEVEL_ADMIN && !$this->modelConfsite->IsMultiLogin() && 
+					!is_null($sess) && $sess->sess_id != $sessId ){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "이미 로그인되어 있습니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_LOGINING);
-			}
-			else if($this->modelMember->isPermitMember($objMember)){
+			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view != STATE_ACTIVE 
+					&& !$this->modelConfsite->IsMultiLogin() && !is_null($sess) && $sess->sess_id != $sessId && $sess->sess_ip != $ip) {
+				$arrResult['status'] = STATUS_FAIL;
+				$arrResult['code'] = RESULT_FAIL;	
+				$arrResult['msg'] = "이미 로그인되어 있습니다.";
+				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_LOGINING);
+			} else if($this->modelMember->isPermitMember($objMember)){
 				//세션 생성
 				$sessData = array('user_id' => $objMember->mb_uid, 'logged_in'=>TRUE );
 				writeLog("[login] ".$user_id." (".$sessId.")");
@@ -121,10 +125,8 @@ class Api extends BaseController
 				$this->modelMember->updateLogin($objMember);
 
 				$this->modelSess->add($objMember, $sessId);
-				// if($objMember->mb_level <= LEVEL_ADMIN){
-					$modelSessLog = new SessLog_Model();
-					$modelSessLog->add($objMember);
-				// }
+				$modelSessLog = new SessLog_Model();
+				$modelSessLog->add($objMember);
 				//결과값 
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_SUCCESS);
 
