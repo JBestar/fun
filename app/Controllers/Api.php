@@ -103,7 +103,7 @@ class Api extends BaseController
 				$arrResult['msg'] = "승인된 아이피가 아닙니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPDENIED);
 			} else if(!$this->modelConfsite->IsMultiLogin() && !is_null($sess) && $sess->sess_id != $sessId && 
-				($objMember->mb_level < LEVEL_ADMIN || ($objMember->mb_level >= LEVEL_ADMIN && $sess->sess_ip != $ip) )){
+				($objMember->mb_level < LEVEL_ADMIN || ($objMember->mb_level >= LEVEL_ADMIN /*&& $sess->sess_ip != $ip*/) )){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "이미 로그인되어 있습니다.";
