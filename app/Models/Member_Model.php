@@ -540,7 +540,9 @@ class Member_Model extends Model {
             'mb_game_co2_percent' => '100',
         ];
 
-        if($this->insert($data))   //if success, return true
+        $insertId = $this->insert($data);
+
+        if($insertId >= 0)   //if success, return true
             return RESULT_OK;
         return RESULT_ERROR;
     }
