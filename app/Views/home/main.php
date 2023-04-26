@@ -332,7 +332,7 @@
                         <script type="text/javascript">
                             $(".BannerSlider-bgDesktop .field_decoupled_block_bg_image_category_video_slots").bgswitcher({
                                 <?php if($_ENV['app.name'] == APP_PHANTOM) :?>
-                                    images: ["/images/main/banner11.png", "/images/main/banner12.png", "/images/main/banner13.png", "/images/main/banner14.png"],
+                                    images: ["/images/main/banner11.png"],
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
                                 <?php endif ?>
