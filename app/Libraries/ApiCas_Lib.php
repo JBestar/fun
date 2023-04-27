@@ -72,7 +72,44 @@ class ApiCas_Lib  {
         return $arrResult;
     }
 
-    
+    public function getAgentInfo()
+    {
+        if(strlen($this->mHost) < 1){
+            return array('status' => 0, 'error'=>INTERNAL_ERROR);
+        }
+
+        $url = $this->mHost."/account/info";
+
+        $post = "";
+        $header =  $this->getHeader($post);
+
+        $response = getCurlRequest($url, $header, $post);
+        
+        $arrResult = json_decode($response, true);
+		
+        $balance = -1;
+		if(!is_null($arrResult) && array_key_exists("status", $arrResult)) {
+			if($arrResult['status'] == 1){
+                // "status": 1,
+				// "user_id": "69a0d021-cd55-4a65-b648-efa776e50178",
+				// "mode": 1,
+				// "name": "test102",
+				// "balance": 3002950,
+				// "createdAt": "2022-02-18T19:12:13.517",
+				// "callback_url": "http://test"
+                $balance = $arrResult['balance'];
+            } else { //
+                //"status": 0,
+                //"error": INVALID_ACCESS_TOKEN, INVALID_PARAMETER, INVALID_USER, INSUFFICIENT_FUNDS, INTERNAL_ERROR
+            }
+		} else {
+            $arrResult['status'] = 0;
+            $arrResult['error'] = CONNECT_ERROR;
+        }
+
+        return $arrResult;
+    }
+
     public function getUserInfo($id)
     {
         if(strlen($this->mHost) < 1){
@@ -141,7 +178,6 @@ class ApiCas_Lib  {
                 //"launch_url": "https://evo.hpplaycasion.com/account/login?security_token=R2VCR3VJTW9abjRqS083QVBTSE4vcDVKNDRibHZIS1lqbEFWTFNoZGcvbz06ZTAxNjlhMGQwMjEtY2Q1NS00YTY1LWI2NDgtZWZhNzc2ZTUwMTc4NTI1MDAwNQ==",
                 //"error": ""
             } else { //
-                // writeLog($arrResult['status'] );
                 //"status": 0,
                 //"error": INVALID_ACCESS_TOKEN, INVALID_PRODUCT, INVALID_PARAMETER, INVALID_USER, INTERNAL_ERROR
             }
@@ -164,7 +200,7 @@ class ApiCas_Lib  {
         $url = $this->mHost."/customer/add_balance";
 
         $arrPost['user_id'] = $id;
-        $arrPost['balance'] = $balance;    
+        $arrPost['balance'] = intval($balance);    
         $post = json_encode($arrPost);
        
         $header =  $this->getHeader($post);

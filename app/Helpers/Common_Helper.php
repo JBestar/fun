@@ -14,8 +14,23 @@
         return true;
       return false;
     }
-    //사이드바의 선택상태 초기화 배렬을 반환해주는 함수
-    
+
+    function num_format($numVal,$afterPoint=2,$minAfterPoint=0,$thousandSep=",",$decPoint="."){
+      // Same as number_format() but without unnecessary zeros.
+      $ret = number_format($numVal,$afterPoint,$decPoint,$thousandSep);
+      if($afterPoint!=$minAfterPoint){
+        while(($afterPoint>$minAfterPoint) && (substr($ret,-1) =="0") ){
+          // $minAfterPoint!=$minAfterPoint and number ends with a '0'
+          // Remove '0' from end of string and set $afterPoint=$afterPoint-1
+          $ret = substr($ret,0,-1);
+          $afterPoint = $afterPoint-1;
+        }
+      }
+      if(substr($ret,-1)==$decPoint) {$ret = substr($ret,0,-1);}
+      return $ret;
+    }
+
+    //sidebar info
     function getNavInfo($objUser = NULL) {
 
       $navInfo= array(
@@ -30,8 +45,8 @@
         $navInfo['user_id'] = $objUser->mb_uid;
         $navInfo['user_name'] = $objUser->mb_nickname;
         $navInfo['user_grade'] = $objUser->mb_grade;
-        $navInfo['user_money'] = number_format(allMoney($objUser));
-        $navInfo['user_point'] = number_format(intval($objUser->mb_point));
+        $navInfo['user_money'] = num_format(allMoney($objUser), NUM_POINT_CNT);
+        $navInfo['user_point'] = num_format(floatval($objUser->mb_point), NUM_POINT_CNT);
         $navInfo['user_off'] = intval($objUser->mb_state_delete) > 0;
       }
 
@@ -43,8 +58,8 @@
       $userInfo['user_id'] = $objUser->mb_uid;
       $userInfo['user_name'] = $objUser->mb_nickname;
       $userInfo['user_grade'] = $objUser->mb_grade;
-      $userInfo['user_money'] = number_format(allMoney($objUser));
-      $userInfo['user_point'] = number_format(intval($objUser->mb_point));
+      $userInfo['user_money'] = num_format(allMoney($objUser), NUM_POINT_CNT, 0);
+      $userInfo['user_point'] = num_format(floatval($objUser->mb_point), NUM_POINT_CNT, 0);
       $userInfo['user_off'] = intval($objUser->mb_state_delete) > 0;
       $userInfo['user_bank_name'] = $objUser->mb_bank_name;
 
@@ -822,7 +837,7 @@
       if(is_null($member))
         return $nMoney;
 
-      $nMoney = $member->mb_money + $member->mb_live_money + $member->mb_slot_money + $member->mb_fslot_money +
+      $nMoney = floatval($member->mb_money) + $member->mb_live_money + $member->mb_slot_money + $member->mb_fslot_money +
         $member->mb_kgon_money + $member->mb_gslot_money+ $member->mb_hslot_money + $member->mb_hold_money;
       return $nMoney;
     }

@@ -406,7 +406,7 @@ class Member_Model extends Model {
             $ratio = [];
             
             $fRatio = getRatioByGame($member, $iGame, $iMode);
-            $ratio['point'] = floor($fRatio * $nAmount / 100.0);
+            $ratio['point'] = $fRatio * $nAmount / 100.0; // floor($fRatio * $nAmount / 100.0);
             
             if($ratio['point'] > 0){
                 $ratio['mb_fid'] = $member->mb_fid;
@@ -426,7 +426,7 @@ class Member_Model extends Model {
     
                 $ratio = [];
                 $fRatio = $fRatio_1 - $fRatio_2;
-                $ratio['point'] = floor($fRatio * $nAmount / 100.0);
+                $ratio['point'] = $fRatio * $nAmount / 100.0; //floor($fRatio * $nAmount / 100.0);
                 
                 if($ratio['point'] > 0){
                     $ratio['mb_fid'] = $arrMember[$idx]->mb_fid;
@@ -439,7 +439,7 @@ class Member_Model extends Model {
             $ratio = [];
             $member = end($arrMember);
             $fRatio = getRatioByGame($member, $iGame, $iMode);
-            $ratio['point'] = floor($fRatio * $nAmount / 100.0);
+            $ratio['point'] = $fRatio * $nAmount / 100.0; //floor($fRatio * $nAmount / 100.0);
             
             if($ratio['point'] > 0){
                 $ratio['mb_fid'] = $member->mb_fid;

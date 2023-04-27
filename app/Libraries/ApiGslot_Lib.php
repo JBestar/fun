@@ -189,6 +189,7 @@ class ApiGslot_Lib  {
 		
 		if(!is_null($arrResult) && array_key_exists("status", $arrResult)) {
 			if($arrResult['status'] == 1){
+				$arrResult['amount'] = intval($balance);
                 // "status": 1, 
                 // "msg": "success",
                 // "user_balance": 10000,

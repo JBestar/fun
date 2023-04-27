@@ -188,7 +188,7 @@ class ApiHslot_Lib  {
         
         $url = $this->mHost."/Deposit";
         $url.= "?Token=".$token;
-        $url.= "&Amount=".$balance;
+        $url.= "&Amount=".intval($balance);
 
         $header =  $this->getHeader();
         
@@ -199,6 +199,7 @@ class ApiHslot_Lib  {
 		if(!is_null($arrResult) && array_key_exists("state", $arrResult)) {
 			if($arrResult['state'] == 0){
                 $arrResult['status'] = 1;
+				$arrResult['amount'] = intval($balance);
                 // "state": "0",
                 // "description": "Success",
                 // "data": {

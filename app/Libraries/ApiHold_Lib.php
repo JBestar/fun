@@ -265,6 +265,7 @@ class ApiHold_Lib {
 			if($arrResult['error'] == 0 && $arrResult['result']['after'] > 0){
                 $arrResult['status'] = 1;
                 $arrResult['balance'] = $arrResult['result']['after'];
+				$arrResult['amount'] = intval($balance);
                 // "result": {
                 //     "id": "TLu_1",
                 //     "balance": "100000",

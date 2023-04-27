@@ -71,7 +71,41 @@ class ApiKgon_Lib  {
         return $arrResult;
     }
 
-    
+    public function getAgentInfo()
+    {
+        if(strlen($this->mHost) < 1){
+            return array('status' => 0, 'error'=>INTERNAL_ERROR);
+        }
+
+        $url = $this->mHost."/partner/balance";
+
+        $post = "";
+        $header =  $this->getHeader($post);
+
+        $response = getCurlRequest($url, $header, $post);
+        
+        $arrResult = json_decode($response, true);
+		
+        $balance = -1;
+		if(!is_null($arrResult) && array_key_exists("code", $arrResult)) {
+			if($arrResult['code'] == 0){
+				$arrResult['status'] = 1;
+                // "code": 0,
+    			// "balance": 10000000
+                $balance = $arrResult['balance'];
+            } else { //
+                $arrResult['status'] = 0;
+                //"code": 0,
+                //"mg": ""
+            }
+		} else {
+            $arrResult['status'] = 0;
+            $arrResult['error'] = INTERNAL_ERROR;
+        }
+
+        return $arrResult;
+    }
+
     public function getUserInfo($id)
     {
         if(strlen($this->mHost) < 1){
@@ -161,7 +195,7 @@ class ApiKgon_Lib  {
         
         $url = $this->mHost."/deposit";
         $post = "username=".$id;
-        $post.= "&amount=".$balance;
+        $post.= "&amount=".intval($balance);
        
         $header =  $this->getHeader($post);
 
@@ -172,6 +206,7 @@ class ApiKgon_Lib  {
 		if(!is_null($arrResult) && array_key_exists("code", $arrResult)) {
 			if($arrResult['code'] == 0){
                 $arrResult['status'] = 1;
+				$arrResult['amount'] = intval($balance);
                 // "code": 0,
                 // "balance": 50000
             } else { //
@@ -201,7 +236,7 @@ class ApiKgon_Lib  {
             $post.= "&amount=1&all=y";
         }
         else{
-            $post.= "&amount=".$balance;
+            $post.= "&amount=".intval($balance);
             $post.= "&all=n";
         } 
 

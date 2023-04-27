@@ -262,7 +262,7 @@ class Api extends BaseController
 
 				$objInfo = new \StdClass;
 				$objInfo->money = allMoney($objMember);
-				$objInfo->point = $objMember->mb_point;
+				$objInfo->point = round($objMember->mb_point, NUM_POINT_CNT);
 				$objInfo->msg = $this->modelNotice->unreadMsg($objMember->mb_uid);
 				$objInfo->cus = $this->modelNotice->unreadCus($objMember->mb_uid);
 

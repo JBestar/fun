@@ -261,6 +261,7 @@ class ApiSlot_Lib {
 		if(!is_null($arrResult) && array_key_exists("resultCode", $arrResult)) {
 			if($arrResult['resultCode'] == 0){
                 $arrResult['status'] = 1;
+				$arrResult['amount'] = intval($balance);
                 // "resultCode": "0",
                 // "resultMessage": "OK",
                 // "balance": "10000"
