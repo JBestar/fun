@@ -9,7 +9,7 @@
         <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
 
         <link rel="stylesheet" href="/css/jquery-ui.css?ver=1" />
-        <link rel="stylesheet" href="/css/devel.css?v=<?=time()?>" />
+        <link rel="stylesheet" href="/css/devel.css?v=1" />
 
         <!-- JS FILES -->
         <script type="text/javascript" src="/js/jquery-1.12.4.min.js"></script>
@@ -221,19 +221,28 @@
                         <tr>
                             <td class="collapsing">계좌정보</td>
                             <td>
-                                <div class="ui divided selection list">
-                                    <span class="" style="margin-right:20px;">
-                                        <div class="ui horizontal basic label"> 계좌주 </div>
-                                        {{ myInfo.user_bank_own }}
-                                    </span>
-                                    <span class="" style="margin-right:20px;">
-                                        <div class="ui horizontal basic label">계좌번호</div>
-                                        {{ myInfo.user_bank_num }}
-                                    </span>
-                                    <span class="" style="margin-right:20px;">
-                                        <div class="ui horizontal basic label">계좌은행</div>
-                                        {{ myInfo.user_bank_name }}
-                                    </span>
+                                <!-- <div class="ui divided selection list"> -->
+                                <div class="ui grid">
+                                    <div class="six wide column">
+                                        <div class="" style="margin-bottom:5px;">
+                                            <div class="ui horizontal basic label" style="width:100px">계좌주</div>
+                                            {{ myInfo.user_bank_own }}
+                                        </div>
+                                        <div class="" style="margin-bottom:5px;">
+                                            <div class="ui horizontal basic label" style="width:100px">계좌은행</div>
+                                            {{ myInfo.user_bank_name }}
+                                        </div>
+                                        <div class="" style="margin-bottom:2px;">
+                                            <div class="ui horizontal basic label" style="width:100px">계좌번호</div>
+                                            {{ myInfo.user_bank_num }}
+                                        </div>
+                                    </div>
+                                    <div class="ten wide column">
+                                        <!-- <div id="btnChangePwd"  uk-toggle="target: #change_account" tabindex="0" aria-expanded="false"  class="ui tiny red labeled icon button">
+                                            <i class="address book icon"></i> <span class="hideOnMobile">계좌변경</span>
+                                        </div> -->
+                                    </div>
+
                                 </div>
                             </td>
                         </tr>
@@ -255,94 +264,6 @@
                     </tbody>
                 </table>
             </div>
-            <!-- <div data-tab="my_cashbook" id="my_cashbook" class="ui tab segment">
-                <div class="ui form">
-                    <div class="fields">
-                        <div class="field">
-                            <label>날짜</label>
-                            <div class="inline field">
-                                <input type="date" v-model="start.cash"/> <span>~</span> <input type="date" v-model="end.cash"/> 
-                                <button class="ui blue button">검색</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <table class="ui compact line table">
-                    <thead>
-                        <tr>
-                            <th>구분</th>
-                            <th>이전금액</th>
-                            <th>금액</th>
-                            <th>이후금액</th>
-                            <th>일시</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="item in cashList">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="pagination_box">
-                    <paginate
-                        :page-count="totalPageCount.cash"
-                        :page-range="3"
-                        :margin-pages="1"
-                        :click-handler="paginationCash"
-                        :prev-text="'＜'"
-                        :next-text="'＞'"
-                        :container-class="'_pagination'"
-                        :page-class="''">
-                    </paginate>
-                </div>
-            </div>
-            <div data-tab="my_betting" id="my_betting" class="ui tab segment">
-                <div class="ui form">
-                    <div class="fields">
-                        <div class="field">
-                            <label>날짜</label>
-                            <div class="inline field">
-                                <input type="date" v-model="start.betting"/> <span>~</span> <input type="date" v-model="end.betting"/> 
-                                <button class="ui blue button">검색</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <table class="ui line table">
-                    <thead>
-                        <tr>
-                            <th>게임</th>
-                            <th>벳</th>
-                            <th>결과</th>
-                            <th>결과일시</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="item in bettingList">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="pagination_box">
-                    <paginate
-                        :page-count="totalPageCount.betting"
-                        :page-range="3"
-                        :margin-pages="1"
-                        :click-handler="paginationBetting"
-                        :prev-text="'＜'"
-                        :next-text="'＞'"
-                        :container-class="'_pagination'"
-                        :page-class="''">
-                    </paginate>
-                </div>
-            </div> -->
             <div data-tab="my_charge" id="my_charge" class="ui tab segment">
                 <div class="ui form">
                     <div class="fields">
@@ -754,6 +675,35 @@
                             },
                         ],
                     },
+                    /*
+                    bank_name: {
+                        identifier: "bank_name",
+                        rules: [
+                            {
+                                type: "empty",
+                                prompt: "계좌은행을 입력해주세요",
+                            },
+                        ],
+                    },
+                    bank_owner: {
+                        identifier: "bank_owner",
+                        rules: [
+                            {
+                                type: "empty",
+                                prompt: "계좌주를 입력해주세요",
+                            },
+                        ],
+                    },
+                    bank_num: {
+                        identifier: "bank_num",
+                        rules: [
+                            {
+                                type: "empty",
+                                prompt: "계좌번호를 입력해주세요",
+                            },
+                        ],
+                    },
+                    */
                     title: {
                         identifier: "title",
                         rules: [
@@ -817,7 +767,6 @@
                     success: function (response) {
                         if (response.status == "success") {
                             UIkit.modal.alert("정상적으로 입금요청이 접수 되었습니다.", {labels: {'ok': '확인'}}).then(function () {
-                                // location.reload();
                             });
                         } else if (response.status == "fail") {
                             alert(response.msg);
@@ -840,7 +789,6 @@
                         if (response.status == "success") {
                             UIkit.modal.alert("정상적으로 출금요청이 접수 되었습니다.", {labels: {'ok': '확인'}}).then(function () {
                                 objDashBoard.getMyInfo();
-                                //location.reload();
                             });
                         } else if (response.status == "fail") {
                             alert(response.msg);
@@ -863,6 +811,32 @@
                         // console.log(response);
                         if (response.status == "success") {
                             UIkit.modal.alert("비밀번호가 변경되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                            });
+                        } else if (response.status == "fail") {
+                            alert(response.msg);
+                        } else if (response.status == "logout") {
+                            reloadPage();
+                        }
+                    },
+                    error: function(request, status, error) {
+                        // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                    }
+                });
+
+                //request changing of account
+                $("#chgaccForm").ajaxForm({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/api/change_acc",
+                    data: $(this).serialize(),
+                    beforeSubmit: function () {
+                        return $("#chgaccForm").valid();
+                    },
+                    success: function (response) {
+                        // console.log(response);
+                        if (response.status == "success") {
+                            UIkit.modal.alert("계좌정보가 변경되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                                objDashBoard.getMyInfo();
                             });
                         } else if (response.status == "fail") {
                             alert(response.msg);
@@ -1600,11 +1574,11 @@
                             </div>
                             <h4 class="ui dividing teal header">출금정보</h4>
                             <div class="inline field">
-                                <label>계좌주&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <label>계좌주 &nbsp;&nbsp;&nbsp;&nbsp;</label>
                                 <div class="ui input"><input type="text" readonly="readonly" name="bank_owner" v-model="myInfo.user_bank_own" /></div>
                             </div>
                             <div class="inline field">
-                                <label>은행명&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <label>계좌은행 </label>
                                 <div class="ui input"><input type="text" name="bank_name" readonly="readonly" v-model="myInfo.user_bank_name" /></div>
                             </div>
                             <div class="inline field">
@@ -1618,6 +1592,40 @@
                         </div>
                         <div class="uk-modal-footer">
                             <div class="ui primary submit button">출금신청하기</div>
+                            <div class="ui uk-modal-close button">취소</div>
+                        </div>
+                    </form>
+                    <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
+                    </button>
+                </div>
+            </div>
+            <div id="change_account" uk-modal="" class="uk-modal" tabindex="-1" style="">
+                <div class="uk-modal-dialog">
+                    <form name="chgaccForm" id="chgaccForm" class="ui form equal width">
+                        <div class="uk-modal-header"><h3 class="uk-modal-title"><i class="ui cloud upload icon"></i> 계좌변경</h3></div>
+                        <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
+                        </button>
+                        <div class="uk-modal-body">
+                            <h4 class="ui dividing teal header">계좌정보</h4>
+                            <div class="inline field">
+                                <label>계좌주 &nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <div class="ui input"><input type="text" name="bank_owner"/></div>
+                            </div>
+                            <div class="inline field">
+                                <label>계좌은행 </label>
+                                <div class="ui input"><input type="text" name="bank_name" /></div>
+                            </div>
+                            <div class="inline field">
+                                <label>계좌번호 </label>
+                                <div class="ui input"><input type="text" name="bank_num" /> </div>
+                            </div>
+                            <div class="inline field">
+                                <label>출금비번 </label>
+                                <div class="ui input"><input type="text" name="bank_passwd" /></div>
+                            </div>
+                        </div>
+                        <div class="uk-modal-footer">
+                            <div class="ui primary submit button">변경하기</div>
                             <div class="ui uk-modal-close button">취소</div>
                         </div>
                     </form>

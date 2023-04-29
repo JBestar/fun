@@ -839,7 +839,7 @@
 
       $nMoney = floatval($member->mb_money) + $member->mb_live_money + $member->mb_slot_money + $member->mb_fslot_money +
         $member->mb_kgon_money + $member->mb_gslot_money+ $member->mb_hslot_money + $member->mb_hold_money;
-      return $nMoney;
+      return round($nMoney, NUM_POINT_CNT);
     }
 
     function createGameId($str){

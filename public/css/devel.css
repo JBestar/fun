@@ -120,7 +120,8 @@ input.error, textarea.error {
     color:white;
 }
 
-#request_exchange .ui.form .inline.field .input{
+#request_exchange .ui.form .inline.field .input,
+#change_account .ui.form .inline.field .input{
     width:calc(100% - 90px);
 }
 

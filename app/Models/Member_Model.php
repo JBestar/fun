@@ -232,22 +232,13 @@ class Member_Model extends Model {
     }
 
     public function updateLogin($member){
-
         $data = [
             'mb_time_last' => date("Y-m-d H:i:s"),
             'mb_ip_last' => $member->mb_ip_last,
         ];
         return $this->update($member->mb_fid, $data);
-
     }
-    
-    public function updatePwd($uid, $pwd){
 
-        return $this->set('mb_pwd', $pwd)
-             ->where('mb_uid', $uid)
-             ->update();
-
-    }
     public function updateRewards($data) {
         if(count($data) < 1)
             return 1;
