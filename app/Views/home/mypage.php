@@ -238,9 +238,9 @@
                                         </div>
                                     </div>
                                     <div class="ten wide column">
-                                        <!-- <div id="btnChangePwd"  uk-toggle="target: #change_account" tabindex="0" aria-expanded="false"  class="ui tiny red labeled icon button">
+                                        <div id="btnChangePwd"  uk-toggle="target: #change_account" tabindex="0" aria-expanded="false"  class="ui tiny red labeled icon button">
                                             <i class="address book icon"></i> <span class="hideOnMobile">계좌변경</span>
-                                        </div> -->
+                                        </div>
                                     </div>
 
                                 </div>
@@ -1606,7 +1606,7 @@
                         <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
                         </button>
                         <div class="uk-modal-body">
-                            <h4 class="ui dividing teal header">계좌정보</h4>
+                            <h4 class="ui dividing teal header">계좌변경은 출금비번으로만 변경가능합니다.</h4>
                             <div class="inline field">
                                 <label>계좌주 &nbsp;&nbsp;&nbsp;&nbsp;</label>
                                 <div class="ui input"><input type="text" name="bank_owner"/></div>
