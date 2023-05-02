@@ -238,9 +238,9 @@
                                         </div>
                                     </div>
                                     <div class="ten wide column">
-                                        <div id="btnChangePwd"  uk-toggle="target: #change_account" tabindex="0" aria-expanded="false"  class="ui tiny red labeled icon button">
+                                        <!-- <div id="btnChangePwd"  uk-toggle="target: #change_account" tabindex="0" aria-expanded="false"  class="ui tiny red labeled icon button">
                                             <i class="address book icon"></i> <span class="hideOnMobile">계좌변경</span>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                 </div>

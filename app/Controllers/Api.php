@@ -392,47 +392,47 @@ class Api extends BaseController
 
     }
 		
-	public function change_acc(){
+	// public function change_acc(){
 		
-		$result = new \StdClass;
-		if(!is_login())
-		{
-			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
-			$result->status = STATUS_LOGOUT;
-		}
-		else {
+	// 	$result = new \StdClass;
+	// 	if(!is_login())
+	// 	{
+	// 		$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+	// 		$result->status = STATUS_LOGOUT;
+	// 	}
+	// 	else {
 
-			$user_id = $this->session->user_id;
-			$bank_owner = trim($this->request->getPost('bank_owner'));
-			$bank_name = trim($this->request->getPost('bank_name'));
-			$bank_num = trim($this->request->getPost('bank_num'));
-			$bank_passwd = trim($this->request->getPost('bank_passwd'));
+	// 		$user_id = $this->session->user_id;
+	// 		$bank_owner = trim($this->request->getPost('bank_owner'));
+	// 		$bank_name = trim($this->request->getPost('bank_name'));
+	// 		$bank_num = trim($this->request->getPost('bank_num'));
+	// 		$bank_passwd = trim($this->request->getPost('bank_passwd'));
 
-			$objMember = $this->modelMember->getByUid($user_id, true);
-			$bPermit = true;
-			if(is_null($objMember)){
-				$result->msg = "회원정보가 유효하지 않습니다."; 
-				$result->status = STATUS_FAIL;
-			} else if($bank_passwd !== $objMember->mb_bank_pwd){
-				$result->msg = "출금비번이 틀림니다."; 
-				$result->status = STATUS_FAIL;
-			} else if($bank_owner == "" || $bank_name == "" || $bank_num == ""){
-				$result->msg = "계좌정보를 정확히 입력해 주세요."; 
-				$result->status = STATUS_FAIL;
-			} else {
-				$data = [
-					'mb_bank_name' => $bank_name,
-					'mb_bank_own' => $bank_owner,
-					'mb_bank_num' => $bank_num,
-				];
-				$this->modelMember->update($objMember->mb_fid, $data);
+	// 		$objMember = $this->modelMember->getByUid($user_id, true);
+	// 		$bPermit = true;
+	// 		if(is_null($objMember)){
+	// 			$result->msg = "회원정보가 유효하지 않습니다."; 
+	// 			$result->status = STATUS_FAIL;
+	// 		} else if($bank_passwd !== $objMember->mb_bank_pwd){
+	// 			$result->msg = "출금비번이 틀림니다."; 
+	// 			$result->status = STATUS_FAIL;
+	// 		} else if($bank_owner == "" || $bank_name == "" || $bank_num == ""){
+	// 			$result->msg = "계좌정보를 정확히 입력해 주세요."; 
+	// 			$result->status = STATUS_FAIL;
+	// 		} else {
+	// 			$data = [
+	// 				'mb_bank_name' => $bank_name,
+	// 				'mb_bank_own' => $bank_owner,
+	// 				'mb_bank_num' => $bank_num,
+	// 			];
+	// 			$this->modelMember->update($objMember->mb_fid, $data);
 
-				$result->status = STATUS_SUCCESS; 
-			}
-		}
+	// 			$result->status = STATUS_SUCCESS; 
+	// 		}
+	// 	}
 
-		echo json_encode($result);	
-	}
+	// 	echo json_encode($result);	
+	// }
 
 	public function register(){
 		$reqData['member_id'] = $this->request->getVar('userid');
