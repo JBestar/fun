@@ -796,7 +796,9 @@ class Api extends BaseController
 				}
 
 				if($arrResult['status'] == 0){
-					$result->msg = "입금요청이 실패되었습니다.";
+					if(array_key_exists('message', $arrResult))
+						$result->msg = $arrResult['message'];
+					else $result->msg = "입금요청이 실패되었습니다.";
 					$result->status = STATUS_FAIL;
 				} else {
 					$data =[

@@ -58,11 +58,12 @@ class ApiVacc_Lib  {
                 $arrResult['status'] = 1;
                 // "code": "GOOD",
                 // "message": "[국민][홍길동]12341234"
-                // writeLog($arrResult['message']);
+                writeLog($arrResult['message']);
             } else { //
                 $arrResult['status'] = 0;
                 //"code": "BAD",
                 // "message": "xxx"
+                writeLog($arrResult['message']);
             }
 		} else {
             $arrResult['status'] = 0;
@@ -104,7 +105,7 @@ class ApiVacc_Lib  {
                 $arrResult['status'] = 0;
                 //"code": "BAD",
                 // "message": "xxx"
-                // writeLog($arrResult['message']);
+                writeLog($arrResult['message']);
             }
 		} else {
             $arrResult['status'] = 0;
