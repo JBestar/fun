@@ -18,9 +18,6 @@
         <script type="text/javascript" src="/js/jquery-form/jquery.validate.js"></script>
         <script type="text/javascript" src="/js/common.js"></script>
 
-        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/uikit@latest/dist/css/uikit.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit-icons.min.js"></script> -->
         <link rel="stylesheet" type="text/css" href="/js/uikit/uikit.min.css" />
         <script src="/js/uikit/uikit.min.js"></script>
         <script src="/js/uikit/uikit-icons.min.js"></script>

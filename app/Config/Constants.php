@@ -166,6 +166,7 @@ defined('CONF_WITHDRAW_PLAY')   || define('CONF_WITHDRAW_PLAY', 53);   //disable
 defined('CONF_MAIN_GAMEIMG')    || define('CONF_MAIN_GAMEIMG', 54);   //game images for main page 
 defined('CONF_DELAY_PLAY')      || define('CONF_DELAY_PLAY', 55);   //delay of play
 defined('CONF_AUTOAPPS')        || define('CONF_AUTOAPPS', 62);   //auto app images
+defined('CONF_API_VACC')        || define('CONF_API_VACC', 70);     //virtual account api
 
 defined('LEVEL_MAX')           || define('LEVEL_MAX', 100);
 defined('LEVEL_ADMIN')         || define('LEVEL_ADMIN', 100);

@@ -8,6 +8,7 @@ use App\Models\Charge_Model;
 use App\Models\Reward_Model;
 use App\Models\Follow_Model;
 use App\Models\Block_Model;
+use App\Libraries\ApiVacc_Lib;
 
 use App\Models\Round_Model;
 use App\Models\Bet_Model;
@@ -614,82 +615,82 @@ class Api extends BaseController
 
     }
 
-	public function request_account()
-	{
-		$result = new \StdClass;
-		if(!is_login())
-		{
-			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
-            $result->status = STATUS_LOGOUT;		
-        } else {
-			$user_id = $this->session->user_id;
-			$objMember = $this->modelMember->getByUid($user_id, true);
+	// public function request_account()
+	// {
+	// 	$result = new \StdClass;
+	// 	if(!is_login())
+	// 	{
+	// 		$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+    //         $result->status = STATUS_LOGOUT;		
+    //     } else {
+	// 		$user_id = $this->session->user_id;
+	// 		$objMember = $this->modelMember->getByUid($user_id, true);
 
-			$refPass = $this->request->getVar('pass');
-			if($objMember->mb_bank_pwd != $refPass){
-				$result->msg = "충환전 비밀번호가 맞지 않습니다.";
-				$result->status = STATUS_FAIL;
-			} else {
-				$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
-				$arrInfo = explode("#", trim($objConf->conf_content));
+	// 		$refPass = $this->request->getVar('pass');
+	// 		if($objMember->mb_bank_pwd != $refPass){
+	// 			$result->msg = "충환전 비밀번호가 맞지 않습니다.";
+	// 			$result->status = STATUS_FAIL;
+	// 		} else {
+	// 			$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
+	// 			$arrInfo = explode("#", trim($objConf->conf_content));
 				
-				if(count($arrInfo) < 3){
-					$arrInfo = null;
-				} else if(count($arrInfo) < 4){
-					$arrInfo[3] = "";
-				}
+	// 			if(count($arrInfo) < 3){
+	// 				$arrInfo = null;
+	// 			} else if(count($arrInfo) < 4){
+	// 				$arrInfo[3] = "";
+	// 			}
 
-				$result->data = $arrInfo;
-				$result->status = STATUS_SUCCESS;
-			}
+	// 			$result->data = $arrInfo;
+	// 			$result->status = STATUS_SUCCESS;
+	// 		}
 
 			
-        }
+    //     }
 		
-		echo json_encode($result);
-	}
+	// 	echo json_encode($result);
+	// }
 
 	
-	public function request_account2()
-	{
-		$result = new \StdClass;
-		if(!is_login())
-		{
-			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
-            $result->status = STATUS_LOGOUT;		
-        } else {
+	// public function request_account2()
+	// {
+	// 	$result = new \StdClass;
+	// 	if(!is_login())
+	// 	{
+	// 		$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+    //         $result->status = STATUS_LOGOUT;		
+    //     } else {
 
-			$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
-			$sAnswer = $objConf->conf_content;
-            $sAnswer .= "<p> <br>입금계좌 : &nbsp;";
-			$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
-			$sAnswer .= str_replace("#", " ", $objConf->conf_content)."</p>";
+	// 		$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
+	// 		$sAnswer = $objConf->conf_content;
+    //         $sAnswer .= "<p> <br>입금계좌 : &nbsp;";
+	// 		$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
+	// 		$sAnswer .= str_replace("#", " ", $objConf->conf_content)."</p>";
 
-			$data = [  
-                'notice_type' => NOTICE_CUSTOMER,
-                'notice_title' => "간편계좌문의",
-                'notice_content' => "계좌문의",
-				'notice_answer' => $sAnswer,
-                'notice_mb_uid' => $this->session->user_id,
-				'notice_read_count' => 1,
-				'notice_state_active' => 1,
-                'notice_time_create' => date("Y-m-d H:i:s")
-            ];
+	// 		$data = [  
+    //             'notice_type' => NOTICE_CUSTOMER,
+    //             'notice_title' => "간편계좌문의",
+    //             'notice_content' => "계좌문의",
+	// 			'notice_answer' => $sAnswer,
+    //             'notice_mb_uid' => $this->session->user_id,
+	// 			'notice_read_count' => 1,
+	// 			'notice_state_active' => 1,
+    //             'notice_time_create' => date("Y-m-d H:i:s")
+    //         ];
 
-			$bResult = $this->modelNotice->registerNotice($data);
+	// 		$bResult = $this->modelNotice->registerNotice($data);
 			
-			if($bResult){
-				$result->msg = "계좌정보가 도착하였습니다.";
-				$result->status = STATUS_SUCCESS;
-			}
-			else {
-				$result->msg = "계좌문의가 실패되었습니다.";
-				$result->status = STATUS_FAIL;
-			}
-        }
+	// 		if($bResult){
+	// 			$result->msg = "계좌정보가 도착하였습니다.";
+	// 			$result->status = STATUS_SUCCESS;
+	// 		}
+	// 		else {
+	// 			$result->msg = "계좌문의가 실패되었습니다.";
+	// 			$result->status = STATUS_FAIL;
+	// 		}
+    //     }
 		
-		echo json_encode($result);
-	}
+	// 	echo json_encode($result);
+	// }
 	
 	public function request_account3()
 	{
@@ -704,48 +705,65 @@ class Api extends BaseController
         } else {
 
 			$sAnswer = "<p> 입금계좌 : &nbsp;";
-			$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
-			
-			$arrInfo = explode("#", $objConf->conf_content);
-			if(count($arrInfo) >= 1){
-				if(strpos($arrInfo[0], 'http') !== false){
-					$sAnswer .= "<a style='color:#ffff00' href='".trim($arrInfo[0])."' target='_blank'>".$arrInfo[0]."</a>";
-				} else {
-					$sAnswer .= "<b style='color:#ffff00'>".$arrInfo[0]."</b>";
+
+			$libApiVacc = new ApiVacc_Lib();
+			$arrResult['status'] = 1;
+
+			if($libApiVacc->isActive()){
+				$arrResult = $libApiVacc->getAccountInfo();
+				if($arrResult['status'] == 1){
+					$sAnswer .= "<b style='color:#ffff00'>".$arrResult['message']."</b>";
+				} 
+				// writeLog($sAnswer);
+			} else {
+				$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
+				$arrInfo = explode("#", $objConf->conf_content);
+				if(count($arrInfo) >= 1){
+					if(strpos($arrInfo[0], 'http') !== false){
+						$sAnswer .= "<a style='color:#ffff00' href='".trim($arrInfo[0])."' target='_blank'>".$arrInfo[0]."</a>";
+					} else {
+						$sAnswer .= "<b style='color:#ffff00'>".$arrInfo[0]."</b>";
+					}
 				}
+				if(count($arrInfo) >= 2){
+					$sAnswer .= "&nbsp;&nbsp;<b style='color:#ffff00'>".$arrInfo[1]."</b>";
+				}
+				if(count($arrInfo) >= 3){
+					$sAnswer .= "&nbsp;&nbsp;<b style='color:#ffff00'>".$arrInfo[2]."</b>";
+				} 
 			}
-			if(count($arrInfo) >= 2){
-				$sAnswer .= "&nbsp;&nbsp;<b style='color:#ffff00'>".$arrInfo[1]."</b>";
-			}
-			if(count($arrInfo) >= 3){
-				$sAnswer .= "&nbsp;&nbsp;<b style='color:#ffff00'>".$arrInfo[2]."</b>";
-			} 
 			$sAnswer .= "</p>";
 
-			$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
-			$sAnswer.= $objConf->conf_content;
-
-			$data = [  
-                'notice_type' => NOTICE_CUSTOMER,
-                'notice_title' => $reqData['title'],
-                'notice_content' => $reqData['content'],
-				'notice_answer' => $sAnswer,
-                'notice_mb_uid' => $this->session->user_id,
-				'notice_read_count' => 1,
-				'notice_state_active' => 1,
-                'notice_time_create' => date("Y-m-d H:i:s")
-            ];
-
-			$bResult = $this->modelNotice->registerNotice($data);
-			
-			if($bResult){
-				$result->msg = "계좌정보가 도착하였습니다.";
-				$result->status = STATUS_SUCCESS;
-			}
-			else {
+			if($arrResult['status'] == 0){
 				$result->msg = "계좌요청이 실패되었습니다.";
 				$result->status = STATUS_FAIL;
+			} else {
+				$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
+				$sAnswer.= $objConf->conf_content;
+	
+				$data = [  
+					'notice_type' => NOTICE_CUSTOMER,
+					'notice_title' => $reqData['title'],
+					'notice_content' => $reqData['content'],
+					'notice_answer' => $sAnswer,
+					'notice_mb_uid' => $this->session->user_id,
+					'notice_read_count' => 1,
+					'notice_state_active' => 1,
+					'notice_time_create' => date("Y-m-d H:i:s")
+				];
+	
+				$bResult = $this->modelNotice->registerNotice($data);
+				
+				if($bResult){
+					$result->msg = "계좌정보가 도착하였습니다.";
+					$result->status = STATUS_SUCCESS;
+				}
+				else {
+					$result->msg = "계좌요청이 실패되었습니다.";
+					$result->status = STATUS_FAIL;
+				}
 			}
+			
         }
 		
 		echo json_encode($result);
@@ -753,7 +771,7 @@ class Api extends BaseController
 
 	public function register_charge(){
 		
-		$reqData['c_price'] = $this->request->getPost('cash');
+		$reqData['c_price'] = intval($this->request->getPost('cash'));
 		
 		$result = new \StdClass;
 		if(!is_login())
@@ -770,26 +788,40 @@ class Api extends BaseController
 				$result->status = STATUS_FAIL;
 				$result->msg = "입금승인 대기중 입니다.";
 			} else {
-				$data =[
-					'charge_emp_fid' => $objMember->mb_emp_fid,
-					'charge_mb_uid' => $objMember->mb_uid,
-					'charge_mb_realname' => $objMember->mb_bank_own,
-					'charge_mb_phone' => $objMember->mb_phone,
-					'charge_money' => $reqData['c_price'],
-					'charge_time_require' => date("Y-m-d H:i:s"),
-					'charge_action_state' => STATE_ACTIVE,
-					'charge_money_before' => allMoney($objMember)
+				$libApiVacc = new ApiVacc_Lib();
 
-				];
-
-				if($modelCharge->register($data)){
-					$result->status = STATUS_SUCCESS;
-					$result->msg = "입금요청이 신청되었습니다. 관리자가 승인하는 동안 잠시 기다려주세요.";
+				$arrResult['status'] = 1;
+				if($libApiVacc->isActive()){
+					$arrResult = $libApiVacc->reqDeposit($objMember->mb_uid, $objMember->mb_bank_own, $reqData['c_price']);
 				}
-				else{
+
+				if($arrResult['status'] == 0){
 					$result->msg = "입금요청이 실패되었습니다.";
 					$result->status = STATUS_FAIL;
+				} else {
+					$data =[
+						'charge_emp_fid' => $objMember->mb_emp_fid,
+						'charge_mb_uid' => $objMember->mb_uid,
+						'charge_mb_realname' => $objMember->mb_bank_own,
+						'charge_mb_phone' => $objMember->mb_phone,
+						'charge_money' => $reqData['c_price'],
+						'charge_time_require' => date("Y-m-d H:i:s"),
+						'charge_action_state' => STATE_ACTIVE,
+						'charge_money_before' => allMoney($objMember)
+	
+					];
+	
+					if($modelCharge->register($data)){
+						$result->status = STATUS_SUCCESS;
+						$result->msg = "입금요청이 신청되었습니다. 관리자가 승인하는 동안 잠시 기다려주세요.";
+					}
+					else{
+						$result->msg = "입금요청이 실패되었습니다.";
+						$result->status = STATUS_FAIL;
+					}
 				}
+
+				
 			}
 			
         }

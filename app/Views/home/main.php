@@ -1557,16 +1557,20 @@
                 $.getJSON("https://jsonip.com/",
                     function(json) {
                         // console.log("ip2="+json.ip);
-                        if(json.ip !== undefined && json.ip.length > 0)
-                            $("#ip_addr").val(json.ip)
+                        if(json.ip !== undefined && json.ip.length > 0){
+                            $("#ip_addr").val(json.ip);
+                            console.log("jsonip="+json.ip);
+                        }
                     }
                 );
 
                 $.getJSON("https://api.ipify.org?format=jsonp&callback=?",
                     function(json) {
                         // console.log("ip1="+json.ip);
-                        if(json.ip !== undefined && json.ip.length > 0)
+                        if(json.ip !== undefined && json.ip.length > 0){
                             $("#ip_addr").val(json.ip)
+                            console.log("ipify="+json.ip);
+                        }
                     }
                 );
 
