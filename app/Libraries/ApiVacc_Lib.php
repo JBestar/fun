@@ -6,7 +6,6 @@ use App\Models\ConfSite_Model;
 class ApiVacc_Lib  {
     
     private $mHost = "";    //"https://xk94rw26.com";
-    private $mAgCode = "";  //'xxx';
     private $mAgToken = ""; //'xxx'; 
     private $mEnable = 0; //'xxx'; 
 
@@ -17,10 +16,9 @@ class ApiVacc_Lib  {
         $objConf = $modelConfsite->find(CONF_API_VACC);
         if(!is_null($objConf)){
             $arrInfo = explode("#", $objConf->conf_content);
-            if(count($arrInfo) >= 3){	//0-host, 1-ag_code, 2-ag_token
+            if(count($arrInfo) >= 2){	//0-host, 1-ag_code, 2-ag_token
                 $this->mHost = $arrInfo[0];
-                $this->mAgCode = $arrInfo[1];
-                $this->mAgToken = $arrInfo[2];
+                $this->mAgToken = $arrInfo[1];
                 $this->mEnable = intval($objConf->conf_active);
             }
         }

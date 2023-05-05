@@ -134,7 +134,7 @@ defined('CONF_API_HOLD')        || define('CONF_API_HOLD', 68);
 defined('CONF_CHARGE_MANUAL')  || define('CONF_CHARGE_MANUAL', 24);
 defined('CONF_DISCHA_MANUAL')  || define('CONF_DISCHA_MANUAL', 25);
 
-defined('CONF_NPG_DENY')        || define('CONF_NPG_DENY', 26);
+defined('CONF_API_VACC')        || define('CONF_API_VACC', 26);     //virtual account api
 defined('CONF_BPG_DENY')        || define('CONF_BPG_DENY', 27);
 defined('CONF_EVOL_DENY')       || define('CONF_EVOL_DENY', 28);
 defined('CONF_SLOT_DENY')       || define('CONF_SLOT_DENY', 29);
@@ -166,7 +166,6 @@ defined('CONF_WITHDRAW_PLAY')   || define('CONF_WITHDRAW_PLAY', 53);   //disable
 defined('CONF_MAIN_GAMEIMG')    || define('CONF_MAIN_GAMEIMG', 54);   //game images for main page 
 defined('CONF_DELAY_PLAY')      || define('CONF_DELAY_PLAY', 55);   //delay of play
 defined('CONF_AUTOAPPS')        || define('CONF_AUTOAPPS', 62);   //auto app images
-defined('CONF_API_VACC')        || define('CONF_API_VACC', 70);     //virtual account api
 
 defined('LEVEL_MAX')           || define('LEVEL_MAX', 100);
 defined('LEVEL_ADMIN')         || define('LEVEL_ADMIN', 100);
