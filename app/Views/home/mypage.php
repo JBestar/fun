@@ -158,9 +158,11 @@
                                         </div>
                                     </div>
                                     <div class="ten wide column">
+                                        <?php if($_ENV['app.name'] != APP_PHANTOM) :?>
                                         <div id="btnChangePwd"  uk-toggle="target: #change_pwd" tabindex="0" aria-expanded="false"  class="ui tiny orange labeled icon button">
                                             <i class="key icon"></i> <span class="hideOnMobile">비번변경</span>
                                         </div>
+                                        <?php endif ?>
                                     </div>
                                 </div>
                             </td>
@@ -253,7 +255,9 @@
                                 <div class="ui divided selection list">
                                     <span class="">
                                         {{ myInfo.user_login_last }}
+                                        <?php if($_ENV['app.name'] != APP_PHANTOM) :?>
                                         <div class="ui horizontal basic label"  style="margin-left:20px;"> IP : {{ myInfo.user_ip_last }} </div>
+                                        <?php endif ?>
                                     </span>
                                 </div>
                             </td>

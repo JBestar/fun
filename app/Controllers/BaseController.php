@@ -153,7 +153,6 @@ class BaseController extends Controller
 		
 							}
 						}
-						
 					}
 					break;
 				case CONF_HOLD_DENY: $confs['hold_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
@@ -162,6 +161,13 @@ class BaseController extends Controller
 			}
 		}
 		
+		if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1) {
+			$confs['evol_deny'] = false;
+			$confs['cas_deny'] = false;
+			$confs['slot_deny'] = false;
+			$confs['bpg_deny'] = false;
+		}
+
 		return $confs;
 	}
 

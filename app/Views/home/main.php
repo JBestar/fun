@@ -87,6 +87,15 @@
             .MainMenu-open-wrapper .MainMenu-LogoSlogan {
                 background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=6);
             }
+
+            <?php if($_ENV['app.name'] == APP_PHANTOM) :?>
+                .games-page .categories-wrapper, .SeoPage .categories-wrapper {
+                    /* background-image: linear-gradient(90deg,#182a46, #3b527a, #182a46); */
+                    background-image: linear-gradient(90deg,#262626, #363636, #262626);
+                    margin-top:16px;
+                }                    
+            <?php endif ?>
+
         </style>
     </head>
     <body>
@@ -305,11 +314,12 @@
                                                                 <div class="wrap">
                                                                     <div class="cont">
                                                                         <div class="field field--text-long">
+                                                                        <?php if($_ENV['app.name'] != APP_PHANTOM) :?>
                                                                             <h1>환영합니다.</h1>
-
                                                                             <div class="text">
                                                                                 저희 카지노는 전세계 유수의 슬롯게임과 라이브카지노를 제공하여, 회원 여러분의 만족을 위해 최선을 다합니다.
                                                                             </div>
+                                                                        <?php endif ?>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -333,11 +343,12 @@
                             $(".BannerSlider-bgDesktop .field_decoupled_block_bg_image_category_video_slots").bgswitcher({
                                 <?php if($_ENV['app.name'] == APP_PHANTOM) :?>
                                     images: ["/images/main/banner11.png"],
+                                    effect: "hide",
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
+                                    effect: "clip",
                                 <?php endif ?>
                                 
-                                effect: "clip",
                             });
 
                             $(".scroll_text").marquee();
