@@ -285,13 +285,31 @@ class Api extends BaseController
 		{
 			$result->status = STATUS_LOGOUT;
 		} else{
-			$objConfUg = $this->modelConfsite->find(CONF_NOTICE_URGENT);
-			$objConfBk = $this->modelConfsite->find(CONF_NOTICE_BANK);
-			$objConfMn = $this->modelConfsite->find(CONF_NOTICE_MAIN);
 
-			$result->notice_main = $objConfMn->conf_active; 
-			$result->notice_urgent = $objConfUg->conf_active;
-			$result->notice_bank = $objConfBk->conf_active; 
+			$notice_main = 0;
+			$notice_bank = 0;
+			$notice_urgent = 0;
+			$arrConf = $this->modelConfsite->getNoticeConf();  
+			foreach($arrConf as $objConf){
+				switch($objConf->conf_id){
+					case CONF_NOTICE_MAIN: $notice_main = $objConf->conf_active;
+						break;
+					case CONF_NOTICE_BANK: $notice_bank = $objConf->conf_active;
+						break;
+					case CONF_NOTICE_URGENT: $notice_urgent = $objConf->conf_active;
+						break;
+					default:break;
+				}
+			}
+
+			$reqData['page'] = 1;
+			$reqData['count'] = 4;
+			$boards = $this->modelNotice->searchBodList($reqData);
+
+			$result->notice_main = $notice_main; 
+			$result->notice_urgent = $notice_bank;
+			$result->notice_bank = $notice_urgent; 
+			$result->boards = $boards; 
 
 			$result->status = STATUS_SUCCESS;	
 		}

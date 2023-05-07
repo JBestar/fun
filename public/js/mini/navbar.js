@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    checkNotice();
+    // checkNotice();
     startWorker();
 });
 
@@ -626,46 +626,46 @@ function showUnread(msg, cus) {
     }
 }
 
-function showNotice(main, urgent, bank) {
-    if (main == 0) {
-        $('.top_notice').hide();
-        $('#wrap').addClass('top_notice_none');
-    } else {
-        $('.top_notice').show();
-        $('#wrap').removeClass('top_notice_none');
-    }
-    if (urgent == 0 || getCookie('layer1_check') == 'true') {
-        $('#layer1').hide();
-    } else {
-        $('#layer1').show();
-    }
-    if (bank == 0 || getCookie('layer3_check') == 'true') {
-        $('#layer3').hide();
-    } else {
-        $('#layer3').show();
-    }
+// function showNotice(main, urgent, bank) {
+//     if (main == 0) {
+//         $('.top_notice').hide();
+//         $('#wrap').addClass('top_notice_none');
+//     } else {
+//         $('.top_notice').show();
+//         $('#wrap').removeClass('top_notice_none');
+//     }
+//     if (urgent == 0 || getCookie('layer1_check') == 'true') {
+//         $('#layer1').hide();
+//     } else {
+//         $('#layer1').show();
+//     }
+//     if (bank == 0 || getCookie('layer3_check') == 'true') {
+//         $('#layer3').hide();
+//     } else {
+//         $('#layer3').show();
+//     }
 
-}
+// }
 
-function checkNotice() {
-    $.ajax({
-        type: 'POST',
-        url: '/api/check_notice',
-        dataType: "json",
-        success: function(data) {
-            // console.log(data);
-            if (data.status == "success") {
-                showNotice(data.notice_main, data.notice_urgent, data.notice_bank);
-            } else if (data.status == "logout") {
-                closeTimer();
-                reloadPage();
-            }
-        },
-        error: function(request, status, error) {
-            // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-        }
-    });
-}
+// function checkNotice() {
+//     $.ajax({
+//         type: 'POST',
+//         url: '/api/check_notice',
+//         dataType: "json",
+//         success: function(data) {
+//             // console.log(data);
+//             if (data.status == "success") {
+//                 showNotice(data.notice_main, data.notice_urgent, data.notice_bank);
+//             } else if (data.status == "logout") {
+//                 closeTimer();
+//                 reloadPage();
+//             }
+//         },
+//         error: function(request, status, error) {
+//             // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+//         }
+//     });
+// }
 
 
 function requestEggInfo() {

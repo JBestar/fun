@@ -134,6 +134,11 @@ class ConfSite_Model extends Model {
         return $this->find($confIds);
     }
     
+    public function getNoticeConf(){
+        $confIds = [CONF_NOTICE_MAIN, CONF_NOTICE_BANK, CONF_NOTICE_URGENT];  
+        return $this->find($confIds);
+    }
+
     public function readBetConf(){
         $confIds = [CONF_BET_NL_DENY, CONF_BET_NP_DENY, CONF_BET_N2P_DENY, CONF_BET_PN_DENY, CONF_BET_N2P_4EN, CONF_BET_PAN_TYPE];  
         $arrConf = $this->find($confIds);

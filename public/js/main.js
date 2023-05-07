@@ -15,6 +15,26 @@ $(document).ready(function() {
         $('#layer3').hide();
     });
 
+    $('#btn_close_oneday_layer4').click(function(e) {
+        setCookie('layer4_check', true, 1);
+        $('#layer4').hide();
+    });
+
+    $('#btn_close_oneday_layer5').click(function(e) {
+        setCookie('layer5_check', true, 1);
+        $('#layer5').hide();
+    });
+    
+    $('#btn_close_oneday_layer6').click(function(e) {
+        setCookie('layer6_check', true, 1);
+        $('#layer6').hide();
+    });
+    
+    $('#btn_close_oneday_layer7').click(function(e) {
+        setCookie('layer7_check', true, 1);
+        $('#layer7').hide();
+    });
+
     $('.pop_close').on('click', function() {
         $(this).parent().parent().hide();
     });
@@ -126,9 +146,7 @@ function session_check() {
             // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
         }
     });
-
 }
-
 
 function checkNotice() {
     $.ajax({
@@ -138,7 +156,7 @@ function checkNotice() {
         success: function(data) {
             // console.log(data);
             if (data.status == "success") {
-                showNotice(data.notice_main, data.notice_urgent, data.notice_bank);
+                showNotice(data.notice_main, data.notice_urgent, data.notice_bank, data.boards);
             } else if (data.status == "logout") {
                 
             }
@@ -187,7 +205,7 @@ function showUnread(msg, cus) {
 
 }
 
-function showNotice(main, urgent, bank) {
+function showNotice(main, urgent, bank, boards) {
     if (main == 0) {
        $(".scroll_area").hide();
     } else {
@@ -206,6 +224,29 @@ function showNotice(main, urgent, bank) {
         $('#layer3').show();
     }
 
+    if(boards.length < 1 || getCookie('layer4_check') == 'true'){
+        $('#layer4').hide();
+    } else {
+        $('#layer4').show();
+    }
+
+    if(boards.length < 2 || getCookie('layer5_check') == 'true'){
+        $('#layer5').hide();
+    } else {
+        $('#layer5').show();
+    }
+
+    if(boards.length < 3 || getCookie('layer6_check') == 'true'){
+        $('#layer6').hide();
+    } else {
+        $('#layer6').show();
+    }
+    
+    if(boards.length < 4 || getCookie('layer7_check') == 'true'){
+        $('#layer7').hide();
+    } else {
+        $('#layer7').show();
+    }
 }
 
 // 쿠키 사용하기

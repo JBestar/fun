@@ -2070,7 +2070,7 @@
                 margin-top: -300px;
                 color:white;
             }
-
+            
             #layer3
             {
                 top: 50%;
@@ -2079,8 +2079,43 @@
                 margin-top: -300px;
                 color:white;
             }
+            #layer4
+            {
+                top: 50%;
+                left: 50%;
+                margin-left: -780px;
+                margin-top: -250px;
+                color:white;
+            }
+            #layer5
+            {
+                top: 50%;
+                left: 50%;
+                margin-left: -390px;
+                margin-top: -250px;
+                color:white;
+            }
+            #layer6
+            {
+                top: 50%;
+                left: 50%;
+                margin-left: 0px;
+                margin-top: -250px;
+                color:white;
+            }
+            #layer7
+            {
+                top: 50%;
+                left: 50%;
+                margin-left: 390px;
+                margin-top: -250px;
+                color:white;
+            }
+            #layer4, #layer5, #layer6, #layer7{
+                z-index: 1000;
+            }
             @media screen and (max-width: 1300px){
-                #layer1, #layer3 {
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                     top: 50%;
                     left: 50%;
                     margin-left: -165px;
@@ -2094,6 +2129,10 @@
                 margin-bottom:10px;
                 margin-top:10px;
             }
+            .pop_layer .pop_container .pop_con {
+                background: #333;
+            }
+
             <?php if(strlen($notice_urgent->conf_idx) > 3) :?>
                 #layer1.pop_layer .pop_container .pop_con {
                     background: <?=$notice_urgent->conf_idx;?>;
@@ -2141,45 +2180,93 @@
             </div>
         </div>
 
-        <!-- <div id="urgent_notice" uk-modal class="uk-modal">
-            <div class="uk-modal-dialog">
-                <form class="ui form equal width" name="urgent_notice" id="urgentNoticeForm">
-                    <div class="uk-modal-header">
-                        <h3 class="uk-modal-title" id="urgent_notice_title">긴급공지사항</h3>
+	<?php if( count($boards) > 0 ) :?>
+        
+        <div id="layer4" class="pop_layer" style="display:none;">
+            <div class="pop_container">
+                <div class="pop_top">
+                    <p class="tit"><?=$boards[0]->notice_title?></p>
+                </div>
+                <div class="pop_con" >
+                    <!-- white-space: pre-wrap;  -->
+                    <div style="text-align:center; font-size:13px; line-height:30px;"><?=$boards[0]->notice_content?>
                     </div>
-                    <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
-                    <div class="uk-modal-body">
-                            <?=$notice_urgent->conf_content?>
-                    </div>
-
-                    <div class="uk-modal-footer">
-                        <div class="ui negative noview button">오늘 하루 보지않기</div>
-                        <div class="ui uk-modal-close button">닫기</div>
-                    </div>
-                </form>
-                <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
+                </div>
+                <button type="button" class="pop_close"><span class="ir_wa"></span></button>
+            </div>
+            <div class="btn_wrap">
+                <button type="button" class="btn" id="btn_close_oneday_layer4">하루안보이기</button>
+                <button type="button" class="btn btn_red pop_close">닫기</button>
             </div>
         </div>
 
-        <div id="bank_notice" uk-modal class="uk-modal">
-            <div class="uk-modal-dialog">
-                <form class="ui form equal width" name="bank_notice" id="bankNoticeForm">
-                    <div class="uk-modal-header">
-                        <h3 class="uk-modal-title" id="bank_notice_title">충환전공지사항</h3>
-                    </div>
-                    <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
-                    <div class="uk-modal-body">
-                            <?=$notice_bank->conf_content?>
-                    </div>
+    <?php endif ?>
 
-                    <div class="uk-modal-footer">
-                        <div class="ui negative noview button">오늘 하루 보지않기</div>
-                        <div class="ui uk-modal-close button">닫기</div>
+    
+	<?php if( count($boards) > 1 ) :?>
+        
+        <div id="layer5" class="pop_layer" style="display:none;">
+            <div class="pop_container">
+                <div class="pop_top">
+                    <p class="tit"><?=$boards[1]->notice_title?></p>
+                </div>
+                <div class="pop_con" >
+                    <!-- white-space: pre-wrap;  -->
+                    <div style="text-align:center; font-size:13px; line-height:30px;"><?=$boards[1]->notice_content?>
                     </div>
-                </form>
-                <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
+                </div>
+                <button type="button" class="pop_close"><span class="ir_wa"></span></button>
             </div>
-        </div> -->
+            <div class="btn_wrap">
+                <button type="button" class="btn" id="btn_close_oneday_layer5">하루안보이기</button>
+                <button type="button" class="btn btn_red pop_close">닫기</button>
+            </div>
+        </div>
 
+    <?php endif ?>
+
+	<?php if( count($boards) > 2 ) :?>
+        
+        <div id="layer6" class="pop_layer" style="display:none;">
+            <div class="pop_container">
+                <div class="pop_top">
+                    <p class="tit"><?=$boards[2]->notice_title?></p>
+                </div>
+                <div class="pop_con" >
+                    <!-- white-space: pre-wrap;  -->
+                    <div style="text-align:center; font-size:13px; line-height:30px;"><?=$boards[2]->notice_content?>
+                    </div>
+                </div>
+                <button type="button" class="pop_close"><span class="ir_wa"></span></button>
+            </div>
+            <div class="btn_wrap">
+                <button type="button" class="btn" id="btn_close_oneday_layer6">하루안보이기</button>
+                <button type="button" class="btn btn_red pop_close">닫기</button>
+            </div>
+        </div>
+
+    <?php endif ?>
+
+	<?php if( count($boards) > 3 ) :?>
+        
+        <div id="layer7" class="pop_layer" style="display:none;">
+            <div class="pop_container">
+                <div class="pop_top">
+                    <p class="tit"><?=$boards[3]->notice_title?></p>
+                </div>
+                <div class="pop_con" >
+                    <!-- white-space: pre-wrap;  -->
+                    <div style="text-align:center; font-size:13px; line-height:30px;"><?=$boards[3]->notice_content?>
+                    </div>
+                </div>
+                <button type="button" class="pop_close"><span class="ir_wa"></span></button>
+            </div>
+            <div class="btn_wrap">
+                <button type="button" class="btn" id="btn_close_oneday_layer7">하루안보이기</button>
+                <button type="button" class="btn btn_red pop_close">닫기</button>
+            </div>
+        </div>
+
+    <?php endif ?>
     </body>
 </html>
