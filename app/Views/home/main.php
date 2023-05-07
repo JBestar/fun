@@ -1966,7 +1966,7 @@
             }
             .pop_layer {
                 position: fixed;
-                width: 380px;
+                width: 370px;
                 height: auto;
                 z-index: 1100;
             }
@@ -2013,7 +2013,7 @@
             }
 
             .pop_layer .pop_container .pop_con p {
-                padding: 0 20px;
+                padding: 0 10px;
             }
 
             .pop_layer .pop_container .pop_con p:first-child {
@@ -2083,7 +2083,7 @@
             {
                 top: 50%;
                 left: 50%;
-                margin-left: -780px;
+                margin-left: -375px;
                 margin-top: -250px;
                 color:white;
             }
@@ -2091,7 +2091,7 @@
             {
                 top: 50%;
                 left: 50%;
-                margin-left: -390px;
+                margin-left: 5px;
                 margin-top: -250px;
                 color:white;
             }
@@ -2099,7 +2099,7 @@
             {
                 top: 50%;
                 left: 50%;
-                margin-left: 0px;
+                margin-left: -755px;
                 margin-top: -250px;
                 color:white;
             }
@@ -2107,7 +2107,7 @@
             {
                 top: 50%;
                 left: 50%;
-                margin-left: 390px;
+                margin-left: 385px;
                 margin-top: -250px;
                 color:white;
             }
