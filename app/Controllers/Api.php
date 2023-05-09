@@ -307,8 +307,8 @@ class Api extends BaseController
 			$boards = $this->modelNotice->searchBodList($reqData);
 
 			$result->notice_main = $notice_main; 
-			$result->notice_urgent = $notice_bank;
-			$result->notice_bank = $notice_urgent; 
+			$result->notice_urgent = $notice_urgent;
+			$result->notice_bank = $notice_bank; 
 			$result->boards = $boards; 
 
 			$result->status = STATUS_SUCCESS;	
