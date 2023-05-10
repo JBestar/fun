@@ -2067,7 +2067,7 @@
                 top: 50%;
                 left: 50%;
                 margin-left: -610px;
-                margin-top: -300px;
+                margin-top: -320px;
                 color:white;
             }
             
@@ -2076,7 +2076,7 @@
                 top: 50%;
                 left: 50%;
                 margin-left: 210px;
-                margin-top: -300px;
+                margin-top: -320px;
                 color:white;
             }
             #layer4
@@ -2084,7 +2084,7 @@
                 top: 50%;
                 left: 50%;
                 margin-left: -375px;
-                margin-top: -250px;
+                margin-top: -280px;
                 color:white;
             }
             #layer5
@@ -2092,7 +2092,7 @@
                 top: 50%;
                 left: 50%;
                 margin-left: 5px;
-                margin-top: -250px;
+                margin-top: -280px;
                 color:white;
             }
             #layer6
@@ -2100,7 +2100,7 @@
                 top: 50%;
                 left: 50%;
                 margin-left: -755px;
-                margin-top: -250px;
+                margin-top: -280px;
                 color:white;
             }
             #layer7
@@ -2108,7 +2108,7 @@
                 top: 50%;
                 left: 50%;
                 margin-left: 385px;
-                margin-top: -250px;
+                margin-top: -280px;
                 color:white;
             }
             #layer4, #layer5, #layer6, #layer7{
