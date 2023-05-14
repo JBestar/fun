@@ -88,7 +88,7 @@
                 background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=6);
             }
 
-            <?php if($_ENV['app.name'] == APP_PHANTOM) :?>
+            <?php if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1) :?>
                 .games-page .categories-wrapper, .SeoPage .categories-wrapper {
                     /* background-image: linear-gradient(90deg,#182a46, #3b527a, #182a46); */
                     background-image: linear-gradient(90deg,#262626, #363636, #262626);
@@ -314,7 +314,7 @@
                                                                 <div class="wrap">
                                                                     <div class="cont">
                                                                         <div class="field field--text-long">
-                                                                        <?php if($_ENV['app.name'] != APP_PHANTOM) :?>
+                                                                        <?php if(!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) :?>
                                                                             <h1>환영합니다.</h1>
                                                                             <div class="text">
                                                                                 저희 카지노는 전세계 유수의 슬롯게임과 라이브카지노를 제공하여, 회원 여러분의 만족을 위해 최선을 다합니다.
