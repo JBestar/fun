@@ -11,41 +11,47 @@ class Home extends BaseController
     {
         $headInfo = $this->getSiteConf();
 
-        $objMember = null;
-        if(is_login()){
-            $user_id = $this->session->user_id;
-            $objMember = $this->modelMember->getByUid($user_id);
+        if(!is_login() && array_key_exists('app.login', $_ENV) && $_ENV['app.login'] == 1){
+            echo view('home/login', $headInfo);
+        } else {
+            $objMember = null;
+            if(is_login()){
+                $user_id = $this->session->user_id;
+                $objMember = $this->modelMember->getByUid($user_id);
+            }
+            $navInfo = getNavInfo($objMember);
+            $navInfo += $this->casinoPrd($headInfo);
+            $navInfo += $this->slotPrd($headInfo);
+    
+            $notice_main = '';
+            $notice_bank = null;
+            $notice_urgent = null;
+            $arrConf = $this->modelConfsite->getNoticeConf();  
+            foreach($arrConf as $objConf){
+                switch($objConf->conf_id){
+                    case CONF_NOTICE_MAIN: $notice_main = $objConf->conf_content;
+                        break;
+                    case CONF_NOTICE_BANK: $notice_bank = $objConf;
+                        break;
+                    case CONF_NOTICE_URGENT: $notice_urgent = $objConf;
+                        break;
+                    default:break;
+                }
+            }
+    
+            $reqData['page'] = 1;
+            $reqData['count'] = 4;
+            $boards = $this->modelNotice->searchBodList($reqData);
+    
+            $navInfo['notice_main'] = $notice_main;
+            $navInfo['notice_bank'] = $notice_bank;
+            $navInfo['notice_urgent'] = $notice_urgent;
+            $navInfo['boards'] = $boards;
+    
+            echo view('home/main', $headInfo+$navInfo);
+    
         }
-		$navInfo = getNavInfo($objMember);
-        $navInfo += $this->casinoPrd($headInfo);
-		$navInfo += $this->slotPrd($headInfo);
 
-        $notice_main = '';
-        $notice_bank = null;
-        $notice_urgent = null;
-		$arrConf = $this->modelConfsite->getNoticeConf();  
-        foreach($arrConf as $objConf){
-			switch($objConf->conf_id){
-				case CONF_NOTICE_MAIN: $notice_main = $objConf->conf_content;
-					break;
-				case CONF_NOTICE_BANK: $notice_bank = $objConf;
-					break;
-                case CONF_NOTICE_URGENT: $notice_urgent = $objConf;
-					break;
-				default:break;
-			}
-		}
-
-        $reqData['page'] = 1;
-        $reqData['count'] = 4;
-        $boards = $this->modelNotice->searchBodList($reqData);
-
-        $navInfo['notice_main'] = $notice_main;
-        $navInfo['notice_bank'] = $notice_bank;
-        $navInfo['notice_urgent'] = $notice_urgent;
-        $navInfo['boards'] = $boards;
-
-        echo view('home/main', $headInfo+$navInfo);
 
     }
 

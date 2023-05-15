@@ -198,22 +198,26 @@ class Api extends BaseController
 
 	public function check_account(){
 		$arrData['member_id'] = $this->request->getVar('userid');
+		$arrData['nickname'] = $this->request->getVar('nickname');
 		
 		$result = new \StdClass;
 		$result->status = STATUS_SUCCESS;
 
-		$checkOk = validUserId($arrData['member_id']);
-		if(!$checkOk){
-			$result->status = STATUS_FAIL;
-			$result->msg = "아이디는 4자~16자, 영문 또는 숫자만 사용 가능합니다.";
-		} else {
-			$objMember = $this->modelMember->getByUid($arrData['member_id']);
-			if(!is_null($objMember) ){
+		if(strlen($arrData['member_id']) > 0){
+			$checkOk = validUserId($arrData['member_id']);
+			if(!$checkOk){
 				$result->status = STATUS_FAIL;
-				$result->msg = "중복된 아이디입니다.";
-			} 
+				$result->msg = "아이디는 4자~16자, 영문 또는 숫자만 사용 가능합니다.";
+			} else {
+				$objMember = $this->modelMember->getByUid($arrData['member_id']);
+				if(!is_null($objMember) ){
+					$result->status = STATUS_FAIL;
+					$result->msg = "중복된 아이디입니다.";
+				} 
+			}
 		}
-		if($result->status == STATUS_SUCCESS && array_key_exists('nickname', $arrData)){
+
+		if($result->status == STATUS_SUCCESS && strlen($arrData['nickname']) > 0){
 			$objMember = $this->modelMember->getByName($arrData['nickname']);
 			if(!is_null($objMember) ){
 				$result->status = STATUS_FAIL;
