@@ -912,13 +912,13 @@ function loadScript(url) {
 
 
 function controlLoginForm(sElement){
-    console.log(window.innerWidth);
+    // console.log(window.innerWidth);
     // if(window.innerWidth <= 679)
     //     return;
 
     let height = $(sElement).css('height');
     height = parseInt(height);
-    console.log(height);
+    // console.log(height);
     if(height > 200){
         $(sElement).css('margin-top', '-200px');
         $(sElement).css('background', 'rgb(20, 21, 25, 0.9)');
