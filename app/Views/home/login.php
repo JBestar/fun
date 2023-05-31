@@ -56,7 +56,7 @@
             }
         <?php elseif($_ENV['app.name'] == APP_BOLTON) :?>
             #wrap.users_wrap {
-                background:url(/images/login/login_bg_<?=strtolower($_ENV['app.logo'])?>.png?v=1) no-repeat center center;
+                background:url(/images/login/login_bg_<?=strtolower($_ENV['app.logo'])?>.png?v=2) no-repeat center center;
                 background-size: cover;
                 padding-bottom: 0;
                 overflow: hidden;
