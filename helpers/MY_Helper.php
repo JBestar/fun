@@ -149,7 +149,7 @@
         return $arrEmpPoint;
 				
       foreach($arrRatio as $ratio){
-        $ratio['point'] = floor($ratio['rate'] * $amount / 100.0);
+        $ratio['point'] = $ratio['rate'] * $amount / 100.0; // floor($ratio['rate'] * $amount / 100.0);
         if($ratio['point'] > 0){
           $ratio['time'] = $dt;
           $arrEmpPoint[] = $ratio;
@@ -166,7 +166,7 @@
 				
       foreach($arrRatio as $ratio){
         if(array_key_exists('comp_rate', $ratio)){
-          $nPoint = floor($ratio['comp_rate'] * $amount / 100.0);
+          $nPoint = $ratio['comp_rate'] * $amount / 100.0; //floor($ratio['comp_rate'] * $amount / 100.0);
           break;
         }
       }
