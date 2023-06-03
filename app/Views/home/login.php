@@ -55,8 +55,12 @@
                 overflow: hidden;
             }
         <?php elseif($_ENV['app.name'] == APP_BOLTON) :?>
+            body {
+                background:url(/images/login/login_bg_clip.png?v=3) repeat ;
+                overflow: hidden;
+            }
             #wrap.users_wrap {
-                background:url(/images/login/login_bg_<?=strtolower($_ENV['app.logo'])?>.png?v=2) no-repeat center center;
+                background:url(/images/login/login_bg_<?=strtolower($_ENV['app.logo'])?>.png?v=1) no-repeat center center;
                 background-size: cover;
                 padding-bottom: 0;
                 overflow: hidden;
@@ -185,95 +189,111 @@
         <?php endif ?>
 
 
+        .users_border{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: -2;
+            width: 1000px;
+            height: 200px;
+            margin-top: 75px;
+            margin-left: -500px;
+            border: 3px solid #fff8bd;
+            border-radius: 0px;
+            box-shadow: 10px 3px 10px #888;
+            background:#000000;
+        }
     </style>
 
     <div id="wrap" class="users_wrap">
-
-        <div class="login_wrap">
-            <div class="login_area">
-                <div class="login_con">
-                    <input type="text" placeholder="User ID" id="user_id" class="english_p">
-                    <input type="password" placeholder="Password" id="user_pw" class="english_s">
-                    <input type="text" id="ip_addr" hidden>
-                    <button type="button" class="submit_btn" id="btnLogin">LOGIN</button>
-                    <button type="button" class="join_btn">JOIN</button>
-                </div>
-            </div>
-            <!--//login_area -->
-            <div class="join_area step01">
-                <input type="text" name="proposer" id="proposer" placeholder="추천인 코드를 입력하세요" class="english_p" style="width:250px;">
-                <div class="btn_wrap">
-                    <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
-                    <button type="button" class="next_btn join01_btn" value="START" title="START" id="btnCode">START</button>
-                </div>
-                <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
-            </div>
-
-            <div class="join_area step02">
-                <ul>
-                    <li>
-                        <p class="tit">아이디<span class="desc" id="id_desc">※ 영문 또는 숫자 4~16자</span></p>
-                        <input type="text" name="input_id" id="input_id" class="english" placeholder="영문 또는 숫자 4~16자">
-                    </li>
-                    <li>
-                        <p class="tit">닉네임<span class="desc" id="nickname_desc">※ 닉네임은 한글과숫자, 영문만 가능합니다. 3~12</span></p>
-                        <input type="text" name="input_nickname" id="input_nickname" class="korean" placeholder="닉네임은 한글과숫자만 입력 가능합니다.">
-                    </li>
-                    <li>
-                        <p class="tit">비밀번호<span class="desc">※ 8~20자 특수문자 한개 이상</span></p>
-                        <input type="text" name="input_pw" id="input_pw" class="english_s" autocomplete="off">
-                    </li>
-                    <li>
-                        <p class="tit">비밀번호 확인</p>
-                        <input type="text" name="input_pw_check" id="input_pw_check" class="english_s" autocomplete="off" style="-webkit-text-security: disc;">
-                    </li>
-                </ul>
-                <div class="btn_wrap">
-                    <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
-                    <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_next">NEXT</button>
-                </div>
-                <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
-            </div>
-
-            <div class="join_area step03">
-                <ul>
-                    <li>
-                        <p class="tit">이름<span class="desc">※ 가입자명과 예금주명이 동일하게 사용됩니다.</span></p>
-                        <input type="text" name="user_name" id="user_name">
-                    </li>
-                    <li>
-                        <p class="tit">연락처</p>
-                        <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="user_phone" id="user_phone" placeholder="-없이 숫자만 입력하세요">
-                    </li>
-                    <li>
-                        <p class="tit">은행명</p>
-                        <input type="text" name="bank_name" id="bank_name">
-                    </li>
-                    <li>
-                        <p class="tit">계좌번호</p>
-                        <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="bank_account" id="bank_account" placeholder="-없이 숫자만 입력하세요">
-                    </li>
-                    <li>
-                        <p class="tit">환전 비밀번호</p>
-                        <input type="text" name="bank_pw" id="bank_pw" autocomplete="off" style="-webkit-text-security: disc;">
-                    </li>
-                </ul>
-                <div class="btn_wrap">
-                    <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
-                    <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_done">NEXT</button>
-                </div>
-                <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
-            </div>
-
-            <div class="join_area step04">
-                <p class="txt">회원가입이 완료되었습니다.</p>
-                <p class="desc"  id="join_commment"><span class="name" id="name_complete"></span>님의 회원가입을 환영합니다.<br> 관리자 승인 후 사이트를 이용하실 수 있습니다.<br> 감사합니다.
-                </p>
-                <button type="button" class="next_btn" value="LOGIN NOW" id="btn_login">로그인</button>
-                <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
-            </div>
+        <div class="users_border">
         </div>
-        <!-- login_wrap -->
+        
+            <div class="login_wrap">
+                <div class="login_area">
+                    <div class="login_con">
+                        <input type="text" placeholder="User ID" id="user_id" class="english_p">
+                        <input type="password" placeholder="Password" id="user_pw" class="english_s">
+                        <input type="text" id="ip_addr" hidden>
+                        <button type="button" class="submit_btn" id="btnLogin">LOGIN</button>
+                        <button type="button" class="join_btn">JOIN</button>
+                    </div>
+                </div>
+                <!--//login_area -->
+                <div class="join_area step01">
+                    <input type="text" name="proposer" id="proposer" placeholder="추천인 코드를 입력하세요" class="english_p" style="width:250px;">
+                    <div class="btn_wrap">
+                        <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
+                        <button type="button" class="next_btn join01_btn" value="START" title="START" id="btnCode">START</button>
+                    </div>
+                    <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
+                </div>
+
+                <div class="join_area step02">
+                    <ul>
+                        <li>
+                            <p class="tit">아이디<span class="desc" id="id_desc">※ 영문 또는 숫자 4~16자</span></p>
+                            <input type="text" name="input_id" id="input_id" class="english" placeholder="영문 또는 숫자 4~16자">
+                        </li>
+                        <li>
+                            <p class="tit">닉네임<span class="desc" id="nickname_desc">※ 닉네임은 한글과숫자, 영문만 가능합니다. 3~12</span></p>
+                            <input type="text" name="input_nickname" id="input_nickname" class="korean" placeholder="닉네임은 한글과숫자만 입력 가능합니다.">
+                        </li>
+                        <li>
+                            <p class="tit">비밀번호<span class="desc">※ 8~20자 특수문자 한개 이상</span></p>
+                            <input type="text" name="input_pw" id="input_pw" class="english_s" autocomplete="off">
+                        </li>
+                        <li>
+                            <p class="tit">비밀번호 확인</p>
+                            <input type="text" name="input_pw_check" id="input_pw_check" class="english_s" autocomplete="off" style="-webkit-text-security: disc;">
+                        </li>
+                    </ul>
+                    <div class="btn_wrap">
+                        <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
+                        <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_next">NEXT</button>
+                    </div>
+                    <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
+                </div>
+
+                <div class="join_area step03">
+                    <ul>
+                        <li>
+                            <p class="tit">이름<span class="desc">※ 가입자명과 예금주명이 동일하게 사용됩니다.</span></p>
+                            <input type="text" name="user_name" id="user_name">
+                        </li>
+                        <li>
+                            <p class="tit">연락처</p>
+                            <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="user_phone" id="user_phone" placeholder="-없이 숫자만 입력하세요">
+                        </li>
+                        <li>
+                            <p class="tit">은행명</p>
+                            <input type="text" name="bank_name" id="bank_name">
+                        </li>
+                        <li>
+                            <p class="tit">계좌번호</p>
+                            <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="bank_account" id="bank_account" placeholder="-없이 숫자만 입력하세요">
+                        </li>
+                        <li>
+                            <p class="tit">환전 비밀번호</p>
+                            <input type="text" name="bank_pw" id="bank_pw" autocomplete="off" style="-webkit-text-security: disc;">
+                        </li>
+                    </ul>
+                    <div class="btn_wrap">
+                        <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
+                        <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_done">NEXT</button>
+                    </div>
+                    <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
+                </div>
+
+                <div class="join_area step04">
+                    <p class="txt">회원가입이 완료되었습니다.</p>
+                    <p class="desc"  id="join_commment"><span class="name" id="name_complete"></span>님의 회원가입을 환영합니다.<br> 관리자 승인 후 사이트를 이용하실 수 있습니다.<br> 감사합니다.
+                    </p>
+                    <button type="button" class="next_btn" value="LOGIN NOW" id="btn_login">로그인</button>
+                    <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
+                </div>
+            </div>
+            <!-- login_wrap -->
 
     </div>
     <?php if(array_key_exists("app.produce", $_ENV)) :?>

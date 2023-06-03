@@ -267,7 +267,7 @@ class Api extends BaseController
 
 				$objInfo = new \StdClass;
 				$objInfo->money = allMoney($objMember);
-				$objInfo->point = round($objMember->mb_point, NUM_POINT_CNT);
+				$objInfo->point = floor($objMember->mb_point); //round($objMember->mb_point, NUM_POINT_CNT);
 				$objInfo->msg = $this->modelNotice->unreadMsg($objMember->mb_uid);
 				$objInfo->cus = $this->modelNotice->unreadCus($objMember->mb_uid);
 
@@ -565,7 +565,7 @@ class Api extends BaseController
 
 						$objInfo = new \StdClass;
 						$objInfo->money = allMoney($objMember)-$reqData['c_price'];
-						$objInfo->point = $objMember->mb_point;
+						$objInfo->point = floor($objMember->mb_point);
 				
 						$result->data = $objInfo;
 						$result->status = STATUS_SUCCESS;

@@ -90,10 +90,19 @@
 
             <?php if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1) :?>
                 .games-page .categories-wrapper, .SeoPage .categories-wrapper {
-                    /* background-image: linear-gradient(90deg,#182a46, #3b527a, #182a46); */
-                    background-image: linear-gradient(90deg,#262626, #363636, #262626);
+                    /* background-image: linear-gradient(90deg,#262626, #363636, #262626); */
+                    background-image: linear-gradient(360deg,#262626, #000000, #000000);
                     margin-top:16px;
-                }                    
+                }         
+                .scroll_area{
+                    background-color: #000000;
+                }           
+            <?php endif ?>
+            <?php if($_ENV['app.name'] == APP_BOLTON) :?>
+            .SeoPage {
+                background-repeat:repeat;
+                background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=2);
+            }
             <?php endif ?>
 
         </style>
@@ -344,6 +353,9 @@
                                 <?php if($_ENV['app.name'] == APP_PHANTOM) :?>
                                     images: ["/images/main/banner11.png"],
                                     effect: "hide",
+                                <?php elseif($_ENV['app.name'] == APP_BOLTON) :?>
+                                    images: ["/images/main/banner21.png", "/images/main/banner22.png"],
+                                    effect: "clip",
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
                                     effect: "clip",

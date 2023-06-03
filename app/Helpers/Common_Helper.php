@@ -45,8 +45,8 @@
         $navInfo['user_id'] = $objUser->mb_uid;
         $navInfo['user_name'] = $objUser->mb_nickname;
         $navInfo['user_grade'] = $objUser->mb_grade;
-        $navInfo['user_money'] = num_format(allMoney($objUser), NUM_POINT_CNT);
-        $navInfo['user_point'] = num_format(floatval($objUser->mb_point), NUM_POINT_CNT);
+        $navInfo['user_money'] = floor(allMoney($objUser)); //num_format(allMoney($objUser), NUM_POINT_CNT);
+        $navInfo['user_point'] = floor($objUser->mb_point);//num_format(floatval($objUser->mb_point), NUM_POINT_CNT);
         $navInfo['user_off'] = intval($objUser->mb_state_delete) > 0;
       }
 
@@ -58,8 +58,8 @@
       $userInfo['user_id'] = $objUser->mb_uid;
       $userInfo['user_name'] = $objUser->mb_nickname;
       $userInfo['user_grade'] = $objUser->mb_grade;
-      $userInfo['user_money'] = num_format(allMoney($objUser), NUM_POINT_CNT, 0);
-      $userInfo['user_point'] = num_format(floatval($objUser->mb_point), NUM_POINT_CNT, 0);
+      $userInfo['user_money'] = floor(allMoney($objUser)); //num_format(allMoney($objUser), NUM_POINT_CNT, 0);
+      $userInfo['user_point'] = floor($objUser->mb_point);//num_format(floatval($objUser->mb_point), NUM_POINT_CNT, 0);
       $userInfo['user_off'] = intval($objUser->mb_state_delete) > 0;
       $userInfo['user_bank_name'] = $objUser->mb_bank_name;
 
@@ -839,7 +839,7 @@
 
       $nMoney = floatval($member->mb_money) + $member->mb_live_money + $member->mb_slot_money + $member->mb_fslot_money +
         $member->mb_kgon_money + $member->mb_gslot_money+ $member->mb_hslot_money + $member->mb_hold_money;
-      return round($nMoney, NUM_POINT_CNT);
+      return floor($nMoney); //round($nMoney, NUM_POINT_CNT);
     }
 
     function createGameId($str){

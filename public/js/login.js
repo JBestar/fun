@@ -546,6 +546,7 @@ $('.join_btn').on('click', function(e) {
 
     $('.login_area').hide();
     $('.step01').fadeIn().slideDown();
+    controlLoginForm('.users_wrap .login_wrap');
 
     $('#proposer').focus();
 });
@@ -563,6 +564,7 @@ $('.step01 .prev_btn').on('click', function(e) {
     $('.step01').hide();
     $('.login_area').show();
     $('#user_id').focus();
+    controlLoginForm('.users_wrap .login_wrap');
 
     reset_input();
 });
@@ -922,9 +924,11 @@ function controlLoginForm(sElement){
     if(height > 200){
         $(sElement).css('margin-top', '-200px');
         $(sElement).css('background', 'rgb(20, 21, 25, 0.9)');
+        $('.users_border').hide();
     } else {
         $(sElement).css('margin-top', '125px');
         $(sElement).css('background', 'rgb(20, 21, 25, 0)');
-
+        $('.users_border').css('height', (height+100) + 'px')
+        $('.users_border').show();
     }
 }

@@ -355,5 +355,5 @@ defined('TRYLOG_IPBLOCK')           || define('TRYLOG_IPBLOCK', "Ip-Block");
 defined('TRYLOG_IPDENIED')          || define('TRYLOG_IPDENIED', "Ip-denied");    
 defined('TRYLOG_LOGINING')          || define('TRYLOG_LOGINING', "Logining");    
 
-defined('NUM_POINT_CNT')            || define('NUM_POINT_CNT', 3);    
+defined('NUM_POINT_CNT')            || define('NUM_POINT_CNT', 1);    
 
