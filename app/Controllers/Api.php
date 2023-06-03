@@ -210,7 +210,7 @@ class Api extends BaseController
 				$result->msg = "아이디는 4자~16자, 영문 또는 숫자만 사용 가능합니다.";
 			} else {
 				$objMember = $this->modelMember->getByUid($arrData['member_id']);
-				if(!is_null($objMember) ){
+				if(!is_null($objMember) && $objMember->mb_state_active != PERMIT_DELETE ){
 					$result->status = STATUS_FAIL;
 					$result->msg = "중복된 아이디입니다.";
 				} 
