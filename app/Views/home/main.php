@@ -7,7 +7,7 @@
         <link rel="shortcut icon" href="/favicon_<?=$_ENV['app.logo']?>.ico?v=1">
 
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <link rel="stylesheet" href="/css/a.min.css?v=2" />
+            <link rel="stylesheet" href="/css/a.min.css?v=3" />
         <?php else : ?>
             <link rel="stylesheet" href="/css/a.min.css?v=<?=time()?>" />
         <?php endif ?>
@@ -103,6 +103,17 @@
                 background-repeat:repeat;
                 background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=2);
             }
+            .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
+                top: 8px;
+                width: 150px;
+            }
+            .MainMenu-open-wrapper.js-is-game-open, .MainMenu-open-wrapper.js-sticky{
+                background-color: #000000;
+            }
+            .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before,
+            .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:after{
+                background-color: #000000;
+            }
             <?php endif ?>
 
         </style>
@@ -127,7 +138,7 @@
             </label>
 
             <div class="MainMenu-top-wrapper">
-                <div class="MainMenu-open-wrapper">
+                <div class="MainMenu-open-wrapper <?= $_ENV['app.name'] == APP_BOLTON? "js-sticky":"" ?>"  >
                     <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
 
                     <a href="/" class="MainMenu-LogoSlogan">
@@ -146,7 +157,7 @@
                         <div class="MainMenu-Left">
 
                             <?php if(is_login()) :?>
-                                <?php if ($apps_enable):?>
+                                <?php if ($apps_enable && (!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) ):?>
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_app"  onclick="$('html, body').animate({scrollTop : 450}, 300); showTabMenu('auto');">
                                         <span style="padding:0px;"> <img src="/images/common/logo_app.gif" class="app_icon" /> </span>
                                     </button>
@@ -354,7 +365,7 @@
                                     images: ["/images/main/banner11.png"],
                                     effect: "hide",
                                 <?php elseif($_ENV['app.name'] == APP_BOLTON) :?>
-                                    images: ["/images/main/banner21.png", "/images/main/banner22.png"],
+                                    images: ["/images/main/banner21.png?v=1", "/images/main/banner22.png?v=2"],
                                     effect: "clip",
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
@@ -773,7 +784,7 @@
                                         <img src="./images/common/star1.png">
                                     </div>
                                 </h2>
-                                <div class="uk-grid uk-grid-small uk-child-width-1-3 uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-grid-match" data-uk-lightbox="toggle:a.uk-position-cover" data-uk-grid="">
+                                <div class="uk-grid uk-grid-small uk-child-width-1-3 uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-grid-match uk-flex-center" data-uk-lightbox="toggle:a.uk-position-cover" data-uk-grid="">
                                     <!-- item -->
                                     <div>
                                             <div class="uk-card uk-card-default uk-card-small">
@@ -787,7 +798,7 @@
                                                 </div>
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
-                                                        <div class="uk-width-expand uk-first-column">
+                                                        <div class="uk-width-expand uk-first-column uk-flex uk-flex-right">
                                                             <span class="game_title blue">홀덤</span>
                                                         </div>
                                                     </div>
@@ -1557,8 +1568,13 @@
                     $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").show();
                     $(".MainMenu-open-wrapper .star-logo").hide();
                 } else {
-                    $(".MainMenu-open-wrapper").removeClass("js-sticky");
-                    $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").hide();
+                    <?php if($_ENV['app.name'] == APP_BOLTON) :?>
+                        $(".MainMenu-open-wrapper").addClass("js-sticky");
+                        $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").show();
+                    <?php else :?>
+                        $(".MainMenu-open-wrapper").removeClass("js-sticky");
+                        $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").hide();
+                    <?php endif ?>
                     $(".MainMenu-open-wrapper .star-logo").show();
                 }
             }
