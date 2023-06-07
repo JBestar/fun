@@ -798,7 +798,7 @@
                                                 </div>
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
-                                                        <div class="uk-width-expand uk-first-column uk-flex uk-flex-right">
+                                                        <div class="uk-width-expand uk-first-column uk-flex uk-flex-center">
                                                             <span class="game_title blue">홀덤</span>
                                                         </div>
                                                     </div>
