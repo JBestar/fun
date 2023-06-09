@@ -23,17 +23,30 @@ class Home extends BaseController
             $navInfo += $this->casinoPrd($headInfo);
             $navInfo += $this->slotPrd($headInfo);
     
+            $boards = array();
             $notice_main = '';
-            $notice_bank = null;
-            $notice_urgent = null;
             $arrConf = $this->modelConfsite->getNoticeConf();  
             foreach($arrConf as $objConf){
                 switch($objConf->conf_id){
                     case CONF_NOTICE_MAIN: $notice_main = $objConf->conf_content;
                         break;
-                    case CONF_NOTICE_BANK: $notice_bank = $objConf;
+                    case CONF_NOTICE_BANK: 
+                        if($objConf->conf_active == STATE_ACTIVE){
+                            $board = new \StdClass;
+                            $board->notice_title = '충,환전 공지사항';
+                            $board->notice_content = $objConf->conf_content;
+                            $board->notice_color = $objConf->conf_idx;
+                            $boards[] = $board;
+                        }
                         break;
-                    case CONF_NOTICE_URGENT: $notice_urgent = $objConf;
+                    case CONF_NOTICE_URGENT: 
+                        if($objConf->conf_active == STATE_ACTIVE){
+                            $board = new \StdClass;
+                            $board->notice_title = '긴 급 공 지 사 항';
+                            $board->notice_content = $objConf->conf_content;
+                            $board->notice_color = $objConf->conf_idx;
+                            $boards[] = $board;
+                        }
                         break;
                     default:break;
                 }
@@ -41,11 +54,13 @@ class Home extends BaseController
     
             $reqData['page'] = 1;
             $reqData['count'] = 4;
-            $boards = $this->modelNotice->searchBodList($reqData);
-    
+            $notices = $this->modelNotice->searchBodList($reqData);
+            foreach($notices as $notice){
+                $notice->notice_color = '#333';
+                $boards[] = $notice;
+            }
+
             $navInfo['notice_main'] = $notice_main;
-            $navInfo['notice_bank'] = $notice_bank;
-            $navInfo['notice_urgent'] = $notice_urgent;
             $navInfo['boards'] = $boards;
     
             echo view('home/main', $headInfo+$navInfo);
@@ -74,6 +89,9 @@ class Home extends BaseController
             print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
         } else{
             $tab = $this->request->getVar('tab');
+            $user_id = $this->session->user_id;
+            $objMember = $this->modelMember->getByUid($user_id);
+            $navInfo = getNavInfo($objMember);
 
             if($tab != "my_qna" && $tab != "my_memo" && $tab != "notice"){
                 $tab = "my_info";

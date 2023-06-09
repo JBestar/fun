@@ -178,12 +178,14 @@
                                         </div>
                                     </div>
                                     <div class="ten wide column">
+                                        <?php if(!$user_off) :?>
                                         <div id="btnRequestCharge" uk-toggle="target: #request_charge" tabindex="0" aria-expanded="false" class="ui tiny blue labeled icon button">
                                             <i class="cloud download icon"></i> <span class="hideOnMobile">입금</span>
                                         </div>
                                         <div id="btnRequestExchange" uk-toggle="target: #request_exchange" tabindex="0" aria-expanded="false" class="ui tiny green labeled icon button">
                                             <i class="cloud upload icon"></i> <span class="hideOnMobile">출금</span>
                                         </div>
+                                        <?php endif ?>
                                     </div>
                                 </div>
                             </td>

@@ -225,6 +225,11 @@ class ConfSite_Model extends Model {
         return $conf;
     }
 
+    public function getExchangePolicy(){
+        $confIds = [CONF_CHARGE_MANUAL, CONF_DISCHA_MANUAL];  
+        return $this->find($confIds);
+    }
+
     public function isBetCancelEnable(){
         $objConf = $this->find(CONF_BET_CANCEL);
         if(!is_null($objConf) && $objConf->conf_active == STATE_ACTIVE)

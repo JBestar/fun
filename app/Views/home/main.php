@@ -162,9 +162,11 @@
                                         <span style="padding:0px;"> <img src="/images/common/logo_app.gif" class="app_icon" /> </span>
                                     </button>
                                 <?php endif?>
-
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestCharge();"><i class="ui cloud download icon"></i><span>입금</span></button>
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestWithdraw();"><i class="ui cloud upload icon"></i><span>출금</span></button>
+                                <?php if(!$user_off) :?>
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestCharge();"><i class="ui cloud download icon"></i><span>입금</span></button>
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestWithdraw();"><i class="ui cloud upload icon"></i><span>출금</span></button>
+                                <?php endif?>
+                            
                             <!-- <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestAccount()"><i class="ui question circle icon"></i><span>계좌문의</span></button> -->
                             <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_memo" onclick="SLB_POPUP('/mypage', 'my_memo')">
                                 <i class="ui comment outline icon"></i><span>쪽지<span id="memo_count"></span></span>
@@ -278,13 +280,14 @@
                             <a><i class="ui life ring outline icon"></i> 오토앱</a>
                         </li>
                         <?php endif ?>
-
+                        <?php if(!$user_off) :?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="requestCharge();">
                             <a><i class="ui cloud download icon"></i> 입금</a>
                         </li>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="requestWithdraw();">
                             <a><i class="ui cloud upload icon"></i> 출금</a>
                         </li>
+                        <?php endif ?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="requestAccount()">
                             <a><i class="ui question circle icon"></i> 계좌문의</a>
                         </li>
@@ -2094,18 +2097,20 @@
             {
                 top: 50%;
                 left: 50%;
-                margin-left: -610px;
-                margin-top: -320px;
+                margin-left: -755px; /*-610px */
+                margin-top: -280px; /*-320px;*/
                 color:white;
+                z-index: 999;
             }
             
             #layer3
             {
                 top: 50%;
                 left: 50%;
-                margin-left: 210px;
-                margin-top: -320px;
+                margin-left: 385px; /*210px;*/
+                margin-top: -280px;  /*-320px;*/
                 color:white;
+                z-index: 999;
             }
             #layer4
             {
@@ -2161,26 +2166,18 @@
                 background: #333;
             }
 
-            <?php if(strlen($notice_urgent->conf_idx) > 3) :?>
-                #layer1.pop_layer .pop_container .pop_con {
-                    background: <?=$notice_urgent->conf_idx;?>;
-                }
-            <?php endif ?>   
-            <?php if(strlen($notice_bank->conf_idx) > 3) :?>
-                #layer3.pop_layer .pop_container .pop_con {
-                    background: <?=$notice_bank->conf_idx;?>;
-                }
-            <?php endif ?>  
         </style>
+
+    <?php if( count($boards) > 4 ) :?>
 
         <div id="layer1" class="pop_layer" style="display:none;">
             <div class="pop_container">
                 <div class="pop_top">
-                    <p class="tit"> 긴 급 공 지 사 항 </p>
+                    <p class="tit"><?=$boards[4]->notice_title?></p>
                 </div>
-                <div class="pop_con" >
+                <div class="pop_con" style="background:<?=$boards[4]->notice_color?>">
                     <!-- white-space: pre-wrap;  -->
-                    <div style="text-align:center; font-size:13px; line-height:30px;"><?=$notice_urgent->conf_content?>
+                    <div style="text-align:center; font-size:13px; line-height:30px;"><?=$boards[4]->notice_content?>
                     </div>
                 </div>
                 <button type="button" class="pop_close"><span class="ir_wa"></span></button>
@@ -2190,14 +2187,17 @@
                 <button type="button" class="btn btn_red pop_close">닫기</button>
             </div>
         </div>
+    <?php endif ?>
         
+    <?php if( count($boards) > 5 ) :?>
+
         <div id="layer3" class="pop_layer" style="display:none;">
             <div class="pop_container">
                 <div class="pop_top">
-                    <p class="tit">충,환전 공지사항</p>
+                    <p class="tit"><?=$boards[5]->notice_title?></p>
                 </div>
-                <div class="pop_con">
-                    <div style="text-align:center; font-size:13px; line-height:30px;"><?=$notice_bank->conf_content?>
+                <div class="pop_con" style="background:<?=$boards[5]->notice_color?>">
+                    <div style="text-align:center; font-size:13px; line-height:30px;"><?=$boards[5]->notice_content?>
                     </div>
                 </div>
                 <button type="button" class="pop_close"><span class="ir_wa"></span></button>
@@ -2207,6 +2207,7 @@
                 <button type="button" class="btn btn_red pop_close">닫기</button>
             </div>
         </div>
+    <?php endif ?>
 
 	<?php if( count($boards) > 0 ) :?>
         
@@ -2215,7 +2216,7 @@
                 <div class="pop_top">
                     <p class="tit"><?=$boards[0]->notice_title?></p>
                 </div>
-                <div class="pop_con" >
+                <div class="pop_con" style="background:<?=$boards[0]->notice_color?>">
                     <!-- white-space: pre-wrap;  -->
                     <div style="text-align:center; font-size:13px; line-height:30px;"><?=$boards[0]->notice_content?>
                     </div>
@@ -2238,7 +2239,7 @@
                 <div class="pop_top">
                     <p class="tit"><?=$boards[1]->notice_title?></p>
                 </div>
-                <div class="pop_con" >
+                <div class="pop_con" style="background:<?=$boards[1]->notice_color?>">
                     <!-- white-space: pre-wrap;  -->
                     <div style="text-align:center; font-size:13px; line-height:30px;"><?=$boards[1]->notice_content?>
                     </div>
@@ -2260,7 +2261,7 @@
                 <div class="pop_top">
                     <p class="tit"><?=$boards[2]->notice_title?></p>
                 </div>
-                <div class="pop_con" >
+                <div class="pop_con" style="background:<?=$boards[2]->notice_color?>">
                     <!-- white-space: pre-wrap;  -->
                     <div style="text-align:center; font-size:13px; line-height:30px;"><?=$boards[2]->notice_content?>
                     </div>
@@ -2282,7 +2283,7 @@
                 <div class="pop_top">
                     <p class="tit"><?=$boards[3]->notice_title?></p>
                 </div>
-                <div class="pop_con" >
+                <div class="pop_con" style="background:<?=$boards[3]->notice_color?>">
                     <!-- white-space: pre-wrap;  -->
                     <div style="text-align:center; font-size:13px; line-height:30px;"><?=$boards[3]->notice_content?>
                     </div>

@@ -291,16 +291,30 @@ class Api extends BaseController
 		} else{
 
 			$notice_main = 0;
-			$notice_bank = 0;
-			$notice_urgent = 0;
+            $boards = array();
+			
 			$arrConf = $this->modelConfsite->getNoticeConf();  
 			foreach($arrConf as $objConf){
 				switch($objConf->conf_id){
 					case CONF_NOTICE_MAIN: $notice_main = $objConf->conf_active;
 						break;
-					case CONF_NOTICE_BANK: $notice_bank = $objConf->conf_active;
+					case CONF_NOTICE_BANK: 
+						if($objConf->conf_active == STATE_ACTIVE){
+                            $board = new \StdClass;
+                            $board->notice_title = '충,환전 공지사항';
+                            $board->notice_content = $objConf->conf_content;
+                            $board->notice_color = $objConf->conf_idx;
+                            $boards[] = $board;
+                        }
 						break;
-					case CONF_NOTICE_URGENT: $notice_urgent = $objConf->conf_active;
+					case CONF_NOTICE_URGENT: 
+						if($objConf->conf_active == STATE_ACTIVE){
+                            $board = new \StdClass;
+                            $board->notice_title = '긴 급 공 지 사 항';
+                            $board->notice_content = $objConf->conf_content;
+                            $board->notice_color = $objConf->conf_idx;
+                            $boards[] = $board;
+                        }
 						break;
 					default:break;
 				}
@@ -308,11 +322,13 @@ class Api extends BaseController
 
 			$reqData['page'] = 1;
 			$reqData['count'] = 4;
-			$boards = $this->modelNotice->searchBodList($reqData);
+			$notices = $this->modelNotice->searchBodList($reqData);
+            foreach($notices as $notice){
+                $notice->notice_color = '#333';
+                $boards[] = $notice;
+            }
 
 			$result->notice_main = $notice_main; 
-			$result->notice_urgent = $notice_urgent;
-			$result->notice_bank = $notice_bank; 
 			$result->boards = $boards; 
 
 			$result->status = STATUS_SUCCESS;	
@@ -518,7 +534,63 @@ class Api extends BaseController
 			$modelExchange = new Exchange_Model();
 			$this->modelConfsite->readMemConf();
 
-			if($modelExchange->wait($user_id)){
+			$result->status = STATUS_SUCCESS;
+			$bLimit = false;
+			if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 ){
+				$bLimit = true;
+
+				$tmNow = time();
+				$strNow = date("Y-m-d H:i:s");        
+				$reqInfo['start_at'] = date('Y-m-d H:i:s', strtotime("-1 month", $tmNow));
+				$reqInfo['end_at'] = $strNow;
+				$reqInfo['req_uid'] = $objMember->mb_uid;
+				$reqInfo['page'] = 1;
+				$reqInfo['count'] = 1;
+				
+				$arrConf = $this->modelConfsite->getExchangePolicy();
+				foreach($arrConf as $objConf){
+					switch($objConf->conf_id){
+						case CONF_CHARGE_MANUAL:	
+							$confs = explode('#', $objConf->conf_idx);
+
+							$exchanges = $modelExchange->searchList($reqInfo);
+
+							if(count($exchanges) > 0 && count($confs) >= 2 && $confs[0] == 1 && floatval($confs[1]) > 0){
+								writeLog("BankDelay Now=".$strNow.", lastExch=".$exchanges[0]->exchange_time_require);
+
+								if(diffDt($strNow, $exchanges[0]->exchange_time_require) < floatval($confs[1]) * 3600){
+									$result->status = STATUS_FAIL;
+									$result->msg = "출금간격은 최소 ".$confs[1]."시간입니다.";
+								}
+							}
+							break;
+						case CONF_DISCHA_MANUAL:	
+							$confs = explode('#', $objConf->conf_idx);
+
+							if(count($confs) >= 3 && $confs[0] == 1 && strlen($confs[1]) > 3 && strlen($confs[2]) > 3 ){
+								$strDate = date( 'Y-m-d', $tmNow );
+								$strStart = $strDate." ".$confs[1];
+								$strEnd = $strDate." ".$confs[2];
+
+								writeLog("BankRest Now=".$strNow." Time=".$strStart."~".$strEnd);
+								if($strNow >= $strStart || $strNow <= $strEnd){
+									$result->status = STATUS_FAIL;
+									$result->msg = "은행 점검시간에는 출금신청이 불가능합니다.";
+								}
+								
+							}
+							
+							break;
+						default:break;
+					}
+				}
+			}
+			if($bLimit && $result->status == STATUS_FAIL){
+				$result->status = STATUS_FAIL;
+			} else if($bLimit && $objMember->mb_state_delete == STATE_ACTIVE){
+				$result->status = STATUS_FAIL;
+				$result->msg = "출금신청을 하실 수 없습니다.";
+			} else if($modelExchange->wait($user_id)){
 				$result->status = STATUS_FAIL;
 				$result->msg = "출금승인 대기중 입니다.";
 			} else if($reqData['bank_passwd'] != $objMember->mb_bank_pwd) {
@@ -572,7 +644,7 @@ class Api extends BaseController
 						$result->msg = "출금요청이 신청되었습니다. 관리자가 승인하는 동안 잠시 기다려주세요.";
 						
 					} else{
-						$result->msg = "출금요청이 실패되었습니다.";
+						$result->msg = "출금신청이 실패되었습니다.";
 						$result->status = STATUS_FAIL;
 					}
 				} else{
@@ -806,7 +878,10 @@ class Api extends BaseController
 
 			$modelCharge = new Charge_Model();
 
-			if($modelCharge->wait($user_id)){
+			if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 && $objMember->mb_state_delete == STATE_ACTIVE){
+				$result->status = STATUS_FAIL;
+				$result->msg = "입금요청을 하실 수 없습니다.";
+			} else if($modelCharge->wait($user_id)){
 				$result->status = STATUS_FAIL;
 				$result->msg = "입금승인 대기중 입니다.";
 			} else {

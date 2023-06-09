@@ -156,7 +156,7 @@ function checkNotice() {
         success: function(data) {
             // console.log(data);
             if (data.status == "success") {
-                showNotice(data.notice_main, data.notice_urgent, data.notice_bank, data.boards);
+                showNotice(data.notice_main, data.boards);
             } else if (data.status == "logout") {
                 
             }
@@ -205,20 +205,20 @@ function showUnread(msg, cus) {
 
 }
 
-function showNotice(main, urgent, bank, boards) {
+function showNotice(main, boards) {
     if (main == 0) {
        $(".scroll_area").hide();
     } else {
        $(".scroll_area").show();
     }
 
-    if (urgent == 0 || getCookie('layer1_check') == 'true') {
+    if (boards.length < 5 || getCookie('layer1_check') == 'true') {
         $('#layer1').hide();
     } else {
         $('#layer1').show();
     }
 
-    if (bank == 0 || getCookie('layer3_check') == 'true') {
+    if (boards.length < 6 || getCookie('layer3_check') == 'true') {
         $('#layer3').hide();
     } else {
         $('#layer3').show();
