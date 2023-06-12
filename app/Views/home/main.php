@@ -123,12 +123,13 @@
                     width:100px;
                     left: 90px;
                 }
+            }
+            <?php endif ?>
+            @media only screen and (max-width: 850px) {
                 .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before{
                     height: 0px;
                 }
             }
-            <?php endif ?>
-
             @media only screen and (min-width: 650px) {
                 .btn-tiny .txt_cash{
                     display:block;
