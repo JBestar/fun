@@ -2093,68 +2093,145 @@
             .pop_layer .btn_wrap button:last-child {
                 float: right;
             }
-            #layer1
-            {
+
+            #layer1, #layer3, #layer4, #layer5, #layer6, #layer7{
                 top: 50%;
                 left: 50%;
-                margin-left: -755px; /*-610px */
-                margin-top: -280px; /*-320px;*/
                 color:white;
-                z-index: 999;
+                z-index: 990;
             }
-            
-            #layer3
-            {
-                top: 50%;
-                left: 50%;
-                margin-left: 385px; /*210px;*/
-                margin-top: -280px;  /*-320px;*/
-                color:white;
-                z-index: 999;
-            }
-            #layer4
-            {
-                top: 50%;
-                left: 50%;
-                margin-left: -375px;
-                margin-top: -280px;
-                color:white;
-            }
-            #layer5
-            {
-                top: 50%;
-                left: 50%;
-                margin-left: 5px;
-                margin-top: -280px;
-                color:white;
-            }
-            #layer6
-            {
-                top: 50%;
-                left: 50%;
-                margin-left: -755px;
-                margin-top: -280px;
-                color:white;
-            }
-            #layer7
-            {
-                top: 50%;
-                left: 50%;
-                margin-left: 385px;
-                margin-top: -280px;
-                color:white;
-            }
-            #layer4, #layer5, #layer6, #layer7{
-                z-index: 1000;
-            }
-            @media screen and (max-width: 1300px){
-                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                    top: 50%;
-                    left: 50%;
-                    margin-left: -165px;
-                    margin-top: -223px;
+
+            <?php if( count($boards) == 1 ) :?>
+                #layer4
+                {
+                    margin-left: -185px;
+                    margin-top: -280px;
                 }
-            }
+                
+                @media screen and (max-width: 800px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                        margin-top: -225px;
+                    }
+                }
+            <?php elseif( count($boards) == 2 ) :?>
+                #layer4
+                {
+                    margin-left: -375px;
+                    margin-top: -280px;
+                    z-index: 999;
+                }
+                #layer5
+                {
+                    margin-left: 5px;
+                    margin-top: -280px;
+                    z-index: 998;
+                }
+                @media screen and (max-width: 800px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                        margin-top: -225px;
+                    }
+                }
+            <?php elseif( count($boards) == 3 ) :?>
+                #layer4
+                {
+                    margin-left: -560px;
+                    margin-top: -280px;
+                    z-index: 999;
+                }
+                #layer5
+                {
+                    margin-left: -185px;
+                    margin-top: -280px;
+                    z-index: 998;
+                }
+                #layer6
+                {
+                    margin-left: 190px;
+                    margin-top: -280px;
+                    z-index: 997;
+                }
+                
+                @media screen and (max-width: 1120px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                        margin-top: -225px;
+                    }
+                }
+            <?php else :?>
+                #layer4
+                {
+                    margin-left: -375px;
+                    margin-top: -280px;
+                    z-index: 999;
+                }
+                #layer5
+                {
+                    margin-left: 5px;
+                    margin-top: -280px;
+                    z-index: 998;
+                }
+                #layer6
+                {
+                    margin-left: -755px;
+                    margin-top: -280px;
+                    z-index: 997;
+                }
+                #layer7
+                {
+                    margin-left: 385px;
+                    margin-top: -280px;
+                    z-index: 996;
+                }
+                #layer1
+                {
+                    margin-left: -755px; /*-610px */
+                    margin-top: -280px; /*-320px;*/
+                    z-index: 995;
+                }
+                #layer3
+                {
+                    margin-left: 385px; /*210px;*/
+                    margin-top: -280px;  /*-320px;*/
+                    z-index: 994;
+                }
+            
+                @media screen and (max-width: 1500px){
+                    #layer4, #layer7  {
+                        margin-left: -560px;
+                        margin-top: -280px;
+                    }
+                    #layer5, #layer1  {
+                        margin-left: -185px;
+                        margin-top: -280px;
+                    }
+                    #layer6, #layer3  {
+                        margin-left: 190px;
+                        margin-top: -280px;
+                    }
+                }
+
+                @media screen and (max-width: 1120px){
+                    #layer1, #layer4, #layer6  {
+                        margin-left: -375px;
+                        margin-top: -280px;
+                    }
+                    #layer3, #layer5, #layer7  {
+                        margin-left: 5px;
+                        margin-top: -280px;
+                    }
+                }
+                
+                @media screen and (max-width: 800px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                        margin-top: -225px;
+                    }
+                }
+            <?php endif ?>
+
+
             
             h1, h2, h3, h4, h5, h6{
                 color:white;
