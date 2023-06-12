@@ -7,7 +7,7 @@
         <link rel="shortcut icon" href="/favicon_<?=$_ENV['app.logo']?>.ico?v=1">
 
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <link rel="stylesheet" href="/css/a.min.css?v=3" />
+            <link rel="stylesheet" href="/css/a.min.css?v=4" />
         <?php else : ?>
             <link rel="stylesheet" href="/css/a.min.css?v=<?=time()?>" />
         <?php endif ?>
@@ -57,7 +57,7 @@
 
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=4" />
-        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=2" />
+        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=3" />
         <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=3" />
     <?php else : ?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=<?=time()?>" />
@@ -114,7 +114,36 @@
             .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:after{
                 background-color: #000000;
             }
+            
+            @media only screen and (max-width: 850px) {
+                .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, 
+                .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
+                    top:11px;
+                    width:100px;
+                    left: 90px;
+                }
+                .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before{
+                    height: 0px;
+                }
+            }
             <?php endif ?>
+
+            @media only screen and (min-width: 650px) {
+                .btn-tiny .txt_cash{
+                    display:block;
+                } 
+                .btn-tiny .icon_cash{
+                    display:none;
+                }
+            }
+            @media only screen and (max-width: 650px) {
+                .btn-tiny .txt_cash{
+                    display:none;
+                } 
+                .btn-tiny .icon_cash{
+                    display:block;
+                }
+            }
 
         </style>
     </head>
@@ -184,12 +213,16 @@
                         <div class="MainMenu-Right">
                             <?php if(is_login()) :?>
                             
-                                <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="margin-right:10px">
-                                    보유머니 <span class="_has_cash" style="padding:12px 3px; color:#ff9600;"><?=$user_money?></span>
+                                <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="margin-right:0px">
+                                    <span class="txt_cash" style="padding:12px 0px;">보유머니</span> 
+                                    <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
+                                    <span class="_has_cash" style="padding:12px 3px; color:#ff9600;"><?=number_format($user_money)?></span>
                                 </button>
                             
-                                <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-right:10px">
-                                    포인트 <span class="_has_point" style="padding:12px 3px; color:#ff9600;"  ><?=$user_point?></span>
+                                <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-left:10px">
+                                    <span class="txt_cash" style="padding:12px 0px;">포인트</span> 
+                                    <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/point.png?v=1"></span>
+                                    <span class="_has_point" style="padding:12px 3px; color:#ff9600;"  ><?=number_format($user_point)?></span>
                                 </button>
                             <?php endif ?>
                         </div>
@@ -324,7 +357,7 @@
                                                 <div class="block block--cta-block block--cta-block--category-video-slots block--category-video-slots" data-banner-id="category_video_slots">
                                                     <div class="BannerSlider-bg">
                                                         <div class="BannerSlider-bgDesktop">
-                                                            <div class="bg-img field_decoupled_block_bg_image_category_video_slots" style="/*background: none;*/"></div>
+                                                            <div class="bg-img field_decoupled_block_bg_image_category_video_slots" style=""></div>
                                                         </div>
                                                         <div class="star-container">
                                                             <img src="./images/common/star1.png">
