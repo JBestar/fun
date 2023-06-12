@@ -94,11 +94,12 @@
                     background-image: linear-gradient(360deg,#262626, #000000, #000000);
                     margin-top:16px;
                 }         
-                .scroll_area{
-                    background-color: #000000;
-                }           
+                          
             <?php endif ?>
             <?php if($_ENV['app.name'] == APP_BOLTON) :?>
+            .scroll_area{
+                background-color: #000000;
+            } 
             .SeoPage {
                 background-repeat:repeat;
                 background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=2);
