@@ -2056,8 +2056,7 @@
             }
 
             .pop_layer .pop_container .pop_con {
-                /*height:560px;*/
-                max-height: 560px;
+                max-height: 530px;
                 overflow-y: auto;
             }
 
@@ -2079,15 +2078,15 @@
             }
 
             .pop_layer .pop_container .pop_con p {
-                padding: 0 10px;
+                /* padding: 0 10px; */
             }
 
             .pop_layer .pop_container .pop_con p:first-child {
-                padding-top: 20px;
+                /* padding-top: 20px; */
             }
 
             .pop_layer .pop_container .pop_con p:last-child {
-                padding-bottom: 20px;
+                /* padding-bottom: 20px; */
             }
 
             .pop_layer .pop_container .pop_con img {
@@ -2146,7 +2145,7 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -225px;
+                        margin-top: -240px;
                     }
                 }
             <?php elseif( count($boards) == 2 ) :?>
@@ -2165,7 +2164,7 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -225px;
+                        margin-top: -240px;
                     }
                 }
             <?php elseif( count($boards) == 3 ) :?>
@@ -2191,7 +2190,7 @@
                 @media screen and (max-width: 1120px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -225px;
+                        margin-top: -240px;
                     }
                 }
             <?php else :?>
@@ -2261,12 +2260,16 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -225px;
+                        margin-top: -280px;
                     }
                 }
             <?php endif ?>
 
-
+            @media screen and (max-height: 700px){
+                .pop_layer .pop_container .pop_con {
+                    max-height: 480px;
+                }
+            }
             
             h1, h2, h3, h4, h5, h6{
                 color:white;
