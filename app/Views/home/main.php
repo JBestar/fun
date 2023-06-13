@@ -2266,7 +2266,7 @@
                     margin-top: -260px;
                 }
                 .pop_layer .pop_container .pop_con {
-                    max-height: 480px;
+                    max-height: 520px;
                     padding-bottom:35px;
                     border-radius:0 0 0 10px;
                 }
@@ -2284,7 +2284,7 @@
                     margin-top: -235px;
                 }
                 .pop_layer .pop_container .pop_con {
-                    max-height: 440px;
+                    max-height: 460px;
                 }
             }
 
@@ -2293,7 +2293,7 @@
                     margin-top: -215px;
                 }
                 .pop_layer .pop_container .pop_con {
-                    max-height: 400px;
+                    max-height: 420px;
                 }
             }
 
@@ -2302,7 +2302,7 @@
                     margin-top: -190px;
                 }
                 .pop_layer .pop_container .pop_con {
-                    max-height: 350px;
+                    max-height: 370px;
                 }
             }
             
@@ -2311,7 +2311,7 @@
                     margin-top: -165px;
                 }
                 .pop_layer .pop_container .pop_con {
-                    max-height: 300px;
+                    max-height: 320px;
                 }
             }
             h1, h2, h3, h4, h5, h6{
