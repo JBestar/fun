@@ -79,7 +79,7 @@
             
             .users_wrap .login_wrap{
                 width:500px;
-                margin-top: 125px;
+                margin-top: 115px;
                 margin-left: -250px;
             }
             .users_wrap .login_wrap .login_area,

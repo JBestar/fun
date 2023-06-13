@@ -2145,7 +2145,6 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -260px;
                     }
                 }
             <?php elseif( count($boards) == 2 ) :?>
@@ -2164,7 +2163,6 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -260px;
                     }
                 }
             <?php elseif( count($boards) == 3 ) :?>
@@ -2190,7 +2188,6 @@
                 @media screen and (max-width: 1120px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -260px;
                     }
                 }
             <?php else :?>
@@ -2260,17 +2257,63 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -260px;
                     }
                 }
             <?php endif ?>
 
             @media screen and (max-height: 700px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -260px;
+                }
                 .pop_layer .pop_container .pop_con {
                     max-height: 480px;
+                    padding-bottom:35px;
+                    border-radius:0 0 0 10px;
+                }
+                .pop_layer .btn_wrap{
+                    margin-top:-35px;
+                    opacity: 0.99;
+                }
+                .btn {
+                    background: rgba(54, 90, 146, 0.8);
                 }
             }
             
+            @media screen and (max-height: 650px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -235px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 440px;
+                }
+            }
+
+            @media screen and (max-height: 600px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -215px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 400px;
+                }
+            }
+
+            @media screen and (max-height: 550px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -190px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 350px;
+                }
+            }
+            
+            @media screen and (max-height: 500px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -165px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 300px;
+                }
+            }
             h1, h2, h3, h4, h5, h6{
                 color:white;
                 line-height:0.2;
