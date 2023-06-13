@@ -2145,7 +2145,7 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -240px;
+                        margin-top: -260px;
                     }
                 }
             <?php elseif( count($boards) == 2 ) :?>
@@ -2164,7 +2164,7 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -240px;
+                        margin-top: -260px;
                     }
                 }
             <?php elseif( count($boards) == 3 ) :?>
@@ -2190,7 +2190,7 @@
                 @media screen and (max-width: 1120px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -240px;
+                        margin-top: -260px;
                     }
                 }
             <?php else :?>
@@ -2260,7 +2260,7 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -280px;
+                        margin-top: -260px;
                     }
                 }
             <?php endif ?>
