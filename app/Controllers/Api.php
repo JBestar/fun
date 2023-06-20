@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+// use App\Models\SessTb_Model;
 use App\Models\SessLog_Model;
 use App\Models\SessTry_Model;
 use App\Models\MoneyHist_Model;
@@ -87,6 +88,16 @@ class Api extends BaseController
 			$sessId = $this->session->session_id;
 			$sess = $this->modelSess->getByUid($objMember->mb_uid);
 
+			$enMultiLogin = $this->modelConfsite->IsMultiLogin();
+			// if(!$enMultiLogin && $objMember->mb_level <= LEVEL_ADMIN && !is_null($sess) ){
+			// 	$modelSessTb = new SessTb_Model();
+			// 	if(!$modelSessTb->isActiveId($sess->sess_id, $sess->sess_mb_uid)){
+			// 		writeLog("Delete Session UserId=".$sess->sess_mb_uid." Id=".$sess->sess_id);
+			// 		$this->modelSess->deleteBySess($sess->sess_id);
+			// 		$sess = null;
+			// 	}
+			// }
+
 			if($objMember->mb_state_active == PERMIT_WAIT){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_WAIT;
@@ -104,14 +115,14 @@ class Api extends BaseController
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "승인된 아이피가 아닙니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPDENIED);
-			} else if($objMember->mb_level < LEVEL_ADMIN && !$this->modelConfsite->IsMultiLogin() && 
+			} else if($objMember->mb_level < LEVEL_ADMIN && !$enMultiLogin && 
 					!is_null($sess) && $sess->sess_id != $sessId ){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "이미 로그인되어 있습니다.";
 				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_LOGINING);
 			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view != STATE_ACTIVE 
-					&& !$this->modelConfsite->IsMultiLogin() && !is_null($sess) && $sess->sess_id != $sessId && $sess->sess_ip != $ip) {
+					&& !$enMultiLogin && !is_null($sess) && $sess->sess_id != $sessId && $sess->sess_ip != $ip) {
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "이미 로그인되어 있습니다.";

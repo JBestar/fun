@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/css/login/style.css?v=1">
     <link rel="stylesheet" href="/css/login/login.css?v=1">
     <!-- <link rel="stylesheet" href="/css/login/login.css?v=<?=time();?>"> -->
+    <script type="text/javascript" src="/js/common.js?ver=1"></script>
 
     <script type="text/javascript" src="/js/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui.js"></script>

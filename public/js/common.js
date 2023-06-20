@@ -746,7 +746,18 @@ function setLogCookie(name, value, expiredays) {
 
 }
 
-
+var logged = getLogCookie("logged");
+if (logged != "yes") {
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "/api/logout",
+        success: function(jResult) {
+            location.reload();
+        },
+        error: function(request, status, error) {}
+    });
+}
 function getLogCookie(name) {
 
     var cName = name + "=";
