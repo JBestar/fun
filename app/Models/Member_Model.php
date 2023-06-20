@@ -483,8 +483,9 @@ class Member_Model extends Model {
                 return RESULT_EMP_ERROR;
 
             if($objEmp->mb_level > LEVEL_COMPANY){
-                $arrData['mb_level'] = LEVEL_COMPANY;
-                $arrData['mb_emp_fid'] = 0;
+                // $arrData['mb_level'] = LEVEL_COMPANY;
+                // $arrData['mb_emp_fid'] = 0;
+                return RESULT_EMP_ERROR;
             } else {
                 $arrData['mb_level'] = $objEmp->mb_level - 1;
                 $arrData['mb_emp_fid'] = $objEmp->mb_fid;
@@ -502,6 +503,7 @@ class Member_Model extends Model {
             'mb_emp_fid' => $arrData['mb_emp_fid'],
             'mb_nickname' => $arrData['nickname'],
             'mb_time_join' => date("Y-m-d H:i:s"),
+            'mb_ip_join' => $arrData['ip'],
             'mb_phone' => $arrData['contact'],
             'mb_grade' => GRADE_1,
             'mb_color' => $arrData['mb_color'],        

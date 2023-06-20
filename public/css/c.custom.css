@@ -44,7 +44,7 @@
     width: 150px;
 }
 .MainMenu-Right {
-    width:350px;
+    width:370px;
     right:100px;
 }
 .MainMenu-Left {
@@ -287,7 +287,8 @@
     }
     .MainMenu-open-wrapper .MainMenu-LogoSlogan {
         top:8px;
-        width:80px;
+        width:100px;
+        left:90px;
     }
 
     .star-logo>img:nth-child(2), .star-logo>img:nth-child(3), .star-logo>img:nth-child(4){

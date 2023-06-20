@@ -46425,12 +46425,6 @@ select.readonly {
     left: 0
 }
 
-@media only screen and (min-width: 1175px) {
-    .MainMenu-open-wrapper {
-        /* display: none; */
-    }
-}
-
 .MainMenu-open-wrapper a {
     color: #fff
 }
@@ -55374,22 +55368,6 @@ a:hover {
     z-index: 1300
 }
 
-@media only screen and (min-width: 1175px) {
-    .MainMenu-open {
-        visibility:hidden;
-        height: 62px;
-        width: 75px;
-        padding: 0 20px
-    }
-    #MainMenu {
-        width: 0px;
-        border-right: 0px;
-    }
-    #MainMenu-controller:checked ~ #MainMenu {
-        width: 0px;
-        border-right: 0px;
-    }
-}
 
 .MainMenu-open .line {
     background-color: #fff
@@ -55627,20 +55605,40 @@ a:hover {
     font-size: 20px
 }
 
-@media only screen and (max-width: 1175px) {
+@media only screen and (max-width: 1250px) {
     .MainMenu-Left {
         display: None;
     }
 }
 
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 530px) {
     #_btn_user_point {
         display: None;
     }
 }
 
-@media only screen and (min-width: 1175px) {
+@media only screen and (max-width: 370px) {
+    #_btn_user_money {
+        display: None;
+    }
+}
+
+@media only screen and (min-width: 1250px) {
+    .MainMenu-open {
+        visibility:hidden;
+        height: 62px;
+        width: 75px;
+        padding: 0 20px
+    }
+    #MainMenu {
+        width: 0px;
+        border-right: 0px;
+    }
+    #MainMenu-controller:checked ~ #MainMenu {
+        width: 0px;
+        border-right: 0px;
+    }
     .MainMenu-ActionsContainer .btn-login {
         display: inline-block;
         margin-right: 5px;

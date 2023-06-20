@@ -841,7 +841,8 @@ $('.step03 .next_btn').on('click', function(e) {
         'phone': user_phone,
         'bank_name': bank_name,
         'bank_account': bank_account,
-        'refund_password': bank_pw
+        'refund_password': bank_pw,
+        'ip':$("#ip_addr").val(),
     };
 
     if (data == null) {
@@ -926,7 +927,7 @@ function controlLoginForm(sElement){
         $(sElement).css('background', 'rgb(20, 21, 25, 0.9)');
         $('.users_border').hide();
     } else {
-        $(sElement).css('margin-top', '125px');
+        $(sElement).css('margin-top', '115px');
         $(sElement).css('background', 'rgb(20, 21, 25, 0)');
         $('.users_border').css('height', (height+100) + 'px')
         $('.users_border').show();

@@ -197,7 +197,7 @@ class Api extends BaseController
 		} else if($objEmp->mb_level <= $minLevel){
 			$result->msg = "승인된 가입자 코드가 아닙니다.";
 			$result->status = STATUS_FAIL;
-		} else if(!$this->modelMember->isPermitMember($objEmp)){
+		} else if(!$this->modelMember->isPermitMember($objEmp) || $objEmp->mb_level > LEVEL_COMPANY){
 			$result->msg = "승인된 가입자 코드가 아닙니다.";
 			$result->status = STATUS_FAIL;
 		} else {
@@ -494,7 +494,10 @@ class Api extends BaseController
 		$reqData['refund_password'] = $this->request->getVar('refund_password');
 		$reqData['proposer'] = $this->request->getVar('agent_id');
 		$reqData['contact'] = $this->request->getVar('phone');
-		
+		$reqData['ip'] = $this->request->getVar('ip');
+		if(trim($reqData['ip']) < 1)
+			$reqData['ip'] = $this->request->getIPAddress();
+
 		$result = new \StdClass;
 		$result->status = STATUS_FAIL;
 		$iResult = RESULT_FAIL;

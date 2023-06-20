@@ -7,7 +7,7 @@
         <link rel="shortcut icon" href="/favicon_<?=$_ENV['app.logo']?>.ico?v=1">
 
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <link rel="stylesheet" href="/css/a.min.css?v=3" />
+            <link rel="stylesheet" href="/css/a.min.css?v=4" />
         <?php else : ?>
             <link rel="stylesheet" href="/css/a.min.css?v=<?=time()?>" />
         <?php endif ?>
@@ -57,7 +57,7 @@
 
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=4" />
-        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=2" />
+        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=3" />
         <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=3" />
     <?php else : ?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=<?=time()?>" />
@@ -94,11 +94,12 @@
                     background-image: linear-gradient(360deg,#262626, #000000, #000000);
                     margin-top:16px;
                 }         
-                .scroll_area{
-                    background-color: #000000;
-                }           
+                          
             <?php endif ?>
             <?php if($_ENV['app.name'] == APP_BOLTON) :?>
+            .scroll_area{
+                background-color: #000000;
+            } 
             .SeoPage {
                 background-repeat:repeat;
                 background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=2);
@@ -114,7 +115,37 @@
             .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:after{
                 background-color: #000000;
             }
+            
+            @media only screen and (max-width: 850px) {
+                .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, 
+                .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
+                    top:11px;
+                    width:100px;
+                    left: 90px;
+                }
+            }
             <?php endif ?>
+            @media only screen and (max-width: 850px) {
+                .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before{
+                    height: 0px;
+                }
+            }
+            @media only screen and (min-width: 650px) {
+                .btn-tiny .txt_cash{
+                    display:block;
+                } 
+                .btn-tiny .icon_cash{
+                    display:none;
+                }
+            }
+            @media only screen and (max-width: 650px) {
+                .btn-tiny .txt_cash{
+                    display:none;
+                } 
+                .btn-tiny .icon_cash{
+                    display:block;
+                }
+            }
 
         </style>
     </head>
@@ -167,16 +198,19 @@
                                     <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestWithdraw();"><i class="ui cloud upload icon"></i><span>출금</span></button>
                                 <?php endif?>
                             
-                            <!-- <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestAccount()"><i class="ui question circle icon"></i><span>계좌문의</span></button> -->
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_memo" onclick="SLB_POPUP('/mypage', 'my_memo')">
-                                <i class="ui comment outline icon"></i><span>쪽지<span id="memo_count"></span></span>
-                            </button>
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_notice" onclick="SLB_POPUP('/mypage', 'notice')"><i class="ui bullhorn icon"></i><span>공지</span></button>
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_info" onclick="SLB_POPUP('/mypage', '')"><i class="ui user icon"></i><span>내정보</span></button>
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_qna" onclick="SLB_POPUP('/mypage', 'my_qna')">
-                                <i class="ui comment alternate icon"></i><span>고객센터<span id="answered_count"></span></span>
-                            </button>
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span>파트너</span></button>
+                                <!-- <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestAccount()"><i class="ui question circle icon"></i><span>계좌문의</span></button> -->
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_memo" onclick="SLB_POPUP('/mypage', 'my_memo')">
+                                    <i class="ui comment outline icon"></i><span>쪽지<span id="memo_count"></span></span>
+                                </button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_notice" onclick="SLB_POPUP('/mypage', 'notice')"><i class="ui bullhorn icon"></i><span>공지</span></button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_info" onclick="SLB_POPUP('/mypage', '')"><i class="ui user icon"></i><span>내정보</span></button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_qna" onclick="SLB_POPUP('/mypage', 'my_qna')">
+                                    <i class="ui comment alternate icon"></i><span>고객센터<span id="answered_count"></span></span>
+                                </button>
+
+                                <?php if($part_en) :?>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span>파트너</span></button>
+                                <?php endif?>
                                 
                             <?php endif ?>
 
@@ -184,12 +218,16 @@
                         <div class="MainMenu-Right">
                             <?php if(is_login()) :?>
                             
-                                <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="margin-right:10px">
-                                    보유머니 <span class="_has_cash" style="padding:12px 3px; color:#ff9600;"><?=$user_money?></span>
+                                <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="margin-right:0px">
+                                    <span class="txt_cash" style="padding:12px 0px;">보유머니</span> 
+                                    <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
+                                    <span class="_has_cash" style="padding:12px 3px; color:#ff9600;"><?=number_format($user_money)?></span>
                                 </button>
                             
-                                <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-right:10px">
-                                    포인트 <span class="_has_point" style="padding:12px 3px; color:#ff9600;"  ><?=$user_point?></span>
+                                <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-left:10px">
+                                    <span class="txt_cash" style="padding:12px 0px;">포인트</span> 
+                                    <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/point.png?v=1"></span>
+                                    <span class="_has_point" style="padding:12px 3px; color:#ff9600;"  ><?=number_format($user_point)?></span>
                                 </button>
                             <?php endif ?>
                         </div>
@@ -301,9 +339,13 @@
                             <a><i class="ui comment alternate icon"></i> 고객센터<span id="answered_count"></span></a>
                         </li>
                         <?php if(is_login()) :?>
-                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="window.open('about:blank').location.href='/home/pt_login'">
-                            <a><i class="ui users icon"></i> 파트너</a>
-                        </li>
+
+                            <?php if($part_en) :?>
+                            <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="window.open('about:blank').location.href='/home/pt_login'">
+                                <a><i class="ui users icon"></i> 파트너</a>
+                            </li>
+                            <?php endif ?>
+
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="location.href='/home/logout'">
                             <a><i class="ui sign out icon"></i> 로그아웃</a>
                         </li>
@@ -324,7 +366,7 @@
                                                 <div class="block block--cta-block block--cta-block--category-video-slots block--category-video-slots" data-banner-id="category_video_slots">
                                                     <div class="BannerSlider-bg">
                                                         <div class="BannerSlider-bgDesktop">
-                                                            <div class="bg-img field_decoupled_block_bg_image_category_video_slots" style="/*background: none;*/"></div>
+                                                            <div class="bg-img field_decoupled_block_bg_image_category_video_slots" style=""></div>
                                                         </div>
                                                         <div class="star-container">
                                                             <img src="./images/common/star1.png">
@@ -1105,6 +1147,7 @@
                             <div class="twelve wide field">
                                 <label>회원아이디 </label>
                                 <input type="text" name="userid" id="userid" placeholder="4자~16자, 영문 또는 숫자" minlength="4" maxlength="16" />
+                                <input type="text" name="ip" id="ip_addr" hidden/>
                             </div>
                             <div class="two wide field">
                                 <label>&nbsp;</label>
@@ -2021,8 +2064,7 @@
             }
 
             .pop_layer .pop_container .pop_con {
-                /*height:560px;*/
-                max-height: 560px;
+                max-height: 530px;
                 overflow-y: auto;
             }
 
@@ -2044,15 +2086,15 @@
             }
 
             .pop_layer .pop_container .pop_con p {
-                padding: 0 10px;
+                /* padding: 0 10px; */
             }
 
             .pop_layer .pop_container .pop_con p:first-child {
-                padding-top: 20px;
+                /* padding-top: 20px; */
             }
 
             .pop_layer .pop_container .pop_con p:last-child {
-                padding-bottom: 20px;
+                /* padding-bottom: 20px; */
             }
 
             .pop_layer .pop_container .pop_con img {
@@ -2111,7 +2153,6 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -225px;
                     }
                 }
             <?php elseif( count($boards) == 2 ) :?>
@@ -2130,7 +2171,6 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -225px;
                     }
                 }
             <?php elseif( count($boards) == 3 ) :?>
@@ -2156,7 +2196,6 @@
                 @media screen and (max-width: 1120px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -225px;
                     }
                 }
             <?php else :?>
@@ -2226,13 +2265,63 @@
                 @media screen and (max-width: 800px){
                     #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
                         margin-left: -185px;
-                        margin-top: -225px;
                     }
                 }
             <?php endif ?>
 
-
+            @media screen and (max-height: 700px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -260px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 520px;
+                    padding-bottom:35px;
+                    border-radius:0 0 0 10px;
+                }
+                .pop_layer .btn_wrap{
+                    margin-top:-35px;
+                    opacity: 0.99;
+                }
+                .btn {
+                    background: rgba(54, 90, 146, 0.8);
+                }
+            }
             
+            @media screen and (max-height: 650px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -235px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 460px;
+                }
+            }
+
+            @media screen and (max-height: 600px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -215px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 420px;
+                }
+            }
+
+            @media screen and (max-height: 550px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -190px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 370px;
+                }
+            }
+            
+            @media screen and (max-height: 500px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -165px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 320px;
+                }
+            }
             h1, h2, h3, h4, h5, h6{
                 color:white;
                 line-height:0.2;
