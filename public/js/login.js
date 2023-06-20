@@ -841,7 +841,8 @@ $('.step03 .next_btn').on('click', function(e) {
         'phone': user_phone,
         'bank_name': bank_name,
         'bank_account': bank_account,
-        'refund_password': bank_pw
+        'refund_password': bank_pw,
+        'ip':$("#ip_addr").val(),
     };
 
     if (data == null) {

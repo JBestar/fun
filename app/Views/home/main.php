@@ -198,16 +198,19 @@
                                     <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestWithdraw();"><i class="ui cloud upload icon"></i><span>출금</span></button>
                                 <?php endif?>
                             
-                            <!-- <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestAccount()"><i class="ui question circle icon"></i><span>계좌문의</span></button> -->
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_memo" onclick="SLB_POPUP('/mypage', 'my_memo')">
-                                <i class="ui comment outline icon"></i><span>쪽지<span id="memo_count"></span></span>
-                            </button>
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_notice" onclick="SLB_POPUP('/mypage', 'notice')"><i class="ui bullhorn icon"></i><span>공지</span></button>
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_info" onclick="SLB_POPUP('/mypage', '')"><i class="ui user icon"></i><span>내정보</span></button>
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_qna" onclick="SLB_POPUP('/mypage', 'my_qna')">
-                                <i class="ui comment alternate icon"></i><span>고객센터<span id="answered_count"></span></span>
-                            </button>
-                            <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span>파트너</span></button>
+                                <!-- <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestAccount()"><i class="ui question circle icon"></i><span>계좌문의</span></button> -->
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_memo" onclick="SLB_POPUP('/mypage', 'my_memo')">
+                                    <i class="ui comment outline icon"></i><span>쪽지<span id="memo_count"></span></span>
+                                </button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_notice" onclick="SLB_POPUP('/mypage', 'notice')"><i class="ui bullhorn icon"></i><span>공지</span></button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_info" onclick="SLB_POPUP('/mypage', '')"><i class="ui user icon"></i><span>내정보</span></button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_qna" onclick="SLB_POPUP('/mypage', 'my_qna')">
+                                    <i class="ui comment alternate icon"></i><span>고객센터<span id="answered_count"></span></span>
+                                </button>
+
+                                <?php if($part_en) :?>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span>파트너</span></button>
+                                <?php endif?>
                                 
                             <?php endif ?>
 
@@ -336,9 +339,13 @@
                             <a><i class="ui comment alternate icon"></i> 고객센터<span id="answered_count"></span></a>
                         </li>
                         <?php if(is_login()) :?>
-                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="window.open('about:blank').location.href='/home/pt_login'">
-                            <a><i class="ui users icon"></i> 파트너</a>
-                        </li>
+
+                            <?php if($part_en) :?>
+                            <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="window.open('about:blank').location.href='/home/pt_login'">
+                                <a><i class="ui users icon"></i> 파트너</a>
+                            </li>
+                            <?php endif ?>
+
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="location.href='/home/logout'">
                             <a><i class="ui sign out icon"></i> 로그아웃</a>
                         </li>
@@ -1140,6 +1147,7 @@
                             <div class="twelve wide field">
                                 <label>회원아이디 </label>
                                 <input type="text" name="userid" id="userid" placeholder="4자~16자, 영문 또는 숫자" minlength="4" maxlength="16" />
+                                <input type="text" name="ip" id="ip_addr" hidden/>
                             </div>
                             <div class="two wide field">
                                 <label>&nbsp;</label>

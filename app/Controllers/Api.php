@@ -483,7 +483,10 @@ class Api extends BaseController
 		$reqData['refund_password'] = $this->request->getVar('refund_password');
 		$reqData['proposer'] = $this->request->getVar('agent_id');
 		$reqData['contact'] = $this->request->getVar('phone');
-		
+		$reqData['ip'] = $this->request->getVar('ip');
+		if(trim($reqData['ip']) < 1)
+			$reqData['ip'] = $this->request->getIPAddress();
+
 		$result = new \StdClass;
 		$result->status = STATUS_FAIL;
 		$iResult = RESULT_FAIL;

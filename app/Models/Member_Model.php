@@ -503,6 +503,7 @@ class Member_Model extends Model {
             'mb_emp_fid' => $arrData['mb_emp_fid'],
             'mb_nickname' => $arrData['nickname'],
             'mb_time_join' => date("Y-m-d H:i:s"),
+            'mb_ip_join' => $arrData['ip'],
             'mb_phone' => $arrData['contact'],
             'mb_grade' => GRADE_1,
             'mb_color' => $arrData['mb_color'],        

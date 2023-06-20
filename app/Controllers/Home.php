@@ -63,6 +63,12 @@ class Home extends BaseController
             $navInfo['notice_main'] = $notice_main;
             $navInfo['boards'] = $boards;
     
+            $navInfo['part_en'] = true;
+            if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1 &&
+                !is_null($objMember) && floatval($objMember->mb_game_hl_ratio) == 0) {
+                $navInfo['part_en'] = false;
+            }
+
             echo view('home/main', $headInfo+$navInfo);
     
         }
