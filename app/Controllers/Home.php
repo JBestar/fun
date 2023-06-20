@@ -65,7 +65,7 @@ class Home extends BaseController
     
             $navInfo['part_en'] = true;
             if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1 &&
-                !is_null($objMember) && floatval($objMember->mb_game_hl_ratio) == 0) {
+                !is_null($objMember) && $objMember->mb_level < LEVEL_ADMIN && floatval($objMember->mb_game_hl_ratio) == 0) {
                 $navInfo['part_en'] = false;
             }
 
