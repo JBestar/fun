@@ -2,6 +2,19 @@ $(document).ready(function() {
     if(is_login()){
         checkNotice();
         startWorker();
+
+        var logged = getLogCookie("logged");
+        if (logged != "yes") {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/api/logout",
+                success: function(jResult) {
+                    location.reload();
+                },
+                error: function(request, status, error) {}
+            });
+        }
     }
 
     
