@@ -16,7 +16,7 @@
         <script type="text/javascript" src="/js/jquery-ui.js"></script>
         <script type="text/javascript" src="/js/jquery-form/jquery.form.js"></script>
         <script type="text/javascript" src="/js/jquery-form/jquery.validate.js"></script>
-        <script type="text/javascript" src="/js/common.js"></script>
+        <script type="text/javascript" src="/js/common.js?v=2"></script>
 
         <link rel="stylesheet" type="text/css" href="/js/uikit/uikit.min.css" />
         <script src="/js/uikit/uikit.min.js"></script>
