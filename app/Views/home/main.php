@@ -95,8 +95,6 @@
                     margin-top:16px;
                 }         
                           
-            <?php endif ?>
-            <?php if($_ENV['app.name'] == APP_BOLTON) :?>
             .scroll_area{
                 background-color: #000000;
             } 
@@ -123,6 +121,11 @@
                     width:100px;
                     left: 90px;
                 }
+            }
+            <?php endif ?>
+            <?php if($_ENV['app.name'] == APP_HERMES) :?>
+                .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
+                top: 2px;
             }
             <?php endif ?>
             @media only screen and (max-width: 850px) {
@@ -169,7 +172,7 @@
             </label>
 
             <div class="MainMenu-top-wrapper">
-                <div class="MainMenu-open-wrapper <?= $_ENV['app.name'] == APP_BOLTON? "js-sticky":"" ?>"  >
+                <div class="MainMenu-open-wrapper <?= array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1? "js-sticky":"" ?>"  >
                     <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
 
                     <a href="/" class="MainMenu-LogoSlogan">
@@ -411,6 +414,9 @@
                                     effect: "hide",
                                 <?php elseif($_ENV['app.name'] == APP_BOLTON) :?>
                                     images: ["/images/main/banner21.png?v=1", "/images/main/banner22.png?v=2"],
+                                    effect: "clip",
+                                <?php elseif($_ENV['app.name'] == APP_HERMES) :?>
+                                    images: ["/images/main/banner31.png?v=1", "/images/main/banner32.png?v=1"],
                                     effect: "clip",
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
@@ -1614,7 +1620,7 @@
                     $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").show();
                     $(".MainMenu-open-wrapper .star-logo").hide();
                 } else {
-                    <?php if($_ENV['app.name'] == APP_BOLTON) :?>
+                    <?php if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1) :?>
                         $(".MainMenu-open-wrapper").addClass("js-sticky");
                         $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").show();
                     <?php else :?>

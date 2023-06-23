@@ -89,6 +89,17 @@ class Home extends BaseController
 		$this->response->redirect('/');
 	}
 
+    public function loginip(){
+        $headInfo = $this->getSiteConf();
+
+        if(!is_login()){
+            echo view('home/loginip', $headInfo);
+        } else {
+            $this->response->redirect('/');
+        }
+	}
+
+
     public function mypage()
     {
         if(!is_login()){

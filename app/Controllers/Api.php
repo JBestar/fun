@@ -26,14 +26,16 @@ class Api extends BaseController
 		
 		$user_id = $this->request->getPost('userid');
 		$user_pw = $this->request->getPost('passwd');
-		$ip = $this->request->getPost('ip');
-		writeLog("[login] param:".$user_id.", ".$user_pw.", ".$ip);
-		if(strlen($ip) < 1)
-			$ip = $this->request->getIPAddress();
+		$user_ip = $this->request->getPost('ip');
+		$type = intval($this->request->getPost('type'));
+
+		writeLog("[login] param:".$user_id.", ".$user_pw.", ".$user_ip.", ".$type);
+		if(strlen($user_ip) < 1 && $type != 1)
+			$user_ip = $this->request->getIPAddress();
 
 		$modelSessTry = new SessTry_Model();
 
-		$sessTry = $modelSessTry->getByIp($ip);
+		$sessTry = $modelSessTry->getByIp($user_ip);
 		$iTry = 5;
 		if(!is_null($sessTry)){
 			$iTry = time() - strtotime($sessTry->log_time);
@@ -49,7 +51,7 @@ class Api extends BaseController
 		$checkOk = validLoginValue($user_id, $user_pw);
 		
 		if(!$checkOk){
-			$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_FAIL);
+			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_FAIL);
 			writeLog("[login] check:".$user_id." ,".$user_pw." ");
 
 			$arrResult['code'] = RESULT_FAIL;		
@@ -69,7 +71,7 @@ class Api extends BaseController
 			$arrResult['code'] = RESULT_FAIL;		
 			$arrResult['status'] = STATUS_FAIL;
 			$arrResult['msg'] = "잘못된 계정정보입니다.";
-			$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_FAIL);
+			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_FAIL);
 		} else if( $objMember->mb_level < LEVEL_ADMIN && $this->modelConfsite->IsMaintain()){
 			$arrResult['status'] = STATUS_FAIL;
 			$arrResult['code'] = RESULT_MAINTAIN;	//Maintain
@@ -79,9 +81,12 @@ class Api extends BaseController
 				$arrResult['code'] = RESULT_FAIL;	
 			}
 			$arrResult['msg'] = $msg;
-			$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_MAINTAIN);
-		}
-		else {
+			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_MAINTAIN);
+		} else if( $objMember->mb_level < LEVEL_ADMIN && $type == 1 && strlen($user_ip) < 1){
+			$arrResult['status'] = STATUS_FAIL;
+			$arrResult['code'] = STATUS_FAIL;	//Maintain
+			$arrResult['msg'] = "로그인이 거절되었습니다.";
+		} else {
 			$modelBlock = new Block_Model();
 			$this->modelSess->deleteLast();
 		
@@ -102,50 +107,50 @@ class Api extends BaseController
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_WAIT;
                 $arrResult['msg'] = "승인대기중입니다.";
-				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_WAIT);
+				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_WAIT);
 			}
-			else if($objMember->mb_level < LEVEL_ADMIN && $modelBlock->getByIp($ip) != null){
+			else if($objMember->mb_level < LEVEL_ADMIN && $modelBlock->getByIp($user_ip) != null){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "차단된 아이피입니다.";
-				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPBLOCK);
+				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IPBLOCK);
 			} else if($objMember->mb_level >= LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE && 
-					!isValidIp($objMember->mb_ip_join, $ip)){
+					!isValidIp($objMember->mb_ip_join, $user_ip)){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "승인된 아이피가 아닙니다.";
-				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IPDENIED);
+				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IPDENIED);
 			} else if($objMember->mb_level < LEVEL_ADMIN && !$enMultiLogin && 
 					!is_null($sess) && $sess->sess_id != $sessId ){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "이미 로그인되어 있습니다.";
-				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_LOGINING);
+				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_LOGINING);
 			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view != STATE_ACTIVE 
-					&& !$enMultiLogin && !is_null($sess) && $sess->sess_id != $sessId && $sess->sess_ip != $ip) {
+					&& !$enMultiLogin && !is_null($sess) && $sess->sess_id != $sessId && $sess->sess_ip != $user_ip) {
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = "이미 로그인되어 있습니다.";
-				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_LOGINING);
+				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_LOGINING);
 			} else if($this->modelMember->isPermitMember($objMember)){
 				//세션 생성
 				$sessData = array('user_id' => $objMember->mb_uid, 'logged_in'=>TRUE );
 				writeLog("[login] ".$user_id." (".$sessId.")");
 
 				$this->session->set($sessData);
-				$objMember->mb_ip_last = $ip;
+				$objMember->mb_ip_last = $user_ip;
 				$this->modelMember->updateLogin($objMember);
 
 				$this->modelSess->add($objMember, $sessId);
 				$modelSessLog = new SessLog_Model();
 				$modelSessLog->add($objMember);
 				//결과값 
-				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_SUCCESS);
+				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_SUCCESS);
 
 				$arrResult['status'] = STATUS_SUCCESS;
 				$arrResult['code'] = RESULT_OK;//1-Success 2-Mistake 3-Stop
 			} else{
-				$modelSessTry->add($user_id, $user_pw, $ip, TRYLOG_IDBLOCK);
+				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IDBLOCK);
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_STOP;//Stop
                 $arrResult['msg'] = "차단된 계정입니다.";

@@ -80,6 +80,7 @@ $routes->get('betlist', 'Mini::betlist');
 $routes->get('rndlist', 'Mini::rndlist');
 
 $routes->get('getaddr', 'Home::getaddr');
+$routes->get('loginip', 'Home::loginip');
 
 $routes->get('xslotlist', 'Slot::xslotlist');
 $routes->get('fslotlist', 'Slot::fslotlist');

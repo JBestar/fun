@@ -53,9 +53,9 @@
                 padding-bottom: 0;
                 overflow: hidden;
             }
-        <?php elseif($_ENV['app.name'] == APP_BOLTON) :?>
+        <?php elseif($_ENV['app.name'] == APP_BOLTON || $_ENV['app.name'] == APP_HERMES) :?>
             body {
-                background:url(/images/login/login_bg_clip.png?v=3) repeat ;
+                background:url(/images/login/login_bg_clip_<?=strtolower($_ENV['app.logo'])?>.png?v=3) repeat ;
                 overflow: hidden;
             }
             #wrap.users_wrap {
@@ -202,6 +202,14 @@
             box-shadow: 10px 3px 10px #888;
             background:#000000;
         }
+
+        <?php if($_ENV['app.name'] == APP_HERMES) :?>
+
+            .users_border{
+                box-shadow: 10px 3px 10px #fffb98;
+            }
+        <?php endif ?>
+
     </style>
 
     <div id="wrap" class="users_wrap">
