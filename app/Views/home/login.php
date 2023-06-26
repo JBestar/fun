@@ -60,9 +60,14 @@
             }
             #wrap.users_wrap {
                 background:url(/images/login/login_bg_<?=strtolower($_ENV['app.logo'])?>.png?v=1) no-repeat center center;
-                background-size: cover;
+                background-size: 100%;
                 padding-bottom: 0;
                 overflow: hidden;
+            }
+            @media screen and (max-width: 800px){
+                #wrap.users_wrap {
+                    background-size: 150%;
+                }
             }
         <?php endif ?>
 
