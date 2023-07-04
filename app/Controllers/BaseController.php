@@ -99,6 +99,18 @@ class BaseController extends Controller
         $this->libApiHold = new ApiHold_Lib();
     }
 
+	protected function setLanguage(){
+		
+        $locale = $this->session->get('lang');
+        $language = \Config\Services::language();
+        $configApp = new \Config\App();
+
+        if(is_null($locale) || is_array($locale) || strlen($locale) < 1)
+            $locale = $configApp->defaultLocale;
+        $locale = "cn";
+        $language->setLocale($this->session->lang);
+        writeLog("[lang] ".$this->session->lang);
+	}
     
 	protected function getSiteConf(){
 		

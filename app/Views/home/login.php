@@ -29,8 +29,8 @@
         <div class="alert_bot">
             <p class="question_ico" style="white-space:pre-line;" id="alert_content"></p>
             <div class="btn_wrap">
-                <a onclick="location.href='javascript:okAlert()';" class="btn btn_red" id="basic_ok" style="cursor: pointer">확인</a>
-                <a onclick="location.href='javascript:closeAlert()';" class="btn" style="cursor: pointer">취소</a>
+                <a onclick="location.href='javascript:okAlert()';" class="btn btn_red" id="basic_ok" style="cursor: pointer"><?=lang('common.ok')?></a>
+                <a onclick="location.href='javascript:closeAlert()';" class="btn" style="cursor: pointer"><?=lang('common.cancel')?></a>
             </div>
         </div>
     </div>
@@ -39,7 +39,7 @@
         <div class="alert_bot">
             <p class="question_ico" style="white-space:pre-line;" id="alert_content"></p>
             <div class="btn_wrap">
-                <a onclick="location.href='javascript:closeAlert()';" class="btn" id="confirm_ok" style="cursor: pointer">확인</a>
+                <a onclick="location.href='javascript:closeAlert()';" class="btn" id="confirm_ok" style="cursor: pointer"><?=lang('common.ok')?></a>
             </div>
         </div>
     </div>
@@ -233,30 +233,30 @@
                 </div>
                 <!--//login_area -->
                 <div class="join_area step01">
-                    <input type="text" name="proposer" id="proposer" placeholder="추천인 코드를 입력하세요" class="english_p" style="width:250px;">
+                    <input type="text" name="proposer" id="proposer" placeholder="<?=lang('common.recommender_input')?>" class="english_p" style="width:250px;">
                     <div class="btn_wrap">
                         <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
                         <button type="button" class="next_btn join01_btn" value="START" title="START" id="btnCode">START</button>
                     </div>
-                    <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
+                    <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
                 </div>
 
                 <div class="join_area step02">
                     <ul>
                         <li>
-                            <p class="tit">아이디<span class="desc" id="id_desc">※ 영문 또는 숫자 4~16자</span></p>
-                            <input type="text" name="input_id" id="input_id" class="english" placeholder="영문 또는 숫자 4~16자">
+                            <p class="tit"><?=lang('common.id')?><span class="desc" id="id_desc">※ <?=lang('common.4to6')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?></span></p>
+                            <input type="text" name="input_id" id="input_id" class="english" placeholder="<?=lang('common.4to6')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?>">
                         </li>
                         <li>
-                            <p class="tit">닉네임<span class="desc" id="nickname_desc">※ 닉네임은 한글과숫자, 영문만 가능합니다. 3~12</span></p>
-                            <input type="text" name="input_nickname" id="input_nickname" class="korean" placeholder="닉네임은 한글과숫자만 입력 가능합니다.">
+                            <p class="tit"><?=lang('common.nickname')?><span class="desc" id="nickname_desc">※ <?=lang('common.3to12')?></span></p>
+                            <input type="text" name="input_nickname" id="input_nickname" class="korean" placeholder="<?=lang('common.3to12')?>">
                         </li>
                         <li>
-                            <p class="tit">비밀번호<span class="desc">※ 8~20자 특수문자 한개 이상</span></p>
+                            <p class="tit"><?=lang('common.password')?><span class="desc">※ <?=lang('common.8to20')?>, <?=lang('common.special_chars')?></span></p>
                             <input type="text" name="input_pw" id="input_pw" class="english_s" autocomplete="off">
                         </li>
                         <li>
-                            <p class="tit">비밀번호 확인</p>
+                            <p class="tit"><?=lang('common.confirm_password')?></p>
                             <input type="text" name="input_pw_check" id="input_pw_check" class="english_s" autocomplete="off" style="-webkit-text-security: disc;">
                         </li>
                     </ul>
@@ -264,29 +264,29 @@
                         <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
                         <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_next">NEXT</button>
                     </div>
-                    <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
+                    <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
                 </div>
 
                 <div class="join_area step03">
                     <ul>
                         <li>
-                            <p class="tit">이름<span class="desc">※ 가입자명과 예금주명이 동일하게 사용됩니다.</span></p>
+                            <p class="tit"><?=lang('common.name')?><span class="desc">※ <?=lang('common.name_comment')?></span></p>
                             <input type="text" name="user_name" id="user_name">
                         </li>
                         <li>
-                            <p class="tit">연락처</p>
-                            <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="user_phone" id="user_phone" placeholder="-없이 숫자만 입력하세요">
+                            <p class="tit"><?=lang('common.phone_number')?></p>
+                            <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="user_phone" id="user_phone" placeholder="<?=lang('common.phone_msg')?>">
                         </li>
                         <li>
-                            <p class="tit">은행명</p>
+                            <p class="tit"><?=lang('common.bank_name')?></p>
                             <input type="text" name="bank_name" id="bank_name">
                         </li>
                         <li>
-                            <p class="tit">계좌번호</p>
-                            <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="bank_account" id="bank_account" placeholder="-없이 숫자만 입력하세요">
+                            <p class="tit"><?=lang('common.account_number')?></p>
+                            <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="bank_account" id="bank_account" placeholder="<?=lang('common.phone_msg')?>">
                         </li>
                         <li>
-                            <p class="tit">환전 비밀번호</p>
+                            <p class="tit"><?=lang('common.withdrawal_password')?></p>
                             <input type="text" name="bank_pw" id="bank_pw" autocomplete="off" style="-webkit-text-security: disc;">
                         </li>
                     </ul>
@@ -294,15 +294,15 @@
                         <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
                         <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_done">NEXT</button>
                     </div>
-                    <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
+                    <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
                 </div>
 
                 <div class="join_area step04">
-                    <p class="txt">회원가입이 완료되었습니다.</p>
-                    <p class="desc"  id="join_commment"><span class="name" id="name_complete"></span>님의 회원가입을 환영합니다.<br> 관리자 승인 후 사이트를 이용하실 수 있습니다.<br> 감사합니다.
+                    <p class="txt"><?=lang('common.signup_complete')?>.</p>
+                    <p class="desc"  id="join_commment"><span class="name" id="name_complete"></span><?=lang('common.signup_welcome')?>.<br> <?=lang('common.signup_permit')?>.<br> <?=lang('common.thanks')?>.
                     </p>
-                    <button type="button" class="next_btn" value="LOGIN NOW" id="btn_login">로그인</button>
-                    <button type="button" class="join_close_btn"><span class="ir_pm">닫기</span></button>
+                    <button type="button" class="next_btn" value="LOGIN NOW" id="btn_login"><?=lang('common.login')?></button>
+                    <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
                 </div>
             </div>
             <!-- login_wrap -->

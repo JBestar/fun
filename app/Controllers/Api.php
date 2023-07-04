@@ -24,6 +24,7 @@ class Api extends BaseController
 	//User Login
 	public function login(){ 
 		
+		$this->setLanguage();
 		$user_id = $this->request->getPost('userid');
 		$user_pw = $this->request->getPost('passwd');
 		$user_ip = $this->request->getPost('ip');
@@ -43,7 +44,7 @@ class Api extends BaseController
 		if($iTry < 3){
 			$arrResult['status'] = STATUS_FAIL;
 			$arrResult['code'] = RESULT_FAIL;	//Waiting 
-			$arrResult['msg'] = "잠시후 다시 시도해주세요. 남은시간:".(3-$iTry)."초";
+			$arrResult['msg'] = lang("common.login_try").(3-$iTry).lang("common.seconds");
 			echo json_encode($arrResult);
 			return;
 		}
@@ -56,7 +57,7 @@ class Api extends BaseController
 
 			$arrResult['code'] = RESULT_FAIL;		
 			$arrResult['status'] = STATUS_FAIL;
-			$arrResult['msg'] = "잘못된 계정정보입니다.";
+			$arrResult['msg'] = lang("common.login_fail");
 			echo json_encode($arrResult);
 			return;
 		}
@@ -70,22 +71,22 @@ class Api extends BaseController
 		{
 			$arrResult['code'] = RESULT_FAIL;		
 			$arrResult['status'] = STATUS_FAIL;
-			$arrResult['msg'] = "잘못된 계정정보입니다.";
+			$arrResult['msg'] = lang("common.login_fail");
 			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_FAIL);
 		} else if( $objMember->mb_level < LEVEL_ADMIN && $this->modelConfsite->IsMaintain()){
 			$arrResult['status'] = STATUS_FAIL;
 			$arrResult['code'] = RESULT_MAINTAIN;	//Maintain
 			$msg = $this->modelConfsite->msgMaintain();
 			if(strlen($msg) < 1){
-				$msg = "점검중입니다.";
+				$msg = lang("common.inspection");
 				$arrResult['code'] = RESULT_FAIL;	
 			}
 			$arrResult['msg'] = $msg;
 			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_MAINTAIN);
 		} else if( $objMember->mb_level < LEVEL_ADMIN && $type == 1 && strlen($user_ip) < 1){
 			$arrResult['status'] = STATUS_FAIL;
-			$arrResult['code'] = STATUS_FAIL;	//Maintain
-			$arrResult['msg'] = "로그인이 거절되었습니다.";
+			$arrResult['code'] = STATUS_FAIL;	
+			$arrResult['msg'] = lang("common.login_refuse");
 		} else {
 			$modelBlock = new Block_Model();
 			$this->modelSess->deleteLast();
@@ -106,34 +107,34 @@ class Api extends BaseController
 			if($objMember->mb_state_active == PERMIT_WAIT){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_WAIT;
-                $arrResult['msg'] = "승인대기중입니다.";
+                $arrResult['msg'] = lang("common.login_wait");
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_WAIT);
 			}
 			else if($objMember->mb_level < LEVEL_ADMIN && $modelBlock->getByIp($user_ip) != null){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
-				$arrResult['msg'] = "차단된 아이피입니다.";
+				$arrResult['msg'] = lang("common.login_ip_block");
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IPBLOCK);
 			} else if($objMember->mb_level >= LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE && 
 					!isValidIp($objMember->mb_ip_join, $user_ip)){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
-				$arrResult['msg'] = "승인된 아이피가 아닙니다.";
+				$arrResult['msg'] = lang("common.login_ip_permit");
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IPDENIED);
 			} else if($objMember->mb_level < LEVEL_ADMIN && !$enMultiLogin && 
 					!is_null($sess) && $sess->sess_id != $sessId ){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
-				$arrResult['msg'] = "이미 로그인되어 있습니다.";
+				$arrResult['msg'] = lang("common.login_duplicate");
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_LOGINING);
 			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view != STATE_ACTIVE 
 					&& !$enMultiLogin && !is_null($sess) && $sess->sess_id != $sessId && $sess->sess_ip != $user_ip) {
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
-				$arrResult['msg'] = "이미 로그인되어 있습니다.";
+				$arrResult['msg'] = lang("common.login_duplicate");
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_LOGINING);
 			} else if($this->modelMember->isPermitMember($objMember)){
-				//세션 생성
+				//Save Session
 				$sessData = array('user_id' => $objMember->mb_uid, 'logged_in'=>TRUE );
 				writeLog("[login] ".$user_id." (".$sessId.")");
 
@@ -144,7 +145,7 @@ class Api extends BaseController
 				$this->modelSess->add($objMember, $sessId);
 				$modelSessLog = new SessLog_Model();
 				$modelSessLog->add($objMember);
-				//결과값 
+				//Add Try 
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_SUCCESS);
 
 				$arrResult['status'] = STATUS_SUCCESS;
@@ -153,7 +154,7 @@ class Api extends BaseController
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IDBLOCK);
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_STOP;//Stop
-                $arrResult['msg'] = "차단된 계정입니다.";
+                $arrResult['msg'] = lang("common.login_id_block");
 			} 			
 		}
 
@@ -727,83 +728,6 @@ class Api extends BaseController
 		echo json_encode($result);
 
     }
-
-	// public function request_account()
-	// {
-	// 	$result = new \StdClass;
-	// 	if(!is_login())
-	// 	{
-	// 		$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
-    //         $result->status = STATUS_LOGOUT;		
-    //     } else {
-	// 		$user_id = $this->session->user_id;
-	// 		$objMember = $this->modelMember->getByUid($user_id, true);
-
-	// 		$refPass = $this->request->getVar('pass');
-	// 		if($objMember->mb_bank_pwd != $refPass){
-	// 			$result->msg = "충환전 비밀번호가 맞지 않습니다.";
-	// 			$result->status = STATUS_FAIL;
-	// 		} else {
-	// 			$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
-	// 			$arrInfo = explode("#", trim($objConf->conf_content));
-				
-	// 			if(count($arrInfo) < 3){
-	// 				$arrInfo = null;
-	// 			} else if(count($arrInfo) < 4){
-	// 				$arrInfo[3] = "";
-	// 			}
-
-	// 			$result->data = $arrInfo;
-	// 			$result->status = STATUS_SUCCESS;
-	// 		}
-
-			
-    //     }
-		
-	// 	echo json_encode($result);
-	// }
-
-	
-	// public function request_account2()
-	// {
-	// 	$result = new \StdClass;
-	// 	if(!is_login())
-	// 	{
-	// 		$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
-    //         $result->status = STATUS_LOGOUT;		
-    //     } else {
-
-	// 		$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
-	// 		$sAnswer = $objConf->conf_content;
-    //         $sAnswer .= "<p> <br>입금계좌 : &nbsp;";
-	// 		$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
-	// 		$sAnswer .= str_replace("#", " ", $objConf->conf_content)."</p>";
-
-	// 		$data = [  
-    //             'notice_type' => NOTICE_CUSTOMER,
-    //             'notice_title' => "간편계좌문의",
-    //             'notice_content' => "계좌문의",
-	// 			'notice_answer' => $sAnswer,
-    //             'notice_mb_uid' => $this->session->user_id,
-	// 			'notice_read_count' => 1,
-	// 			'notice_state_active' => 1,
-    //             'notice_time_create' => date("Y-m-d H:i:s")
-    //         ];
-
-	// 		$bResult = $this->modelNotice->registerNotice($data);
-			
-	// 		if($bResult){
-	// 			$result->msg = "계좌정보가 도착하였습니다.";
-	// 			$result->status = STATUS_SUCCESS;
-	// 		}
-	// 		else {
-	// 			$result->msg = "계좌문의가 실패되었습니다.";
-	// 			$result->status = STATUS_FAIL;
-	// 		}
-    //     }
-		
-	// 	echo json_encode($result);
-	// }
 	
 	public function request_account3()
 	{

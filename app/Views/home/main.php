@@ -197,22 +197,22 @@
                                     </button>
                                 <?php endif?>
                                 <?php if(!$user_off) :?>
-                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestCharge();"><i class="ui cloud download icon"></i><span>입금</span></button>
-                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestWithdraw();"><i class="ui cloud upload icon"></i><span>출금</span></button>
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestCharge();"><i class="ui cloud download icon"></i><span><?=lang('common.deposit')?></span></button>
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestWithdraw();"><i class="ui cloud upload icon"></i><span><?=lang('common.withdrawal')?></span></button>
                                 <?php endif?>
                             
-                                <!-- <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestAccount()"><i class="ui question circle icon"></i><span>계좌문의</span></button> -->
+                                <!-- <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestAccount()"><i class="ui question circle icon"></i><span><?=lang('common.ask_account')?></span></button> -->
                                 <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_memo" onclick="SLB_POPUP('/mypage', 'my_memo')">
-                                    <i class="ui comment outline icon"></i><span>쪽지<span id="memo_count"></span></span>
+                                    <i class="ui comment outline icon"></i><span><?=lang('common.message')?><span id="memo_count"></span></span>
                                 </button>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_notice" onclick="SLB_POPUP('/mypage', 'notice')"><i class="ui bullhorn icon"></i><span>공지</span></button>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_info" onclick="SLB_POPUP('/mypage', '')"><i class="ui user icon"></i><span>내정보</span></button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_notice" onclick="SLB_POPUP('/mypage', 'notice')"><i class="ui bullhorn icon"></i><span><?=lang('common.notice')?></span></button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_info" onclick="SLB_POPUP('/mypage', '')"><i class="ui user icon"></i><span><?=lang('common.myinfo')?></span></button>
                                 <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_qna" onclick="SLB_POPUP('/mypage', 'my_qna')">
-                                    <i class="ui comment alternate icon"></i><span>고객센터<span id="answered_count"></span></span>
+                                    <i class="ui comment alternate icon"></i><span><?=lang('common.customer')?><span id="answered_count"></span></span>
                                 </button>
 
                                 <?php if($part_en) :?>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span>파트너</span></button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span><?=lang('common.partener')?></span></button>
                                 <?php endif?>
                                 
                             <?php endif ?>
@@ -222,13 +222,13 @@
                             <?php if(is_login()) :?>
                             
                                 <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="margin-right:0px">
-                                    <span class="txt_cash" style="padding:12px 0px;">보유머니</span> 
+                                    <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
                                     <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
                                     <span class="_has_cash" style="padding:12px 3px; color:#ff9600;"><?=number_format($user_money)?></span>
                                 </button>
                             
                                 <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-left:10px">
-                                    <span class="txt_cash" style="padding:12px 0px;">포인트</span> 
+                                    <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.point')?></span> 
                                     <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/point.png?v=1"></span>
                                     <span class="_has_point" style="padding:12px 3px; color:#ff9600;"  ><?=number_format($user_point)?></span>
                                 </button>
@@ -238,15 +238,15 @@
                         <?php if(!is_login()) :?>
                             <!-- uk-toggle="target: #agentCheckModal"  -->
                             <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showAgentCheckModal();">
-                                <span>가입</span>
+                                <span><?=lang('common.signup')?></span>
                             </button>
                             <!-- uk-toggle="target: #loginModal" -->
                             <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showLoginModal();"  >
-                                <span>로그인</span>
+                                <span><?=lang('common.login')?></span>
                             </button>
                         <?php else :?>
                             <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="location.href='/home/logout'">
-                                <span>로그아웃</span>     
+                                <span><?=lang('common.logout')?></span>     
                             </button>
                             <!-- <div class="ui uk-navbar-right nav-overlay">
                                 <ul class="uk-navbar-nav after_login" style="gap:10px;">
@@ -258,7 +258,7 @@
                                 </ul>
                                 <ul class="uk-navbar-nav after_login2" style="gap:20px;">
                                     <li>
-                                        <a class="bg-btn" href="/home/logout"> <span uk-icon="icon: sign-out; " class="uk-icon"> 로그아웃 </span> </a>
+                                        <a class="bg-btn" href="/home/logout"> <span uk-icon="icon: sign-out; " class="uk-icon"> <?=lang('common.logout')?> </span> </a>
                                     </li>    
                                 </ul>
                             </div> -->
@@ -272,14 +272,14 @@
                     <div class="MainMenu-logo">
                         <?php if(!is_login()) :?>
                             <div class="MainMenu-play" uk-toggle="target: #agentCheckModal" tabindex="0" aria-expanded="false">
-                                <a href="#" class="js-register-open btn-primary btn-normal"><span>가입</span></a>
+                                <a href="#" class="js-register-open btn-primary btn-normal"><span><?=lang('common.logout')?></span></a>
                             </div>
                         <?php else :?>
                             <div class="MainMenu-play" onclick="SLB_POPUP('/mypage')">
                                 <a href="#" class="js-register-open btn-primary btn-normal">
-                                    [<?=$user_name?>] 님 환영합니다 <br />
-                                    보유머니 : <span class="_has_cash"><?=$user_money?></span><br />
-                                    보유포인트 : <span class="_has_point"><?=$user_point?></span>
+                                    [<?=$user_name?>] <?=lang('common.welcome')?> <br />
+                                    <?=lang('common.money')?> : <span class="_has_cash"><?=$user_money?></span><br />
+                                    <?=lang('common.point')?> : <span class="_has_point"><?=$user_point?></span>
                                 </a>
                             </div>
                         <?php endif ?>
@@ -288,70 +288,70 @@
                     <ul class="menu menu--main MainMenu-List">
                         <?php if(!is_login()) :?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" uk-toggle="target: #loginModal" tabindex="0" aria-expanded="false">
-                            <a><i class="ui sign in icon"></i> 로그인</a>
+                            <a><i class="ui sign in icon"></i> <?=lang('common.login')?></a>
                         </li>
                         <?php endif ?>
                         
                         <?php if (!$hold_deny):?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('holdem');">
-                            <a><i class="ui hospital symbol icon"></i> 홀덤</a>
+                            <a><i class="ui hospital symbol icon"></i> <?=lang('common.holdem')?></a>
                         </li>
                         <?php endif ?>
 
                         <?php if (!$evol_deny || !$cas_deny):?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('live-casino');">
-                            <a><i class="ui life ring icon"></i> 카지노</a>
+                            <a><i class="ui life ring icon"></i> <?=lang('common.casino')?></a>
                         </li>
                         <?php endif ?>
 
                         <?php if (!$slot_deny):?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('slots');">
-                            <a><i class="ui hockey puck icon"></i> 슬롯</a>
+                            <a><i class="ui hockey puck icon"></i> <?=lang('common.slot')?></a>
                         </li>
                         <?php endif ?>
 
                         <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$hpg_deny) :?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('mini');">
-                            <a><i class="ui bowling ball icon"></i> 미니게임</a>
+                            <a><i class="ui bowling ball icon"></i> <?=lang('common.mini_games')?></a>
                         </li>
                         <?php endif ?>
 
                         <?php if ($apps_enable):?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('auto');">
-                            <a><i class="ui life ring outline icon"></i> 오토앱</a>
+                            <a><i class="ui life ring outline icon"></i> <?=lang('common.auto_app')?></a>
                         </li>
                         <?php endif ?>
                         <?php if(!$user_off) :?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="requestCharge();">
-                            <a><i class="ui cloud download icon"></i> 입금</a>
+                            <a><i class="ui cloud download icon"></i> <?=lang('common.deposit')?></a>
                         </li>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="requestWithdraw();">
-                            <a><i class="ui cloud upload icon"></i> 출금</a>
+                            <a><i class="ui cloud upload icon"></i> <?=lang('common.withdrawal')?></a>
                         </li>
                         <?php endif ?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="requestAccount()">
-                            <a><i class="ui question circle icon"></i> 계좌문의</a>
+                            <a><i class="ui question circle icon"></i> <?=lang('common.ask_account')?></a>
                         </li>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', 'my_memo')">
-                            <a><i class="ui comment outline icon"></i> 쪽지</a>
+                            <a><i class="ui comment outline icon"></i> <?=lang('common.message')?></a>
                         </li>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', 'notice')">
-                            <a><i class="ui bullhorn icon"></i> 공지</a>
+                            <a><i class="ui bullhorn icon"></i> <?=lang('common.notice')?></a>
                         </li>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', 'my_qna')">
-                            <a><i class="ui comment alternate icon"></i> 고객센터<span id="answered_count"></span></a>
+                            <a><i class="ui comment alternate icon"></i> <?=lang('common.customer')?><span id="answered_count"></span></a>
                         </li>
                         <?php if(is_login()) :?>
 
                             <?php if($part_en) :?>
                             <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="window.open('about:blank').location.href='/home/pt_login'">
-                                <a><i class="ui users icon"></i> 파트너</a>
+                                <a><i class="ui users icon"></i> <?=lang('common.partener')?></a>
                             </li>
                             <?php endif ?>
 
-                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="location.href='/home/logout'">
-                            <a><i class="ui sign out icon"></i> 로그아웃</a>
-                        </li>
+                            <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="location.href='/home/logout'">
+                                <a><i class="ui sign out icon"></i> <?=lang('common.logout')?></a>
+                            </li>
                         <?php endif ?>
                     </ul>
                 </div>
@@ -383,9 +383,9 @@
                                                                     <div class="cont">
                                                                         <div class="field field--text-long">
                                                                         <?php if(!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) :?>
-                                                                            <h1>환영합니다.</h1>
+                                                                            <h1><?=lang('common.welcome_to')?>.</h1>
                                                                             <div class="text">
-                                                                                저희 카지노는 전세계 유수의 슬롯게임과 라이브카지노를 제공하여, 회원 여러분의 만족을 위해 최선을 다합니다.
+                                                                                <?=lang('common.welcome_casino')?>
                                                                             </div>
                                                                         <?php endif ?>
                                                                         </div>
@@ -547,7 +547,7 @@
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="<?=$item->name_kr?>" data-cid="<?=$item->code?>" data-cname="<?=$item->name_kr?>"
                                                                 <?php if($item->maintain==1) :?>
-                                                                    data-onoff="off">점검중입니다
+                                                                    data-onoff="off"><?=lang('common.inspection')?>
                                                                 <?php else :?>
                                                                     data-onoff="on">Play
                                                                 <?php endif ?>
@@ -602,7 +602,7 @@
 
                                                                 <button class="uk-button uk-button-primary playBtn" id="playBtn" data-cid="<?=$item->cas_id?>" data-gameid="<?=$item->cat?>" 
                                                                     <?php if($item->maintain==1) :?>
-                                                                        data-onoff="off">점검중입니다
+                                                                        data-onoff="off"><?=lang('common.inspection')?>
                                                                     <?php else :?>
                                                                         data-onoff="on">Play
                                                                     <?php endif ?>
@@ -632,7 +632,7 @@
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                                 <button class="uk-button uk-button-primary playBtn" id="playBtn" data-cid="<?=$item->cas_id?>" data-gameid="<?=$item->cat?>"
                                                                     <?php if($item->maintain==1) :?>
-                                                                        data-onoff="off">점검중입니다
+                                                                        data-onoff="off"><?=lang('common.inspection')?>
                                                                     <?php else :?>
                                                                         data-onoff="on">Play
                                                                     <?php endif ?>
@@ -685,7 +685,7 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <span class="game_title blue">해피파워볼</span>
+                                                            <span class="game_title blue"><?=lang('common.powerball_happy')?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -706,7 +706,7 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <span class="game_title blue">보글파워볼</span>
+                                                            <span class="game_title blue"><?=lang('common.powerball_boggle')?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -725,7 +725,7 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <span class="game_title blue">보글사다리</span>
+                                                            <span class="game_title blue"><?=lang('common.powerladder_boggle')?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -746,7 +746,7 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <span class="game_title blue">EOS5분파워볼</span>
+                                                            <span class="game_title blue"><?=lang('common.powerball_eos5')?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -767,7 +767,7 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <span class="game_title blue">EOS3분파워볼</span>
+                                                            <span class="game_title blue"><?=lang('common.powerball_eos3')?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -788,7 +788,7 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <span class="game_title blue">코인5분파워볼</span>
+                                                            <span class="game_title blue"><?=lang('common.powerball_coin5')?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -809,7 +809,7 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <span class="game_title blue">코인3분파워볼</span>
+                                                            <span class="game_title blue"><?=lang('common.powerball_coin3')?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -843,14 +843,14 @@
                                                     <img src="/images/mini/btn_hold.png?v=1" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="홀덤" data-onoff="on" data-cid="Holdem">Play </button>
+                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="<?=lang('common.holdem')?>" data-onoff="on" data-cid="Holdem">Play </button>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column uk-flex uk-flex-center">
-                                                            <span class="game_title blue">홀덤</span>
+                                                            <span class="game_title blue"><?=lang('common.holdem')?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1095,26 +1095,26 @@
             <div class="uk-modal-dialog">
                 <form class="ui form equal width" name="formLogin" id="formLogin" autocomplete="off">
                     <div class="uk-modal-header">
-                        <h2 class="uk-modal-title">로그인</h2>
+                        <h2 class="uk-modal-title"><?=lang('common.login')?></h2>
                     </div>
                     <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
                     <div class="uk-modal-body">
                         <div class="ui fields">
                             <div class="field required">
-                                <label>아이디 </label>
+                                <label><?=lang('common.id')?> </label>
                                 <input type="text" name="userid" placeholder="userid" />
                             </div>
 
                             <div class="field required">
-                                <label>비밀번호 </label>
+                                <label><?=lang('common.password')?> </label>
                                 <input type="password" name="passwd" placeholder="password" />
                             </div>
                             <input type="text" name="ip" id="ip_addr" hidden/>
                         </div>
                     </div>
                     <div class="uk-modal-footer">
-                        <button class="ui primary submit button" type="submit">로그인하기</button>
-                        <div class="ui uk-modal-close button">취소</div>
+                        <button class="ui primary submit button" type="submit"><?=lang('common.log_in')?></button>
+                        <div class="ui uk-modal-close button"><?=lang('common.cancel')?></div>
                     </div>
                 </form>
             </div>
@@ -1123,20 +1123,20 @@
             <div class="uk-modal-dialog">
                 <form class="ui form equal width" name="agentCheckForm" id="agentCheckForm" autocomplete="off">
                     <div class="uk-modal-header">
-                        <h2 class="uk-modal-title">추천인 입력</h2>
+                        <h2 class="uk-modal-title"><?=lang('common.recommender_in')?></h2>
                     </div>
                     <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
                     <div class="uk-modal-body">
                         <div class="ui fields">
                             <div class="field required">
-                                <label>추천인 아이디 </label>
-                                <input type="text" name="recommender_id" id="recommender_id" placeholder="추천인 아이디" value="" />
+                                <label><?=lang('common.recommender_id')?> </label>
+                                <input type="text" name="recommender_id" id="recommender_id" placeholder="<?=lang('common.recommender_id')?>" value="" />
                             </div>
                         </div>
                     </div>
                     <div class="uk-modal-footer">
-                        <button class="ui primary submit button" type="button">다음단계</button>
-                        <div class="ui uk-modal-close button">취소</div>
+                        <button class="ui primary submit button" type="button"><?=lang('common.next')?></button>
+                        <div class="ui uk-modal-close button"><?=lang('common.cancel')?></div>
                     </div>
                 </form>
             </div>
@@ -1145,43 +1145,43 @@
             <div class="uk-modal-dialog">
                 <form class="ui form equal width" name="fregisterform" id="fregisterform" autocomplete="off">
                     <div class="uk-modal-header">
-                        <h2 class="uk-modal-title">가입정보 입력</h2>
+                        <h2 class="uk-modal-title"><?=lang('common.signup_info')?></h2>
                     </div>
                     <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
                     <div class="uk-modal-body">
                         <div class="fields">
                             <div class="twelve wide field">
-                                <label>회원아이디 </label>
-                                <input type="text" name="userid" id="userid" placeholder="4자~16자, 영문 또는 숫자" minlength="4" maxlength="16" />
+                                <label><?=lang('common.userid')?> </label>
+                                <input type="text" name="userid" id="userid" placeholder="<?=lang('common.4to6')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?>" minlength="4" maxlength="16" />
                                 <input type="text" name="ip" id="ip_addr" hidden/>
                             </div>
                             <div class="two wide field">
                                 <label>&nbsp;</label>
-                                <button class="ui teal button" type="button" onclick="checkDupUserid();">중복확인</button>
+                                <button class="ui teal button" type="button" onclick="checkDupUserid();"><?=lang('common.duplicate_check')?></button>
                             </div>
                         </div>
 
                         <div class="two fields">
                             <div class="field">
-                                <label>비밀번호 </label>
-                                <input type="password" name="passwd" id="passwd" placeholder="8자~20자, 특수문자 한개 이상" />
+                                <label><?=lang('common.password')?> </label>
+                                <input type="password" name="passwd" id="passwd" placeholder="<?=lang('common.8to20')?>, <?=lang('common.special_chars')?>" />
                             </div>
                             <div class="field">
-                                <label>비밀번호 확인 </label>
+                                <label><?=lang('common.confirm_password')?> </label>
                                 <input type="password" name="passwd_re" id="passwd_re" placeholder="confirm password" />
                             </div>
                         </div>
 
                         <div class="field">
-                            <label>닉네임 </label>
+                            <label><?=lang('common.nickname')?> </label>
                             <input type="text" name="nickname" id="nickname" placeholder="nickname" />
                         </div>
 
                         <div class="two fields">
                             <div class="field required">
-                                <label>출금계좌 은행 </label>
+                                <label><?=lang('common.withdrawal_bank')?> </label>
                                 <select name="bank_name" id="bank_name">
-                                    <option value="">은행선택</option>
+                                    <option value=""><?=lang('common.select_bank')?></option>
                                     <option value="국민은행">국민은행</option>
                                     <option value="농협">농협</option>
                                     <option value="우리은행">우리은행</option>
@@ -1223,35 +1223,35 @@
                                 </select>
                             </div>
                             <div class="field required">
-                                <label>출금계좌 소유자명</label>
+                                <label><?=lang('common.withdrawal_owner')?></label>
                                 <input type="text" id="bank_owner" name="bank_owner" placeholder="Bank Owner Name" />
                             </div>
                         </div>
 
                         <div class="two fields">
                             <div class="field required">
-                                <label>출금계좌 번호</label>
+                                <label><?=lang('common.withdrawal_number')?></label>
                                 <input type="text" id="bank_account" name="bank_account" value="" size="10" maxlength="30" pattern="[0-9\-]+" />
                             </div>
                             <div class="field required">
-                                <label>출금 비밀번호</label>
+                                <label><?=lang('common.withdrawal_password')?></label>
                                 <input type="text" id="refund_password" name="refund_password" value="" />
                             </div>
                         </div>
                         
                         <div class="field">
-                            <label>추천인 </label>
+                            <label><?=lang('common.recommender')?> </label>
                             <input type="text" name="agent_id" id="agent_id" class="frm_input required" readonly="readonly" />
                         </div>
 
                         <div class="field">
-                            <label>휴대폰 번호</label>
+                            <label><?=lang('common.phone_number')?></label>
                             <input type="text" id="phone" name="phone" placeholder="000-0000-0000" />
                         </div>
                     </div>
                     <div class="uk-modal-footer">
-                        <button class="ui primary button" type="submit">가입하기</button>
-                        <div class="ui uk-modal-close button" onclick='document.getElementById("agentCheckForm").reset();document.getElementById("fregisterform").reset();'>취소</div>
+                        <button class="ui primary button" type="submit"><?=lang('common.sign_up')?></button>
+                        <div class="ui uk-modal-close button" onclick='document.getElementById("agentCheckForm").reset();document.getElementById("fregisterform").reset();'><?=lang('common.cancel')?></div>
                     </div>
                 </form>
             </div>
@@ -1261,28 +1261,28 @@
             <div id="request_charge" uk-modal class="uk-modal">
                 <div class="uk-modal-dialog">
                     <form name="chargeForm" id="chargeForm" class="ui form equal width">
-                        <div class="uk-modal-header"><h3 class="uk-modal-title"><i class="ui cloud download icon"></i> 입금요청</h3></div>
+                        <div class="uk-modal-header"><h3 class="uk-modal-title"><i class="ui cloud download icon"></i> <?=lang('common.deposit_request')?></h3></div>
                         <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
                         <div class="uk-modal-body">
                             <div class="field required">
-                                <label>요청금액</label>
-                                <div class="ui input"><input type="number" name="cash" id="cash" placeholder="입금요청하실 금액을 만원단위로 입력해주세요" step="10000" /></div>
+                                <label><?=lang('common.request_amount')?></label>
+                                <div class="ui input"><input type="number" name="cash" id="cash" placeholder="<?=lang('common.request_deposit_msg')?>" step="10000" /></div>
                                 <div style="padding-top: 5px; text-align:right;">
-                                    <button type="button" onclick="setMoneyField('cash',10000)" class="ui inverted blue mini button">1만</button> <button type="button" onclick="setMoneyField('cash',50000)" class="ui inverted blue mini button">5만</button>
-                                    <button type="button" onclick="setMoneyField('cash',100000)" class="ui inverted blue mini button">10만</button> <button type="button" onclick="setMoneyField('cash',500000)" class="ui inverted blue mini button">50만</button>
-                                    <button type="button" onclick="setMoneyField('cash',1000000)" class="ui inverted blue mini button">100만</button> <button type="button" onclick="setMoneyField('cash',0)" class="ui inverted blue mini button">다시입력</button>
+                                    <button type="button" onclick="setMoneyField('cash',10000)" class="ui inverted blue mini button"><?=lang('common.10_thousands')?></button> <button type="button" onclick="setMoneyField('cash',50000)" class="ui inverted blue mini button"><?=lang('common.50_thousands')?></button>
+                                    <button type="button" onclick="setMoneyField('cash',100000)" class="ui inverted blue mini button"><?=lang('common.100_thousands')?></button> <button type="button" onclick="setMoneyField('cash',500000)" class="ui inverted blue mini button"><?=lang('common.500_thousands')?></button>
+                                    <button type="button" onclick="setMoneyField('cash',1000000)" class="ui inverted blue mini button"><?=lang('common.1_million')?></button> <button type="button" onclick="setMoneyField('cash',0)" class="ui inverted blue mini button"><?=lang('common.reenter')?></button>
                                 </div>
                             </div>
                             <div class="field required">
-                                <label>입금자 명</label>
+                                <label><?=lang('common.depositor')?></label>
                                 <div class="ui input">
-                                    <input type="text" name="req_name_replaced" v-model="myInfo.user_bank_own" placeholder="입금자 명" readonly="readonly" /> 
+                                    <input type="text" name="req_name_replaced" v-model="myInfo.user_bank_own" placeholder="<?=lang('common.depositor')?>" readonly="readonly" /> 
                                 </div>
                             </div>
                         </div>
                         <div class="uk-modal-footer">
-                            <div class="ui primary submit button">입금요청하기</div>
-                            <div class="ui uk-modal-close button">취소</div>
+                            <div class="ui primary submit button"><?=lang('common.deposit_request_to')?></div>
+                            <div class="ui uk-modal-close button"><?=lang('common.cancel')?></div>
                         </div>
                     </form>
                     <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
@@ -1291,45 +1291,45 @@
             <div id="request_exchange" uk-modal class="uk-modal">
                 <div class="uk-modal-dialog">
                     <form name="exchangeForm" id="exchangeForm" class="ui form equal width">
-                        <div class="uk-modal-header"><h3 class="uk-modal-title"><i class="ui cloud upload icon"></i> 출금신청</h3></div>
+                        <div class="uk-modal-header"><h3 class="uk-modal-title"><i class="ui cloud upload icon"></i> <?=lang('common.withdrawal_request')?></h3></div>
                         <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
                         <div class="uk-modal-body">
                             <div class="inline field">
-                                <label>현재 보유 머니</label>
-                                <div class="ui teal label"><span class="_has_cash">{{myInfo.user_money}}</span> 원</div>
+                                <label><?=lang('common.current_money')?></label>
+                                <div class="ui teal label"><span class="_has_cash">{{myInfo.user_money}}</span> <?=lang('common.won')?></div>
                             </div>
 
                             <div class="inline field required">
-                                <label>신청금액</label>
-                                <div class="ui input"><input type="number" name="cash" id="cash_out" placeholder="출금요청하실 금액을 만원단위로 입력해주세요" step="10000" /></div>
+                                <label><?=lang('common.request_amount')?></label>
+                                <div class="ui input"><input type="number" name="cash" id="cash_out" placeholder="<?=lang('common.request_withdrawal_msg')?>" step="10000" /></div>
                                 <div style="padding-top: 5px; text-align:right;">
-                                    <button type="button" onclick="setMoneyField('cash_out',10000)" class="ui inverted blue mini button">1만</button> <button type="button" onclick="setMoneyField('cash_out',50000)" class="ui inverted blue mini button">5만</button>
-                                    <button type="button" onclick="setMoneyField('cash_out',100000)" class="ui inverted blue mini button">10만</button> <button type="button" onclick="setMoneyField('cash_out',500000)" class="ui inverted blue mini button">50만</button>
-                                    <button type="button" onclick="setMoneyField('cash_out',1000000)" class="ui inverted blue mini button">100만</button> <button type="button" onclick="setMoneyField('cash_out',0)" class="ui inverted blue mini button">다시입력</button>
+                                    <button type="button" onclick="setMoneyField('cash_out',10000)" class="ui inverted blue mini button"><?=lang('common.10_thousands')?></button> <button type="button" onclick="setMoneyField('cash_out',50000)" class="ui inverted blue mini button"><?=lang('common.50_thousands')?></button>
+                                    <button type="button" onclick="setMoneyField('cash_out',100000)" class="ui inverted blue mini button"><?=lang('common.100_thousands')?></button> <button type="button" onclick="setMoneyField('cash_out',500000)" class="ui inverted blue mini button"><?=lang('common.500_thousands')?></button>
+                                    <button type="button" onclick="setMoneyField('cash_out',1000000)" class="ui inverted blue mini button"><?=lang('common.1_million')?></button> <button type="button" onclick="setMoneyField('cash_out',0)" class="ui inverted blue mini button"><?=lang('common.reenter')?></button>
                                 </div>
                             </div>
-                            <h4 class="ui dividing teal header">출금정보</h4>
+                            <h4 class="ui dividing teal header"><?=lang('common.withdrawal_information')?></h4>
                             <div class="inline field">
-                                <label>계좌주&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <label style="min-width:80px; margin-right:0px;"><?=lang('common.account_owner')?></label>
                                 <div class="ui input"><input type="text" readonly="readonly" v-model="myInfo.user_bank_own" /> </div>
                             </div>
                             <div class="inline field">
-                                <label>은행명&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <label style="min-width:80px; margin-right:0px;"><?=lang('common.bank_name')?></label>
                                 <div class="ui input"><input type="text" readonly="readonly" v-model="myInfo.user_bank_name" /> </div>
                             </div>
                             <div class="inline field">
-                                <label>계좌번호&nbsp;</label>
+                                <label style="min-width:80px; margin-right:0px;"><?=lang('common.account_number')?></label>
                                 <div class="ui input"><input type="text" readonly="readonly" v-model="myInfo.user_bank_num" /> </div>
                             </div>
                             
                             <div class="inline field">
-                                <label>출금비번&nbsp;</label>
+                                <label style="min-width:80px; margin-right:0px;"><?=lang('common.withdrawal_pwd')?></label>
                                 <div class="ui input"><input type="text" name="bank_passwd" /></div>
                             </div>
                         </div>
                         <div class="uk-modal-footer">
-                            <div class="ui primary submit button">출금신청하기</div>
-                            <div class="ui uk-modal-close button">취소</div>
+                            <div class="ui primary submit button"><?=lang('common.withdrawal_request_to')?></div>
+                            <div class="ui uk-modal-close button"><?=lang('common.cancel')?></div>
                         </div>
                     </form>
                     <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
@@ -2355,8 +2355,8 @@
                 <button type="button" class="pop_close"><span class="ir_wa"></span></button>
             </div>
             <div class="btn_wrap">
-                <button type="button" class="btn" id="btn_close_oneday_layer1">하루안보이기</button>
-                <button type="button" class="btn btn_red pop_close">닫기</button>
+                <button type="button" class="btn" id="btn_close_oneday_layer1"><?=lang('common.close_day')?></button>
+                <button type="button" class="btn btn_red pop_close"><?=lang('common.close')?></button>
             </div>
         </div>
     <?php endif ?>
@@ -2375,8 +2375,8 @@
                 <button type="button" class="pop_close"><span class="ir_wa"></span></button>
             </div>
             <div class="btn_wrap">
-                <button type="button" class="btn" id="btn_close_oneday_layer3">하루안보이기</button>
-                <button type="button" class="btn btn_red pop_close">닫기</button>
+                <button type="button" class="btn" id="btn_close_oneday_layer3"><?=lang('common.close_day')?></button>
+                <button type="button" class="btn btn_red pop_close"><?=lang('common.close')?></button>
             </div>
         </div>
     <?php endif ?>
@@ -2396,8 +2396,8 @@
                 <button type="button" class="pop_close"><span class="ir_wa"></span></button>
             </div>
             <div class="btn_wrap">
-                <button type="button" class="btn" id="btn_close_oneday_layer4">하루안보이기</button>
-                <button type="button" class="btn btn_red pop_close">닫기</button>
+                <button type="button" class="btn" id="btn_close_oneday_layer4"><?=lang('common.close_day')?></button>
+                <button type="button" class="btn btn_red pop_close"><?=lang('common.close')?></button>
             </div>
         </div>
 
@@ -2419,8 +2419,8 @@
                 <button type="button" class="pop_close"><span class="ir_wa"></span></button>
             </div>
             <div class="btn_wrap">
-                <button type="button" class="btn" id="btn_close_oneday_layer5">하루안보이기</button>
-                <button type="button" class="btn btn_red pop_close">닫기</button>
+                <button type="button" class="btn" id="btn_close_oneday_layer5"><?=lang('common.close_day')?></button>
+                <button type="button" class="btn btn_red pop_close"><?=lang('common.close')?></button>
             </div>
         </div>
 
@@ -2441,8 +2441,8 @@
                 <button type="button" class="pop_close"><span class="ir_wa"></span></button>
             </div>
             <div class="btn_wrap">
-                <button type="button" class="btn" id="btn_close_oneday_layer6">하루안보이기</button>
-                <button type="button" class="btn btn_red pop_close">닫기</button>
+                <button type="button" class="btn" id="btn_close_oneday_layer6"><?=lang('common.close_day')?></button>
+                <button type="button" class="btn btn_red pop_close"><?=lang('common.close')?></button>
             </div>
         </div>
 
@@ -2463,8 +2463,8 @@
                 <button type="button" class="pop_close"><span class="ir_wa"></span></button>
             </div>
             <div class="btn_wrap">
-                <button type="button" class="btn" id="btn_close_oneday_layer7">하루안보이기</button>
-                <button type="button" class="btn btn_red pop_close">닫기</button>
+                <button type="button" class="btn" id="btn_close_oneday_layer7"><?=lang('common.close_day')?></button>
+                <button type="button" class="btn btn_red pop_close"><?=lang('common.close')?></button>
             </div>
         </div>
 

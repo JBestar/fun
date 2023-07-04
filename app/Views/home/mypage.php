@@ -134,21 +134,19 @@
         <div id="dashboard" class="ui loading segment" style="margin: 0px; ">
             <div class="ui message inverted"></div>
             <div class="ui grid top attached tabular menu grey">
-                <a data-tab="my_info" class="item ">회원정보</a> 
-                <!-- <a data-tab="my_cashbook" class="item">거래</a> 
-                <a data-tab="my_betting" class="item">베팅</a>  -->
-                <a data-tab="my_charge" class="item">입금내역</a>
-                <a data-tab="my_exchange" class="item">출금내역</a> 
-                <a data-tab="my_memo" class="item">&nbsp;&nbsp;&nbsp;&nbsp;쪽지&nbsp;&nbsp;&nbsp;&nbsp;</a>
-                <a data-tab="my_qna" class="item">고객센터</a>
-                <a data-tab="notice" class="item">공지사항</a>
+                <a data-tab="my_info" class="item "><?=lang('common.info_user')?></a> 
+                <a data-tab="my_charge" class="item"><?=lang('common.deposit_history')?></a>
+                <a data-tab="my_exchange" class="item"><?=lang('common.withdrawal_history')?></a> 
+                <a data-tab="my_memo" class="item">&nbsp;&nbsp;&nbsp;&nbsp;<?=lang('common.message')?>&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <a data-tab="my_qna" class="item"><?=lang('common.customer')?></a>
+                <a data-tab="notice" class="item"><?=lang('common.notice_list')?></a>
             </div>
             
             <div data-tab="my_info" class="ui tab segment ">
                 <table class="ui celled table no_border">
                     <tbody>
                         <tr>
-                            <td class="collapsing">회원아이디 ( 닉네임 )</td>
+                            <td class="collapsing"><?=lang('common.nickname')?> ( <?=lang('common.nickname')?> )</td>
                             <td>
                                 <div class="ui grid">
                                     <div class="six wide column">
@@ -160,7 +158,7 @@
                                     <div class="ten wide column">
                                     <?php if(!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) :?>
                                         <div id="btnChangePwd"  uk-toggle="target: #change_pwd" tabindex="0" aria-expanded="false"  class="ui tiny orange labeled icon button">
-                                            <i class="key icon"></i> <span class="hideOnMobile">비번변경</span>
+                                            <i class="key icon"></i> <span class="hideOnMobile"><?=lang('common.password_change')?></span>
                                         </div>
                                         <?php endif ?>
                                     </div>
@@ -168,22 +166,22 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="collapsing">보유머니</td>
+                            <td class="collapsing"><?=lang('common.money')?></td>
                             <td>
                                 <div class="ui grid">
                                     <div class="six wide column">
                                         <div class="ui teal basic label">
                                             {{ myInfo.user_money }}
-                                            <div class="detail">보유머니</div>
+                                            <div class="detail"><?=lang('common.money')?></div>
                                         </div>
                                     </div>
                                     <div class="ten wide column">
                                         <?php if(!$user_off) :?>
                                         <div id="btnRequestCharge" uk-toggle="target: #request_charge" tabindex="0" aria-expanded="false" class="ui tiny blue labeled icon button">
-                                            <i class="cloud download icon"></i> <span class="hideOnMobile">입금</span>
+                                            <i class="cloud download icon"></i> <span class="hideOnMobile"><?=lang('common.deposit')?></span>
                                         </div>
                                         <div id="btnRequestExchange" uk-toggle="target: #request_exchange" tabindex="0" aria-expanded="false" class="ui tiny green labeled icon button">
-                                            <i class="cloud upload icon"></i> <span class="hideOnMobile">출금</span>
+                                            <i class="cloud upload icon"></i> <span class="hideOnMobile"><?=lang('common.withdrawal')?></span>
                                         </div>
                                         <?php endif ?>
                                     </div>
@@ -191,50 +189,50 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="collapsing">포인트</td>
+                            <td class="collapsing"><?=lang('common.point')?></td>
                             <td>
                                 <div class="ui grid">
                                     <div class="six wide column">
                                         <div class="ui teal basic label">
                                             {{ myInfo.user_point }}
-                                            <div class="detail">포인트</div>
+                                            <div class="detail"><?=lang('common.point')?></div>
                                         </div>
                                     </div>
                                     <div class="ten wide column">
                                         <!-- <div id="btnRequestCash" uk-toggle="target: #request_cash" tabindex="0" aria-expanded="false" class="ui tiny yellow labeled icon button"> -->
                                         <div id="btnRequestCash" tabindex="0" class="ui tiny yellow labeled icon button">
-                                            <i class="refresh icon"></i> <span class="hideOnMobile">머니로 전환</span>
+                                            <i class="refresh icon"></i> <span class="hideOnMobile"><?=lang('common.change_point')?></span>
                                         </div>
                                     </div>
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td class="collapsing">추천인</td>
+                            <td class="collapsing"><?=lang('common.recommender')?></td>
                             <td>
                                 {{ myInfo.user_emp }}
                             </td>
                         </tr>
                         <tr>
-                            <td class="collapsing">휴대폰</td>
+                            <td class="collapsing"><?=lang('common.phone_number')?></td>
                             <td>{{ myInfo.user_phone }}</td>
                         </tr>
                         <tr>
-                            <td class="collapsing">계좌정보</td>
+                            <td class="collapsing"><?=lang('common.account_info')?></td>
                             <td>
                                 <!-- <div class="ui divided selection list"> -->
                                 <div class="ui grid">
                                     <div class="six wide column">
                                         <div class="" style="margin-bottom:5px;">
-                                            <div class="ui horizontal basic label" style="width:100px">계좌주</div>
+                                            <div class="ui horizontal basic label" style="width:100px"><?=lang('common.account_owner')?></div>
                                             {{ myInfo.user_bank_own }}
                                         </div>
                                         <div class="" style="margin-bottom:5px;">
-                                            <div class="ui horizontal basic label" style="width:100px">계좌은행</div>
+                                            <div class="ui horizontal basic label" style="width:100px"><?=lang('common.bank_name')?></div>
                                             {{ myInfo.user_bank_name }}
                                         </div>
                                         <div class="" style="margin-bottom:2px;">
-                                            <div class="ui horizontal basic label" style="width:100px">계좌번호</div>
+                                            <div class="ui horizontal basic label" style="width:100px"><?=lang('common.account_number')?></div>
                                             {{ myInfo.user_bank_num }}
                                         </div>
                                     </div>
@@ -248,11 +246,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="collapsing">가입일</td>
+                            <td class="collapsing"><?=lang('common.signup_date')?></td>
                             <td>{{ myInfo.user_join_at }}</td>
                         </tr>
                         <tr>
-                            <td class="collapsing">마지막로그인</td>
+                            <td class="collapsing"><?=lang('common.login_last')?></td>
                             <td>
                                 <div class="ui divided selection list">
                                     <span class="">
@@ -279,7 +277,7 @@
                                 <div class="ui mini icon input">
                                     <input type="date" v-model="end.charge"/> 
                                 </div>
-                                <button class="ui tiny blue button" v-on:click="getMyChargeList">검색</button>
+                                <button class="ui tiny blue button" v-on:click="getMyChargeList"><?=lang('common.search')?></button>
                             </div>
                         </div>
                     </div>
@@ -287,12 +285,12 @@
                 <table class="ui line table">
                     <thead>
                         <tr>
-                            <th>구분</th>
-                            <th>입금금액</th>
-                            <th>신청일시</th>
-                            <th>입금성명</th>
-                            <th>현재상태</th>
-                            <th>승인일시</th>
+                            <th><?=lang('common.type')?></th>
+                            <th><?=lang('common.deposit_amount')?></th>
+                            <th><?=lang('common.request_date')?></th>
+                            <th><?=lang('common.depositor')?></th>
+                            <th><?=lang('common.status_current')?></th>
+                            <th><?=lang('common.permit_date')?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -324,7 +322,6 @@
                 <div class="ui form">
                     <div class="fields">
                         <div class="field">
-                            <!-- <label>신청일</label> -->
                             <div class="inline field">
                                 <div class="ui mini icon input">
                                     <input type="date" v-model="start.exchange"/> 
@@ -333,7 +330,7 @@
                                 <div class="ui mini icon input">
                                     <input type="date" v-model="end.exchange"/> 
                                 </div>
-                                <button class="ui tiny blue button" v-on:click="getMyExchangeList">검색</button>
+                                <button class="ui tiny blue button" v-on:click="getMyExchangeList"><?=lang('common.search')?></button>
                             </div>
                         </div>
                     </div>
@@ -341,12 +338,12 @@
                 <table class="ui line table">
                     <thead>
                         <tr>
-                            <th>구분</th>
-                            <th>출금금액</th>
-                            <th>신청일시</th>
-                            <th>계좌</th>
-                            <th>현재상태</th>
-                            <th>승인일시</th>
+                            <th><?=lang('common.type')?></th>
+                            <th><?=lang('common.withdrawal_amount')?></th>
+                            <th><?=lang('common.request_date')?></th>
+                            <th><?=lang('common.account')?></th>
+                            <th><?=lang('common.status_current')?></th>
+                            <th><?=lang('common.permit_date')?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -385,28 +382,28 @@
                         <div class="ui mini icon input">
                             <input type="date" v-model="end.memo"/> 
                         </div>
-                        <button class="ui tiny blue button" v-on:click="getMyMemoList">검색</button>
-                        <button class="ui tiny red right floated button" onclick="deleteMemo(0)"> 전체 삭제</button>
-                        <button class="ui tiny green right floated button" onclick="readMemo(0)"> 전체 읽기</button>
+                        <button class="ui tiny blue button" v-on:click="getMyMemoList"><?=lang('common.search')?></button>
+                        <button class="ui tiny red right floated button" onclick="deleteMemo(0)"><?=lang('common.delete_all')?></button>
+                        <button class="ui tiny green right floated button" onclick="readMemo(0)"><?=lang('common.read_all')?></button>
                     </div>
                 </div>
                 <table class="ui unstackable accordion celled table">
                     <thead>
                         <tr>
-                            <th>발송인</th>
-                            <th>제목</th>
-                            <th>보낸일시</th>
-                            <th>확인</th>
-                            <th>삭제</th>
+                            <th><?=lang('common.sender')?></th>
+                            <th><?=lang('common.title')?></th>
+                            <th><?=lang('common.send_date')?></th>
+                            <th><?=lang('common.check')?></th>
+                            <th><?=lang('common.delete')?></th>
                         </tr>
                     </thead>
                     <tbody v-for="item in memoList">
                         <tr class="ui title" v-on:click="viewMemo(item.notice_fid, item.notice_read_count)">
-                            <td><span>관리자</span></td>
+                            <td><span><?=lang('common.administrator')?></span></td>
                             <td><span>{{ item.notice_title }}</span> <i class="ui dropdown icon"></i></td>
                             <td><span>{{ item.notice_time_create }}</span></td>
                             <td v-html="strMsgCheck(item.notice_read_count)"> </td>
-                            <td><div class="ui orange horizontal label" v-on:click="deleteMemo(item.notice_fid)">삭제</div></td>
+                            <td><div class="ui orange horizontal label" v-on:click="deleteMemo(item.notice_fid)"><?=lang('common.delete')?></div></td>
                         </tr>
                         <tr>
                             <td colspan="100%" class="full-width transition hidden">
@@ -443,20 +440,20 @@
                         <div class="ui mini icon input">
                             <input type="date" v-model="end.qna"/> 
                         </div>
-                        <button class="ui tiny blue button" v-on:click="getMyQnaList" style="margin-bottom:10px" >검색</button>
-                        <button class="ui tiny red right floated button" onclick="deleteCus(0)"><i class="ui times circle icon"></i> 전체 삭제</button>
-                        <button uk-toggle="target:#qnaWriteModal" class="ui tiny blue right floated button" aria-expanded="false"><i class="pencil alternate icon"></i> 1:1 문의</button>
-                        <button class="ui tiny green right floated button" onclick="requestAccount()"><i class="ui question circle icon"></i> 계좌 문의</button>
+                        <button class="ui tiny blue button" v-on:click="getMyQnaList" style="margin-bottom:10px" ><?=lang('common.search')?></button>
+                        <button class="ui tiny red right floated button" onclick="deleteCus(0)"><i class="ui times circle icon"></i><?=lang('common.delete_all')?></button>
+                        <button uk-toggle="target:#qnaWriteModal" class="ui tiny blue right floated button" aria-expanded="false"><i class="pencil alternate icon"></i> <?=lang('common.ask_1on1')?></button>
+                        <button class="ui tiny green right floated button" onclick="requestAccount()"><i class="ui question circle icon"></i><?=lang('common.ask_account')?></button>
                     </div>
                 </div>
                 <table class="ui unstackable accordion celled table">
                     <thead>
                         <tr>
-                            <th>작성자</th>
-                            <th>문의제목</th>
-                            <th>문의일시</th>
-                            <th>답변</th>
-                            <th>삭제</th>
+                            <th><?=lang('common.sender')?></th>
+                            <th><?=lang('common.ask_title')?></th>
+                            <th><?=lang('common.ask_time')?></th>
+                            <th><?=lang('common.answer')?></th>
+                            <th><?=lang('common.delete')?></th>
                         </tr>
                     </thead>
                     <tbody v-for="item in qnaList">
@@ -465,15 +462,15 @@
                             <td><span>{{ item.notice_title }}</span> <i class="ui dropdown icon"></i></td>
                             <td><span>{{ item.notice_time_create }}</span></td>
                             <td v-html="strQnaCheck(item.notice_state_active)"> </td>
-                            <td><div class="ui orange horizontal label" v-on:click="deleteCus(item.notice_fid)">삭제</div></td>
+                            <td><div class="ui orange horizontal label" v-on:click="deleteCus(item.notice_fid)"><?=lang('common.delete')?></div></td>
                         </tr>
                         <tr>
                             <td colspan="100%" class="full-width transition hidden">
                                 <div class="ui message">
-                                    <div class="header">문의내용</div>
+                                    <div class="header"><?=lang('common.ask_content')?></div>
                                     <p style="text-align: center;"></p>
                                     <p style=" white-space: pre-wrap;" v-html="item.notice_content"></p>
-                                    <div class="header">답변내용</div>
+                                    <div class="header"><?=lang('common.answer_content')?></div>
                                     <p style="text-align: center;"></p>
                                     <p style=" white-space: pre-wrap;" v-html="item.notice_answer"></p>
                                     
@@ -508,7 +505,7 @@
                                 <div class="ui mini icon input">
                                     <input type="date" v-model="end.notice"/> 
                                 </div>
-                                <button class="ui tiny blue button" v-on:click="getNoticeList">검색</button>
+                                <button class="ui tiny blue button" v-on:click="getNoticeList"><?=lang('common.search')?></button>
                             </div>
                         </div>
                     </div>
@@ -516,15 +513,15 @@
                 <table class="ui unstackable accordion celled table">
                     <thead>
                         <tr>
-                            <th>공지</th>
-                            <th>작성자</th>
-                            <th>제목</th>
+                            <th><?=lang('common.notice')?></th>
+                            <th><?=lang('common.writer')?></th>
+                            <th><?=lang('common.title')?></th>
                         </tr>
                     </thead>
                     <tbody v-for="item in noticeList">
                         <tr class="ui title" >
-                            <td><span>[공지]</span></td>
-                            <td><span>관리자</span></td>
+                            <td><span>[<?=lang('common.notice')?>]</span></td>
+                            <td><span><?=lang('common.administrator')?></span></td>
                             <td><span>{{ item.notice_title }}</span> <i class="ui dropdown icon"></i></td>
                         </tr>
                         <tr>
@@ -556,16 +553,16 @@
             <div id="qnaWriteModal" uk-modal="" class="uk-modal">
                 <div class="uk-modal-dialog">
                     <form name="qnaForm" id="qnaForm" class="ui form equal width">
-                        <div class="uk-modal-header"><h3 class="uk-modal-title">1:1 문의하기</h3></div>
+                        <div class="uk-modal-header"><h3 class="uk-modal-title"><?=lang('common.ask_1on1')?></h3></div>
                         <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
                         </button>
                         <div class="uk-modal-body">
-                            <div class="field required"><label>문의제목</label> <input type="text" name="title" placeholder="문의제목" /></div>
-                            <div class="field required"><label>문의하실 내용</label> <textarea name="contents" rows="5" placeholder="문의내용" class="ui-textarea"></textarea></div>
+                            <div class="field required"><label><?=lang('common.ask_title')?></label> <input type="text" name="title" placeholder="<?=lang('common.ask_title')?>" /></div>
+                            <div class="field required"><label><?=lang('common.ask_content')?></label> <textarea name="contents" rows="5" placeholder="<?=lang('common.ask_content')?>" class="ui-textarea"></textarea></div>
                         </div>
                         <div class="uk-modal-footer">
-                            <div class="ui primary submit button">문의하기</div>
-                            <div class="ui uk-modal-close button">취소</div>
+                            <div class="ui primary submit button"><?=lang('common.asking')?></div>
+                            <div class="ui uk-modal-close button"><?=lang('common.cancel')?></div>
                         </div>
                     </form>
                 </div>
@@ -1125,7 +1122,7 @@
                                 if (response.status == "success") {
                                     objDashBoard.myInfo = response.data;
 
-                                    $("#dashboard .inverted").text(`${ objDashBoard.myInfo.user_id } (${ objDashBoard.myInfo.user_name }) 님 반갑습니다.`);
+                                    $("#dashboard .inverted").text(`${ objDashBoard.myInfo.user_id } (${ objDashBoard.myInfo.user_name }) <?=lang('common.nice_meet')?>.`);
 
                                 } 
                             },
@@ -1530,23 +1527,23 @@
             <div id="request_charge" uk-modal="" class="uk-modal" style="" tabindex="-1">
                 <div class="uk-modal-dialog">
                     <form name="chargeForm" id="chargeForm" class="ui form equal width">
-                        <div class="uk-modal-header"><h3 class="uk-modal-title"><i class="ui cloud download icon"></i> 입금요청</h3></div>
+                        <div class="uk-modal-header"><h3 class="uk-modal-title"><i class="ui cloud download icon"></i> <?=lang('common.deposit_request')?></h3></div>
                         <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
                         </button>
                         <div class="uk-modal-body">
                             <div class="field required">
-                                <label>요청금액</label> <input type="number" name="cash" id="cash" placeholder="입금요청하실 금액을 만원단위로 입력해주세요" step="10000" />
+                                <label><?=lang('common.request_amount')?></label> <input type="number" name="cash" id="cash" placeholder="<?=lang('common.request_deposit_msg')?>" step="10000" />
                                 <div style="padding-top: 5px; text-align:right;">
-                                    <button type="button" onclick="setMoneyField('cash',10000)" class="ui inverted blue mini button">1만</button> <button type="button" onclick="setMoneyField('cash',50000)" class="ui inverted blue mini button">5만</button>
-                                    <button type="button" onclick="setMoneyField('cash',100000)" class="ui inverted blue mini button">10만</button> <button type="button" onclick="setMoneyField('cash',500000)" class="ui inverted blue mini button">50만</button>
-                                    <button type="button" onclick="setMoneyField('cash',1000000)" class="ui inverted blue mini button">100만</button> <button type="button" onclick="setMoneyField('cash',0)" class="ui inverted blue mini button">다시입력</button>
+                                    <button type="button" onclick="setMoneyField('cash',10000)" class="ui inverted blue mini button"><?=lang('common.10_thousands')?></button> <button type="button" onclick="setMoneyField('cash',50000)" class="ui inverted blue mini button"><?=lang('common.50_thousands')?></button>
+                                    <button type="button" onclick="setMoneyField('cash',100000)" class="ui inverted blue mini button"><?=lang('common.100_thousands')?></button> <button type="button" onclick="setMoneyField('cash',500000)" class="ui inverted blue mini button"><?=lang('common.500_thousands')?></button>
+                                    <button type="button" onclick="setMoneyField('cash',1000000)" class="ui inverted blue mini button"><?=lang('common.1_million')?></button> <button type="button" onclick="setMoneyField('cash',0)" class="ui inverted blue mini button"><?=lang('common.reenter')?></button>
                                 </div>
                             </div>
-                            <div class="field required"><label>입금자 명</label> <input type="text" name="req_name" placeholder="입금자 명" v-model="myInfo.user_bank_own" /></div>
+                            <div class="field required"><label><?=lang('common.depositor')?></label> <input type="text" name="req_name" placeholder="입금자 명" v-model="myInfo.user_bank_own" /></div>
                         </div>
                         <div class="uk-modal-footer">
-                            <div class="ui primary submit button">입금요청하기</div>
-                            <div class="ui uk-modal-close button">취소</div>
+                            <div class="ui primary submit button"><?=lang('common.deposit_request_to')?></div>
+                            <div class="ui uk-modal-close button"><?=lang('common.cancel')?></div>
                         </div>
                     </form>
                     <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
@@ -1561,41 +1558,41 @@
                         </button>
                         <div class="uk-modal-body">
                             <div class="inline field">
-                                <label>현재 보유 머니</label>
+                                <label><?=lang('common.current_money')?></label>
                                 <div class="ui teal label">
-                                    {{ myInfo.user_money }} 원
+                                    {{ myInfo.user_money }} <?=lang('common.won')?>
                                 </div>
                             </div>
                             <div class="inline field required">
-                                <label>신청금액</label> 
+                                <label><?=lang('common.request_amount')?></label> 
                                 <div class="ui input"><input type="number" name="cash" id="cash_out" placeholder="출금요청하실 금액을 만원단위로 입력해주세요" step="10000" /></div>
                                 <div style="padding-top: 5px; text-align:right;">
-                                    <button type="button" onclick="setMoneyField('cash_out',10000)" class="ui inverted blue mini button">1만</button> <button type="button" onclick="setMoneyField('cash_out',50000)" class="ui inverted blue mini button">5만</button>
-                                    <button type="button" onclick="setMoneyField('cash_out',100000)" class="ui inverted blue mini button">10만</button> <button type="button" onclick="setMoneyField('cash_out',500000)" class="ui inverted blue mini button">50만</button>
-                                    <button type="button" onclick="setMoneyField('cash_out',1000000)" class="ui inverted blue mini button">100만</button> <button type="button" onclick="setMoneyField('cash_out',0)" class="ui inverted blue mini button">다시입력</button>
+                                    <button type="button" onclick="setMoneyField('cash_out',10000)" class="ui inverted blue mini button"><?=lang('common.10_thousands')?></button> <button type="button" onclick="setMoneyField('cash_out',50000)" class="ui inverted blue mini button"><?=lang('common.50_thousands')?></button>
+                                    <button type="button" onclick="setMoneyField('cash_out',100000)" class="ui inverted blue mini button"><?=lang('common.100_thousands')?></button> <button type="button" onclick="setMoneyField('cash_out',500000)" class="ui inverted blue mini button"><?=lang('common.500_thousands')?></button>
+                                    <button type="button" onclick="setMoneyField('cash_out',1000000)" class="ui inverted blue mini button"><?=lang('common.1_million')?></button> <button type="button" onclick="setMoneyField('cash_out',0)" class="ui inverted blue mini button"><?=lang('common.reenter')?></button>
                                 </div>
                             </div>
-                            <h4 class="ui dividing teal header">출금정보</h4>
+                            <h4 class="ui dividing teal header"><?=lang('common.withdrawal_information')?></h4>
                             <div class="inline field">
-                                <label>계좌주 &nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label style="min-width:80px; margin-right:0px;"><?=lang('common.account_owner')?></label>
                                 <div class="ui input"><input type="text" readonly="readonly" name="bank_owner" v-model="myInfo.user_bank_own" /></div>
                             </div>
                             <div class="inline field">
-                                <label>계좌은행 </label>
+                            <label style="min-width:80px; margin-right:0px;"><?=lang('common.bank_name')?></label>
                                 <div class="ui input"><input type="text" name="bank_name" readonly="readonly" v-model="myInfo.user_bank_name" /></div>
                             </div>
                             <div class="inline field">
-                                <label>계좌번호 </label>
+                            <label style="min-width:80px; margin-right:0px;"><?=lang('common.account_number')?></label>
                                 <div class="ui input"><input type="text" readonly="readonly" v-model="myInfo.user_bank_num"/> </div>
                             </div>
                             <div class="inline field">
-                                <label>출금비번 </label>
+                            <label style="min-width:80px; margin-right:0px;"><?=lang('common.withdrawal_pwd')?></label>
                                 <div class="ui input"><input type="text" name="bank_passwd" /></div>
                             </div>
                         </div>
                         <div class="uk-modal-footer">
-                            <div class="ui primary submit button">출금신청하기</div>
-                            <div class="ui uk-modal-close button">취소</div>
+                            <div class="ui primary submit button"><?=lang('common.withdrawal_request_to')?></div>
+                            <div class="ui uk-modal-close button"><?=lang('common.cancel')?></div>
                         </div>
                     </form>
                     <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">

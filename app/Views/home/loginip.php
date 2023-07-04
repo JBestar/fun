@@ -28,8 +28,8 @@
         <div class="alert_bot">
             <p class="question_ico" style="white-space:pre-line;" id="alert_content"></p>
             <div class="btn_wrap">
-                <a onclick="location.href='javascript:okAlert()';" class="btn btn_red" id="basic_ok" style="cursor: pointer">확인</a>
-                <a onclick="location.href='javascript:closeAlert()';" class="btn" style="cursor: pointer">취소</a>
+                <a onclick="location.href='javascript:okAlert()';" class="btn btn_red" id="basic_ok" style="cursor: pointer"><?=lang('common.ok')?></a>
+                <a onclick="location.href='javascript:closeAlert()';" class="btn" style="cursor: pointer"><?=lang('common.cancel')?></a>
             </div>
         </div>
     </div>
@@ -38,25 +38,25 @@
         <div class="alert_bot">
             <p class="question_ico" style="white-space:pre-line;" id="alert_content"></p>
             <div class="btn_wrap">
-                <a onclick="location.href='javascript:closeAlert()';" class="btn" id="confirm_ok" style="cursor: pointer">확인</a>
+                <a onclick="location.href='javascript:closeAlert()';" class="btn" id="confirm_ok" style="cursor: pointer"><?=lang('common.ok')?></a>
             </div>
         </div>
     </div>
 
     <div class="login-box">
-        <h2>IP 로그인</h2>
+        <h2>IP <?=lang('common.login')?></h2>
         <form>
           <div class="user-box">
             <input type="text" name="" required="" id="user_id">
-            <label>아이디</label>
+            <label><?=lang('common.id')?></label>
           </div>
           <div class="user-box">
             <input type="password" name="" required="" id="user_pw">
-            <label>비밀번호</label>
+            <label><?=lang('common.password')?></label>
           </div>
           <div class="user-box">
             <input type="text" name="" required="" id="ip_addr">
-            <label>아이피</label>
+            <label><?=lang('common.ip')?></label>
           </div>
           <div class="user-box" style="text-align:center;">
             <a href="javascript: void(0);" style="width:120px;" id="btnLogin">
@@ -64,7 +64,7 @@
                 <span></span>
                 <span></span>
                 <span></span>
-                로그인
+                <?=lang('common.login')?>
               </a>
           </div>
         </form>

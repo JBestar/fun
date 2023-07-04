@@ -11,6 +11,19 @@ class Home extends BaseController
     {
         $headInfo = $this->getSiteConf();
 
+        $configApp = new \Config\App();
+        $locale = $this->session->get('lang');
+        $language = \Config\Services::language();
+
+        writeLog("defaultLocale=".$configApp->defaultLocale." language=".$language->getLocale());
+
+        if(is_null($locale) || is_array($locale) || strlen($locale) < 1)
+            $locale = $configApp->defaultLocale;
+        $locale = "cn";
+        $this->session->set('lang', $locale);
+        $language->setLocale($this->session->lang);
+        writeLog("[lang] ".$this->session->lang);
+
         if(!is_login() && array_key_exists('app.login', $_ENV) && $_ENV['app.login'] == 1){
             echo view('home/login', $headInfo);
         } else {
@@ -90,6 +103,7 @@ class Home extends BaseController
 	}
 
     public function loginip(){
+		$this->setLanguage();
         $headInfo = $this->getSiteConf();
 
         if(!is_login()){
@@ -102,6 +116,21 @@ class Home extends BaseController
 
     public function mypage()
     {
+        
+        $configApp = new \Config\App();
+        $locale = $this->session->get('lang');
+        $language = \Config\Services::language();
+
+        writeLog("defaultLocale=".$configApp->defaultLocale." language=".$language->getLocale());
+
+        if(is_null($locale) || is_array($locale) || strlen($locale) < 1)
+            $locale = $configApp->defaultLocale;
+        $locale = "cn";
+        $this->session->set('lang', $locale);
+        $language->setLocale($this->session->lang);
+        writeLog("[lang] ".$this->session->lang);
+
+        
         if(!is_login()){
             print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
         } else{
