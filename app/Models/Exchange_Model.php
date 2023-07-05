@@ -36,6 +36,29 @@ class Exchange_Model extends Model {
         return !is_null($exchange);
     }
 
+    public function last($user_id){
+        
+        $getFields = ['exchange_fid', 'exchange_mb_uid', 'exchange_money', 'exchange_time_require', 
+            'exchange_action_state', 'exchange_action_uid', 'exchange_time_process',
+            'exchange_bank_name', 'exchange_bank_account', 'exchange_bank_serial',
+            'exchange_money_before', 'exchange_money_after' ]; 
+        
+        $where = " WHERE exchange_mb_uid = ".$this->db->escape($user_id);
+        $where.= " AND exchange_action_state = '".STATE_VERIFY."' ";
+        
+        $strTbColum = " ".implode(", ", $getFields);
+        
+        $strSql = " SELECT ".$strTbColum." FROM ".$this->table;
+        $strSql .= $where;
+
+        $strSql.=" ORDER BY exchange_fid DESC LIMIT 1";
+
+        $query = $this -> db -> query($strSql);
+        $result = $query -> getResult();
+        return $result;
+
+    }
+
     public function searchCount($reqData){
 
         $where = " WHERE exchange_time_require >= ".$this->db->escape($reqData['start_at']);
