@@ -561,11 +561,6 @@ class Api extends BaseController
 
 				$tmNow = time();
 				$strNow = date("Y-m-d H:i:s");        
-				$reqInfo['start_at'] = date('Y-m-d H:i:s', strtotime("-1 month", $tmNow));
-				$reqInfo['end_at'] = $strNow;
-				$reqInfo['req_uid'] = $objMember->mb_uid;
-				$reqInfo['page'] = 1;
-				$reqInfo['count'] = 1;
 				
 				$arrConf = $this->modelConfsite->getExchangePolicy();
 				foreach($arrConf as $objConf){
@@ -573,7 +568,7 @@ class Api extends BaseController
 						case CONF_CHARGE_MANUAL:	
 							$confs = explode('#', $objConf->conf_idx);
 
-							$exchanges = $modelExchange->searchList($reqInfo);
+							$exchanges = $modelExchange->last($objMember->mb_uid);
 
 							if(count($exchanges) > 0 && count($confs) >= 2 && $confs[0] == 1 && floatval($confs[1]) > 0){
 								writeLog("BankDelay Now=".$strNow.", lastExch=".$exchanges[0]->exchange_time_require);
