@@ -12,7 +12,7 @@ class Casino extends BaseController
 						
 		if(!is_login())
 		{
-			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
             $logHead = "<CAS_EVOL>";
@@ -132,7 +132,7 @@ class Casino extends BaseController
 						
 		if(!is_login())
 		{
-			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else if($_ENV['app.casino'] == APP_CASINO_STAR){
 			$this->response->redirect('/cas_h?prd='.$prdId);	
@@ -246,7 +246,7 @@ class Casino extends BaseController
 						
 		if(!is_login())
 		{
-			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
 			$gameId = GAME_CASINO_STAR;
@@ -351,7 +351,7 @@ class Casino extends BaseController
 						
 		if(!is_login())
 		{
-			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
 			$gameId = GAME_HOLD_CMS;

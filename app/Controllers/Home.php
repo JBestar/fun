@@ -9,6 +9,7 @@ class Home extends BaseController
 {
     public function index()
     {
+
         $headInfo = $this->getSiteConf();
 
         $configApp = new \Config\App();
@@ -46,7 +47,7 @@ class Home extends BaseController
                     case CONF_NOTICE_BANK: 
                         if($objConf->conf_active == STATE_ACTIVE){
                             $board = new \StdClass;
-                            $board->notice_title = '충,환전 공지사항';
+                            $board->notice_title = lang("common.notice_deposit");
                             $board->notice_content = $objConf->conf_content;
                             $board->notice_color = $objConf->conf_idx;
                             $boards[] = $board;
@@ -55,7 +56,7 @@ class Home extends BaseController
                     case CONF_NOTICE_URGENT: 
                         if($objConf->conf_active == STATE_ACTIVE){
                             $board = new \StdClass;
-                            $board->notice_title = '긴 급 공 지 사 항';
+                            $board->notice_title = lang("common.notice_emergency");
                             $board->notice_content = $objConf->conf_content;
                             $board->notice_color = $objConf->conf_idx;
                             $boards[] = $board;
@@ -132,7 +133,7 @@ class Home extends BaseController
 
         
         if(!is_login()){
-            print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+            print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
         } else{
             $tab = $this->request->getVar('tab');
             $user_id = $this->session->user_id;

@@ -16,7 +16,7 @@ class Slot extends BaseController
 		$prdCode = trim($this->request->getVar('prd'));
 		if(!is_login())
 		{
-			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else if($_ENV['app.type'] == APP_TYPE_2){
 			$this->response->redirect('/fslotlist?prd='.$prdCode);	
@@ -244,7 +244,7 @@ class Slot extends BaseController
 			
 		if(!is_login())
 		{
-			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else if($_ENV['app.fslot'] == APP_FSLOT_GOLD){
 			$this->response->redirect('/slot/xslotg?prd='.$prdCode.'&game='.$slotId);	
@@ -368,7 +368,7 @@ class Slot extends BaseController
 	public function xslotg(){
 		if(!is_login())
 		{
-			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
 			$modelSlotgame = new SlotGame_Model();
@@ -490,7 +490,7 @@ class Slot extends BaseController
 	public function xslotk(){
 		if(!is_login())
 		{
-			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
 			$modelSlotgame = new SlotGame_Model();
@@ -602,7 +602,7 @@ class Slot extends BaseController
 	public function xsloth(){
 		if(!is_login())
 		{
-			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
 			$modelSlotgame = new SlotGame_Model();
@@ -715,7 +715,7 @@ class Slot extends BaseController
 						
 		if(!is_login())
 		{
-			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else if($_ENV['app.type'] == APP_TYPE_1){
 			$this->response->redirect('/xslot_list?prd='.$prdCode);	

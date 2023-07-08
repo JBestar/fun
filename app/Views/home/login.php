@@ -244,8 +244,8 @@
                 <div class="join_area step02">
                     <ul>
                         <li>
-                            <p class="tit"><?=lang('common.id')?><span class="desc" id="id_desc">※ <?=lang('common.4to6')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?></span></p>
-                            <input type="text" name="input_id" id="input_id" class="english" placeholder="<?=lang('common.4to6')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?>">
+                            <p class="tit"><?=lang('common.id')?><span class="desc" id="id_desc">※ <?=lang('common.4to16')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?></span></p>
+                            <input type="text" name="input_id" id="input_id" class="english" placeholder="<?=lang('common.4to16')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?>">
                         </li>
                         <li>
                             <p class="tit"><?=lang('common.nickname')?><span class="desc" id="nickname_desc">※ <?=lang('common.3to12')?></span></p>

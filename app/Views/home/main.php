@@ -19,6 +19,20 @@
         <script type="text/javascript" src="/js/jquery-form/jquery.form.js"></script>
         <script type="text/javascript" src="/js/jquery-form/jquery.validate.js"></script>
 
+        <script>
+            var langMessage = {
+                id_input : '<?=lang('common.id_input')?>',
+                id_input_4 : '<?=lang('common.id_input_4')?>',
+                id_input_16 : '<?=lang('common.id_input_16')?>',
+
+                password_input : '<?=lang('common.password_input')?>', 
+                password_input_4 : '<?=lang('common.password_input_4')?>', 
+
+                password_verify : '<?=lang('common.password_verify')?>',
+                password_verify_c : '<?=lang('common.password_verify_c')?>',
+
+            };
+        </script>  
         <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
         <link rel="stylesheet" href="/css/bootstrap.min.css?ver=1" />
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
@@ -95,33 +109,33 @@
                     margin-top:16px;
                 }         
                           
-            .scroll_area{
-                background-color: #000000;
-            } 
-            .SeoPage {
-                background-repeat:repeat;
-                background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=2);
-            }
-            .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
-                top: 8px;
-                width: 150px;
-            }
-            .MainMenu-open-wrapper.js-is-game-open, .MainMenu-open-wrapper.js-sticky{
-                background-color: #000000;
-            }
-            .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before,
-            .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:after{
-                background-color: #000000;
-            }
-            
-            @media only screen and (max-width: 850px) {
-                .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, 
-                .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
-                    top:11px;
-                    width:100px;
-                    left: 90px;
+                .scroll_area{
+                    background-color: #000000;
+                } 
+                .SeoPage {
+                    background-repeat:repeat;
+                    background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=2);
                 }
-            }
+                .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
+                    top: 8px;
+                    width: 150px;
+                }
+                .MainMenu-open-wrapper.js-is-game-open, .MainMenu-open-wrapper.js-sticky{
+                    background-color: #000000;
+                }
+                .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before,
+                .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:after{
+                    background-color: #000000;
+                }
+                
+                @media only screen and (max-width: 850px) {
+                    .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, 
+                    .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
+                        top:11px;
+                        width:100px;
+                        left: 90px;
+                    }
+                }
             <?php endif ?>
             <?php if($_ENV['app.name'] == APP_HERMES) :?>
                 .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
@@ -1151,8 +1165,8 @@
                     <div class="uk-modal-body">
                         <div class="fields">
                             <div class="twelve wide field">
-                                <label><?=lang('common.userid')?> </label>
-                                <input type="text" name="userid" id="userid" placeholder="<?=lang('common.4to6')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?>" minlength="4" maxlength="16" />
+                                <label><?=lang('common.id_user')?> </label>
+                                <input type="text" name="userid" id="userid" placeholder="<?=lang('common.4to16')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?>" minlength="4" maxlength="16" />
                                 <input type="text" name="ip" id="ip_addr" hidden/>
                             </div>
                             <div class="two wide field">
@@ -1441,7 +1455,7 @@
 
                 },
                 error: function(request, status, error) {
-                    console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                    // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             });
 
@@ -1451,15 +1465,15 @@
                     rules: [
                         {
                             type: "empty",
-                            prompt: "회원아이디를 입력해주세요",
+                            prompt: langMessage.id_input,
                         },
                         {
                             type: "minLength[4]",
-                            prompt: "회원아이디를 4글자이상 입력해주세요",
+                            prompt: langMessage.id_input_4,
                         },
                         {
                             type: "maxLength[16]",
-                            prompt: "회원아이디를 16글자이하 입력해주세요",
+                            prompt: langMessage.id_input_16,
                         },
                     ],
                 },
@@ -1468,11 +1482,11 @@
                     rules: [
                         {
                             type: "empty",
-                            prompt: "비밀번호를 입력해주세요",
+                            prompt: langMessage.password_input
                         },
                         {
                             type: "minLength[4]",
-                            prompt: "비밀번호를 4글자이상 입력해주세요",
+                            prompt: langMessage.password_input_4,
                         },
                     ],
                 },
@@ -1481,11 +1495,11 @@
                     rules: [
                         {
                             type: "empty",
-                            prompt: "비밀번호 확인을 입력해주세요",
+                            prompt: langMessage.password_verify,
                         },
                         {
                             type: "match[passwd]",
-                            prompt: "비밀번호 확인을 정확히 입력해주세요.",
+                            prompt: langMessage.password_verify_c,
                         },
                     ],
                 },

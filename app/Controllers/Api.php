@@ -187,6 +187,7 @@ class Api extends BaseController
 	}
 
 	public function check_proposer(){
+		$this->setLanguage();
 		$arrData['proposer'] = $this->request->getVar('recommender_id');
 		
 		$result = new \StdClass;
@@ -198,13 +199,13 @@ class Api extends BaseController
 		}
 
 		if(is_null($objEmp)){
-			$result->msg = "가입자 코드가 맞지 않습니다.";
+			$result->msg = lang("common.recommender_mistake");
 			$result->status = STATUS_FAIL;
 		} else if($objEmp->mb_level <= $minLevel){
-			$result->msg = "승인된 가입자 코드가 아닙니다.";
+			$result->msg = lang("common.recommender_nopermitted");
 			$result->status = STATUS_FAIL;
 		} else if(!$this->modelMember->isPermitMember($objEmp) || $objEmp->mb_level > LEVEL_COMPANY){
-			$result->msg = "승인된 가입자 코드가 아닙니다.";
+			$result->msg = lang("common.recommender_nopermitted");
 			$result->status = STATUS_FAIL;
 		} else {
 			$result->status = STATUS_SUCCESS;
@@ -224,12 +225,12 @@ class Api extends BaseController
 			$checkOk = validUserId($arrData['member_id']);
 			if(!$checkOk){
 				$result->status = STATUS_FAIL;
-				$result->msg = "아이디는 4자~16자, 영문 또는 숫자만 사용 가능합니다.";
+				$result->msg = lang("common.id_rule"); 
 			} else {
 				$objMember = $this->modelMember->getByUid($arrData['member_id']);
 				if(!is_null($objMember) && $objMember->mb_state_active != PERMIT_DELETE ){
 					$result->status = STATUS_FAIL;
-					$result->msg = "중복된 아이디입니다.";
+					$result->msg = lang("common.id_duplicated"); 
 				} 
 			}
 		}
@@ -238,7 +239,7 @@ class Api extends BaseController
 			$objMember = $this->modelMember->getByName($arrData['nickname']);
 			if(!is_null($objMember) ){
 				$result->status = STATUS_FAIL;
-				$result->msg = "중복된 닉네임입니다.";
+				$result->msg = lang("common.nickname_duplicated"); 
 			}
 		}
 		echo json_encode($result);	
@@ -318,7 +319,7 @@ class Api extends BaseController
 					case CONF_NOTICE_BANK: 
 						if($objConf->conf_active == STATE_ACTIVE){
                             $board = new \StdClass;
-                            $board->notice_title = '충,환전 공지사항';
+                            $board->notice_title = lang("common.notice_deposit"); 
                             $board->notice_content = $objConf->conf_content;
                             $board->notice_color = $objConf->conf_idx;
                             $boards[] = $board;
@@ -327,7 +328,7 @@ class Api extends BaseController
 					case CONF_NOTICE_URGENT: 
 						if($objConf->conf_active == STATE_ACTIVE){
                             $board = new \StdClass;
-                            $board->notice_title = '긴 급 공 지 사 항';
+                            $board->notice_title = lang("common.notice_emergency"); 
                             $board->notice_content = $objConf->conf_content;
                             $board->notice_color = $objConf->conf_idx;
                             $boards[] = $board;
@@ -358,7 +359,7 @@ class Api extends BaseController
 		$result = new \StdClass;
 		if(!is_login())
 		{
-			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요."; 
+			$result->msg = lang("common.session_expired"); 
 			$result->status = STATUS_LOGOUT;
 		}
 		else {
@@ -372,7 +373,7 @@ class Api extends BaseController
 				$bPermit = false;
 						
 			if(!$bPermit){
-				$result->msg = "비밀번호가 맞지 않습니다."; 
+				$result->msg = lang("common.password_mistake"); 
 				$result->status = STATUS_FAIL;                
 			} else{
 				$result->status = STATUS_SUCCESS; 
@@ -389,7 +390,7 @@ class Api extends BaseController
 		$result = new \StdClass;
 		if(!is_login())
 		{
-			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+			$result->msg = lang("common.session_expired");
 			$result->status = STATUS_LOGOUT;
 		}
 		else {
@@ -404,10 +405,10 @@ class Api extends BaseController
 				$bPermit = false;
 				
 			if(!validUserPw($user_newPw)){
-				$result->msg = "새 비밀번호는 8자~20자, 특수문자 한개 이상 입력하셔야 합니다."; 
+				$result->msg = lang("common.password_rule"); 
 				$result->status = STATUS_FAIL;
 			} else if(!$bPermit){
-				$result->msg = "현재 비밀번호가 틀림니다."; 
+				$result->msg = lang("common.password_mistake_now"); 
 				$result->status = STATUS_FAIL;                
 			} else{
 				$data = [
@@ -453,7 +454,7 @@ class Api extends BaseController
 	// 	$result = new \StdClass;
 	// 	if(!is_login())
 	// 	{
-	// 		$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+	// 		$result->msg = lang("common.session_expired");
 	// 		$result->status = STATUS_LOGOUT;
 	// 	}
 	// 	else {
@@ -510,11 +511,11 @@ class Api extends BaseController
 
 		$checkOk = validUserId($reqData['member_id']);
 		if(!$checkOk){
-			$result->msg = "아이디는 4자~16자, 영문 또는 숫자만 사용 가능합니다.";
+			$result->msg = lang("common.id_rule");
 		} else {
 			$checkOk = validUserPw($reqData['password']);
 			if(!$checkOk)
-				$result->msg = "비밀번호는 8자~20자, 특수문자 한개 이상 입력하셔야 합니다.";
+				$result->msg = lang("common.password_rule");
 		}
 
 		if($checkOk)
@@ -523,14 +524,14 @@ class Api extends BaseController
 		if($iResult == RESULT_OK){
 			$result->status = STATUS_SUCCESS;
 		} else if($iResult == RESULT_EXIST_ID) {
-			$result->msg = '중복된 아이디 입니다.';
+			$result->msg = lang("common.id_duplicated");
 		} else if($iResult == RESULT_EXIST_NAME) {
-			$result->msg = '중복된 닉네임 입니다.';
+			$result->msg = lang("common.nickname_duplicated");
 		} else if($iResult == RESULT_EMP_ERROR) {
-			$result->msg = '승인된 추천인이 아닙니다.';
+			$result->msg = lang("common.recommender_nopermit");
 		} else {
 			if(!property_exists($result, 'msg'))
-				$result->msg = '회원가입에 실패하였습니다. 관리자에게 문의 바랍니다.';
+				$result->msg = lang("common.signup_fail");
 		}
 		echo json_encode($result);
 
@@ -544,7 +545,7 @@ class Api extends BaseController
 		$result = new \StdClass;
 		if(!is_login())
 		{
-			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;
         } else {
 			$user_id = $this->session->user_id;
@@ -590,7 +591,7 @@ class Api extends BaseController
 								writeLog("BankRest Now=".$strNow." Time=".$strStart."~".$strEnd);
 								if($strNow >= $strStart || $strNow <= $strEnd){
 									$result->status = STATUS_FAIL;
-									$result->msg = "은행 점검시간에는 출금신청이 불가능합니다.";
+									$result->msg = lang("common.withdrawal_fail_bank");
 								}
 								
 							}
@@ -604,19 +605,19 @@ class Api extends BaseController
 				$result->status = STATUS_FAIL;
 			} else if($bLimit && $objMember->mb_state_delete == STATE_ACTIVE){
 				$result->status = STATUS_FAIL;
-				$result->msg = "출금신청을 하실 수 없습니다.";
+				$result->msg = lang("common.withdrawal_cant");
 			} else if($modelExchange->wait($user_id)){
 				$result->status = STATUS_FAIL;
-				$result->msg = "출금승인 대기중 입니다.";
+				$result->msg = lang("common.withdrawal_fail_wait");
 			} else if($reqData['bank_passwd'] != $objMember->mb_bank_pwd) {
 				$result->status = STATUS_FAIL;
-				$result->msg = "출금비번이 틀림니다.";
+				$result->msg = lang("common.withdrawal_fail_password");
 			} else if($reqData['c_price'] > allMoney($objMember)){
 				$result->status = STATUS_FAIL;
-				$result->msg = "출금금액이 보유머니를 초과하셧습니다.";
+				$result->msg = lang("common.withdrawal_fail_money");
 			} else if($reqData['c_price'] < 10000){
 				$result->status = STATUS_FAIL;
-				$result->msg = "출금금액은 10,000원 이상으로 신청해주세요..";
+				$result->msg = lang("common.withdrawal_fail_amount");
 			} else if($_ENV['mem.delay_play'] > 0 && $_ENV['mem.withdeny_play'] &&  diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet) < $_ENV['mem.delay_play']){
 				$result->status = STATUS_FAIL;
 				$result->msg = "게임플레이중에는 출금신청을 하실수 없습니다. ".intval($_ENV['mem.delay_play']/60-diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet)/60)."분후 다시 해주세요.";
@@ -630,7 +631,7 @@ class Api extends BaseController
 
 				if($iResult == 1){
 					if($reqData['c_price'] > $objMember->mb_money){
-						$result->msg = "게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요(".PLAY_FAIL_TRANSFER.").";
+						$result->msg = lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.").";
 						$result->status = STATUS_FAIL;
 					} else if($reqData['c_price'] > 0 && $this->modelMember->updateAssets($objMember, 0-$reqData['c_price'])){
 						$data =[
@@ -656,14 +657,14 @@ class Api extends BaseController
 				
 						$result->data = $objInfo;
 						$result->status = STATUS_SUCCESS;
-						$result->msg = "출금요청이 신청되었습니다. 관리자가 승인하는 동안 잠시 기다려주세요.";
+						$result->msg = lang("common.withdrawal_ok");
 						
 					} else{
-						$result->msg = "출금신청이 실패되었습니다.";
+						$result->msg = lang("common.withdrawal_fail");
 						$result->status = STATUS_FAIL;
 					}
 				} else{
-					$result->msg = "게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_TRANSFER.")";
+					$result->msg = lang("common.game_fail").".(".PLAY_FAIL_TRANSFER.")";
 					$result->status = STATUS_FAIL;
 				}
 				
@@ -732,11 +733,11 @@ class Api extends BaseController
 		$result = new \StdClass;
 		if(!is_login())
 		{
-			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
 
-			$sAnswer = "<p> 입금계좌 : &nbsp;";
+			$sAnswer = "<p> ".lang("common.deposit_amount")." : &nbsp;";
 
 			$libApiVacc = new ApiVacc_Lib();
 			$arrResult['status'] = 1;
@@ -767,7 +768,7 @@ class Api extends BaseController
 			$sAnswer .= "</p>";
 
 			if($arrResult['status'] == 0){
-				$result->msg = "계좌요청이 실패되었습니다.";
+				$result->msg = lang("account_fail");
 				$result->status = STATUS_FAIL;
 			} else {
 				$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
@@ -787,11 +788,11 @@ class Api extends BaseController
 				$bResult = $this->modelNotice->registerNotice($data);
 				
 				if($bResult){
-					$result->msg = "계좌정보가 도착하였습니다.";
+					$result->msg = lang("common.session_expired");
 					$result->status = STATUS_SUCCESS;
 				}
 				else {
-					$result->msg = "계좌요청이 실패되었습니다.";
+					$result->msg = lang("common.account_fail"); 
 					$result->status = STATUS_FAIL;
 				}
 			}
@@ -808,7 +809,7 @@ class Api extends BaseController
 		$result = new \StdClass;
 		if(!is_login())
 		{
-			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;
         } else {
 			$user_id = $this->session->user_id;
@@ -818,10 +819,10 @@ class Api extends BaseController
 
 			if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 && $objMember->mb_state_delete == STATE_ACTIVE){
 				$result->status = STATUS_FAIL;
-				$result->msg = "입금요청을 하실 수 없습니다.";
+				$result->msg = lang("common.deposit_cant"); 
 			} else if($modelCharge->wait($user_id)){
 				$result->status = STATUS_FAIL;
-				$result->msg = "입금승인 대기중 입니다.";
+				$result->msg = lang("common.deposit_fail_wait");
 			} else {
 				$libApiVacc = new ApiVacc_Lib();
 
@@ -833,7 +834,7 @@ class Api extends BaseController
 				if($arrResult['status'] == 0){
 					if(array_key_exists('message', $arrResult))
 						$result->msg = $arrResult['message'];
-					else $result->msg = "입금요청이 실패되었습니다.";
+					else $result->msg = lang("common.deposit_fail");
 					$result->status = STATUS_FAIL;
 				} else {
 					$data =[
@@ -850,10 +851,10 @@ class Api extends BaseController
 	
 					if($modelCharge->register($data)){
 						$result->status = STATUS_SUCCESS;
-						$result->msg = "입금요청이 신청되었습니다. 관리자가 승인하는 동안 잠시 기다려주세요.";
+						$result->msg = lang("common.deposit_ok");
 					}
 					else{
-						$result->msg = "입금요청이 실패되었습니다.";
+						$result->msg = lang("common.deposit_fail");
 						$result->status = STATUS_FAIL;
 					}
 				}
@@ -977,7 +978,7 @@ class Api extends BaseController
 		$result = new \StdClass;
 		if(!is_login())
 		{
-			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
 			$reqData['send_uid'] = $this->session->user_id;
@@ -989,7 +990,7 @@ class Api extends BaseController
 			if($bResult)
 				$result->status = STATUS_SUCCESS;
 			else {
-				$result->msg = "삭제가 실패되었습니다.";
+				$result->msg = lang("common.delete_fail");
 				$result->status = STATUS_FAIL;
 			}
 				
@@ -1005,7 +1006,7 @@ class Api extends BaseController
 		$result = new \StdClass;
 		if(!is_login())
 		{
-			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
 			$data = [  
@@ -1021,7 +1022,7 @@ class Api extends BaseController
 			if($bResult)
 				$result->status = STATUS_SUCCESS;
 			else {
-				$result->msg = "문의등록이 실패되었습니다.";
+				$result->msg = lang("common.ask_fail");
 				$result->status = STATUS_FAIL;
 			}
         }
@@ -1082,7 +1083,7 @@ class Api extends BaseController
 		$result = new \StdClass;
 		if(!is_login())
 		{
-			$result->msg = "세션이 만료되었습니다. 다시 로그인하세요.";
+			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
 			$reqData['send_uid'] = $this->session->user_id;
@@ -1093,7 +1094,7 @@ class Api extends BaseController
 			if($bResult)
 				$result->status = STATUS_SUCCESS;
 			else {
-				$result->msg = "삭제가 실패되었습니다.";
+				$result->msg = lang("common.delete_fail");
 				$result->status = STATUS_FAIL;
 			}
 				
@@ -1815,7 +1816,7 @@ class Api extends BaseController
 						$iResult = isEnableBet($arrBetData, $member, $objConfig, $arrRoundData);
 						if($iResult == 1){
 							$arrEmpRatio = $this->modelMember->getEmployeeRatio($member, $arrBetData['amount'], $arrBetData['game'], $arrBetData['mode']);
-							//베팅에 성공하면 거래내역에 반영,유저머니 변경
+							//Add Money hisotry and Update User money
 							if($this->modelMember->updateAssets($member, 0-$arrBetData['amount'])){
 								$iBetId = $modelBet->register($arrBetData, $member);
 								$modelMoneyhist->registerBet($member, $arrBetData, $iMoneyChangeType);
