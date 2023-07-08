@@ -95,33 +95,33 @@
                     margin-top:16px;
                 }         
                           
-            .scroll_area{
-                background-color: #000000;
-            } 
-            .SeoPage {
-                background-repeat:repeat;
-                background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=2);
-            }
-            .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
-                top: 8px;
-                width: 150px;
-            }
-            .MainMenu-open-wrapper.js-is-game-open, .MainMenu-open-wrapper.js-sticky{
-                background-color: #000000;
-            }
-            .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before,
-            .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:after{
-                background-color: #000000;
-            }
-            
-            @media only screen and (max-width: 850px) {
-                .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, 
-                .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
-                    top:11px;
-                    width:100px;
-                    left: 90px;
+                .scroll_area{
+                    background-color: #000000;
+                } 
+                .SeoPage {
+                    background-repeat:repeat;
+                    background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=2);
                 }
-            }
+                .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
+                    top: 8px;
+                    width: 150px;
+                }
+                .MainMenu-open-wrapper.js-is-game-open, .MainMenu-open-wrapper.js-sticky{
+                    background-color: #000000;
+                }
+                .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before,
+                .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:after{
+                    background-color: #000000;
+                }
+                
+                @media only screen and (max-width: 850px) {
+                    .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, 
+                    .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
+                        top:11px;
+                        width:100px;
+                        left: 90px;
+                    }
+                }
             <?php endif ?>
             <?php if($_ENV['app.name'] == APP_HERMES) :?>
                 .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
