@@ -102,14 +102,31 @@ class BaseController extends Controller
 	protected function setLanguage(){
 		
         $locale = $this->session->get('lang');
-        $language = \Config\Services::language();
-        $configApp = new \Config\App();
 
-        if(is_null($locale) || is_array($locale) || strlen($locale) < 1)
-            $locale = $configApp->defaultLocale;
-        $locale = "cn";
+        if(is_null($locale) || is_array($locale) || strlen($locale) < 1){
+
+			$configApp = new \Config\App();
+			if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ){
+				
+				$locale = $this->request->getCookie('lang');
+				writeLog("cookieLang=".$locale);
+				if(strlen($locale) < 1){
+					$locale = $this->request->getLocale();
+					writeLog("requestLocale=".$locale);
+				}
+				
+				if(!in_array($locale, $configApp->supportedLocales)){
+					$locale = $configApp->defaultLocale;
+					writeLog("defaultLocale=".$locale);
+				}
+			} else 
+				$locale = $configApp->defaultLocale;
+			$this->session->set('lang', $locale);
+        }
+        $language = \Config\Services::language();
         $language->setLocale($this->session->lang);
-        writeLog("[lang] ".$this->session->lang);
+		// writeLog(" language=".$language->getLocale());
+		
 	}
     
 	protected function getSiteConf(){

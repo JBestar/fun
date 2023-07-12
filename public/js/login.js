@@ -486,12 +486,12 @@ $("#btnLogin").click(function(e) {
     var user_pw = $("#user_pw").val();
 
     if (user_id == "") {
-        confirmAlert('ID를 입력해 주세요.');
+        confirmAlert(langMessage.login_id_input);
         return false;
     }
 
     if (user_pw == "") {
-        confirmAlert('패스워드를 입력해 주세요.');
+        confirmAlert(langMessage.password_input);
         return false;
     }
 
@@ -531,7 +531,7 @@ $("#btnLogin").click(function(e) {
         },
         error: function(request, status, error) {
             // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            // confirmAlert("관리자에게 문의 바랍니다.\n" + request.status, 'reloadPage()');
+            // confirmAlert(langMessage.administrator_ask+"\n" + request.status, 'reloadPage()');
         }
     });
 });
@@ -576,7 +576,7 @@ $('.step01 .join01_btn').on('click', function(e) {
     var proposer = $("#proposer").val();
 
     if (proposer == "") {
-        confirmAlert('추천인 코드를 입력해 주세요.');
+        confirmAlert(langMessage.recommender_input);
         return;
     }
 
@@ -604,7 +604,7 @@ $('.step01 .join01_btn').on('click', function(e) {
         },
         error: function(request, status, error) {
             // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            confirmAlert("관리자에게 문의 바랍니다.");
+            confirmAlert(langMessage.administrator_ask);
         }
     });
 });
@@ -619,7 +619,7 @@ $("#input_id").focusout(function() {
     var input_id = $("#input_id").val();
 
     if (input_id.length < 4) {
-        $("#id_desc").html("<span style='color:red'>아이디를 입력해 주세요.(4~16)</span>");
+        $("#id_desc").html("<span style='color:red'>"+langMessage.login_id_input+".(4~16)</span>");
         return;
     }
 
@@ -627,7 +627,7 @@ $("#input_id").focusout(function() {
         'userid': input_id
     };
     if (data.userid == "") {
-        $("#id_desc").html("<span style='color:red'>아이디를 입력해 주세요.(4~16)</span>");
+        $("#id_desc").html("<span style='color:red'>"+langMessage.login_id_input+".(4~16)</span>");
         return;
     }
 
@@ -639,14 +639,13 @@ $("#input_id").focusout(function() {
         success: function(jResult) {
             // console.log(jResult);
             if ((jResult.status == 'success')) {
-                $("#id_desc").text('사용 가능한 아이디 입니다.');
+                $("#id_desc").text(langMessage.id_available);
             } else {
                 $("#id_desc").html("<span style='color:red'>" + jResult.msg + "</span>");
             }
         },
         error: function(request, status, error) {
-            // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            $("#id_desc").html("<span style='color:red'>관리자에게 문의 바랍니다.</span>");
+            $("#id_desc").html("<span style='color:red'>"+langMessage.administrator_ask+"</span>");
         }
     });
 });
@@ -656,7 +655,7 @@ $("#input_nickname").focusout(function() {
     var input_nickname = $("#input_nickname").val();
 
     if (input_nickname.length < 3) {
-        $("#nickname_desc").html("<span style='color:red'>닉네임을 입력해 주세요.(3~12)</span>");
+        $("#nickname_desc").html("<span style='color:red'>"+langMessage.nickname_input+"(3~12)</span>");
         return;
     }
 
@@ -664,7 +663,7 @@ $("#input_nickname").focusout(function() {
         'nickname': input_nickname
     };
     if (data.nickname == "") {
-        $("#nickname_desc").html("<span style='color:red'>닉네임을 입력해 주세요.(3~12)</span>");
+        $("#nickname_desc").html("<span style='color:red'>"+langMessage.nickname_input+"(3~12)</span>");
         return;
     }
 
@@ -676,15 +675,13 @@ $("#input_nickname").focusout(function() {
         success: function(jResult) {
             // console.log(jResult);
             if ((jResult.status == 'success')) {
-                $("#nickname_desc").text("사용 가능한 닉네임입니다.");
+                $("#nickname_desc").text(langMessage.nickname_available);
             } else {
                 $("#nickname_desc").html("<span style='color:red'>" + jResult.msg + "</span>");
             }
         },
         error: function(request, status, error) {
-            // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-
-            $("#nickname_desc").html("<span style='color:red'>관리자에게 문의 바랍니다.</span>");
+            $("#nickname_desc").html("<span style='color:red'>"+langMessage.administrator_ask+"</span>");
         }
     });
 });
@@ -709,24 +706,24 @@ $('.step02 .next_btn').on('click', function(e) {
     var input_pw = $("#input_pw").val();
     var input_pw_check = $("#input_pw_check").val();
 
-    if (input_id.length < 3) {
-        confirmAlert("아이디를 입력해 주세요.(4~16)");
+    if (input_id.length < 4) {
+        confirmAlert(langMessage.login_id_input+"(4~16)");
         return;
     }
 
     if (input_nickname.length < 3) {
-        confirmAlert("닉네임을 입력해 주세요.(3~12)");
+        confirmAlert(langMessage.nickname_input+"(3~12)");
         return;
     }
 
     if (input_pw != input_pw_check) {
-        confirmAlert("비밀번호가 일치하지 않습니다. 비밀번호를 확인해 주세요.");
+        confirmAlert(langMessage.password_match);
         return;
     }
 
     const regex = new RegExp('^[A-Za-z0-9]*[~!@#$%^&*_:;,.=+-]+[A-Za-z0-9]*$');
     if (input_pw.length < 8 || input_pw.length > 20 || !regex.test(input_pw)) {
-        confirmAlert("비밀번호는 8자~20자, 특수문자 한개 이상 입력하셔야 합니다.");
+        confirmAlert(langMessage.password_rule);
         return;
     }
 
@@ -736,7 +733,7 @@ $('.step02 .next_btn').on('click', function(e) {
     });
 
     if (data.userid == "" || data.nickname == "") {
-        confirmAlert('입력 정보를 다시 확인해 주세요.');
+        confirmAlert(langMessage.signup_check);
         return false;
     }
 
@@ -755,7 +752,7 @@ $('.step02 .next_btn').on('click', function(e) {
                 controlLoginForm('.users_wrap .login_wrap');
                 $('#user_name').focus();
             } else if ((jResult.status == 'warn')) {
-                if(confirm("삭제된 회원중에 아이디가 이미 존재합니다. 그래도 계속하시겠습니까?")){
+                if(confirm(langMessage.id_deleted)){
                     $('.step02').hide();
                     $('.step03').show();
                     controlLoginForm('.users_wrap .login_wrap');
@@ -766,7 +763,7 @@ $('.step02 .next_btn').on('click', function(e) {
             }
         },
         error: function() {
-            confirmAlert("관리자에게 문의 바랍니다. ");
+            confirmAlert(langMessage.administrator_ask);
         }
     });
 });
@@ -802,28 +799,28 @@ $('.step03 .next_btn').on('click', function(e) {
     }
 
     if (user_phone.length < 1) {
-        confirmAlert("연락처를 입력해 주세요.");
+        confirmAlert(langMessage.phone_number_input);
         return;
     }
 
     if (bank_name.length < 1) {
-        confirmAlert("은행명을 입력해 주세요.");
+        confirmAlert(langMessage.bank_name_input);
         return;
     }
 
     if (bank_account.length < 1) {
-        confirmAlert("계좌번호를 입력해 주세요.");
+        confirmAlert(langMessage.account_number_input);
         return;
     }
 
     if (bank_pw.length < 1) {
-        confirmAlert("환전 비밀번호를 입력해 주세요.");
+        confirmAlert(langMessage.withdrawal_password_input);
         return;
     }
 
     var check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
     if (check.test(bank_pw)) {
-        confirmAlert("환전 비밀번호는 한글을 포함할수 없습니다.");
+        confirmAlert(langMessage.withdrawal_rule);
         return;
     }
 
@@ -846,7 +843,7 @@ $('.step03 .next_btn').on('click', function(e) {
     };
 
     if (data == null) {
-        confirmAlert('회원가입에 실패하였습니다. 관리자에게 문의 바랍니다.');
+        confirmAlert(langMessage.signup_fail);
         return false;
     }
 
@@ -872,7 +869,7 @@ $('.step03 .next_btn').on('click', function(e) {
         error: function(request, status, error) {
             // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
 
-            confirmAlert("관리자에게 문의 바랍니다. ");
+            confirmAlert(langMessage.administrator_ask);
         }
     });
 });
@@ -933,3 +930,28 @@ function controlLoginForm(sElement){
         $('.users_border').show();
     }
 }
+
+// 로그인 버튼 
+$("#lang").change(function(e) {
+    e.preventDefault();
+
+    var lang = $("#lang").val();
+
+    var data = {
+        'lang': lang,
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/api/change_lang',
+        dataType: 'json',
+        data:  data,
+        success: function(jResult) {
+            // console.log(jResult);
+            location.reload();
+        },
+        error: function(request, status, error) {
+            // confirmAlert(langMessage.administrator_ask+"\n" + request.status, 'reloadPage()');
+        }
+    });
+});

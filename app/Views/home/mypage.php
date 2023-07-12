@@ -29,8 +29,60 @@
         <script src="/js/semantic-ui/semantic.js"></script>
         <script>
             Vue.component("paginate", VuejsPaginate);
-        </script>
 
+            var langMessage = {
+                ask_content_input : '<?=lang('common.ask_content_input')?>',
+                ask_quick : '<?=lang('common.ask_quick')?>',
+                ask_receive : '<?=lang('common.ask_receive')?>',
+                ask_title_input : '<?=lang('common.ask_title_input')?>',
+                cancel : '<?=lang('common.cancel')?>',
+                change_point_request : '<?=lang('common.change_point_request')?>',
+                change_point_result : '<?=lang('common.change_point_result')?>',
+                delete_all_ask : '<?=lang('common.delete_all_ask')?>',
+                delete_ask : '<?=lang('common.delete_ask')?>',
+                delete_check : '<?=lang('common.delete_check')?>',
+                deposit_account_answer : '<?=lang('common.deposit_account_answer')?>',
+                deposit_account_ask : '<?=lang('common.deposit_account_ask')?>',
+                deposit_account_check : '<?=lang('common.deposit_account_check')?>',
+                deposit_account_request : '<?=lang('common.deposit_account_request')?>',
+                deposit_permit : '<?=lang('common.deposit_permit')?>',
+                deposit_quick : '<?=lang('common.deposit_quick')?>',
+                deposit_success : '<?=lang('common.deposit_success')?>',
+                id_input : '<?=lang('common.id_input')?>',
+                id_input_4 : '<?=lang('common.id_input_4')?>',
+                id_input_16 : '<?=lang('common.id_input_16')?>',
+                inspection : '<?=lang('common.inspection')?>',
+                message_to_read : '<?=lang('common.message_to_read')?>',
+                nickname_input : '<?=lang('common.nickname_input')?>',
+                ok : '<?=lang('common.ok')?>',
+                password_change_ok : '<?=lang('common.password_change_ok')?>',
+                password_input : '<?=lang('common.password_input')?>', 
+                password_input_4 : '<?=lang('common.password_input_4')?>', 
+                password_current_input : '<?=lang('common.password_current_input')?>',
+                password_new_input : '<?=lang('common.password_new_input')?>',
+                password_verify : '<?=lang('common.password_verify')?>',
+                password_verify_c : '<?=lang('common.password_verify_c')?>',
+                read_all_ask : '<?=lang('common.read_all_ask')?>',
+                request_amount_input : '<?=lang('common.request_amount_input')?>',
+                signup_complete : '<?=lang('common.signup_complete')?>',
+                signup_permit : '<?=lang('common.signup_permit')?>',
+                status_check : '<?=lang('status_check')?>',
+                status_complete : '<?=lang('status_complete')?>',
+                status_current : '<?=lang('status_current')?>',
+                status_permit : '<?=lang('status_permit')?>',
+                status_refuse : '<?=lang('status_refuse')?>',
+                status_uncheck : '<?=lang('status_uncheck')?>',
+                status_wait : '<?=lang('status_wait')?>',
+                thanks : '<?=lang('common.thanks')?>',
+                withdrawal_bank_select : '<?=lang('common.withdrawal_bank_select')?>',
+                withdrawal_number_input : '<?=lang('common.withdrawal_number_input')?>',
+                withdrawal_owner_input : '<?=lang('common.withdrawal_owner_input')?>',
+                withdrawal_password_input : '<?=lang('common.withdrawal_password_input')?>',
+                withdrawal_permit : '<?=lang('common.withdrawal_permit')?>',
+                withdrawal_quick : '<?=lang('common.withdrawal_quick')?>',
+                withdrawal_success : '<?=lang('common.withdrawal_success')?>',
+            };
+        </script>  
         <style>
                         
             @media screen and (min-width:680px) { 
@@ -593,7 +645,7 @@
 
                     if(objDashBoard.unreadMemo > 0){
                         tab = 'my_memo';
-                        alert("미확인 쪽지가 있습니다.");
+                        alert(langMessage.message_to_read);
                         $(".menu .item").tab("change tab", tab);
                     }
                     // console.log(tab);
@@ -636,7 +688,7 @@
                         rules: [
                             {
                                 type: "empty",
-                                prompt: "요청하실 금액을 숫자로 입력해주세요",
+                                prompt: langMessage.request_amount_input,
                             },
                             {
                                 type: "minLength[5]",
@@ -671,45 +723,16 @@
                         rules: [
                             {
                                 type: "empty",
-                                prompt: "출금 비밀번호를 입력해주세요",
+                                prompt: langMessage.withdrawal_password_input,
                             },
                         ],
                     },
-                    /*
-                    bank_name: {
-                        identifier: "bank_name",
-                        rules: [
-                            {
-                                type: "empty",
-                                prompt: "계좌은행을 입력해주세요",
-                            },
-                        ],
-                    },
-                    bank_owner: {
-                        identifier: "bank_owner",
-                        rules: [
-                            {
-                                type: "empty",
-                                prompt: "계좌주를 입력해주세요",
-                            },
-                        ],
-                    },
-                    bank_num: {
-                        identifier: "bank_num",
-                        rules: [
-                            {
-                                type: "empty",
-                                prompt: "계좌번호를 입력해주세요",
-                            },
-                        ],
-                    },
-                    */
                     title: {
                         identifier: "title",
                         rules: [
                             {
                                 type: "empty",
-                                prompt: "문의제목을 입력해주세요",
+                                prompt: langMessage.ask_title_input,
                             },
                         ],
                     },
@@ -718,7 +741,7 @@
                         rules: [
                             {
                                 type: "empty",
-                                prompt: "문의하실 내용을 입력해주세요",
+                                prompt: langMessage.ask_content_input,
                             },
                         ],
                     },
@@ -727,7 +750,7 @@
                         rules: [
                             {
                                 type: "empty",
-                                prompt: "현재 비밀번호를 입력해주세요",
+                                prompt: langMessage.password_current_input,
                             }
                         ],
                     },
@@ -736,7 +759,7 @@
                         rules: [
                             {
                                 type: "empty",
-                                prompt: "새 비밀번호를 입력해주세요",
+                                prompt: langMessage.password_new_input,
                             },
                             {
                                 type: "minLength[3]",
@@ -755,7 +778,6 @@
                     },
                 });
 
-                // 입금요청
                 $("#chargeForm").ajaxForm({
                     dataType: "json",
                     type: "POST",
@@ -766,7 +788,7 @@
                     },
                     success: function (response) {
                         if (response.status == "success") {
-                            UIkit.modal.alert("정상적으로 입금요청이 접수 되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                            UIkit.modal.alert(langMessage.deposit_success, {labels: {'ok': langMessage.ok}}).then(function () {
                             });
                         } else if (response.status == "fail") {
                             alert(response.msg);
@@ -776,7 +798,6 @@
                     },
                 });
 
-                //출금요청
                 $("#exchangeForm").ajaxForm({
                     dataType: "json",
                     type: "POST",
@@ -787,7 +808,7 @@
                     },
                     success: function (response) {
                         if (response.status == "success") {
-                            UIkit.modal.alert("정상적으로 출금요청이 접수 되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                            UIkit.modal.alert(langMessage.withdrawal_success, {labels: {'ok': langMessage.ok}}).then(function () {
                                 objDashBoard.getMyInfo();
                             });
                         } else if (response.status == "fail") {
@@ -798,7 +819,6 @@
                     },
                 });
 
-                //비밀번호 변경요청
                 $("#chgpwdForm").ajaxForm({
                     dataType: "json",
                     type: "POST",
@@ -810,7 +830,7 @@
                     success: function (response) {
                         // console.log(response);
                         if (response.status == "success") {
-                            UIkit.modal.alert("비밀번호가 변경되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                            UIkit.modal.alert(langMessage.password_change_ok, {labels: {'ok': langMessage.ok}}).then(function () {
                             });
                         } else if (response.status == "fail") {
                             alert(response.msg);
@@ -835,7 +855,7 @@
                     success: function (response) {
                         // console.log(response);
                         if (response.status == "success") {
-                            UIkit.modal.alert("계좌정보가 변경되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                            UIkit.modal.alert("계좌정보가 변경되었습니다.", {labels: {'ok': langMessage.ok}}).then(function () {
                                 objDashBoard.getMyInfo();
                             });
                         } else if (response.status == "fail") {
@@ -851,7 +871,7 @@
 
                 $("#btnRequestCash").on("click", function(e) {
 
-                    UIkit.modal.confirm("포인트를 머니로 전환하시겠습니까?", {labels: {'ok': '확인', 'cancel': '취소'}}).then(
+                    UIkit.modal.confirm(langMessage.change_point_request, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
                         function () {
                             $.ajax({
                                 dataType: "json",
@@ -860,7 +880,7 @@
                                 // data: $(this).serialize(),
                                 success: function (response) {
                                     if (response.status == "success") {
-                                        UIkit.modal.alert("머니로 전환되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                                        UIkit.modal.alert(langMessage.change_point_result, {labels: {'ok': langMessage.ok}}).then(function () {
                                             objDashBoard.getMyInfo();
                                         });
                                     } else {
@@ -886,7 +906,7 @@
                     },
                     success: function (response) {
                         if (response.status == "success") {
-                            UIkit.modal.alert("문의가 접수되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                            UIkit.modal.alert(langMessage.ask_receive, {labels: {'ok': langMessage.ok}}).then(function () {
                                 objDashBoard.getMyQnaList();
                                 //location.reload();
                             });
@@ -899,10 +919,10 @@
 
             function requestAccount() {
 
-                let title = "[빠른문의] 입금계좌요청";
-                let content = "빠른문의 : 입금계좌요청";
-                if (confirm(title + " \n\n을(를) 보내시겠습니까?") == false) return false;
-
+                let title = "["+langMessage.ask_quick+"] "+langMessage.deposit_account_request;
+                let content = ""+langMessage.ask_quick+" : "+langMessage.deposit_account_request;
+                if (confirm(langMessage.deposit_account_ask) == false) return false;
+                
                 $.post(
                     "/api/request_account3",
                     {
@@ -911,7 +931,7 @@
                     },
                     function (response) {
                         if (response.status == "success") {
-                            UIkit.modal.alert("계좌회답이 도착하였습니다.", {labels: {'ok': '확인'}}).then(function () {
+                            UIkit.modal.alert(langMessage.deposit_account_answer, {labels: {'ok': langMessage.ok}}).then(function () {
                                 objDashBoard.getMyQnaList();
                             });
                         } else {
@@ -924,7 +944,7 @@
                   
             function readMemo(idx) {
 
-                UIkit.modal.confirm("전체 읽기를 하시겠습니까?", {labels: {'ok': '확인', 'cancel': '취소'}}).then(
+                UIkit.modal.confirm(langMessage.read_all_ask, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
                     function () {
                         $.post(
                             "/api/check_message",
@@ -946,15 +966,15 @@
             }
             function deleteMemo(idx) {
                 if(idx==0 && objDashBoard.unreadMemo > 0){
-                    alert("미확인 쪽지가 있습니다.\n확인후 삭제해주세요.");
+                    alert(langMessage.delete_check);
                     return;
                 }
 
-                let msg = "삭제하시겠습니까?";
+                let msg = langMessage.delete_ask;
                 if(idx == 0)
-                    msg = "전체 삭제를 하시겠습니까?";
+                    msg = langMessage.delete_all_ask;
 
-                UIkit.modal.confirm(msg, {labels: {'ok': '확인', 'cancel': '취소'}}).then(
+                UIkit.modal.confirm(msg, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
                     function () {
                         $.post(
                             "/api/delete_message",
@@ -977,11 +997,11 @@
 
             function deleteCus(idx) {
 
-                let msg = "삭제하시겠습니까?";
+                let msg = langMessage.delete_ask;
                 if(idx == 0)
-                    msg = "전체 삭제를 하시겠습니까?";
+                    msg = langMessage.delete_all_ask;
 
-                UIkit.modal.confirm(msg, {labels: {'ok': '확인', 'cancel': '취소'}}).then(
+                UIkit.modal.confirm(msg, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
                     function () {
                         $.post(
                             "/api/delete_customer",
@@ -1370,7 +1390,7 @@
                     
                     },
                     deleteMemo: function (idx) {
-                        UIkit.modal.confirm("삭제하시겠습니까?", {labels: {'ok': '확인', 'cancel': '취소'}}).then(
+                        UIkit.modal.confirm(langMessage.delete_ask, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
                             function () {
                                 $.post(
                                     "/api/delete_message",
@@ -1391,7 +1411,7 @@
                         );
                     },
                     deleteCus: function (idx) {
-                        UIkit.modal.confirm("삭제하시겠습니까?", {labels: {'ok': '확인', 'cancel': '취소'}}).then(
+                        UIkit.modal.confirm(langMessage.delete_ask, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
                             function () {
                                 $.post(
                                     "/api/delete_customer",
@@ -1460,35 +1480,35 @@
                     },
                     strChargeType: function (type){
                         if(type == 5){
-                            return "직입금";
-                        } else return "신청입금";
+                            return langMessage.deposit_quick;
+                        } else return langMessage.deposit_permit;
                     },
                     strExchangeType: function (type){
                         if(type == 5){
-                            return "직출금";
-                        } else return "신청출금";
+                            return langMessage.withdrawal_quick;
+                        } else return langMessage.withdrawal_permit;
                     },
                     strChState: function (type){
                         if(type == 2){
-                            return "<span class='green'>승인</span>";
+                            return "<span class='green'>"+langMessage.status_permit+"</span>";
                         } else if(type == 3){
-                            return "<span class='red'>거절</span>";
+                            return "<span class='red'>"+langMessage.status_refuse+"</span>";
                         } else if(type == 5){
-                            return "완료";
-                        } else return "<span class='yellow'>대기</span>";
+                            return langMessage.status_complete;
+                        } else return "<span class='yellow'>"+langMessage.status_wait+"</span>";
                     },
                     strMsgCheck: function (read){
                         if(read == 0){
-                            return "<span class='red'>미확인</span>";
+                            return "<span class='red'>"+langMessage.status_uncheck+"</span>";
                         } else {
-                            return "<span >확인</span>";
+                            return "<span >"+langMessage.status_check+"</span>";
                         } 
                     },
                     strQnaCheck: function (state){
                         if(state == 0){
-                            return "<span class='yellow'>대기</span>";
+                            return "<span class='yellow'>"+langMessage.status_wait+"</span>";
                         } else if(state == 1) {
-                            return "<span class='green'>완료</span>";
+                            return "<span class='green'>"+langMessage.status_complete+"</span>";
                         } else 
                             return "<span ></span>";
                     },
@@ -1553,7 +1573,7 @@
             <div id="request_exchange" uk-modal="" class="uk-modal" tabindex="-1" style="">
                 <div class="uk-modal-dialog">
                     <form name="exchangeForm" id="exchangeForm" class="ui form equal width">
-                        <div class="uk-modal-header"><h3 class="uk-modal-title"><i class="ui cloud upload icon"></i> 출금신청</h3></div>
+                        <div class="uk-modal-header"><h3 class="uk-modal-title"><i class="ui cloud upload icon"></i> <?=lang('common.withdrawal_request')?></h3></div>
                         <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
                         </button>
                         <div class="uk-modal-body">
@@ -1564,8 +1584,8 @@
                                 </div>
                             </div>
                             <div class="inline field required">
-                                <label><?=lang('common.request_amount')?></label> 
-                                <div class="ui input"><input type="number" name="cash" id="cash_out" placeholder="출금요청하실 금액을 만원단위로 입력해주세요" step="10000" /></div>
+                                <label><?=lang('common.withdrawal_amount_in')?></label> 
+                                <div class="ui input"><input type="number" name="cash" id="cash_out" placeholder="<?=lang('common.request_withdrawal_msg')?>" step="10000" /></div>
                                 <div style="padding-top: 5px; text-align:right;">
                                     <button type="button" onclick="setMoneyField('cash_out',10000)" class="ui inverted blue mini button"><?=lang('common.10_thousands')?></button> <button type="button" onclick="setMoneyField('cash_out',50000)" class="ui inverted blue mini button"><?=lang('common.50_thousands')?></button>
                                     <button type="button" onclick="setMoneyField('cash_out',100000)" class="ui inverted blue mini button"><?=lang('common.100_thousands')?></button> <button type="button" onclick="setMoneyField('cash_out',500000)" class="ui inverted blue mini button"><?=lang('common.500_thousands')?></button>

@@ -164,9 +164,10 @@ class Api extends BaseController
 	}
 	
 	public function logout(){
-		$this->sess_destroy();
 		$sess_id = $this->session->session_id;
 		writeLog("[api] logout (".$sess_id.")");
+		
+		$this->sess_destroy();
 		
 		$arrResult['status'] = "success";
 		echo json_encode($arrResult);
@@ -405,7 +406,7 @@ class Api extends BaseController
 				$bPermit = false;
 				
 			if(!validUserPw($user_newPw)){
-				$result->msg = lang("common.password_rule"); 
+				$result->msg = lang("common.password_new_rule"); 
 				$result->status = STATUS_FAIL;
 			} else if(!$bPermit){
 				$result->msg = lang("common.password_mistake_now"); 
@@ -490,6 +491,24 @@ class Api extends BaseController
 
 	// 	echo json_encode($result);	
 	// }
+
+	public function change_lang()
+	{
+		
+		$result = new \StdClass;
+		$locale = $this->request->getVar('lang');
+		$configApp = new \Config\App();
+		if(!in_array($locale, $configApp->supportedLocales)){
+			$locale = $configApp->defaultLocale;
+			writeLog("defaultLocale=".$locale);
+		}
+		$this->session->set('lang', $locale);
+
+		$result->status = STATUS_SUCCESS;
+		
+		echo json_encode($result);
+
+    }
 
 	public function register(){
 		$reqData['member_id'] = $this->request->getVar('userid');

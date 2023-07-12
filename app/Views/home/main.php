@@ -21,16 +21,37 @@
 
         <script>
             var langMessage = {
+                ask_quick : '<?=lang('common.ask_quick')?>',
+                cancel : '<?=lang('common.cancel')?>',
+                change_point_request : '<?=lang('common.change_point_request')?>',
+                change_point_result : '<?=lang('common.change_point_result')?>',
+                deposit_account_answer : '<?=lang('common.deposit_account_answer')?>',
+                deposit_account_ask : '<?=lang('common.deposit_account_ask')?>',
+                deposit_account_check : '<?=lang('common.deposit_account_check')?>',
+                deposit_account_request : '<?=lang('common.deposit_account_request')?>',
+                deposit_success : '<?=lang('common.deposit_success')?>',
                 id_input : '<?=lang('common.id_input')?>',
                 id_input_4 : '<?=lang('common.id_input_4')?>',
                 id_input_16 : '<?=lang('common.id_input_16')?>',
-
+                inspection : '<?=lang('common.inspection')?>',
+                nickname_input : '<?=lang('common.nickname_input')?>',
+                ok : '<?=lang('common.ok')?>',
+                password_change_ok : '<?=lang('common.password_change_ok')?>',
                 password_input : '<?=lang('common.password_input')?>', 
                 password_input_4 : '<?=lang('common.password_input_4')?>', 
-
+                password_current_input : '<?=lang('common.password_current_input')?>',
+                password_new_input : '<?=lang('common.password_new_input')?>',
                 password_verify : '<?=lang('common.password_verify')?>',
                 password_verify_c : '<?=lang('common.password_verify_c')?>',
-
+                request_amount_input : '<?=lang('common.request_amount_input')?>',
+                signup_complete : '<?=lang('common.signup_complete')?>',
+                signup_permit : '<?=lang('common.signup_permit')?>',
+                thanks : '<?=lang('common.thanks')?>',
+                withdrawal_bank_select : '<?=lang('common.withdrawal_bank_select')?>',
+                withdrawal_number_input : '<?=lang('common.withdrawal_number_input')?>',
+                withdrawal_owner_input : '<?=lang('common.withdrawal_owner_input')?>',
+                withdrawal_password_input : '<?=lang('common.withdrawal_password_input')?>',
+                withdrawal_success : '<?=lang('common.withdrawal_success')?>',
             };
         </script>  
         <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
@@ -248,7 +269,12 @@
                                 </button>
                             <?php endif ?>
                         </div>
-
+                        <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
+                            <select name="lang" id="lang" style="position:absolute; right:10px; top:5px; max-width:65px; padding:0 5px; color: #ffff00; font-size:14px; background:none; height:22px; border:none; text-align:center;">
+                                <option style="background:#000; text-align:center" value="ko" <?=$lang=='ko'?'selected':''?> > <?=lang('common.lang_korean')?> </option>
+                                <option style="background:#000; text-align:center" value="cn" <?=$lang=='cn'?'selected':''?> > <?=lang('common.lang_chinese')?> </option>
+                            </select>
+                        <?php endif ?>
                         <?php if(!is_login()) :?>
                             <!-- uk-toggle="target: #agentCheckModal"  -->
                             <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showAgentCheckModal();">
@@ -259,7 +285,11 @@
                                 <span><?=lang('common.login')?></span>
                             </button>
                         <?php else :?>
-                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="location.href='/home/logout'">
+                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="location.href='/home/logout'"
+                            <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
+                                style="margin-top:27px;"
+                            <?php endif ?>
+                                >   
                                 <span><?=lang('common.logout')?></span>     
                             </button>
                             <!-- <div class="ui uk-navbar-right nav-overlay">
@@ -1279,7 +1309,7 @@
                         <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
                         <div class="uk-modal-body">
                             <div class="field required">
-                                <label><?=lang('common.request_amount')?></label>
+                                <label><?=lang('common.deposit_amount_in')?></label>
                                 <div class="ui input"><input type="number" name="cash" id="cash" placeholder="<?=lang('common.request_deposit_msg')?>" step="10000" /></div>
                                 <div style="padding-top: 5px; text-align:right;">
                                     <button type="button" onclick="setMoneyField('cash',10000)" class="ui inverted blue mini button"><?=lang('common.10_thousands')?></button> <button type="button" onclick="setMoneyField('cash',50000)" class="ui inverted blue mini button"><?=lang('common.50_thousands')?></button>
@@ -1314,7 +1344,7 @@
                             </div>
 
                             <div class="inline field required">
-                                <label><?=lang('common.request_amount')?></label>
+                                <label><?=lang('common.withdrawal_amount_in')?></label>
                                 <div class="ui input"><input type="number" name="cash" id="cash_out" placeholder="<?=lang('common.request_withdrawal_msg')?>" step="10000" /></div>
                                 <div style="padding-top: 5px; text-align:right;">
                                     <button type="button" onclick="setMoneyField('cash_out',10000)" class="ui inverted blue mini button"><?=lang('common.10_thousands')?></button> <button type="button" onclick="setMoneyField('cash_out',50000)" class="ui inverted blue mini button"><?=lang('common.50_thousands')?></button>
@@ -1352,34 +1382,34 @@
             <div id="change_pwd" uk-modal class="uk-modal">
                 <div class="uk-modal-dialog">
                     <form name="chgpwdForm" id="chgpwdForm" class="ui form equal width">
-                        <div class="uk-modal-header"><h3 class="uk-modal-title">비번변경</h3></div>
+                        <div class="uk-modal-header"><h3 class="uk-modal-title"><?=lang('common.password_change')?></h3></div>
                         <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
                         <div class="uk-modal-body">
                             <div class="field required">
-                                <label>현재 비밀번호</label>
+                                <label><?=lang('common.password_current')?></label>
                                 <div class="ui input">
-                                    <input type="text" name="pwd_old" id="pwd_old" placeholder="현재 비밀번호" /> 
+                                    <input type="text" name="pwd_old" id="pwd_old" placeholder="<?=lang('common.password_current')?>" /> 
                                 </div>
                             </div>
                             <div class="field required">
-                                <label>새 비밀번호</label>
+                                <label><?=lang('common.password_new')?></label>
                                 <div class="ui input">
-                                    <input type="text" name="pwd_new" id="pwd_new" placeholder="새 비밀번호" /> 
+                                    <input type="text" name="pwd_new" id="pwd_new" placeholder="<?=lang('common.password_new')?>" /> 
                                 </div>
                             </div>
                         </div>
                         <div class="uk-modal-footer">
-                            <div class="ui primary submit button">변경하기</div>
-                            <div class="ui uk-modal-close button">취소</div>
+                            <div class="ui primary submit button"><?=lang('common.change')?></div>
+                            <div class="ui uk-modal-close button"><?=lang('common.cancel')?></div>
                         </div>
                     </form>
                     <button class="uk-button uk-modal-close-default uk-icon uk-close" uk-close></button>
                 </div>
             </div>
         </div>
-
         
         <script>
+            setLogCookie('lang', '<?=$lang?>', 30);
             function SLB_POPUP(page, tab) {
                 if(!check_login()){
                     return;
@@ -1516,7 +1546,7 @@
                     rules: [
                         {
                             type: "empty",
-                            prompt: "닉네임을 입력해주세요",
+                            prompt: langMessage.nickname_input,
                         },
                     ],
                 },
@@ -1525,7 +1555,7 @@
                     rules: [
                         {
                             type: "empty",
-                            prompt: "출금계좌 은행을 선택해주세요",
+                            prompt: langMessage.withdrawal_bank_select,
                         },
                     ],
                 },
@@ -1534,7 +1564,7 @@
                     rules: [
                         {
                             type: "empty",
-                            prompt: "출금계좌 소유자명을 입력해주세요",
+                            prompt: langMessage.withdrawal_owner_input,
                         },
                     ],
                 },
@@ -1543,7 +1573,7 @@
                     rules: [
                         {
                             type: "empty",
-                            prompt: "출금계좌 번호를 입력해주세요",
+                            prompt: langMessage.withdrawal_number_input,
                         },
                     ],
                 },
@@ -1552,7 +1582,7 @@
                     rules: [
                         {
                             type: "empty",
-                            prompt: "출금 비밀번호를 입력해주세요",
+                            prompt: langMessage.withdrawal_password_input,
                         },
                     ],
                 },
@@ -1569,7 +1599,7 @@
                     rules: [
                         {
                             type: "empty",
-                            prompt: "휴대폰 번호를 입력해주세요",
+                            prompt: langMessage.phone_number_input,
                         },
                     ],
                 },
@@ -1592,7 +1622,7 @@
                 },
                 success: function (response) {
                     if (response.status == "success") {
-                        alert("가입이 신청되었습니다.\n관리자 승인 후 사이트를 이용하실 수 있습니다.\n감사합니다.");
+                        alert(langMessage.signup_complete+"\n"+langMessage.signup_permit+"\n"+langMessage.thanks);
                         UIkit.modal("#loginModal").show();
                     } else {
                         alert(response.msg);
@@ -1683,7 +1713,7 @@
                     {
                         var onoff = $(this).data("onoff");
                         var game_id = $(this).data("cid");
-                        var message = "점검중입니다."; //$(this).data('message');
+                        var message = langMessage.inspection; 
                         if (onoff == "on") {
                             openSlotGame(game_id, $(this).data("cname"));
                         } else {
@@ -1697,7 +1727,7 @@
                     if (onoff == "on") {
                         openCasinoGame($(this).data("cid"), $(this).data("gameid"));
                     } else {
-                        alert("점검중입니다.");
+                        alert(langMessage.inspection);
                     }
                 });
                 $("#holdem .openGameBtn, #holdem .playBtn").click(function () {
@@ -1708,7 +1738,7 @@
                     if (onoff == "on") {
                         window.open("/holdem", "games", "width=1200, height=800, left=100, top=50");
                     } else {
-                        alert("점검중입니다.");
+                        alert(langMessage.inspection);
                     }
                 });
                 $("#auto .openGameBtn, #auto .playBtn").click(function () {
@@ -1733,10 +1763,33 @@
                     if (onoff == "on") {
                         window.open("/mini?gm="+$(this).data("cid"), "games", "width=1200, height=800, left=100, top=50");
                     } else {
-                        alert("점검중입니다.");
+                        alert(langMessage.inspection);
                     }
                 });
 
+                $("#lang").change(function(e) {
+                    e.preventDefault();
+
+                    var lang = $("#lang").val();
+                    console.log("lang="+lang);
+                    var data = {
+                        'lang': lang,
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/change_lang',
+                        dataType: 'json',
+                        data:  data,
+                        success: function(jResult) {
+                            // console.log(jResult);
+                            location.reload();
+                        },
+                        error: function(request, status, error) {
+                            // confirmAlert(langMessage.administrator_ask+"\n" + request.status, 'reloadPage()');
+                        }
+                    });
+                });
                 // validate rule check
                 var validationChgRules = {
                     cash: {
@@ -1744,7 +1797,7 @@
                         rules: [
                             {
                                 type: "empty",
-                                prompt: "요청하실 금액을 숫자로 입력해주세요",
+                                prompt: langMessage.request_amount_input,
                             },
                             {
                                 type: "minLength[5]",
@@ -1779,7 +1832,7 @@
                         rules: [
                             {
                                 type: "empty",
-                                prompt: "출금 비밀번호를 입력해주세요",
+                                prompt: langMessage.withdrawal_password_input,
                             },
                         ],
                     },
@@ -1788,7 +1841,7 @@
                         rules: [
                             {
                                 type: "empty",
-                                prompt: "현재 비밀번호를 입력해주세요",
+                                prompt: langMessage.password_current_input,
                             }
                         ],
                     },
@@ -1797,7 +1850,7 @@
                         rules: [
                             {
                                 type: "empty",
-                                prompt: "새 비밀번호를 입력해주세요",
+                                prompt: langMessage.password_new_input,
                             },
                             {
                                 type: "minLength[3]",
@@ -1816,7 +1869,6 @@
                     },
                 });
 
-                // 입금요청
                 $("#chargeForm").ajaxForm({
                     dataType: "json",
                     type: "POST",
@@ -1828,7 +1880,7 @@
                     success: function (response) {
                         // console.log(response);
                         if (response.status == "success") {
-                            UIkit.modal.alert("정상적으로 입금요청이 신청되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                            UIkit.modal.alert(langMessage.deposit_success, {labels: {'ok': langMessage.ok}}).then(function () {
                                 // location.reload();
                             });
                         } else if (response.status == "fail") {
@@ -1850,7 +1902,7 @@
                         return true;
                     },
                 });
-                //출금요청
+
                 $("#exchangeForm").ajaxForm({
                     dataType: "json",
                     type: "POST",
@@ -1862,9 +1914,8 @@
                     success: function (response) {
                         // console.log(response);
                         if (response.status == "success") {
-                            UIkit.modal.alert("정상적으로 출금요청이 신청되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                            UIkit.modal.alert(langMessage.withdrawal_success, {labels: {'ok': langMessage.ok}}).then(function () {
                                 session_check();
-                                // objMain.getMyInfo();
                                 //location.reload();
                             });
                         } else if (response.status == "fail") {
@@ -1898,7 +1949,7 @@
                     success: function (response) {
                         // console.log(response);
                         if (response.status == "success") {
-                            UIkit.modal.alert("비밀번호가 변경되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                            UIkit.modal.alert(langMessage.password_change_ok, {labels: {'ok': langMessage.ok}}).then(function () {
                             });
                         } else if (response.status == "fail") {
                             alert(response.msg);
@@ -1917,9 +1968,9 @@
                     return;
                 }
 
-                let title = "[빠른문의] 입금계좌요청";
-                let content = "빠른문의 : 입금계좌요청";
-                if (confirm(title + " \n\n을(를) 보내시겠습니까?\n\n(입금계좌 답변은  1:1 문의에서 확인하세요)") == false) return false;
+                let title = "["+langMessage.ask_quick+"] "+langMessage.deposit_account_request;
+                let content = ""+langMessage.ask_quick+" : "+langMessage.deposit_account_request;
+                if (confirm(langMessage.deposit_account_ask) == false) return false;
 
                 $.post(
                     "/api/request_account3",
@@ -1929,7 +1980,7 @@
                     },
                     function (response) {
                         if (response.status == "success") {
-                            alert("정상적으로 요청 되었습니다\n\n입금계좌 답변은  1:1 문의에서 확인하세요");
+                            alert(langMessage.deposit_account_answer+"\n\n"+langMessage.deposit_account_check);
                         } else {
                             alert(response.message);
                         }
@@ -1984,7 +2035,7 @@
                     return;
                 }
 
-                UIkit.modal.confirm("포인트를 머니로 전환하시겠습니까?", {labels: {'ok': '확인', 'cancel': '취소'}}).then(
+                UIkit.modal.confirm(langMessage.change_point_request, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
                     function () {
                         $.ajax({
                             dataType: "json",
@@ -1992,7 +2043,7 @@
                             url: "/api/change_point",
                             success: function (response) {
                                 if (response.status == "success") {
-                                    UIkit.modal.alert("머니로 전환되었습니다.", {labels: {'ok': '확인'}}).then(function () {
+                                    UIkit.modal.alert(langMessage.change_point_result, {labels: {'ok': langMessage.ok}}).then(function () {
                                         session_check();
                                     });
                                 } else {

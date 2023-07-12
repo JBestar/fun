@@ -10,20 +10,9 @@ class Home extends BaseController
     public function index()
     {
 
+        $this->setLanguage();
         $headInfo = $this->getSiteConf();
-
-        $configApp = new \Config\App();
-        $locale = $this->session->get('lang');
-        $language = \Config\Services::language();
-
-        writeLog("defaultLocale=".$configApp->defaultLocale." language=".$language->getLocale());
-
-        if(is_null($locale) || is_array($locale) || strlen($locale) < 1)
-            $locale = $configApp->defaultLocale;
-        $locale = "cn";
-        $this->session->set('lang', $locale);
-        $language->setLocale($this->session->lang);
-        writeLog("[lang] ".$this->session->lang);
+        $headInfo['lang'] = $this->session->lang;
 
         if(!is_login() && array_key_exists('app.login', $_ENV) && $_ENV['app.login'] == 1){
             echo view('home/login', $headInfo);
@@ -99,6 +88,7 @@ class Home extends BaseController
 
 		$sess_id = $this->session->session_id;
 		writeLog("[home] logout (".$sess_id.")");
+        
 		$this->sess_destroy();
 		$this->response->redirect('/');
 	}

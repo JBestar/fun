@@ -19,6 +19,29 @@
     <script type="text/javascript" src="/js/jquery-ui.js"></script>
 
     <title><?=$site_name?></title>
+    <script>
+        var langMessage = {
+            account_number_input : '<?=lang('common.account_number_input')?>',
+            administrator_ask : '<?=lang('common.administrator_ask')?>',
+            bank_name_input : '<?=lang('common.bank_name_input')?>',
+            cancel : '<?=lang('common.cancel')?>',
+            id_available : '<?=lang('common.id_available')?>',
+            id_deleted : '<?=lang('common.id_deleted')?>',
+            login_id_input : '<?=lang('common.login_id_input')?>',
+            nickname_available : '<?=lang('common.nickname_available')?>',
+            nickname_input : '<?=lang('common.nickname_input')?>',
+            ok : '<?=lang('common.ok')?>',
+            password_input : '<?=lang('common.password_input')?>',
+            password_match : '<?=lang('common.password_match')?>',
+            password_rule : '<?=lang('common.password_rule')?>',
+            phone_number_input : '<?=lang('common.phone_number_input')?>',
+            recommender_input : '<?=lang('common.recommender_input')?>',
+            signup_check : '<?=lang('common.signup_check')?>',
+            signup_fail : '<?=lang('common.signup_fail')?>',
+            withdrawal_password_input : '<?=lang('common.withdrawal_password_input')?>',
+            withdrawal_rule : '<?=lang('common.withdrawal_rule')?>',
+        };
+    </script>  
 </head>
 <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
@@ -218,94 +241,101 @@
     </style>
 
     <div id="wrap" class="users_wrap">
+        <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
+            <select name="lang" id="lang" style="position:absolute; right:10px; top:5px; width:60px; padding:0 10px; color: #ffff00; background:none; border:none; text-align:center;">
+                <option value="ko" <?=$lang=='ko'?'selected':''?> > <?=lang('common.lang_korean')?> </option>
+                <option value="cn" <?=$lang=='cn'?'selected':''?> > <?=lang('common.lang_chinese')?> </option>
+            </select>
+        <?php endif ?>
+
         <div class="users_border">
         </div>
         
-            <div class="login_wrap">
-                <div class="login_area">
-                    <div class="login_con">
-                        <input type="text" placeholder="User ID" id="user_id" class="english_p">
-                        <input type="password" placeholder="Password" id="user_pw" class="english_s">
-                        <input type="text" id="ip_addr" hidden>
-                        <button type="button" class="submit_btn" id="btnLogin">LOGIN</button>
-                        <button type="button" class="join_btn">JOIN</button>
-                    </div>
-                </div>
-                <!--//login_area -->
-                <div class="join_area step01">
-                    <input type="text" name="proposer" id="proposer" placeholder="<?=lang('common.recommender_input')?>" class="english_p" style="width:250px;">
-                    <div class="btn_wrap">
-                        <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
-                        <button type="button" class="next_btn join01_btn" value="START" title="START" id="btnCode">START</button>
-                    </div>
-                    <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
-                </div>
-
-                <div class="join_area step02">
-                    <ul>
-                        <li>
-                            <p class="tit"><?=lang('common.id')?><span class="desc" id="id_desc">※ <?=lang('common.4to16')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?></span></p>
-                            <input type="text" name="input_id" id="input_id" class="english" placeholder="<?=lang('common.4to16')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?>">
-                        </li>
-                        <li>
-                            <p class="tit"><?=lang('common.nickname')?><span class="desc" id="nickname_desc">※ <?=lang('common.3to12')?></span></p>
-                            <input type="text" name="input_nickname" id="input_nickname" class="korean" placeholder="<?=lang('common.3to12')?>">
-                        </li>
-                        <li>
-                            <p class="tit"><?=lang('common.password')?><span class="desc">※ <?=lang('common.8to20')?>, <?=lang('common.special_chars')?></span></p>
-                            <input type="text" name="input_pw" id="input_pw" class="english_s" autocomplete="off">
-                        </li>
-                        <li>
-                            <p class="tit"><?=lang('common.confirm_password')?></p>
-                            <input type="text" name="input_pw_check" id="input_pw_check" class="english_s" autocomplete="off" style="-webkit-text-security: disc;">
-                        </li>
-                    </ul>
-                    <div class="btn_wrap">
-                        <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
-                        <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_next">NEXT</button>
-                    </div>
-                    <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
-                </div>
-
-                <div class="join_area step03">
-                    <ul>
-                        <li>
-                            <p class="tit"><?=lang('common.name')?><span class="desc">※ <?=lang('common.name_comment')?></span></p>
-                            <input type="text" name="user_name" id="user_name">
-                        </li>
-                        <li>
-                            <p class="tit"><?=lang('common.phone_number')?></p>
-                            <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="user_phone" id="user_phone" placeholder="<?=lang('common.phone_msg')?>">
-                        </li>
-                        <li>
-                            <p class="tit"><?=lang('common.bank_name')?></p>
-                            <input type="text" name="bank_name" id="bank_name">
-                        </li>
-                        <li>
-                            <p class="tit"><?=lang('common.account_number')?></p>
-                            <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="bank_account" id="bank_account" placeholder="<?=lang('common.phone_msg')?>">
-                        </li>
-                        <li>
-                            <p class="tit"><?=lang('common.withdrawal_password')?></p>
-                            <input type="text" name="bank_pw" id="bank_pw" autocomplete="off" style="-webkit-text-security: disc;">
-                        </li>
-                    </ul>
-                    <div class="btn_wrap">
-                        <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
-                        <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_done">NEXT</button>
-                    </div>
-                    <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
-                </div>
-
-                <div class="join_area step04">
-                    <p class="txt"><?=lang('common.signup_complete')?>.</p>
-                    <p class="desc"  id="join_commment"><span class="name" id="name_complete"></span><?=lang('common.signup_welcome')?>.<br> <?=lang('common.signup_permit')?>.<br> <?=lang('common.thanks')?>.
-                    </p>
-                    <button type="button" class="next_btn" value="LOGIN NOW" id="btn_login"><?=lang('common.login')?></button>
-                    <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
+        <div class="login_wrap">
+            <div class="login_area">
+                <div class="login_con">
+                    <input type="text" placeholder="User ID" id="user_id" class="english_p">
+                    <input type="password" placeholder="Password" id="user_pw" class="english_s">
+                    <input type="text" id="ip_addr" hidden>
+                    <button type="button" class="submit_btn" id="btnLogin"><?=lang('common.login')?></button>
+                    <button type="button" class="join_btn"><?=lang('common.signup')?></button>
                 </div>
             </div>
-            <!-- login_wrap -->
+            <!--//login_area -->
+            <div class="join_area step01">
+                <input type="text" name="proposer" id="proposer" placeholder="<?=lang('common.recommender_input')?>" class="english_p" style="width:250px;">
+                <div class="btn_wrap">
+                    <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
+                    <button type="button" class="next_btn join01_btn" value="START" title="START" id="btnCode">START</button>
+                </div>
+                <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
+            </div>
+
+            <div class="join_area step02">
+                <ul>
+                    <li>
+                        <p class="tit"><?=lang('common.id')?><span class="desc" id="id_desc">※ <?=lang('common.4to16')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?></span></p>
+                        <input type="text" name="input_id" id="input_id" class="english" placeholder="<?=lang('common.4to16')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?>">
+                    </li>
+                    <li>
+                        <p class="tit"><?=lang('common.nickname')?><span class="desc" id="nickname_desc">※ <?=lang('common.3to12')?></span></p>
+                        <input type="text" name="input_nickname" id="input_nickname" class="korean" placeholder="<?=lang('common.3to12')?>">
+                    </li>
+                    <li>
+                        <p class="tit"><?=lang('common.password')?><span class="desc">※ <?=lang('common.8to20')?>, <?=lang('common.special_chars')?></span></p>
+                        <input type="text" name="input_pw" id="input_pw" class="english_s" autocomplete="off">
+                    </li>
+                    <li>
+                        <p class="tit"><?=lang('common.confirm_password')?></p>
+                        <input type="text" name="input_pw_check" id="input_pw_check" class="english_s" autocomplete="off" style="-webkit-text-security: disc;">
+                    </li>
+                </ul>
+                <div class="btn_wrap">
+                    <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
+                    <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_next">NEXT</button>
+                </div>
+                <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
+            </div>
+
+            <div class="join_area step03">
+                <ul>
+                    <li>
+                        <p class="tit"><?=lang('common.name')?><span class="desc">※ <?=lang('common.name_comment')?></span></p>
+                        <input type="text" name="user_name" id="user_name">
+                    </li>
+                    <li>
+                        <p class="tit"><?=lang('common.phone_number')?></p>
+                        <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="user_phone" id="user_phone" placeholder="<?=lang('common.phone_msg')?>">
+                    </li>
+                    <li>
+                        <p class="tit"><?=lang('common.bank_name')?></p>
+                        <input type="text" name="bank_name" id="bank_name">
+                    </li>
+                    <li>
+                        <p class="tit"><?=lang('common.account_number')?></p>
+                        <input type="number" pattern="[0-9]*" inputmode="numeric" min="0" onkeydown="checkNumber(event)" style="ime-mode:disabled;" name="bank_account" id="bank_account" placeholder="<?=lang('common.phone_msg')?>">
+                    </li>
+                    <li>
+                        <p class="tit"><?=lang('common.withdrawal_password')?></p>
+                        <input type="text" name="bank_pw" id="bank_pw" autocomplete="off" style="-webkit-text-security: disc;">
+                    </li>
+                </ul>
+                <div class="btn_wrap">
+                    <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
+                    <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_done">NEXT</button>
+                </div>
+                <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
+            </div>
+
+            <div class="join_area step04">
+                <p class="txt"><?=lang('common.signup_complete')?>.</p>
+                <p class="desc"  id="join_commment"><span class="name" id="name_complete"></span><?=lang('common.signup_welcome')?>.<br> <?=lang('common.signup_permit')?>.<br> <?=lang('common.thanks')?>.
+                </p>
+                <button type="button" class="next_btn" value="LOGIN NOW" id="btn_login"><?=lang('common.login')?></button>
+                <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
+            </div>
+        </div>
+        <!-- login_wrap -->
 
     </div>
     <?php if(array_key_exists("app.produce", $_ENV)) :?>
@@ -313,6 +343,9 @@
     <?php else : ?>
         <script src="<?php echo base_url('/js/login.js?v=2');?>"></script>
     <?php endif ?>
+    <script>
+        setLogCookie('lang', '<?=$lang?>', 30);
+    </script>  
 </body>
 
 </html>
