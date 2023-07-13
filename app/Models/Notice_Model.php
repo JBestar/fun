@@ -133,14 +133,14 @@ class Notice_Model extends Model {
     
     public function searchBodCount($reqData){
 
-        $getFields = ['notice_fid', 'notice_type', 'notice_title', 'notice_content', 'notice_answer', 'notice_mb_uid', 
-            'notice_time_create', 'notice_state_active', 'notice_client_delete' ]; 
+        // $getFields = ['notice_fid', 'notice_type', 'notice_title', 'notice_content', 'notice_answer', 'notice_mb_uid', 
+        //     'notice_time_create', 'notice_state_active', 'notice_client_delete' ]; 
 
         $where = "notice_type = '".NOTICE_BOARD."' ";
         $where.= "AND notice_state_active = '".STATE_ACTIVE."' ";
         $where.= "AND notice_state_delete = '".STATE_DISABLE."' ";
         
-        $data = $this->select($getFields)
+        $data = $this//->select($getFields)
                     ->where($where)
                     ->findAll(); 
         return count($data);
@@ -148,8 +148,8 @@ class Notice_Model extends Model {
 
     public function searchBodList($reqData){
         
-        $getFields = ['notice_fid', 'notice_type', 'notice_title', 'notice_content', 'notice_answer', 'notice_mb_uid', 
-            'notice_time_create', 'notice_state_active', 'notice_client_delete' ]; 
+        // $getFields = ['notice_fid', 'notice_type', 'notice_title', 'notice_content', 'notice_answer', 'notice_mb_uid', 
+        //     'notice_time_create', 'notice_state_active', 'notice_client_delete' ]; 
 
         $where = "notice_type = '".NOTICE_BOARD."' ";
         $where.= "AND notice_state_active = '".STATE_ACTIVE."' ";
@@ -161,7 +161,7 @@ class Notice_Model extends Model {
             return NULL;
         if($count < 1)
             return NULL;
-        return $this->select($getFields)
+        return $this //->select($getFields)
                     ->where($where)
                     ->orderBy('notice_fid', 'DESC')
                     ->findAll($count, $count*($page-1)); 
@@ -169,8 +169,8 @@ class Notice_Model extends Model {
 
     public function searchCusCount($reqData){
 
-        $getFields = ['notice_fid', 'notice_type', 'notice_title', 'notice_content', 'notice_answer', 'notice_mb_uid', 
-            'notice_time_create', 'notice_state_active', 'notice_client_delete', 'mb_grade', 'mb_nickname']; 
+        // $getFields = ['notice_fid', 'notice_type', 'notice_title', 'notice_content', 'notice_answer', 'notice_mb_uid', 
+        //     'notice_time_create', 'notice_state_active', 'notice_client_delete', 'mb_grade', 'mb_nickname']; 
 
         $joinTable = "member";
 
@@ -179,7 +179,7 @@ class Notice_Model extends Model {
         if(array_key_exists('send_uid', $reqData) ){
             $where.= "AND notice_mb_uid = ".$this->db->escape($reqData['send_uid'])." ";
         }
-        $data = $this->select($getFields)
+        $data = $this //->select($getFields)
                     ->join($joinTable, $joinTable.'.mb_uid = '.$this->table.'.notice_mb_uid')  
                     ->where($where)
                     ->findAll(); 
@@ -215,8 +215,8 @@ class Notice_Model extends Model {
     
     public function searchMsgCount($reqData){
 
-        $getFields = ['notice_fid', 'notice_type', 'notice_title', 'notice_content', 'notice_mb_uid', 
-            'notice_time_create', 'notice_state_active', 'notice_client_delete', 'mb_grade', 'mb_nickname']; 
+        // $getFields = ['notice_fid', 'notice_type', 'notice_title', 'notice_content', 'notice_mb_uid', 
+        //     'notice_time_create', 'notice_state_active', 'notice_client_delete', 'mb_grade', 'mb_nickname']; 
 
         $joinTable = "member";
 
@@ -226,7 +226,7 @@ class Notice_Model extends Model {
         if(array_key_exists('send_uid', $reqData) ){
             $where.= "AND notice_mb_uid = ".$this->db->escape($reqData['send_uid'])." ";
         }
-        $data = $this->select($getFields)
+        $data = $this//->select($getFields)
                     ->join($joinTable, $joinTable.'.mb_uid = '.$this->table.'.notice_mb_uid')  
                     ->where($where)
                     ->findAll(); 
@@ -235,8 +235,8 @@ class Notice_Model extends Model {
 
     public function searchMsgList($reqData){
         
-        $getFields = ['notice_fid', 'notice_type', 'notice_title', 'notice_content', 'notice_mb_uid', 'notice_read_count', 
-            'notice_time_create', 'notice_state_active', 'notice_client_delete', 'mb_grade', 'mb_nickname']; 
+        // $getFields = ['notice_fid', 'notice_type', 'notice_title', 'notice_content', 'notice_mb_uid', 'notice_read_count', 
+        //     'notice_time_create', 'notice_state_active', 'notice_client_delete', 'mb_grade', 'mb_nickname']; 
 
         $joinTable = "member";
 
@@ -252,7 +252,7 @@ class Notice_Model extends Model {
             return NULL;
         if($count < 1)
             return NULL;
-        return $this->select($getFields)
+        return $this//->select($getFields)
                     ->join($joinTable, $joinTable.'.mb_uid = '.$this->table.'.notice_mb_uid')  
                     ->where($where)
                     ->orderBy('notice_fid', 'DESC')

@@ -89,7 +89,7 @@ return [
     'ip' => '아이피',
     'info_user' => '회원정보',
     'inspection' => '점검중입니다',
-    'lang_chinese' => '중어',
+    'lang_chinese' => '중국어',
     'lang_english' => '영어',
     'lang_korean' => '한국어',
     'log_in' => '로그인하기',

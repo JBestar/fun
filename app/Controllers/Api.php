@@ -595,7 +595,7 @@ class Api extends BaseController
 
 								if(diffDt($strNow, $exchanges[0]->exchange_time_require) < floatval($confs[1]) * 3600){
 									$result->status = STATUS_FAIL;
-									$result->msg = "출금간격은 최소 ".$confs[1]."시간입니다.";
+									$result->msg = langTo($this->session->lang, "withdrawal_delay", $confs[1]);
 								}
 							}
 							break;
@@ -639,7 +639,7 @@ class Api extends BaseController
 				$result->msg = lang("common.withdrawal_fail_amount");
 			} else if($_ENV['mem.delay_play'] > 0 && $_ENV['mem.withdeny_play'] &&  diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet) < $_ENV['mem.delay_play']){
 				$result->status = STATUS_FAIL;
-				$result->msg = "게임플레이중에는 출금신청을 하실수 없습니다. ".intval($_ENV['mem.delay_play']/60-diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet)/60)."분후 다시 해주세요.";
+				$result->msg = langTo($this->session->lang, "withdrawal_deny", intval($_ENV['mem.delay_play']/60-diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet)/60) );
 			} else {
 				$iResult = 1;
 				if($reqData['c_price'] > $objMember->mb_money){
@@ -791,6 +791,11 @@ class Api extends BaseController
 				$result->status = STATUS_FAIL;
 			} else {
 				$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
+				if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ){
+					if($this->session->lang == "cn"  && !isEmptyNotice($objConf->conf_content_cn)){
+						$objConf->conf_content = $objConf->conf_content_cn;
+					}
+				}
 				$sAnswer.= $objConf->conf_content;
 	
 				$data = [  
@@ -1086,9 +1091,19 @@ class Api extends BaseController
 			$reqData['send_uid'] = $this->session->user_id;
 
 			$result->totalRows = $this->modelNotice->searchMsgCount($reqData);
-			$result->rows = $this->modelNotice->searchMsgList($reqData);
+			$arrNotice = $this->modelNotice->searchMsgList($reqData);
             $result->unread = $this->modelNotice->unreadMsg($reqData['send_uid']);
-
+			if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ){
+				if(!is_null($arrNotice) && count($arrNotice) > 0 && $this->session->lang != "ko"){
+					foreach($arrNotice as $notice){
+						if($this->session->lang == "cn"  && !isEmptyNotice($notice->notice_content_cn)){
+							$notice->notice_title = $notice->notice_title_cn;
+							$notice->notice_content = $notice->notice_content_cn;
+						}
+					}
+				}
+			}
+			$result->rows = $arrNotice;
 			$result->status = STATUS_SUCCESS;
         }
 		
@@ -1161,7 +1176,20 @@ class Api extends BaseController
         } else {
 
 			$result->totalRows = $this->modelNotice->searchBodCount($reqData);
-			$result->rows = $this->modelNotice->searchBodList($reqData);
+			$arrNotice = $this->modelNotice->searchBodList($reqData);
+
+			if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ){
+				if(!is_null($arrNotice) && count($arrNotice) > 0 && $this->session->lang != "ko"){
+					foreach($arrNotice as $notice){
+						if($this->session->lang == "cn"  && !isEmptyNotice($notice->notice_content_cn) ){
+							$notice->notice_title = $notice->notice_title_cn;
+							$notice->notice_content = $notice->notice_content_cn;
+						}
+					}
+				}
+			}
+
+			$result->rows = $arrNotice;
 			$result->status = STATUS_SUCCESS;
         }
 		

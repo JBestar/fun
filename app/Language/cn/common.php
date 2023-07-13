@@ -90,9 +90,9 @@ return [
     'info_user' => '个人信息',
     'inspection' => '维护中',   //正在检查中
     'korean' => '韩语',
-    'lang_chinese' => '汉语',
+    'lang_chinese' => '中国语',
     'lang_english' => '英语',
-    'lang_korean' => '韩语',
+    'lang_korean' => '韩国语',
     'log_in' => '登陆',         //登录
     'login' => '登陆',          //登录
     'login_duplicate' => '已登陆。',

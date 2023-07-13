@@ -32,12 +32,20 @@ class Home extends BaseController
             foreach($arrConf as $objConf){
                 switch($objConf->conf_id){
                     case CONF_NOTICE_MAIN: $notice_main = $objConf->conf_content;
+                        if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ){
+                            if($headInfo['lang'] == "cn" && strlen($objConf->conf_content_cn) > 0 )
+                                $notice_main = $objConf->conf_content_cn;
+                        }
                         break;
                     case CONF_NOTICE_BANK: 
                         if($objConf->conf_active == STATE_ACTIVE){
                             $board = new \StdClass;
                             $board->notice_title = lang("common.notice_deposit");
                             $board->notice_content = $objConf->conf_content;
+                            if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ){
+                                if($headInfo['lang'] == "cn" && strlen($objConf->conf_content_cn) > 0 )
+                                    $board->notice_content = $objConf->conf_content_cn;
+                            }
                             $board->notice_color = $objConf->conf_idx;
                             $boards[] = $board;
                         }
@@ -47,6 +55,10 @@ class Home extends BaseController
                             $board = new \StdClass;
                             $board->notice_title = lang("common.notice_emergency");
                             $board->notice_content = $objConf->conf_content;
+                            if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ){
+                                if($headInfo['lang'] == "cn" && strlen($objConf->conf_content_cn) > 0 )
+                                    $board->notice_content = $objConf->conf_content_cn;
+                            }
                             $board->notice_color = $objConf->conf_idx;
                             $boards[] = $board;
                         }
@@ -60,6 +72,12 @@ class Home extends BaseController
             $notices = $this->modelNotice->searchBodList($reqData);
             foreach($notices as $notice){
                 $notice->notice_color = '#333';
+                if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ){
+                    if($headInfo['lang'] == "cn" && !isEmptyNotice($notice->notice_content_cn) ){
+                        $notice->notice_title = $notice->notice_title_cn;
+                        $notice->notice_content = $notice->notice_content_cn;
+                    }
+                }
                 $boards[] = $notice;
             }
 
@@ -107,28 +125,15 @@ class Home extends BaseController
 
     public function mypage()
     {
-        
-        $configApp = new \Config\App();
-        $locale = $this->session->get('lang');
-        $language = \Config\Services::language();
-
-        writeLog("defaultLocale=".$configApp->defaultLocale." language=".$language->getLocale());
-
-        if(is_null($locale) || is_array($locale) || strlen($locale) < 1)
-            $locale = $configApp->defaultLocale;
-        $locale = "cn";
-        $this->session->set('lang', $locale);
-        $language->setLocale($this->session->lang);
-        writeLog("[lang] ".$this->session->lang);
-
-        
         if(!is_login()){
             print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
         } else{
+            $this->setLanguage();
             $tab = $this->request->getVar('tab');
             $user_id = $this->session->user_id;
             $objMember = $this->modelMember->getByUid($user_id);
             $navInfo = getNavInfo($objMember);
+            $navInfo['lang'] = $this->session->lang;
 
             if($tab != "my_qna" && $tab != "my_memo" && $tab != "notice"){
                 $tab = "my_info";

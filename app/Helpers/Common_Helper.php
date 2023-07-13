@@ -892,4 +892,37 @@
       }
       return false;
     }
+
+    function isEmptyNotice($content){
+      
+      $content = trim($content);
+      if(strlen($content) < 1)
+        return true;
+      
+      return  preg_match("/^(<\w+>)?<br>(<\/\w+>)?$/i", $content);
+    }
+
+    function langTo($locale, $msgType, $param){
+      $result = "";
+      switch($msgType){
+        case "withdrawal_delay":
+          if($locale == "cn")
+            $result = "取款间隔至少为".$param."小时.";
+          else if($locale == "en")
+            $result = "The withdrawal interval is at least ".$param." hour.";
+          else
+            $result = "출금간격은 최소 ".$param."시간입니다.";
+          break;
+        case "withdrawal_deny":
+          if($locale == "cn")
+            $result = "玩游戏时不能申请取款. (等待时间:".$param."分钟)";
+          else if($locale == "en")
+            $result = "You can't request for withdrawal during the game. (Waiting Time:".$param." minutes)";
+          else
+            $result = "게임플레이중에는 출금신청을 하실수 없습니다. (대기 시간:".$param."분)";
+          break;
+        default: break;
+      }
+      return $result;
+    }
 ?>

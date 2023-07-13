@@ -13,6 +13,8 @@ class Slot extends BaseController
 
 	public function xslotlist()
 	{
+		$this->setLanguage();
+
 		$prdCode = trim($this->request->getVar('prd'));
 		if(!is_login())
 		{

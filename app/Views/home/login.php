@@ -242,9 +242,9 @@
 
     <div id="wrap" class="users_wrap">
         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-            <select name="lang" id="lang" style="position:absolute; right:10px; top:5px; width:60px; padding:0 10px; color: #ffff00; background:none; border:none; text-align:center;">
-                <option value="ko" <?=$lang=='ko'?'selected':''?> > <?=lang('common.lang_korean')?> </option>
-                <option value="cn" <?=$lang=='cn'?'selected':''?> > <?=lang('common.lang_chinese')?> </option>
+            <select name="lang" id="lang" style="position:absolute; right:10px; top:10px; width:60px; padding:0 10px; color: #ffff00; background:none; border:none; text-align:center; border-radius:0; font-size:14px;">
+                <option value="ko" style="background:#dc610d; padding:5px;" <?=$lang=='ko'?'selected':''?> > <?=lang('common.lang_korean')?> </option>
+                <option value="cn" style="background:#dc610d; padding:5px;" <?=$lang=='cn'?'selected':''?> > <?=lang('common.lang_chinese')?> </option>
             </select>
         <?php endif ?>
 
