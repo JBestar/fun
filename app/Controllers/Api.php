@@ -216,6 +216,7 @@ class Api extends BaseController
 	}
 
 	public function check_account(){
+		$this->setLanguage();
 		$arrData['member_id'] = $this->request->getVar('userid');
 		$arrData['nickname'] = $this->request->getVar('nickname');
 		
@@ -308,6 +309,7 @@ class Api extends BaseController
 		{
 			$result->status = STATUS_LOGOUT;
 		} else{
+			$this->setLanguage();
 
 			$notice_main = 0;
             $boards = array();
@@ -356,6 +358,7 @@ class Api extends BaseController
 	}
 	
 	public function check_pass(){
+		$this->setLanguage();
 		
 		$result = new \StdClass;
 		if(!is_login())
@@ -387,6 +390,7 @@ class Api extends BaseController
 
 	
 	public function change_pass(){
+		$this->setLanguage();
 		
 		$result = new \StdClass;
 		if(!is_login())
@@ -511,6 +515,7 @@ class Api extends BaseController
     }
 
 	public function register(){
+		$this->setLanguage();
 		$reqData['member_id'] = $this->request->getVar('userid');
 		$reqData['password'] = $this->request->getVar('passwd');
 		$reqData['nickname'] = $this->request->getVar('nickname');
@@ -557,6 +562,7 @@ class Api extends BaseController
 	}
 
 	public function register_exchange(){
+		$this->setLanguage();
 		
 		$reqData['c_price'] = intval($this->request->getPost("cash"));
 		$reqData['bank_passwd'] = $this->request->getPost("bank_passwd");
@@ -639,7 +645,8 @@ class Api extends BaseController
 				$result->msg = lang("common.withdrawal_fail_amount");
 			} else if($_ENV['mem.delay_play'] > 0 && $_ENV['mem.withdeny_play'] &&  diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet) < $_ENV['mem.delay_play']){
 				$result->status = STATUS_FAIL;
-				$result->msg = langTo($this->session->lang, "withdrawal_deny", intval($_ENV['mem.delay_play']/60-diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet)/60) );
+				// writeLog($_ENV['mem.delay_play']." > ".diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet));
+				$result->msg = langTo($this->session->lang, "withdrawal_deny", intval($_ENV['mem.delay_play']/60-diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet)/60)+1);
 			} else {
 				$iResult = 1;
 				if($reqData['c_price'] > $objMember->mb_money){
@@ -746,6 +753,7 @@ class Api extends BaseController
 	
 	public function request_account3()
 	{
+		$this->setLanguage();
 		$reqData['title'] = $this->request->getPost('title');
 		$reqData['content'] = $this->request->getPost('content');
 
@@ -828,6 +836,7 @@ class Api extends BaseController
 
 	public function register_charge(){
 		
+		$this->setLanguage();
 		$reqData['c_price'] = intval($this->request->getPost('cash'));
 		
 		$result = new \StdClass;
@@ -999,6 +1008,7 @@ class Api extends BaseController
 
 	public function delete_customer()
 	{
+		$this->setLanguage();
 		$result = new \StdClass;
 		if(!is_login())
 		{
@@ -1027,6 +1037,7 @@ class Api extends BaseController
 	
 	public function write_customer()
 	{
+		$this->setLanguage();
 		$result = new \StdClass;
 		if(!is_login())
 		{
@@ -1114,6 +1125,7 @@ class Api extends BaseController
 
 	public function delete_message()
 	{
+		$this->setLanguage();
 		$result = new \StdClass;
 		if(!is_login())
 		{

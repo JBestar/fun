@@ -9,6 +9,7 @@ class Casino extends BaseController
 
     public function evl()
 	{
+		$this->setLanguage();
 						
 		if(!is_login())
 		{
@@ -81,19 +82,19 @@ class Casino extends BaseController
 			}
 
 			if($iCreated == 0){
-				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 2){
 				print "<script language=javascript> alert('계정생성중 오류가 발생하였습니다.'); self.close(); </script>";
 			} else if($iCreated == 3){
-				print "<script language=javascript> alert('실행이 중지되었습니다.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.game_stop")."'); self.close(); </script>";
 			} else if($iCreated == 4){
-				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
 				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
 			} else if($iCreated == 7){
-				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.inspection")."'); self.close(); </script>";
 			} else if($iCreated == 8){
-				print "<script language=javascript> alert('".(DELAY_GAME-$diffDt)."초후 다시 시도해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
 			} else if($iCreated == 9){
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 1){
@@ -114,11 +115,11 @@ class Casino extends BaseController
                             print "<script language=javascript> alert('존재하지 않는 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
                         }
                         else {
-                            print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+                            print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
                         } 
                     }
                 } else { //Fail in transfering of money
-					print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+					print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
 				}
 			}
 			
@@ -128,6 +129,7 @@ class Casino extends BaseController
 
     public function cas()
 	{
+		$this->setLanguage();
 		$prdId = trim($this->request->getVar('prd'));
 						
 		if(!is_login())
@@ -193,21 +195,21 @@ class Casino extends BaseController
 			}
 
 			if($iCreated == 0){
-				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 2){
 				print "<script language=javascript> alert('계정창조중 오류가 발생하였습니다.'); self.close(); </script>";
 			} else if($iCreated == 3){
-				print "<script language=javascript> alert('실행이 중지되었습니다.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.game_stop")."'); self.close(); </script>";
 			} else if($iCreated == 4){
-				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
 				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
 			} else if($iCreated == 6){
 				print "<script language=javascript> alert('게임을 정확히 선택해주세요.'); self.close(); </script>";
 			} else if($iCreated == 7){
-				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.inspection")."'); self.close(); </script>";
 			} else if($iCreated == 8){
-				print "<script language=javascript> alert('".(DELAY_GAME-$diffDt)."초후 다시 시도해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
 			} else if($iCreated == 9){
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 1){
@@ -215,7 +217,7 @@ class Casino extends BaseController
 					$iResult = $this->alltoGame($objMember, $gameId);
 				else $iResult = 1;
                 if($iResult != 1){
-                    print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+                    print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
                 } else {
                     $arrResult = $this->libApiKgon->auth($objMember->mb_kgon_uid, $objMember->mb_nickname, $objMember->mb_uid, $objCas->key, $objCas->lobby);
                     if($arrResult['status'] == 1){
@@ -231,7 +233,7 @@ class Casino extends BaseController
 								$log.=" msg=".$arrResult['msg'];
 							writeLog($log); 
 						}
-                        print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+                        print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
                     }
                 }
 				
@@ -243,6 +245,7 @@ class Casino extends BaseController
 
 	public function cas_h()
 	{
+		$this->setLanguage();
 						
 		if(!is_login())
 		{
@@ -299,21 +302,21 @@ class Casino extends BaseController
 			}
 
 			if($iCreated == 0){
-				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 2){
 				print "<script language=javascript> alert('계정창조중 오류가 발생하였습니다.'); self.close(); </script>";
 			} else if($iCreated == 3){
-				print "<script language=javascript> alert('실행이 중지되었습니다.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.game_stop")."'); self.close(); </script>";
 			} else if($iCreated == 4){
-				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
 				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
 			} else if($iCreated == 6){
 				print "<script language=javascript> alert('게임을 정확히 선택해주세요.'); self.close(); </script>";
 			} else if($iCreated == 7){
-				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.inspection")."'); self.close(); </script>";
 			} else if($iCreated == 8){
-				print "<script language=javascript> alert('".(DELAY_GAME-$diffDt)."초후 다시 시도해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
 			} else if($iCreated == 9){
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 1){
@@ -322,7 +325,7 @@ class Casino extends BaseController
 				else $iResult = 1;
 
                 if($iResult != 1){
-                    print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+                    print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
                 } else {
                     $arrResult = $this->libApiHslot->auth($objMember->mb_hslot_token, null, $objCas);
                     if($arrResult['status'] == 1){
@@ -336,7 +339,7 @@ class Casino extends BaseController
 							$log = $logHead.$objMember->mb_uid."-Auth Error description=".$arrResult['description'];
 							writeLog($log);  
 						}
-                        print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+                        print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
                     }
                 }
 				
@@ -348,6 +351,7 @@ class Casino extends BaseController
 
 	public function holdem()
 	{
+		$this->setLanguage();
 						
 		if(!is_login())
 		{
@@ -402,28 +406,28 @@ class Casino extends BaseController
 			}
 
 			if($iCreated == 0){
-				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 2){
 				print "<script language=javascript> alert('계정창조중 오류가 발생하였습니다.'); self.close(); </script>";
 			} else if($iCreated == 3){
-				print "<script language=javascript> alert('실행이 중지되었습니다.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.game_stop")."'); self.close(); </script>";
 			} else if($iCreated == 4){
-				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
 				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
 			} else if($iCreated == 6){
 				print "<script language=javascript> alert('게임을 정확히 선택해주세요.'); self.close(); </script>";
 			} else if($iCreated == 7){
-				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.inspection")."'); self.close(); </script>";
 			} else if($iCreated == 8){
-				print "<script language=javascript> alert('".(DELAY_GAME-$diffDt)."초후 다시 시도해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
 			} else if($iCreated == 9){
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 1){
 				$iResult = $this->alltoGame($objMember, $gameId);
 
                 if($iResult != 1){
-                    print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+                    print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
                 } else {
 					$this->libApiHold->logout($objMember->mb_hold_uid);
 					usleep(500000);
@@ -440,7 +444,7 @@ class Casino extends BaseController
 							$log = $logHead.$objMember->mb_uid."-Auth Error=".$arrResult['error'];
 							writeLog($log);  
 						}
-                        print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+                        print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
                     }
                 }
 				

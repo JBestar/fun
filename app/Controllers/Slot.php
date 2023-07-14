@@ -59,7 +59,7 @@ class Slot extends BaseController
 			} else if($iCreated == 3){
 				print "<script language=javascript> alert('실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 4){
-				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
 				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
 			} else if($iCreated == 1){
@@ -82,7 +82,7 @@ class Slot extends BaseController
 
 		if(!is_login())
 		{
-			print "<script> alert('세션이 만료되었습니다. 다시 로그인하세요.'); self.close(); </script>";
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
         } else if($_ENV['app.type'] == APP_TYPE_2){
 			$this->response->redirect('/slot/xslotf?prd='.$prdCode.'&game='.$slotId);	
 		} else {
@@ -179,7 +179,7 @@ class Slot extends BaseController
 			} else if($iCreated == 3){
 				print "<script language=javascript> alert('게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 4){
-				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
 				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
 			} else if($iCreated == 6){
@@ -187,7 +187,7 @@ class Slot extends BaseController
 			} else if($iCreated == 7){
 				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
 			} else if($iCreated == 8){
-				print "<script language=javascript> alert('".(DELAY_GAME-$diffDt)."초후 다시 시도해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
 			}  else if($iCreated == 9){
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 100){
@@ -241,6 +241,7 @@ class Slot extends BaseController
 
 
 	public function xslotf(){
+		$this->setLanguage();
 		$prdCode = trim($this->request->getVar('prd'));
 		$slotId = trim($this->request->getVar('game'));
 			
@@ -323,7 +324,7 @@ class Slot extends BaseController
 			} else if($iCreated == 3){
 				print "<script language=javascript> alert('게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 4){
-				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
 				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
 			} else if($iCreated == 6){
@@ -331,7 +332,7 @@ class Slot extends BaseController
 			} else if($iCreated == 7){
 				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
 			} else if($iCreated == 8){
-				print "<script language=javascript> alert('".(DELAY_GAME-$diffDt)."초후 다시 시도해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
 			} else if($iCreated == 9){
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 1){
@@ -368,6 +369,7 @@ class Slot extends BaseController
 
 	
 	public function xslotg(){
+		$this->setLanguage();
 		if(!is_login())
 		{
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
@@ -446,7 +448,7 @@ class Slot extends BaseController
 			} else if($iCreated == 3){
 				print "<script language=javascript> alert('게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 4){
-				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
 				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
 			} else if($iCreated == 6){
@@ -454,7 +456,7 @@ class Slot extends BaseController
 			} else if($iCreated == 7){
 				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
 			} else if($iCreated == 8){
-				print "<script language=javascript> alert('".(DELAY_GAME-$diffDt)."초후 다시 시도해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
 			} else if($iCreated == 9){
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 1){
@@ -490,6 +492,7 @@ class Slot extends BaseController
 	}
 
 	public function xslotk(){
+		$this->setLanguage();
 		if(!is_login())
 		{
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
@@ -561,7 +564,7 @@ class Slot extends BaseController
 			} else if($iCreated == 3){
 				print "<script language=javascript> alert('게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 4){
-				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
 				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
 			} else if($iCreated == 6){
@@ -569,7 +572,7 @@ class Slot extends BaseController
 			} else if($iCreated == 7){
 				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
 			} else if($iCreated == 8){
-				print "<script language=javascript> alert('".(DELAY_GAME-$diffDt)."초후 다시 시도해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
 			} else if($iCreated == 9){
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 1){
@@ -602,6 +605,7 @@ class Slot extends BaseController
 	}
 
 	public function xsloth(){
+		$this->setLanguage();
 		if(!is_login())
 		{
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
@@ -674,7 +678,7 @@ class Slot extends BaseController
 			} else if($iCreated == 3){
 				print "<script language=javascript> alert('게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 4){
-				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
 				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
 			} else if($iCreated == 6){
@@ -682,7 +686,7 @@ class Slot extends BaseController
 			} else if($iCreated == 7){
 				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
 			} else if($iCreated == 8){
-				print "<script language=javascript> alert('".(DELAY_GAME-$diffDt)."초후 다시 시도해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
 			} else if($iCreated == 9){
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 1){
@@ -713,6 +717,7 @@ class Slot extends BaseController
 
 	public function fslotlist()
 	{
+		$this->setLanguage();
 		$prdCode = trim($this->request->getVar('prd'));
 						
 		if(!is_login())
@@ -755,7 +760,7 @@ class Slot extends BaseController
 			} else if($iCreated == 3){
 				print "<script language=javascript> alert('실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 4){
-				print "<script language=javascript> alert('준비중입니다'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
 				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
 			} else if($iCreated == 1){

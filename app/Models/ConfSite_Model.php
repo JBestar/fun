@@ -164,7 +164,7 @@ class ConfSite_Model extends Model {
 
     public function readMemConf(){
         $confIds = [CONF_TRANS_DENY, CONF_RETURN_DENY, CONF_TRANS_LV1, CONF_RETURN_LV1, 
-            CONF_TRANS_LVS, CONF_DEPOSIT_PLAY, CONF_WITHDRAW_PLAY];  
+            CONF_TRANS_LVS, CONF_DEPOSIT_PLAY, CONF_WITHDRAW_PLAY, CONF_DELAY_PLAY];  
         $arrConf = $this->find($confIds);
         $_ENV['mem.trans_deny'] = false;
         $_ENV['mem.return_deny'] = false;

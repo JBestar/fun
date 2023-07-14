@@ -29,6 +29,7 @@
                 deposit_account_ask : '<?=lang('common.deposit_account_ask')?>',
                 deposit_account_check : '<?=lang('common.deposit_account_check')?>',
                 deposit_account_request : '<?=lang('common.deposit_account_request')?>',
+                deposit_request_amount : '<?=lang('common.deposit_request_amount')?>',
                 deposit_success : '<?=lang('common.deposit_success')?>',
                 id_input : '<?=lang('common.id_input')?>',
                 id_input_4 : '<?=lang('common.id_input_4')?>',
@@ -281,7 +282,11 @@
                                 <span><?=lang('common.signup')?></span>
                             </button>
                             <!-- uk-toggle="target: #loginModal" -->
-                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showLoginModal();"  >
+                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showLoginModal();"  
+                                <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
+                                    style="margin-top:27px;"
+                                <?php endif ?>
+                            >
                                 <span><?=lang('common.login')?></span>
                             </button>
                         <?php else :?>
@@ -1801,7 +1806,7 @@
                             },
                             {
                                 type: "minLength[5]",
-                                prompt: "최소 1만원 이상 입력해주세요",
+                                prompt: langMessage.deposit_request_amount,
                             },
                         ],
                     },
@@ -1814,7 +1819,7 @@
                             },
                             {
                                 type: "minLength[5]",
-                                prompt: "최소 1만원 이상 입력해주세요",
+                                prompt: langMessage.deposit_request_amount,
                             },
                         ],
                     },

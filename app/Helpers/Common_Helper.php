@@ -905,11 +905,19 @@
     function langTo($locale, $msgType, $param){
       $result = "";
       switch($msgType){
+        case "game_delay":
+          if($locale == "cn")
+            $result = $param."秒后请再试一次";
+          else if($locale == "en")
+            $result = "Please try again in ".$param." seconds.";
+          else
+            $result = $param."초후 다시 시도해주세요";
+          break;
         case "withdrawal_delay":
           if($locale == "cn")
-            $result = "取款间隔至少为".$param."小时.";
+            $result = "取款间隔至少为".$param."个小时.";
           else if($locale == "en")
-            $result = "The withdrawal interval is at least ".$param." hour.";
+            $result = "The withdrawal interval is at least ".$param." hours.";
           else
             $result = "출금간격은 최소 ".$param."시간입니다.";
           break;
@@ -920,6 +928,8 @@
             $result = "You can't request for withdrawal during the game. (Waiting Time:".$param." minutes)";
           else
             $result = "게임플레이중에는 출금신청을 하실수 없습니다. (대기 시간:".$param."분)";
+          break;
+          
           break;
         default: break;
       }

@@ -47,6 +47,7 @@
                 deposit_account_request : '<?=lang('common.deposit_account_request')?>',
                 deposit_permit : '<?=lang('common.deposit_permit')?>',
                 deposit_quick : '<?=lang('common.deposit_quick')?>',
+                deposit_request_amount : '<?=lang('common.deposit_request_amount')?>',
                 deposit_success : '<?=lang('common.deposit_success')?>',
                 id_input : '<?=lang('common.id_input')?>',
                 id_input_4 : '<?=lang('common.id_input_4')?>',
@@ -692,7 +693,7 @@
                             },
                             {
                                 type: "minLength[5]",
-                                prompt: "최소 1만원 이상 입력해주세요",
+                                prompt: langMessage.deposit_request_amount,
                             },
                         ],
                     },
@@ -705,7 +706,7 @@
                             },
                             {
                                 type: "minLength[5]",
-                                prompt: "최소 1만원 이상 입력해주세요",
+                                prompt: langMessage.deposit_request_amount,
                             },
                         ],
                     },

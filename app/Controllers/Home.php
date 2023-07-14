@@ -125,10 +125,10 @@ class Home extends BaseController
 
     public function mypage()
     {
+		$this->setLanguage();
         if(!is_login()){
             print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
         } else{
-            $this->setLanguage();
             $tab = $this->request->getVar('tab');
             $user_id = $this->session->user_id;
             $objMember = $this->modelMember->getByUid($user_id);

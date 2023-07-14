@@ -242,7 +242,7 @@
 
     <div id="wrap" class="users_wrap">
         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-            <select name="lang" id="lang" style="position:absolute; right:10px; top:10px; width:60px; padding:0 10px; color: #ffff00; background:none; border:none; text-align:center; border-radius:0; font-size:14px;">
+            <select name="lang" id="lang" style="position:absolute; right:10px; top:10px; width:65px; padding:0 10px; color: #ffff00; background:none; border:none; text-align:center; border-radius:0; font-size:14px;">
                 <option value="ko" style="background:#dc610d; padding:5px;" <?=$lang=='ko'?'selected':''?> > <?=lang('common.lang_korean')?> </option>
                 <option value="cn" style="background:#dc610d; padding:5px;" <?=$lang=='cn'?'selected':''?> > <?=lang('common.lang_chinese')?> </option>
             </select>
@@ -265,8 +265,8 @@
             <div class="join_area step01">
                 <input type="text" name="proposer" id="proposer" placeholder="<?=lang('common.recommender_input')?>" class="english_p" style="width:250px;">
                 <div class="btn_wrap">
-                    <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
-                    <button type="button" class="next_btn join01_btn" value="START" title="START" id="btnCode">START</button>
+                    <button type="button" class="prev_btn" value="BACK" title="BACK"><?=lang('common.login_back1')?></button>
+                    <button type="button" class="next_btn join01_btn" value="START" title="START" id="btnCode"><?=lang('common.login_start')?></button>
                 </div>
                 <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
             </div>
@@ -291,8 +291,8 @@
                     </li>
                 </ul>
                 <div class="btn_wrap">
-                    <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
-                    <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_next">NEXT</button>
+                    <button type="button" class="prev_btn" value="BACK" title="BACK"><?=lang('common.login_back2')?></button>
+                    <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_next"><?=lang('common.login_next')?></button>
                 </div>
                 <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
             </div>
@@ -321,8 +321,8 @@
                     </li>
                 </ul>
                 <div class="btn_wrap">
-                    <button type="button" class="prev_btn" value="BACK" title="BACK">BACK</button>
-                    <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_done">NEXT</button>
+                    <button type="button" class="prev_btn" value="BACK" title="BACK"><?=lang('common.login_back2')?></button>
+                    <button type="button" class="next_btn" value="NEXT" title="NEXT" id="btn_done"><?=lang('common.login_next')?></button>
                 </div>
                 <button type="button" class="join_close_btn"><span class="ir_pm"><?=lang('common.close')?></span></button>
             </div>
