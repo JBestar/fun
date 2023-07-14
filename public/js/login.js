@@ -63,13 +63,13 @@ $(".english").keyup(function(event) {
         if (regex.test(inputVal)) {
             $(this).val(inputVal.replace(/[^a-z0-9]/gi, ''));
             if ($(this).attr('id') === 'user_id') {
-                $('#login_alert').text('영어와 숫자만 입력가능합니다.');
+                $('#login_alert').text(langMessage.login_rule);
             } else if ($(this).attr('id') === 'proposer') {
-                $('#prop_alert').text('영어와 숫자만 입력가능합니다.');
+                $('#prop_alert').text(langMessage.login_rule);
             } else if ($(this).attr('id') === 'login_email_m') {
                 $('.login_alert').show();
             } else if ($(this).attr('id') === 'login_email') {
-                confirmAlert('영어와 숫자만 입력가능합니다.');
+                confirmAlert(langMessage.login_rule);
             }
         } else {
             $(this).val(inputVal.replace(/[^a-z0-9]/gi, ''));
@@ -87,7 +87,7 @@ $(".english_p").keyup(function(event) {
         if (first_len !== re_len) {
             $(this).val(reVal);
             if (pop_open !== 'true') {
-                confirmAlert('영어와 숫자만 입력 가능합니다', 'handleWindowsKeyboard()')
+                confirmAlert(langMessage.login_rule, 'handleWindowsKeyboard()')
             }
         }
     }
@@ -794,7 +794,7 @@ $('.step03 .next_btn').on('click', function(e) {
     var bank_pw = $("#bank_pw").val();
 
     if (user_name.length < 1) {
-        confirmAlert("이름(예금주)을 입력해 주세요.");
+        confirmAlert(langMessage.login_name_input);
         return;
     }
 

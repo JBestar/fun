@@ -101,9 +101,9 @@
         <div id="gamelist">
             <div class="ui inverted segment sticky" style="left: 10px;">
                 <!-- <button class="ui button"><i class="ui icon arrow down"></i>인기순</button>  -->
-                <button class="ui button" v-on:click="sortABC"><i class="ui icon arrow" v-bind:class="{up:!sort, down:sort}"></i>알파벳순</button>
-                <button class="ui button" v-on:click="sortKo"><i class="ui icon arrow" v-bind:class="{up:!sort2, down:sort2}"></i>한글순</button>
-                <div class="ui action input" v-on:click="search"><input type="text" v-model="keyword" id="search" placeholder="Search..." /> <button class="ui button">검색</button></div>
+                <button class="ui button" v-on:click="sortABC"><i class="ui icon arrow" v-bind:class="{up:!sort, down:sort}"></i><?=lang('common.order_alphabet')?></button>
+                <button class="ui button" v-on:click="sortKo"><i class="ui icon arrow" v-bind:class="{up:!sort2, down:sort2}"></i><?=lang('common.order_korean')?></button>
+                <div class="ui action input" v-on:click="search"><input type="text" v-model="keyword" id="search" placeholder="Search..." /> <button class="ui button"><?=lang('common.search')?></button></div>
                 <button class="ui icon button" v-on:click="sortBack"><i class="ui undo icon"></i></button>
             </div>
             <div class="ui nine doubling cards" >
@@ -111,7 +111,7 @@
                 <div class="ui grey card" v-for="item in games">
                     <a class="image item">
                         <img v-bind:src="item.img_1" onerror="this.src='https://semantic-ui.com/images/wireframe/image.png'" /> 
-                        <button class="ui teal button start" v-on:click="openGame(item.code)">시작하기</button>
+                        <button class="ui teal button start" v-on:click="openGame(item.code)"><?=lang('common.play')?></button>
                     </a>
                     <div class="content"><div class="header">{{item.name_kor}}</div></div>
                 </div>

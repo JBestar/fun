@@ -105,8 +105,10 @@ return [
     'login_ip_block' => '被隔绝的IP',
     'login_ip_permit' => '不是已批准的IP',
     'login_last' => '最后登陆',
+    'login_name_input' => '请输入名字.',
     'login_next' => '下一步',
     'login_refuse' => '登陆被拒绝.',
+    'login_rule' => '只能输入英文或数字.',
     'login_start' => '下一步',
     'login_try' => '请稍后再试. 剩余时间:',
     'login_wait' => '正在等待批准.',
@@ -119,7 +121,7 @@ return [
     'name' => '名字',
     'name_comment' => '使用相同的名字和账户人',
     'next' => '下一步', //下面
-    'nice_meet' => ', 很高兴见到您',
+    'nice_meet' => ', 您好', //很高兴见到您
     'nickname' => '昵称',
     'nickname_available' => '是可以使用的昵称.',
     'nickname_duplicated' => '重复的昵称',
@@ -131,6 +133,8 @@ return [
     'number' => '数字',
     'ok' => '确认',
     'or' => '或',
+    'order_alphabet' => '字母顺序',
+    'order_korean' => '韩语顺序',
     'password' => '密码',
     'password_change' => '更改密码',
     'password_change_ok' => '您的密码已被更改.',
@@ -149,6 +153,7 @@ return [
     'password_verify_c' => '请输入正确的密码确认',
     'partener' => 'Partner', //伙伴
     'permit_date' => '批准日期',
+    'play' => '开始',
     'phone_number' => '手机号码',
     'phone_number_input' => '请输入您的手机号码',
     'phone_msg' => '请只输入数字',

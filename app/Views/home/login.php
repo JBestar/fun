@@ -28,6 +28,8 @@
             id_available : '<?=lang('common.id_available')?>',
             id_deleted : '<?=lang('common.id_deleted')?>',
             login_id_input : '<?=lang('common.login_id_input')?>',
+            login_name_input : '<?=lang('common.login_name_input')?>',
+            login_rule : '<?=lang('common.login_rule')?>',
             nickname_available : '<?=lang('common.nickname_available')?>',
             nickname_input : '<?=lang('common.nickname_input')?>',
             ok : '<?=lang('common.ok')?>',
