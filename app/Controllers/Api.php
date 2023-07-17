@@ -625,6 +625,10 @@ class Api extends BaseController
 						default:break;
 					}
 				}
+				if($reqData['c_price'] % 10000 != 0){
+					$result->status = STATUS_FAIL;
+					$result->msg = lang("common.deposit_request_unit"); 
+				} 
 			}
 			if($bLimit && $result->status == STATUS_FAIL){
 				$result->status = STATUS_FAIL;
@@ -853,6 +857,9 @@ class Api extends BaseController
 			if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 && $objMember->mb_state_delete == STATE_ACTIVE){
 				$result->status = STATUS_FAIL;
 				$result->msg = lang("common.deposit_cant"); 
+			} else if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 && $reqData['c_price'] % 10000 != 0){
+				$result->status = STATUS_FAIL;
+				$result->msg = lang("common.deposit_request_unit"); 
 			} else if($modelCharge->wait($user_id)){
 				$result->status = STATUS_FAIL;
 				$result->msg = lang("common.deposit_fail_wait");

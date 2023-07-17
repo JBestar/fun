@@ -53,7 +53,7 @@ class Slot extends BaseController
 			}
 
 			if($iCreated == 0){
-				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 2){
 				print "<script language=javascript> alert('계정생성중 오류가 발생하였습니다.'); self.close(); </script>";
 			} else if($iCreated == 3){
@@ -61,7 +61,7 @@ class Slot extends BaseController
 			} else if($iCreated == 4){
 				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
-				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 1){
 
 				$games = $modelSlotgame->gets($gameId, $objPrd->code);
@@ -173,7 +173,7 @@ class Slot extends BaseController
 			}
 			
 			if($iCreated == 0){
-				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 2){
 				print "<script language=javascript> alert('계정생성중 오류가 발생하였습니다.'); self.close(); </script>";
 			} else if($iCreated == 3){
@@ -181,7 +181,7 @@ class Slot extends BaseController
 			} else if($iCreated == 4){
 				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
-				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 6){
 				print "<script language=javascript> alert('존재하지 않는 게임입니다.'); self.close(); </script>";
 			} else if($iCreated == 7){
@@ -205,12 +205,12 @@ class Slot extends BaseController
 				$iResult = $this->alltoGame($objMember, $gameId);
 
 				if($iResult != 1){ //Fail in transfering of money
-					print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+					print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
 				} else {
 					$arrResult =  $this->libApiSlot->createSess($objMember->mb_slot_uid);
 					if($arrResult['status'] != 1) {
 						writeLog($logHead.$objMember->mb_uid."-CreateSess resultCode=".$arrResult['resultCode']); 
-						print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+						print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
 					}
 					else{
 						writeLog($logHead.$objMember->mb_uid."-CreateSess ID=".$arrResult['session']); 
@@ -226,10 +226,10 @@ class Slot extends BaseController
 						} else {
 							writeLog($logHead.$objMember->mb_uid."-Link resultCode=".$arrResult['resultCode']);
 							if(array_key_exists('resultCode', $arrResult) && $arrResult['resultCode'] == SLOTCODE_USER_NONE){
-								print "<script language=javascript> alert('존재하지 않는 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+								print "<script language=javascript> alert('".lang("common.user_exist").lang("common.administrator_ask")."'); self.close(); </script>";
 							}
 							else {
-								print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+								print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
 							} 
 						}
 					}
@@ -318,7 +318,7 @@ class Slot extends BaseController
 			}
 
 			if($iCreated == 0){
-				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 2){
 				print "<script language=javascript> alert('계정생성중 오류가 발생하였습니다.'); self.close(); </script>";
 			} else if($iCreated == 3){
@@ -326,7 +326,7 @@ class Slot extends BaseController
 			} else if($iCreated == 4){
 				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
-				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 6){
 				print "<script language=javascript> alert('존재하지 않는 게임입니다.'); self.close(); </script>";
 			} else if($iCreated == 7){
@@ -349,17 +349,17 @@ class Slot extends BaseController
 						// echo view('slot/game', array("game" => $gameId, "launch_url" => $arrResult['launch_url']));	
 					} else {
 						if(array_key_exists('error', $arrResult) && $arrResult['error'] == INVALID_USER){
-							print "<script language=javascript> alert('존재하지 않는 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+							print "<script language=javascript> alert('".lang("common.user_exist").lang("common.administrator_ask")."'); self.close(); </script>";
 						}
 						else {
 							if(array_key_exists('error', $arrResult)) {
 								writeLog($logHead.$objMember->mb_uid."launchError=".$arrResult['error']);
 							}
-							print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+							print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
 						} 
 					}
 				} else { //Fail in Transfering of money
-					print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+					print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
 				}
 				 
 			}
@@ -442,7 +442,7 @@ class Slot extends BaseController
 			}
 
 			if($iCreated == 0){
-				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 2){
 				print "<script language=javascript> alert('계정생성중 오류가 발생하였습니다.'); self.close(); </script>";
 			} else if($iCreated == 3){
@@ -450,7 +450,7 @@ class Slot extends BaseController
 			} else if($iCreated == 4){
 				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
-				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 6){
 				print "<script language=javascript> alert('존재하지 않는 게임입니다.'); self.close(); </script>";
 			} else if($iCreated == 7){
@@ -473,17 +473,17 @@ class Slot extends BaseController
 						// echo view('slot/game', array("game" => $gameId, "launch_url" => $arrResult['launch_url']));	
 					} else {
 						if(array_key_exists('msg', $arrResult) && $arrResult['msg'] == "INVALID_USER"){
-							print "<script language=javascript> alert('존재하지 않는 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+							print "<script language=javascript> alert('".lang("common.user_exist").lang("common.administrator_ask")."'); self.close(); </script>";
 						}
 						else {
 							if(array_key_exists('msg', $arrResult)) {
 								writeLog($logHead.$objMember->mb_uid."launch msg=".$arrResult['msg']);
 							}
-							print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+							print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
 						} 
 					}
 				} else { //Fail in Transfering of money
-					print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+					print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
 				}
 				 
 			}
@@ -558,7 +558,7 @@ class Slot extends BaseController
 			}
 
 			if($iCreated == 0){
-				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 2){
 				print "<script language=javascript> alert('계정생성중 오류가 발생하였습니다.'); self.close(); </script>";
 			} else if($iCreated == 3){
@@ -566,7 +566,7 @@ class Slot extends BaseController
 			} else if($iCreated == 4){
 				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
-				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 6){
 				print "<script language=javascript> alert('존재하지 않는 게임입니다.'); self.close(); </script>";
 			} else if($iCreated == 7){
@@ -593,10 +593,10 @@ class Slot extends BaseController
 								$log.=" msg=".$arrResult['msg'];
 							writeLog($log); 
 						} 
-                        print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+                        print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
 					}
 				} else { //Fail in Transfering of money
-					print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+					print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
 				}
 				 
 			}
@@ -672,7 +672,7 @@ class Slot extends BaseController
 			}
 
 			if($iCreated == 0){
-				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 2){
 				print "<script language=javascript> alert('계정생성중 오류가 발생하였습니다.'); self.close(); </script>";
 			} else if($iCreated == 3){
@@ -680,7 +680,7 @@ class Slot extends BaseController
 			} else if($iCreated == 4){
 				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
-				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 6){
 				print "<script language=javascript> alert('존재하지 않는 게임입니다.'); self.close(); </script>";
 			} else if($iCreated == 7){
@@ -705,10 +705,10 @@ class Slot extends BaseController
 							$log = $logHead.$objMember->mb_uid."-Auth Error description=".$arrResult['description'];
 							writeLog($log); 
 						} 
-                        print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+                        print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
 					}
 				} else { //Fail in Transfering of money
-					print "<script language=javascript> alert('게임서버가 응답하지 않습니다. 잠시후 다시 시도해주세요.(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+					print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
 				}
 				 
 			}
@@ -754,7 +754,7 @@ class Slot extends BaseController
 				$iCreated = 1;
 
 			if($iCreated == 0){
-				print "<script language=javascript> alert('관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 2){
 				print "<script language=javascript> alert('계정생성중 오류가 발생하였습니다.'); self.close(); </script>";
 			} else if($iCreated == 3){
@@ -762,7 +762,7 @@ class Slot extends BaseController
 			} else if($iCreated == 4){
 				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
-				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 1){
 
 				$games = $modelSlotgame->gets($gameId, $objPrd->code);

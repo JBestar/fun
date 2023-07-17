@@ -45,48 +45,48 @@
                                     <div class="tit_right">
                                         <div class="time betting_board_time" id="board_time"></div>
                                         <img class="betting_board_refresh_btn lazy" src="/images/common/refresh_m_btn.png" style="" />
-                                        <button class="btn btn_hide_video">영상숨기기</button>
+                                        <button class="btn btn_hide_video"><?=lang('common.hide_screen')?></button>
                                     </div>
                                 </div>
                                 <div class="game_item">
                                     <div class="game_title">
-                                        <span class="tit">일반</span>
-                                        <button class="btn btn_hide_video m_none">영상숨기기</button>
+                                        <span class="tit"><?=lang('common.normal')?></span>
+                                        <button class="btn btn_hide_video m_none"><?=lang('common.hide_screen')?></button>
                                     </div>
                                     <div class="game_content">
                                         <ul>
                                             <li class="board_node" id="1">
                                                 <div class="bet bet_left large btn_select" id="1" pc="NSL">
-                                                    <div><span class="game_side blue">좌</span></div> 
+                                                    <div><span class="game_side blue"><?=lang('common.ball_left')?></span></div> 
                                                     <span class="rate game_rate"><?=$rate->game_ratio_1?></span>
                                                 </div>
                                                 <div class="vs">vs</div>
                                                 <div class="bet bet_right large btn_select" id="2" pc="NSL">
-                                                    <div><span class="game_side red">우</span></div>
+                                                    <div><span class="game_side red"><?=lang('common.ball_right')?></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_1?></span>
                                                 </div>
                                             </li>
 
                                             <li class="board_node" id="2">
                                                 <div class="bet bet_left large btn_select" id="1" pc="NSL">
-                                                    <div><span class="game_side blue">3</span></div>
+                                                    <div><span class="game_side blue"><?=lang('common.ball_three')?></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_2?></span>
                                                 </div>
                                                 <div class="vs">vs</div>
                                                 <div class="bet bet_right large btn_select" id="2" pc="NSL">
-                                                <div><span class="game_side red">4</span></span></div>
+                                                <div><span class="game_side red"><?=lang('common.ball_four')?></span></span></div>
                                                 <span class="rate game_rate"><?=$rate->game_ratio_2?></span>
                                             </div>
                                             </li>
 
                                             <li class="board_node" id="3">
                                                 <div class="bet bet_left large btn_select" id="1" pc="NSL">
-                                                    <div><span class="game_side blue">홀</span></div>
+                                                    <div><span class="game_side blue"><?=lang('common.ball_odd')?></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_3?></span>
                                                 </div>
                                                 <div class="vs">vs</div>
                                                 <div class="bet bet_right large btn_select" id="2" pc="NSL">
-                                                    <div><span class="game_side red">짝</span></span></div>
+                                                    <div><span class="game_side red"><?=lang('common.ball_even')?></span></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_3?></span>
                                                 </div>
                                             </li>
@@ -97,26 +97,26 @@
 
                                 <div class="game_item">
                                     <div class="game_title">
-                                        <span class="tit">조합</span>
+                                        <span class="tit"><?=lang('common.combination')?></span>
                                     </div>
                                     <div class="game_content">
                                         <ul>
                                             <li class="board_node" id="4">
                                                 <div class="bet bet_left small btn_select" id="1" pc="NSLC">
-                                                    <div><span class="game_side blue">좌</span><span class="game_side blue">3</span></div>
+                                                    <div><span class="game_side blue"><?=lang('common.ball_left')?></span><span class="game_side blue"><?=lang('common.ball_three')?></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_4?></span>
                                                 </div>
                                                 <div class="bet bet_left small btn_select" id="2" pc="NSLC">
-                                                    <div><span class="game_side red">우</span><span class="game_side blue">3</span></div>
+                                                    <div><span class="game_side red"><?=lang('common.ball_right')?></span><span class="game_side blue"><?=lang('common.ball_three')?></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_6?></span>
                                                 </div>
                                                 <div class="break_flex pc_none"></div>
                                                 <div class="bet bet_right small btn_select" id="3" pc="NSLC">
-                                                    <div><span class="game_side blue">좌</span><span class="game_side red">4</span></div>
+                                                    <div><span class="game_side blue"><?=lang('common.ball_left')?></span><span class="game_side red"><?=lang('common.ball_four')?></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_5?></span>
                                                 </div>
                                                 <div class="bet bet_right small btn_select" id="4" pc="NSLC">
-                                                    <div><span class="game_side red">우</span><span class="game_side red">4</span></div>
+                                                    <div><span class="game_side red"><?=lang('common.ball_right')?></span><span class="game_side red"><?=lang('common.ball_four')?></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_7?></span>
                                                 </div>
                                             </li>

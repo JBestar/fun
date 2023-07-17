@@ -90,7 +90,7 @@ class Casino extends BaseController
 			} else if($iCreated == 4){
 				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
-				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 7){
 				print "<script language=javascript> alert('".lang("common.inspection")."'); self.close(); </script>";
 			} else if($iCreated == 8){
@@ -112,7 +112,7 @@ class Casino extends BaseController
                         $this->response->redirect($arrResult['launch_url']);
                     } else {
                         if(array_key_exists('error', $arrResult) && $arrResult['error'] == INVALID_USER){
-                            print "<script language=javascript> alert('존재하지 않는 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+                            print "<script language=javascript> alert('".lang("common.user_exist").lang("common.administrator_ask")."'); self.close(); </script>";
                         }
                         else {
                             print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
@@ -203,7 +203,7 @@ class Casino extends BaseController
 			} else if($iCreated == 4){
 				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
-				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 6){
 				print "<script language=javascript> alert('게임을 정확히 선택해주세요.'); self.close(); </script>";
 			} else if($iCreated == 7){
@@ -310,7 +310,7 @@ class Casino extends BaseController
 			} else if($iCreated == 4){
 				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
-				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 6){
 				print "<script language=javascript> alert('게임을 정확히 선택해주세요.'); self.close(); </script>";
 			} else if($iCreated == 7){
@@ -414,7 +414,7 @@ class Casino extends BaseController
 			} else if($iCreated == 4){
 				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
 			} else if($iCreated == 5){
-				print "<script language=javascript> alert('중복된 사용자입니다. 관리자에게 문의해주세요.'); self.close(); </script>";
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
 			} else if($iCreated == 6){
 				print "<script language=javascript> alert('게임을 정확히 선택해주세요.'); self.close(); </script>";
 			} else if($iCreated == 7){

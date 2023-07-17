@@ -6,8 +6,8 @@
                             <div class="slide_con on">
                                 <div class="search_tab">
                                     <ul>
-                                        <li><a href="javascript:;" id="<?=$dates[0]?>"class="on">오늘</a></li>
-                                        <li><a href="javascript:;" id="<?=$dates[1]?>">어제</a></li>
+                                        <li><a href="javascript:;" id="<?=$dates[0]?>"class="on"><?=lang('common.today')?></a></li>
+                                        <li><a href="javascript:;" id="<?=$dates[1]?>"><?=lang('common.yestoday')?></a></li>
                                         <li><a href="javascript:;" id="<?=$dates[2]?>"><?=substr($dates[2], 5)?></a></li>
                                         <li><a href="javascript:;" id="<?=$dates[3]?>"><?=substr($dates[3], 5)?></a></li>
                                         <li><a href="javascript:;" id="<?=$dates[4]?>"><?=substr($dates[4], 5)?></a></li>

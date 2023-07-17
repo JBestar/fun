@@ -11,15 +11,15 @@
                                 <div class="betting_board_txt">
                                     <ul>
                                         <li>
-                                            <span>게임선택</span>
+                                            <span><?=lang('common.game_select')?></span>
                                             <p id="board_game"></p>
                                         </li>
                                         <li>
-                                            <span>배당률</span>
+                                            <span><?=lang('common.game_rate')?></span>
                                             <p id="board_rate"></p>
                                         </li>
                                         <li>
-                                            <span>따라가기</span>
+                                            <span><?=lang('common.game_follow')?></span>
                                             <p>
                                                 <b id="board_follow" style="color:black"></b>
                                                 <button class="betting_board_follow_btn" id="follow_game"></button>
@@ -31,25 +31,25 @@
                                     <ul>
                                         <li>
                                             <dl>
-                                                <dt>보유금액</dt>
-                                                <dd class="highlight" data-amount="<?=$user_money?>" id="u_money"><?=$user_money?> 원</dd>
+                                                <dt><?=lang('common.money')?></dt>
+                                                <dd class="highlight" data-amount="<?=$user_money?>" id="u_money"><?=$user_money?> <?=lang('common.won')?></dd>
                                             </dl>
                                         </li>
                                         <li>
                                             <dl>
-                                                <dt>최대적중금액</dt>
+                                                <dt><?=lang('common.win_max')?></dt>
                                                 <dd id="dist_max" data-amount="0" ></dd>
                                             </dl>
                                         </li>
                                         <li>
                                             <dl>
-                                                <dt>최소베팅금액</dt>
+                                                <dt><?=lang('common.bet_min')?></dt>
                                                 <dd id="bet_min" data-amount="0"></dd>
                                             </dl>
                                         </li>
                                         <li>
                                             <dl>
-                                                <dt>최대베팅금액</dt>
+                                                <dt><?=lang('common.bet_max')?></dt>
                                                 <dd id="bet_max" data-amount="0"></dd>
                                             </dl>
                                         </li>
@@ -57,11 +57,11 @@
                                 </div>
                                 <div class="betting_board_box">
                                     <div class="betting_board_box_input">
-                                        <span class="tit"> 금액</span>
+                                        <span class="tit"> <?=lang('common.amount')?></span>
                                         <input type="text" class="betting_board_box_input_bet" id="bet_money" value="0" placeholder="" readonly="" />
                                     </div>
                                     <div class="betting_board_box_input">
-                                        <span class="tit">적중 금액</span>
+                                        <span class="tit"><?=lang('common.win_amount')?></span>
                                         <input type="text" class="betting_board_box_input_hit" value="0" id="hit_money_input" placeholder="" readonly="" />
                                     </div>
                                     <div class="betting_board_box_btn">
@@ -90,14 +90,14 @@
                                         <?php endif ?>
                                         <ul>
                                             <li class="small"><button type="button" id="bet_price_0">MAX</button></li>
-                                            <li class="reset"><button type="button" id="refresh_money">초기화</button></li>
+                                            <li class="reset"><button type="button" id="refresh_money"><?=lang('common.reset')?></button></li>
                                         </ul>
                                     </div>
                                     <div class="betting_board_box_input">
-                                        <span class="tit">직접입력</span>
+                                        <span class="tit"><?=lang('common.direct_input')?></span>
                                         <input type="text" id="input_money" placeholder="0" onkeydown="return checkNumber(event, this)" />
                                     </div>
-                                    <button type="button" class="betting_btn" id="mini_betting">베팅하기</button>
+                                    <button type="button" class="betting_btn" id="mini_betting"><?=lang('common.betting')?></button>
                                 </div>
                             </div>
                             <!-- betting_board_slip -->
@@ -156,25 +156,25 @@
             <div id="layer2" class="pop_layer" style="display:none; width: 320px;">
                 <div class="pop_container">
                     <div class="pop_top">
-                        <p class="tit">따라가기 유저 설정</p>
+                        <p class="tit"><?=lang('common.follower_set')?></p>
                     </div>
                     <div class="pop_con" style="min-height:150px;">
                         <div style="text-align:center; font-size:16px; line-height:30px; padding:20px;">
                             <div class="follow_input">
-                                <span class="tit">아이디</span>
+                                <span class="tit"><?=lang('common.id')?></span>
                                 <input type="text" id="follow_uid" >
                             </div>
                             <div  class="follow_input">
-                                <span class="tit">금액 (%)</span>
+                                <span class="tit"><?=lang('common.amount')?> (%)</span>
                                 <input type="number" id="follow_rate" placeholder="0">
                             </div>    
                         </div>
                     </div>
-                    <button type="button" class="pop_close"><span class="ir_wa">닫기</span></button>
+                    <button type="button" class="pop_close"><span class="ir_wa"><?=lang('common.close')?></span></button>
                 </div>
                 <div class="btn_wrap">
-                    <button type="button" class="btn btn_red pop_close">닫기</button>
-                    <button type="button" class="btn" id="btn_save_follow">저장</button>
+                    <button type="button" class="btn btn_red pop_close"><?=lang('common.close')?></button>
+                    <button type="button" class="btn" id="btn_save_follow"><?=lang('common.save')?></button>
                 </div>
             </div>
 

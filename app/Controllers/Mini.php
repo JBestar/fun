@@ -93,6 +93,7 @@ class Mini extends BaseController
 			$this->response->redirect('/');	
 
         } else {
+            $this->setLanguage();
             $user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
 			$headInfo = $this->getSiteConf();
@@ -144,6 +145,7 @@ class Mini extends BaseController
 			$this->response->redirect('/');	
 
         } else {
+            $this->setLanguage();
             $user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
 			$headInfo = $this->getSiteConf();
