@@ -87,19 +87,19 @@ function showPage(game, data) {
         html += '<div class="inner">';
         html += '<div class="all_result_wrap">';
         html += '<div class="all_result_tit">';
-        html += '<p class="round">회차</p>';
-        html += '<p class="time">경기시간</p>';
+        html += '<p class="round">'+langMessage.game_round+'</p>';
+        html += '<p class="time">'+langMessage.game_time+'</p>';
         if (game == 2 || game == 6) {
-            html += '<p class="rst">좌우</p>';
+            html += '<p class="rst">'+langMessage.ball_left+langMessage.ball_right+'</p>';
             html += '<p class="rst">3/4</p>';
-            html += '<p class="rst">홀짝</p>';
+            html += '<p class="rst">'+langMessage.ball_odd+langMessage.ball_even+'</p>';
         } else {
-            html += '<p class="win">당첨번호결과</p>';
-            html += '<p class="rst_c">숫자 합</p>';
-            html += '<p class="rst_c">숫자 홀/짝</p>';
-            html += '<p class="rst_c">파워볼</p>';
-            html += '<p class="rst_c">파워볼 홀/짝</p>';
-            html += '<p class="group">대/중/소</p>';
+            html += '<p class="win">'+langMessage.number_result+'</p>';
+            html += '<p class="rst_c">'+langMessage.number_+' '+langMessage.sum+'</p>';
+            html += '<p class="rst_c">'+langMessage.number_+' '+langMessage.ball_odd+'/'+langMessage.ball_even+'</p>';
+            html += '<p class="rst_c">'+langMessage.powerball+'</p>';
+            html += '<p class="rst_c">'+langMessage.powerball+' '+langMessage.ball_odd+'/'+langMessage.ball_even+'</p>';
+            html += '<p class="group">'+langMessage.ball_large+'/'+langMessage.ball_medium+'/'+langMessage.ball_small+'</p>';
         }
 
         html += '</div>';
@@ -107,7 +107,7 @@ function showPage(game, data) {
         html += '<ul>';
 
         if (data.length == 0) {
-            html += '<li class="none"><p>게임결과가 없습니다.</p></li>';
+            html += '<li class="none"><p>'+langMessage.game_result_none+'</p></li>';
         } else {
             data.forEach((round) => {
                 html += '<li>';
@@ -118,14 +118,14 @@ function showPage(game, data) {
                 if (game == 2 || game == 6) {
                     if (round.round_state == 1) {
                         if (round.round_result_1 == "P")
-                            html += '<p class="rst"> <span class="rst_ico blue">좌</span></p>';
-                        else html += '<p class="rst"> <span class="rst_ico red">우</span></p>';
+                            html += '<p class="rst"> <span class="rst_ico blue">'+langMessage.ball_left+'</span></p>';
+                        else html += '<p class="rst"> <span class="rst_ico red">'+langMessage.ball_right+'</span></p>';
                         if (round.round_result_2 == "P")
                             html += '<p class="rst"> <span class="rst_ico blue">3</span></p>';
                         else html += '<p class="rst"> <span class="rst_ico red">4</span></p>';
                         if (round.round_result_3 == "P")
-                            html += '<p class="rst"> <span class="rst_ico blue">홀</span></p>';
-                        else html += '<p class="rst"> <span class="rst_ico red">짝</span></p>';
+                            html += '<p class="rst"> <span class="rst_ico blue">'+langMessage.ball_odd+'</span></p>';
+                        else html += '<p class="rst"> <span class="rst_ico red">'+langMessage.ball_right+'</span></p>';
                     } else {
                         html += '<p class="rst">-</p>';
                         html += '<p class="rst">-</p>';
@@ -137,22 +137,22 @@ function showPage(game, data) {
                         html += '<p class="win">' + nums[0] + '</p>';
                         html += '<p class="rst_c"><span class="rst_ico gray">' + nums[1] + '</span></p>';
                         if (round.round_result_3 == "P")
-                            html += '<p class="rst_c"><span class="rst_ico blue">홀</span></p>';
+                            html += '<p class="rst_c"><span class="rst_ico blue">'+langMessage.ball_odd+'</span></p>';
                         else
-                            html += '<p class="rst_c"><span class="rst_ico red">짝</span></p>';
+                            html += '<p class="rst_c"><span class="rst_ico red">'+langMessage.ball_even+'</span></p>';
 
                         html += '<p class="rst_c"><span class="rst_ico gray">' + round.round_power + '</span></p>';
                         if (round.round_result_3 == "P")
-                            html += '<p class="rst_c"><span class="rst_ico blue">홀</span></p>';
+                            html += '<p class="rst_c"><span class="rst_ico blue">'+langMessage.ball_odd+'</span></p>';
                         else
-                            html += '<p class="rst_c"><span class="rst_ico red">짝</span></p>';
+                            html += '<p class="rst_c"><span class="rst_ico red">'+langMessage.ball_even+'</span></p>';
 
                         if (round.round_result_5 == "L")
-                            html += '<p class="group"><span class="rst_ico green">대</span> (81~130)</p>';
+                            html += '<p class="group"><span class="rst_ico green">'+langMessage.ball_large+'</span> (81~130)</p>';
                         else if (round.round_result_5 == "M")
-                            html += '<p class="group"><span class="rst_ico green">중</span> (65~80)</p>';
+                            html += '<p class="group"><span class="rst_ico green">'+langMessage.ball_medium+'</span> (65~80)</p>';
                         else
-                            html += '<p class="group"><span class="rst_ico green">소</span> (15~64)</p>';
+                            html += '<p class="group"><span class="rst_ico green">'+langMessage.ball_small+'</span> (15~64)</p>';
 
                     } else {
                         html += '<p class="win">-</p>';
@@ -174,28 +174,28 @@ function showPage(game, data) {
         html += '<div class="all_result_tit">';
         if (game == 2 || game == 6) {
             html += '<div class="row">';
-            html += '<p class="round">회차</p>';
-            html += '<p class="win">경기시간</p>';
+            html += '<p class="round">'+langMessage.game_round+'</p>';
+            html += '<p class="win">'+langMessage.game_time+'</p>';
             html += '<p class="rst_c">결과</p>';
             html += '</div></div>';
         } else {
             html += '<div class="row">';
-            html += '<p class="round">회차</p>';
-            html += '<p class="win">당첨번호결과</p>';
-            html += '<p class="rst_c">숫자 합</p>';
-            html += ' <p class="rst_c">숫자 홀/짝</p>';
+            html += '<p class="round">'+langMessage.game_round+'</p>';
+            html += '<p class="win">'+langMessage.number_result+'</p>';
+            html += '<p class="rst_c">'+langMessage.number_+' '+langMessage.sum+'</p>';
+            html += ' <p class="rst_c">'+langMessage.number_+' '+langMessage.ball_odd+'/'+langMessage.ball_even+'</p>';
             html += '</div>';
             html += '<div class="row">';
-            html += '<p class="rst_c">파워볼</p>';
-            html += '<p class="rst_c">파워볼 홀/짝</p>';
-            html += '<p class="group">대/중/소</p>';
+            html += '<p class="rst_c">'+langMessage.powerball+'</p>';
+            html += '<p class="rst_c">'+langMessage.powerball+' '+langMessage.ball_odd+'/'+langMessage.ball_even+'</p>';
+            html += '<p class="group">'+langMessage.ball_large+'/'+langMessage.ball_medium+'/'+langMessage.ball_small+'</p>';
             html += '</div></div>';
         }
 
         html += '<div class="all_result_con">';
         html += '<ul>';
         if (data.length == 0) {
-            html += '<li class="none"  style="display:grid;"><p>게임결과가 없습니다.</p></li>';
+            html += '<li class="none"  style="display:grid;"><p>'+langMessage.game_result_none+'</p></li>';
         } else {
             data.forEach((round) => {
                 html += '<li class="row_wrap">';
@@ -208,14 +208,14 @@ function showPage(game, data) {
                     html += '<p class="rst_c">';
                     if (round.round_state == 1) {
                         if (round.round_result_1 == "P")
-                            html += '<span class="rst_ico blue">좌</span>';
-                        else html += '<span class="rst_ico red">우</span>';
+                            html += '<span class="rst_ico blue">'+langMessage.ball_left+'</span>';
+                        else html += '<span class="rst_ico red">'+langMessage.ball_right+'</span>';
                         if (round.round_result_2 == "P")
                             html += '<span class="rst_ico blue">3</span>';
                         else html += '<span class="rst_ico red">4</span>';
                         if (round.round_result_3 == "P")
-                            html += '<span class="rst_ico blue">홀</span>';
-                        else html += '<span class="rst_ico red">짝</span>';
+                            html += '<span class="rst_ico blue">'+langMessage.ball_odd+'</span>';
+                        else html += '<span class="rst_ico red">'+langMessage.ball_even+'</span>';
                     } else {
                         html += "-";
                     }
@@ -226,23 +226,23 @@ function showPage(game, data) {
                         html += '<p class="win">' + nums[0] + '</p>';
                         html += '<p class="rst_c"><span class="rst_ico gray">' + nums[1] + '</span></p>';
                         if (round.round_result_3 == "P")
-                            html += '<p class="rst_c"><span class="rst_ico blue">홀</span></p>';
+                            html += '<p class="rst_c"><span class="rst_ico blue">'+langMessage.ball_odd+'</span></p>';
                         else
-                            html += '<p class="rst_c"><span class="rst_ico red">짝</span></p>';
+                            html += '<p class="rst_c"><span class="rst_ico red">'+langMessage.ball_even+'</span></p>';
 
                         html += '</div><div class="row">';
                         html += '<p class="rst_c"><span class="rst_ico gray">' + round.round_power + '</span></p>';
                         if (round.round_result_3 == "P")
-                            html += '<p class="rst_c"><span class="rst_ico blue">홀</span></p>';
+                            html += '<p class="rst_c"><span class="rst_ico blue">'+langMessage.ball_odd+'</span></p>';
                         else
-                            html += '<p class="rst_c"><span class="rst_ico red">짝</span></p>';
+                            html += '<p class="rst_c"><span class="rst_ico red">'+langMessage.ball_even+'</span></p>';
 
                         if (round.round_result_5 == "L")
-                            html += '<p class="group"><span class="rst_ico green">대</span> (81~130)</p>';
+                            html += '<p class="group"><span class="rst_ico green">'+langMessage.ball_large+'</span> (81~130)</p>';
                         else if (round.round_result_5 == "M")
-                            html += '<p class="group"><span class="rst_ico green">중</span> (65~80)</p>';
+                            html += '<p class="group"><span class="rst_ico green">'+langMessage.ball_medium+'</span> (65~80)</p>';
                         else
-                            html += '<p class="group"><span class="rst_ico green">소</span> (15~64)</p>';
+                            html += '<p class="group"><span class="rst_ico green">'+langMessage.ball_small+'</span> (15~64)</p>';
                         html += '</div>';
 
                     } else {

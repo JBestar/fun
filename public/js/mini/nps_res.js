@@ -23,42 +23,42 @@ $(function() {
             gameName = "";
             selIdx = 1;
             if (selId == 1) {
-                gameTitle = "좌";
+                gameTitle = langMessage.ball_left;
             } else {
-                gameTitle = "우";
+                gameTitle = langMessage.ball_right;
             }
             setLimitAmount(1);
         } else if (categoryId == 2) {
             gameName = "";
             selIdx = 2;
             if (selId == 1) {
-                gameTitle = "3줄";
+                gameTitle = langMessage.ball_three;
             } else {
-                gameTitle = "4줄";
+                gameTitle = langMessage.ball_foure;
             }
             setLimitAmount(1);
         } else if (categoryId == 3) {
             gameName = "";
             selIdx = 3;
             if (selId == 1) {
-                gameTitle = "홀";
+                gameTitle = langMessage.ball_odd;
             } else {
-                gameTitle = "짝";
+                gameTitle = langMessage.ball_even;
             }
             setLimitAmount(1);
         } else if (categoryId == 4) {
-            gameName = "조합";
+            gameName = langMessage.combination;
             if (selId == 1) {
-                gameTitle = "좌/3";
+                gameTitle = langMessage.ball_left +"/3";
                 selIdx = 4;
             } else if (selId == 2) {
-                gameTitle = "우/3";
+                gameTitle = langMessage.ball_right + "/3";
                 selIdx = 6;
             } else if (selId == 3) {
-                gameTitle = "좌/4";
+                gameTitle = langMessage.ball_left +"/4";
                 selIdx = 5;
             } else if (selId == 4) {
-                gameTitle = "우/4";
+                gameTitle = langMessage.ball_right + "/4";
                 selIdx = 7;
             }
             setLimitAmount(2);
@@ -95,9 +95,9 @@ function clear() {
 
 function changeVideoBtnText() {
     if ($(".betting_area_flex").hasClass("hide_video") === true) {
-        $(".btn_hide_video").html("영상 숨기기");
+        $(".btn_hide_video").html(langMessage.hide_screen);
     } else {
-        $(".btn_hide_video").html("영상 보기");
+        $(".btn_hide_video").html(langMessage.show_screen);
     }
 }
 
@@ -115,9 +115,9 @@ function showRoundResult(arrRound) {
             if (round.round_state == 1) {
                 if (round.round_result_1) {
                     if (round.round_result_1 == "P") {
-                        tHtml += '<span class="rst_ico blue">좌</span>&nbsp;';
+                        tHtml += '<span class="rst_ico blue">'+langMessage.ball_left+'</span>&nbsp;';
                     } else {
-                        tHtml += '<span class="rst_ico red">우</span>&nbsp;';
+                        tHtml += '<span class="rst_ico red">'+langMessage.ball_right+'</span>&nbsp;';
                     }
                 }
                 if (round.round_result_2) {
@@ -129,9 +129,9 @@ function showRoundResult(arrRound) {
                 }
                 if (round.round_result_3) {
                     if (round.round_result_3 == "P") {
-                        tHtml += '<span class="rst_ico blue">홀</span>&nbsp;';
+                        tHtml += '<span class="rst_ico blue">'+langMessage.ball_odd+'</span>&nbsp;';
                     } else {
-                        tHtml += '<span class="rst_ico red">짝</span>&nbsp;';
+                        tHtml += '<span class="rst_ico red">'+langMessage.ball_even+'</span>&nbsp;';
                     }
                 }
 

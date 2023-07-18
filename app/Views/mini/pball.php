@@ -306,17 +306,17 @@
                                             </li>
                                             <li class="board_node" id="9">
                                                 <div class="bet bet_left small btn_select" id="5" pc="NPLC">
-                                                    <div><span class="game_side blue"><?=lang('common.normalball_')?> <?=lang('common.ball_under')?></span><span class="game_side blue"><?=lang('common.powerball_')?> <?=lang('common.ball_under')?></span></div>
+                                                    <div><span class="game_side blue"><?=lang('common.normalball_')?> <?=lang('common.ball_under_')?></span><span class="game_side blue"><?=lang('common.powerball_')?> <?=lang('common.ball_under_')?></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_17?></span></div>
                                                 <div class="bet bet_left small btn_select" id="6" pc="NPLC">
-                                                    <div><span class="game_side blue"><?=lang('common.normalball_')?> <?=lang('common.ball_under')?></span><span class="game_side red"><?=lang('common.powerball_')?> <?=lang('common.ball_over')?></span></div>
+                                                    <div><span class="game_side blue"><?=lang('common.normalball_')?> <?=lang('common.ball_under_')?></span><span class="game_side red"><?=lang('common.powerball_')?> <?=lang('common.ball_over_')?></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_18?></span></div>
                                                 <div class="break_flex pc_none"></div>
                                                 <div class="bet bet_right small btn_select" id="7" pc="NPLC">
-                                                    <div><span class="game_side red"><?=lang('common.normalball_')?> <?=lang('common.ball_over')?></span><span class="game_side blue"><?=lang('common.powerball_')?> <?=lang('common.ball_under')?></span></div>
+                                                    <div><span class="game_side red"><?=lang('common.normalball_')?> <?=lang('common.ball_over_')?></span><span class="game_side blue"><?=lang('common.powerball_')?> <?=lang('common.ball_under_')?></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_19?></span></div>
                                                 <div class="bet bet_right small btn_select" id="8" pc="NPLC">
-                                                    <div><span class="game_side red"><?=lang('common.normalball_')?> <?=lang('common.ball_over')?></span><span class="game_side red"><?=lang('common.powerball_')?> <?=lang('common.ball_over')?></span></div>
+                                                    <div><span class="game_side red"><?=lang('common.normalball_')?> <?=lang('common.ball_over_')?></span><span class="game_side red"><?=lang('common.powerball_')?> <?=lang('common.ball_over_')?></span></div>
                                                     <span class="rate game_rate"><?=$rate->game_ratio_20?></span></div>
                                             </li>
                                         </ul>

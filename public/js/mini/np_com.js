@@ -9,19 +9,25 @@ function getGameName(game) {
             sGame = "파워사다리";
             break;
         case 5:
-            sGame = "보글파워볼";
+            sGame = langMessage.powerball_boggle;
             break;
         case 6:
-            sGame = "보글사다리";
+            sGame = langMessage.powerladder_boggle;
             break;
         case 9:
-            sGame = "EOS5분 파워볼";
+            sGame = langMessage.powerball_eos5;
             break; 
         case 10:
-            sGame = "EOS3분 파워볼";
+            sGame = langMessage.powerball_eos3;
+            break;
+        case 11:
+            sGame = langMessage.powerball_coin5;
+            break; 
+        case 12:
+            sGame = langMessage.powerball_coin3;
             break;
         case 14:
-            sGame = "해피 파워볼";
+            sGame = langMessage.powerball_happy;
             break;
         default:
             break;
@@ -33,31 +39,31 @@ function getModeName(game, mode) {
     var sMode = "";
     if (game == 1 || game == 5 || (game >= 9 && game <= 12) || game == 14 ) {
         if (mode == 1) {
-            sMode = "파워볼 홀짝";
+            sMode = langMessage.powerball + " " + langMessage.ball_odd + langMessage.ball_even; //"파워볼 홀짝"
         } else if (mode == 2) {
-            sMode = "파워볼 언오버";
+            sMode = langMessage.powerball + " " + langMessage.ball_under_ + langMessage.ball_over; //"파워볼 언오버"
         } else if (mode == 3) {
-            sMode = "일반볼 홀짝";
+            sMode = langMessage.normalball + " " + langMessage.ball_odd + langMessage.ball_even; //"일반볼 홀짝"
         } else if (mode == 4) {
-            sMode = "일반볼 언오버";
+            sMode = langMessage.normalball + " " + langMessage.ball_under_ + langMessage.ball_over;// "일반볼 언오버";
         } else if (mode >= 5 && mode <= 8) {
-            sMode = "파워볼 조합";
+            sMode = langMessage.powerball + " " + langMessage.combination;// "파워볼 조합";
         } else if (mode >= 9 && mode <= 12) {
-            sMode = "일반볼 조합";
+            sMode = langMessage.normalball + " " + langMessage.combination;// "일반볼 조합";
         } else if (mode >= 13 && mode <= 20) {
-            sMode = "일반볼 + 파워볼 조합";
+            sMode = langMessage.normalball + " + " + langMessage.powerball + " " + langMessage.combination;// "일반볼 + 파워볼 조합";
         } else if (mode >= 21 && mode <= 29) {
-            sMode = "일반볼 대중소";
+            sMode = langMessage.normalball + " " + langMessage.ball_lms;//"일반볼 대중소";
         } else if (mode == 30) {
-            sMode = "파워볼 숫자";
+            sMode = langMessage.powerball + " " + langMessage.number_;// "파워볼 숫자";
         } else if (mode >= 31 && mode <= 38) {
-            sMode = "일반볼조합 + 파워볼 홀짝";
+            sMode = langMessage.normalball_mix + " " + langMessage.powerball + " " + + langMessage.ball_odd + langMessage.ball_even;// "일반볼조합 + 파워볼 홀짝";
         }
     } else if (game == 2 || game == 6) {
         if (mode >= 1 && mode <= 3) {
-            sMode = "일반";
+            sMode = langMessage.normal; // "일반";
         } else if (mode >= 4 && mode <= 7) {
-            sMode = "조합";
+            sMode = langMessage.combination; // "조합";
         }
     }
     return sMode;
@@ -88,11 +94,11 @@ function getResultName(game, mode, result) {
         switch (parseInt(mode)) {
             case 1:
             case 3:
-                sResult = result == "P" ? getTargetHtml(1, "홀") : getTargetHtml(2, "짝");
+                sResult = result == "P" ? getTargetHtml(1, langMessage.ball_odd) : getTargetHtml(2, langMessage.ball_even);
                 break;
             case 2:
             case 4:
-                sResult = result == "P" ? getTargetHtml(1, "언더") : getTargetHtml(2, "오버");
+                sResult = result == "P" ? getTargetHtml(1, langMessage.ball_under) : getTargetHtml(2, langMessage.ball_over);
                 break;
             case 5:
             case 6:
@@ -103,39 +109,39 @@ function getResultName(game, mode, result) {
             case 11:
             case 12:
                 if (result == "PP")
-                    sResult = getTargetHtml(1, "홀") + " / " + getTargetHtml(1, "언더");
+                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(1, langMessage.ball_under);
                 else if (result == "PB")
-                    sResult = getTargetHtml(1, "홀") + " / " + getTargetHtml(2, "오버");
+                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(2, langMessage.ball_over);
                 else if (result == "BP")
-                    sResult = getTargetHtml(2, "짝") + " / " + getTargetHtml(1, "언더");
+                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(1, langMessage.ball_under);
                 else if (result == "BB")
-                    sResult = getTargetHtml(2, "짝") + " / " + getTargetHtml(2, "오버");
+                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(2, langMessage.ball_over);
                 break;
             case 13:
             case 14:
             case 15:
             case 16:
                 if (result == "PP")
-                    sResult = getTargetHtml(1, "일 홀") + " / " + getTargetHtml(1, "파 홀");
+                    sResult = getTargetHtml(1, langMessage.normalball_ + " " + langMessage.ball_odd) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 else if (result == "PB")
-                    sResult = getTargetHtml(1, "일 홀") + " / " + getTargetHtml(2, "파 짝");
+                    sResult = getTargetHtml(1, langMessage.normalball_ + " " + langMessage.ball_odd) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 else if (result == "BP")
-                    sResult = getTargetHtml(2, "일 짝") + " / " + getTargetHtml(1, "파 홀");
+                    sResult = getTargetHtml(2, langMessage.normalball_ + " " + langMessage.ball_even) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 else if (result == "BB")
-                    sResult = getTargetHtml(2, "일 짝") + " / " + getTargetHtml(2, "파 짝");
+                    sResult = getTargetHtml(2, langMessage.normalball_ + " " + langMessage.ball_even) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 break;
             case 17:
             case 18:
             case 19:
             case 20:
                 if (result == "PP")
-                    sResult = getTargetHtml(1, "일 언더") + " / " + getTargetHtml(1, "파 언더");
+                    sResult = getTargetHtml(1, langMessage.normalball_ + " " + langMessage.ball_under) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_under);
                 else if (result == "PB")
-                    sResult = getTargetHtml(1, "일 언더") + " / " + getTargetHtml(2, "파 오버");
+                    sResult = getTargetHtml(1, langMessage.normalball_ + " " + langMessage.ball_under) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_over);
                 else if (result == "BP")
-                    sResult = getTargetHtml(2, "일 오버") + " / " + getTargetHtml(1, "파 언더");
+                    sResult = getTargetHtml(2, langMessage.normalball_ + " " + langMessage.ball_over) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_under);
                 else if (result == "BB")
-                    sResult = getTargetHtml(2, "일 오버") + " / " + getTargetHtml(2, "파 오버");
+                    sResult = getTargetHtml(2, langMessage.normalball_ + " " + langMessage.ball_over) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_over);
                 break;
             case 21:
             case 22:
@@ -144,27 +150,27 @@ function getResultName(game, mode, result) {
             case 25:
             case 26:
                 if (result == "PL")
-                    sResult = getTargetHtml(1, "홀") + " / " + getTargetHtml(3, "대");
+                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_large);
                 else if (result == "PM")
-                    sResult = getTargetHtml(1, "홀") + " / " + getTargetHtml(3, "중");
+                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_medium);
                 else if (result == "PS")
-                    sResult = getTargetHtml(1, "홀") + " / " + getTargetHtml(3, "소");
+                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_small);
                 else if (result == "BL")
-                    sResult = getTargetHtml(2, "짝") + " / " + getTargetHtml(3, "대");
+                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_large);
                 else if (result == "BM")
-                    sResult = getTargetHtml(2, "짝") + " / " + getTargetHtml(3, "중");
+                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_medium);
                 else if (result == "BS")
-                    sResult = getTargetHtml(2, "짝") + " / " + getTargetHtml(3, "소");
+                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_small);
                 break;
             case 27:
             case 28:
             case 29:
                 if (result == "L")
-                    sResult = getTargetHtml(3, "대");
+                    sResult = getTargetHtml(3, langMessage.ball_large);
                 else if (result == "M")
-                    sResult = getTargetHtml(3, "중");
+                    sResult = getTargetHtml(3, langMessage.ball_medium);
                 else if (result == "S")
-                    sResult = getTargetHtml(3, "소");
+                    sResult = getTargetHtml(3, langMessage.ball_small);
                 break;
             case 30:
                 sResult = getTargetHtml(4, result);
@@ -178,21 +184,21 @@ function getResultName(game, mode, result) {
             case 37:
             case 38:
                 if (result == "PPP")
-                    sResult = getTargetHtml(1, "홀") + " / " + getTargetHtml(1, "언더") + " / " + getTargetHtml(1, "파 홀");
+                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(1, langMessage.ball_under) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 else if (result == "PPB")
-                    sResult = getTargetHtml(1, "홀") + " / " + getTargetHtml(1, "언더") + " / " + getTargetHtml(2, "파 짝");
+                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(1, langMessage.ball_under) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 else if (result == "PBP")
-                    sResult = getTargetHtml(1, "홀") + " / " + getTargetHtml(2, "오버") + " / " + getTargetHtml(1, "파 홀");
+                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(2, langMessage.ball_over) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 else if (result == "PBB")
-                    sResult = getTargetHtml(1, "홀") + " / " + getTargetHtml(2, "오버") + " / " + getTargetHtml(2, "파 짝");
+                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(2, langMessage.ball_over) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 else if (result == "BPP")
-                    sResult = getTargetHtml(2, "짝") + " / " + getTargetHtml(1, "언더") + " / " + getTargetHtml(1, "파 홀");
+                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(1, langMessage.ball_under) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 else if (result == "BPB")
-                    sResult = getTargetHtml(2, "짝") + " / " + getTargetHtml(1, "언더") + " / " + getTargetHtml(2, "파 짝");
+                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(1, langMessage.ball_under) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 else if (result == "BBP")
-                    sResult = getTargetHtml(2, "짝") + " / " + getTargetHtml(2, "오버") + " / " + getTargetHtml(1, "파 홀");
+                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(2, langMessage.ball_over) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 else if (result == "BBB")
-                    sResult = getTargetHtml(2, "짝") + " / " + getTargetHtml(2, "오버") + " / " + getTargetHtml(2, "파 짝");
+                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(2, langMessage.ball_over) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 break;
             default:
                 break;
@@ -200,26 +206,26 @@ function getResultName(game, mode, result) {
     } else if (game == 2 || game == 6) {
         switch (parseInt(mode)) {
             case 1:
-                sResult = result == "P" ? getTargetHtml(1, "좌") : getTargetHtml(2, "우");
+                sResult = result == "P" ? getTargetHtml(1, langMessage.ball_left) : getTargetHtml(2, langMessage.ball_right);
                 break;
             case 2:
                 sResult = result == "P" ? getTargetHtml(1, "3") : getTargetHtml(2, "4");
                 break;
             case 3:
-                sResult = result == "P" ? getTargetHtml(1, "홀") : getTargetHtml(2, "짝");
+                sResult = result == "P" ? getTargetHtml(1, langMessage.ball_odd) : getTargetHtml(2, langMessage.ball_even);
                 break;
             case 4:
             case 5:
             case 6:
             case 7:
                 if (result == "PP")
-                    sResult = getTargetHtml(1, "좌") + " / " + getTargetHtml(1, "3");
+                    sResult = getTargetHtml(1, langMessage.ball_left) + " / " + getTargetHtml(1, "3");
                 else if (result == "PB")
-                    sResult = getTargetHtml(1, "좌") + " / " + getTargetHtml(2, "4");
+                    sResult = getTargetHtml(1, langMessage.ball_left) + " / " + getTargetHtml(2, "4");
                 else if (result == "BP")
-                    sResult = getTargetHtml(2, "우") + " / " + getTargetHtml(1, "3");
+                    sResult = getTargetHtml(2, langMessage.ball_right) + " / " + getTargetHtml(1, "3");
                 else if (result == "BB")
-                    sResult = getTargetHtml(2, "우") + " / " + getTargetHtml(2, "4");
+                    sResult = getTargetHtml(2, langMessage.ball_right) + " / " + getTargetHtml(2, "4");
                 break;
             default:
                 break;
@@ -234,105 +240,105 @@ function getTargetName(game, mode, target) {
         switch (parseInt(mode)) {
             case 1:
             case 3:
-                sTarget = target == "P" ? getTargetHtml(1, "홀") : getTargetHtml(2, "짝");
+                sTarget = target == "P" ? getTargetHtml(1, langMessage.ball_odd) : getTargetHtml(2, langMessage.ball_even);
                 break;
             case 2:
             case 4:
-                sTarget = target == "P" ? getTargetHtml(1, "언더") : getTargetHtml(2, "오버");
+                sTarget = target == "P" ? getTargetHtml(1, langMessage.ball_under) : getTargetHtml(2, langMessage.ball_over);
                 break;
             case 5:
             case 9:
-                sTarget = getTargetHtml(1, "홀") + " / " + getTargetHtml(1, "언더");
+                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(1, langMessage.ball_under);
                 break;
             case 6:
             case 10:
-                sTarget = getTargetHtml(1, "홀") + " / " + getTargetHtml(2, "오버");;
+                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(2, langMessage.ball_over);;
                 break;
             case 7:
             case 11:
-                sTarget = getTargetHtml(2, "짝") + " / " + getTargetHtml(1, "언더");
+                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(1, langMessage.ball_under);
                 break;
             case 8:
             case 12:
-                sTarget = getTargetHtml(2, "짝") + " / " + getTargetHtml(2, "오버");
+                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(2, langMessage.ball_over);
                 break;
             case 13:
-                sTarget = getTargetHtml(1, "일 홀") + " / " + getTargetHtml(1, "파 홀");
+                sTarget = getTargetHtml(1, langMessage.normalball_ + " " + langMessage.ball_odd) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 break;
             case 14:
-                sTarget = getTargetHtml(1, "일 홀") + " / " + getTargetHtml(2, "파 짝");
+                sTarget = getTargetHtml(1, langMessage.normalball_ + " " + langMessage.ball_odd) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 break;
             case 15:
-                sTarget = getTargetHtml(2, "일 짝") + " / " + getTargetHtml(1, "파 홀");
+                sTarget = getTargetHtml(2, langMessage.normalball_ + " " + langMessage.ball_even) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 break;
             case 16:
-                sTarget = getTargetHtml(2, "일 짝") + " / " + getTargetHtml(2, "파 짝");
+                sTarget = getTargetHtml(2, langMessage.normalball_ + " " + langMessage.ball_even) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 break;
             case 17:
-                sTarget = getTargetHtml(1, "일 언더") + " / " + getTargetHtml(1, "파 언더");
+                sTarget = getTargetHtml(1, langMessage.normalball_ + " " + langMessage.ball_under) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_under);
                 break;
             case 18:
-                sTarget = getTargetHtml(1, "일 언더") + " / " + getTargetHtml(2, "파 오버");
+                sTarget = getTargetHtml(1, langMessage.normalball_ + " " + langMessage.ball_under) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_over);
                 break;
             case 19:
-                sTarget = getTargetHtml(2, "일 오버") + " / " + getTargetHtml(1, "파 언더");
+                sTarget = getTargetHtml(2, langMessage.normalball_ + " " + langMessage.ball_over) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_under);
                 break;
             case 20:
-                sTarget = getTargetHtml(2, "일 오버") + " / " + getTargetHtml(2, "파 오버");
+                sTarget = getTargetHtml(2, langMessage.normalball_ + " " + langMessage.ball_over) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_over);
                 break;
             case 21:
-                sTarget = getTargetHtml(1, "홀") + " / " + getTargetHtml(3, "대");
+                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_large);
                 break;
             case 22:
-                sTarget = getTargetHtml(1, "홀") + " / " + getTargetHtml(3, "중");
+                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_medium);
                 break;
             case 23:
-                sTarget = getTargetHtml(1, "홀") + " / " + getTargetHtml(3, "소");
+                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_small);
                 break;
             case 24:
-                sTarget = getTargetHtml(2, "짝") + " / " + getTargetHtml(3, "대");
+                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_large);
                 break;
             case 25:
-                sTarget = getTargetHtml(2, "짝") + " / " + getTargetHtml(3, "중");
+                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_medium);
                 break;
             case 26:
-                sTarget = getTargetHtml(2, "짝") + " / " + getTargetHtml(3, "소");
+                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_small);
                 break;
             case 27:
-                sTarget = getTargetHtml(3, "대");
+                sTarget = getTargetHtml(3, langMessage.ball_large);
                 break;
             case 28:
-                sTarget = getTargetHtml(3, "중");
+                sTarget = getTargetHtml(3, langMessage.ball_medium);
                 break;
             case 29:
-                sTarget = getTargetHtml(3, "소");
+                sTarget = getTargetHtml(3, langMessage.ball_small);
                 break;
             case 30:
                 sTarget = getTargetHtml(4, target);
                 break;
             case 31:
-                sTarget = getTargetHtml(1, "홀") + " / " + getTargetHtml(1, "언더") + " / " + getTargetHtml(1, "파 홀");
+                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(1, langMessage.ball_under) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 break;
             case 32:
-                sTarget = getTargetHtml(1, "홀") + " / " + getTargetHtml(1, "언더") + " / " + getTargetHtml(2, "파 짝");
+                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(1, langMessage.ball_under) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 break;
             case 33:
-                sTarget = getTargetHtml(1, "홀") + " / " + getTargetHtml(2, "오버") + " / " + getTargetHtml(1, "파 홀");
+                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(2, langMessage.ball_over) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 break;
             case 34:
-                sTarget = getTargetHtml(1, "홀") + " / " + getTargetHtml(2, "오버") + " / " + getTargetHtml(2, "파 짝");
+                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(2, langMessage.ball_over) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 break;
             case 35:
-                sTarget = getTargetHtml(2, "짝") + " / " + getTargetHtml(1, "언더") + " / " + getTargetHtml(1, "파 홀");
+                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(1, langMessage.ball_under) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 break;
             case 36:
-                sTarget = getTargetHtml(2, "짝") + " / " + getTargetHtml(1, "언더") + " / " + getTargetHtml(2, "파 짝");
+                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(1, langMessage.ball_under) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 break;
             case 37:
-                sTarget = getTargetHtml(2, "짝") + " / " + getTargetHtml(2, "오버") + " / " + getTargetHtml(1, "파 홀");
+                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(2, langMessage.ball_over) + " / " + getTargetHtml(1, langMessage.powerball_ + " " + langMessage.ball_odd);
                 break;
             case 38:
-                sTarget = getTargetHtml(2, "짝") + " / " + getTargetHtml(2, "오버") + " / " + getTargetHtml(2, "파 짝");
+                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(2, langMessage.ball_over) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_even);
                 break;
 
             default:
@@ -341,25 +347,25 @@ function getTargetName(game, mode, target) {
     } else if (game == 2 || game == 6) {
         switch (parseInt(mode)) {
             case 1:
-                sTarget = target == "P" ? getTargetHtml(1, "좌") : getTargetHtml(2, "우");
+                sTarget = target == "P" ? getTargetHtml(1, langMessage.ball_left) : getTargetHtml(2, langMessage.ball_right);
                 break;
             case 2:
                 sTarget = target == "P" ? getTargetHtml(1, "3") : getTargetHtml(2, "4");
                 break;
             case 3:
-                sTarget = target == "P" ? getTargetHtml(1, "홀") : getTargetHtml(2, "짝");
+                sTarget = target == "P" ? getTargetHtml(1, langMessage.ball_odd) : getTargetHtml(2, langMessage.ball_even);
                 break;
             case 4:
-                sTarget = getTargetHtml(1, "좌") + " / " + getTargetHtml(1, "3");
+                sTarget = getTargetHtml(1, langMessage.ball_left) + " / " + getTargetHtml(1, "3");
                 break;
             case 5:
-                sTarget = getTargetHtml(1, "좌") + " / " + getTargetHtml(2, "4");
+                sTarget = getTargetHtml(1, langMessage.ball_left) + " / " + getTargetHtml(2, "4");
                 break;
             case 6:
-                sTarget = getTargetHtml(2, "우") + " / " + getTargetHtml(1, "3");
+                sTarget = getTargetHtml(2, langMessage.ball_right) + " / " + getTargetHtml(1, "3");
                 break;
             case 7:
-                sTarget = getTargetHtml(2, "우") + " / " + getTargetHtml(2, "4");
+                sTarget = getTargetHtml(2, langMessage.ball_right) + " / " + getTargetHtml(2, "4");
                 break;
         }
 
@@ -375,26 +381,26 @@ function getBetResultHtml(gameId, list) {
         html += '<div class="betting_history_wrap">';
         html += '<div class="betting_history_tit">';
 
-        html += '<p class="round">회차</p>';
-        html += '<p class="time">베팅시간</p>';
+        html += '<p class="round">'+langMessage.game_round+'</p>'; //회차
+        html += '<p class="time">'+langMessage.bet_time+'</p>';     //베팅시간
         html += '<div class="con">';
-        html += '<p class="game">게임분류</p>';
-        html += '<p class="bet">베팅내역</p>';
-        html += '<p class="bet">경기결과</p>';
-        html += '<p class="rate">배당률</p>';
+        html += '<p class="game">'+langMessage.game_type+'</p>';     //게임분류
+        html += '<p class="bet">'+langMessage.bet_history+'</p>';      //베팅내역
+        html += '<p class="bet">'+langMessage.game_result_+'</p>';      //경기결과
+        html += '<p class="rate">'+langMessage.game_rate+'</p>';       //배당율
         html += "</div>";
-        html += '<p class="money">베팅금액</p>';
-        html += '<p class="money">적중/손실</p>';
-        html += '<p class="rst">적중여부</p>';
+        html += '<p class="money">'+langMessage.bet_amount+'</p>';    //베팅금액
+        html += '<p class="money">'+langMessage.win+'/'+langMessage.loss+'</p>';   //적중/손실
+        html += '<p class="rst">'+langMessage.win_status+'</p>';      //적중여부
         if(typeof mCancelEnable !== 'undefined' && mCancelEnable)
-            html += '<p class="money">베팅취소</p>';
+            html += '<p class="money">'+langMessage.bet_cancel+'</p>';    //베팅취소
 
         html += "</div>";
 
         html += '<div class="betting_history_con">';
         html += "<ul>";
         if (list.length == 0) {
-            html += '<li class="none"><p>베팅 내역이 없습니다.</p></li>';
+            html += '<li class="none"><p>'+langMessage.bet_none+'</p></li>'; //베팅 내역이 없습니다.
         } else {
             list.forEach((element) => {
 
@@ -425,13 +431,13 @@ function getBetResultHtml(gameId, list) {
                 html += '<p class="money">' + numberWithCommas(element.bet_money) + "</p>";
                 if (element.bet_state == 3) {
                     html += '<p class="money hit">+' + element.bet_win_money + "</p>";
-                    html += '<p class="rst hit">적중</p>';
+                    html += '<p class="rst hit">'+langMessage.win+'</p>';
                 } else if (element.bet_state == 2) {
                     html += '<p class="money">-' + element.bet_money + "</p>";
-                    html += '<p class="rst">미적중</p>';
+                    html += '<p class="rst">'+langMessage.win_no+'</p>';
                 } else {
                     html += '<p class="money"></p>';
-                    html += '<p class="rst">베팅</p>';
+                    html += '<p class="rst">'+langMessage.bet+'</p>';
                 }
                 if(typeof mCancelEnable !== 'undefined' && mCancelEnable){
                     if(element.bet_round_no == mRound.round_no && mRoundState == 1)
@@ -451,7 +457,7 @@ function getBetResultHtml(gameId, list) {
         html += '<div class="betting_history_m">';
         html += "<ul>";
         if (list.length == 0) {
-            html += '<li class="none"><p>베팅 내역이 없습니다.</p></li>';
+            html += '<li class="none"><p>'+langMessage.bet_none+'</p></li>';
         } else {
             list.forEach((element) => {
                 html += '<li class="checked_li_m" id="' + element.bet_fid + '">';
@@ -461,11 +467,11 @@ function getBetResultHtml(gameId, list) {
                 html += '<p class="game">' + getGameName(gameId) + "</p>";
 
                 if (element.bet_state == 3) {
-                    html += '<p class="rst_txt hit">' + "적중" + "</p>";
+                    html += '<p class="rst_txt hit">' + langMessage.win + "</p>";
                 } else if (element.bet_state == 2) {
-                    html += '<p class="rst_txt">' + "미적중" + "</p>";
+                    html += '<p class="rst_txt">' + langMessage.loss + "</p>";
                 } else {
-                    html += '<p class="rst_txt">' + "베팅" + "</p>";
+                    html += '<p class="rst_txt">' + langMessage.bet + "</p>";
                 }
                 html += "</div>";
 
@@ -479,24 +485,24 @@ function getBetResultHtml(gameId, list) {
                 }
                 html += "</dl></div>";
 
-                html += "<div><dl><dt>베팅시간</dt>";
+                html += "<div><dl><dt>"+langMessage.bet_time+"</dt>";
                 html += "<dd>" + element.bet_time.slice(5) + "</dd>";
                 html += "</dl></div>";
 
-                html += "<div><dl><dt>게임분류</dt>";
+                html += "<div><dl><dt>"+langMessage.game_type+"</dt>";
                 html += '<dd class="game">' + getModeName(gameId, element.bet_mode) + "</dd></dl>";
 
-                html += "<dl><dt>베팅</dt>";
+                html += "<dl><dt>"+langMessage.bet+"</dt>";
                 html += "<dd>" + getTargetName(gameId, element.bet_mode, element.bet_target) + "</dd></dl>";
                 if (element.bet_state > 1) {
-                    html += "<dl><dt>경기결과</dt>";
+                    html += "<dl><dt>"+langMessage.game_result_+"</dt>";
                     html += "<dd>" + getResultName(gameId, element.bet_mode, element.bet_result) + "</dd></dl>";
                 }
                 html += "</div>";
 
-                html += "<div><dl><dt>배당률</dt>";
+                html += "<div><dl><dt>"+langMessage.game_rate+"</dt>";
                 html += "<dd>" + element.bet_ratio + "</dd>";
-                html += "</dl><dl><dt>베팅금액</dt>";
+                html += "</dl><dl><dt>"+langMessage.bet_amount+"</dt>";
                 html += "<dd>" + numberWithCommas(element.bet_money) + "</dd>";
                 html += "</dl></div>";
 
@@ -505,9 +511,9 @@ function getBetResultHtml(gameId, list) {
                 html += '<div class="betting_history_m_bot">';
                 html += "<dl>";
                 if(typeof mCancelEnable !== 'undefined' && mCancelEnable && mRoundState == 1 && element.bet_round_no == mRound.round_no)
-                    html += "<button class='btn' onclick='reqBetCancel(" + element.bet_fid + ", this);'>베팅취소</button>";
+                    html += "<button class='btn' onclick='reqBetCancel(" + element.bet_fid + ", this);'>"+langMessage.bet_cancel+"</button>";
                 else {
-                    html += "<dt>적중/손실</dt>";
+                    html += "<dt>"+langMessage.win+"/"+langMessage.loss+"</dt>";
                     if (element.bet_state == 3) {
                         html += '<dd class="hit">+' + numberWithCommas(element.bet_win_money) + "</dd>";
                     } else if (element.bet_state == 2) {
@@ -581,19 +587,19 @@ function setLimitAmount($iType){
 
     $("#bet_min").data("amount", minBet);
     if(minBet <= 0 ){
-        $("#bet_min").text("무제한");
+        $("#bet_min").text(langMessage.infinite);
     }
-    else $("#bet_min").text(minBet.toLocaleString() + " 원");
+    else $("#bet_min").text(minBet.toLocaleString() + " "+langMessage.won);
     $("#bet_max").data("amount", maxBet);
     if(maxBet <= 0 ){
-        $("#bet_max").text("무제한");
+        $("#bet_max").text(langMessage.infinite);
     }
-    else $("#bet_max").text(maxBet.toLocaleString() + " 원");
+    else $("#bet_max").text(maxBet.toLocaleString() + " "+langMessage.won);
     
     $("#dist_max").data("amount", maxWin);
     if(maxWin <= 0 ){
-        $("#dist_max").text("무제한");
+        $("#dist_max").text(langMessage.infinite);
     }
-    else $("#dist_max").text(maxWin.toLocaleString() + " 원");
+    else $("#dist_max").text(maxWin.toLocaleString() + " "+langMessage.won);
 
 }

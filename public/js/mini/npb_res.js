@@ -6,9 +6,9 @@ function clear() {
 
 function changeVideoBtnText() {
     if ($(".betting_area_flex").hasClass("hide_video") === true) {
-        $(".btn_hide_video").html("영상 숨기기");
+        $(".btn_hide_video").html(langMessage.hide_screen);
     } else {
-        $(".btn_hide_video").html("영상 보기");
+        $(".btn_hide_video").html(langMessage.show_screen);
     }
     scrollBettingBoard();
 }
@@ -41,166 +41,166 @@ $(function() {
         var selIdx = 0;
 
         if (categoryId == 1) {
-            gameName = "파워볼";
+            gameName = langMessage.powerball;
             selIdx = 1;
             if (selId == 1) {
-                gameTitle = "홀";
+                gameTitle = langMessage.ball_odd;
             } else {
-                gameTitle = "짝";
+                gameTitle = langMessage.ball_even;
             }
             setLimitAmount(1);
         } else if (categoryId == 2) {
-            gameName = "파워볼";
+            gameName = langMessage.powerball;
             selIdx = 2;
             if (selId == 1) {
-                gameTitle = "언더";
+                gameTitle = langMessage.ball_under;
             } else {
-                gameTitle = "오버";
+                gameTitle = langMessage.ball_over;
             }
             setLimitAmount(1);
         } else if (categoryId == 3) {
-            gameName = "일반볼";
+            gameName = langMessage.normalball;
             selIdx = 3;
             if (selId == 1) {
-                gameTitle = "홀";
+                gameTitle = langMessage.ball_odd;
             } else {
-                gameTitle = "짝";
+                gameTitle = langMessage.ball_even;
             }
             setLimitAmount(1);
         } else if (categoryId == 4) {
-            gameName = "일반볼";
+            gameName = langMessage.normalball;
             selIdx = 4;
             if (selId == 1) {
-                gameTitle = "언더";
+                gameTitle = langMessage.ball_under;
             } else {
-                gameTitle = "오버";
+                gameTitle = langMessage.ball_over;
             }
             setLimitAmount(1);
         } else if (categoryId == 5) {
-            gameName = "파워볼 조합";
+            gameName = langMessage.powerball + " " + langMessage.combination; //"파워볼 조합"
             if (selId == 1) {
-                gameTitle = "홀/언더";
+                gameTitle = langMessage.ball_odd + "/" + langMessage.ball_under; //"홀/언더"
                 selIdx = 5;
             } else if (selId == 2) {
-                gameTitle = "홀/오버";
+                gameTitle = langMessage.ball_odd + "/" + langMessage.ball_over; //"홀/오버"
                 selIdx = 6;
             } else if (selId == 3) {
-                gameTitle = "짝/언더";
+                gameTitle = langMessage.ball_even + "/" + langMessage.ball_under; //"짝/언더"
                 selIdx = 7;
             } else if (selId == 4) {
-                gameTitle = "짝/오버";
+                gameTitle = langMessage.ball_even + "/" + langMessage.ball_over; //"짝/오버"
                 selIdx = 8;
             }
             setLimitAmount(2);
         } else if (categoryId == 6) {
-            gameName = "일반볼 조합";
+            gameName = langMessage.normalball + " " + langMessage.combination; //"일반볼 조합"
             if (selId == 1) {
-                gameTitle = "홀/언더";
+                gameTitle = langMessage.ball_odd + "/" + langMessage.ball_under; //"홀/언더"
                 selIdx = 9;
             } else if (selId == 2) {
-                gameTitle = "홀/오버";
+                gameTitle = langMessage.ball_odd + "/" + langMessage.ball_over; //"홀/오버"
                 selIdx = 10;
             } else if (selId == 3) {
-                gameTitle = "짝/언더";
+                gameTitle = langMessage.ball_even + "/" + langMessage.ball_under; //"짝/언더"
                 selIdx = 11;
             } else if (selId == 4) {
-                gameTitle = "짝/오버";
+                gameTitle = langMessage.ball_even + "/" + langMessage.ball_over; //"짝/오버"
                 selIdx = 12;
             }
             setLimitAmount(3);
         } else if (categoryId == 7) {
-            gameName = "일반볼 대중소";
+            gameName = langMessage.normalball + " " + langMessage.ball_lms; //"일반볼 대중소";
             if (selId == 1) {
-                gameTitle = "홀/대";
+                gameTitle = langMessage.ball_odd + "/" + langMessage.ball_large; //"홀/대";
                 selIdx = 21;
             } else if (selId == 2) {
-                gameTitle = "홀/중";
+                gameTitle = langMessage.ball_odd + "/" + langMessage.ball_medium; //"홀/중";
                 selIdx = 22;
             } else if (selId == 3) {
-                gameTitle = "홀/소";
+                gameTitle = langMessage.ball_odd + "/" + langMessage.ball_small; //"홀/소";
                 selIdx = 23;
             } else if (selId == 4) {
-                gameTitle = "짝/대";
+                gameTitle = langMessage.ball_even + "/" + langMessage.ball_large; //"짝/대";
                 selIdx = 24;
             } else if (selId == 5) {
-                gameTitle = "짝/중";
+                gameTitle = langMessage.ball_even + "/" + langMessage.ball_medium; //"짝/중";
                 selIdx = 25;
             } else if (selId == 6) {
-                gameTitle = "짝/소";
+                gameTitle = langMessage.ball_even + "/" + langMessage.ball_small; //"짝/소";
                 selIdx = 26;
             }
             setLimitAmount(5);
         } else if (categoryId == 8) {
-            gameName = "일반볼 대중소";
+            gameName = langMessage.normalball + " " + langMessage.ball_lms; //"일반볼 대중소";
             if (selId == 1) {
-                gameTitle = "대";
+                gameTitle = langMessage.ball_large; //"대";
                 selIdx = 27;
             } else if (selId == 2) {
-                gameTitle = "중";
+                gameTitle = langMessage.ball_medium; //"중";
                 selIdx = 28;
             } else {
-                gameTitle = "소";
+                gameTitle = langMessage.ball_small; //"소";
                 selIdx = 29;
             }
             setLimitAmount(5);
         } else if (categoryId == 9) {
-            gameName = "일반볼+파워볼 조합";
+            gameName = langMessage.normalball + " + " + langMessage.powerball + " " + langMessage.combination; //"일반볼+파워볼 조합";
             if (selId == 1) {
-                gameTitle = "일반홀/파워홀";
+                gameTitle = langMessage.normalball_ + " " + langMessage.ball_odd + "/" + langMessage.powerball_ + " " + langMessage.ball_odd; //"일반홀/파워홀"
                 selIdx = 13;
             } else if (selId == 2) {
-                gameTitle = "일반홀/파워짝";
+                gameTitle = langMessage.normalball_ + " " + langMessage.ball_odd + "/" + langMessage.powerball_ + " " + langMessage.ball_even; //"일반홀/파워짝"
                 selIdx = 14;
             } else if (selId == 3) {
-                gameTitle = "일반짝/파워홀";
+                gameTitle = langMessage.normalball_ + " " + langMessage.ball_even + "/" + langMessage.powerball_ + " " + langMessage.ball_odd; //"일반짝/파워홀"
                 selIdx = 15;
             } else if (selId == 4) {
-                gameTitle = "일반짝/파워짝";
+                gameTitle = langMessage.normalball_ + " " + langMessage.ball_even + "/" + langMessage.powerball_ + " " + langMessage.ball_even; //"일반짝/파워짝"
                 selIdx = 16;
             } else if (selId == 5) {
-                gameTitle = "일언더/파언더";
+                gameTitle = langMessage.normalball_  + " " + langMessage.ball_under + "/" + langMessage.powerball_  + " " + langMessage.ball_under; //"일언더/파언더"
                 selIdx = 17;
             } else if (selId == 6) {
-                gameTitle = "일언더/파오버";
+                gameTitle = langMessage.normalball_  + " " + langMessage.ball_under + "/" + langMessage.powerball_  + " " + langMessage.ball_over; //"일언더/파오버"
                 selIdx = 18;
             } else if (selId == 7) {
-                gameTitle = "일오버/파언더";
+                gameTitle = langMessage.normalball_  + " " + langMessage.ball_over + "/" + langMessage.powerball_  + " " + langMessage.ball_under; //"일오버/파언더"
                 selIdx = 19;
             } else if (selId == 8) {
-                gameTitle = "일오버/파오버";
+                gameTitle = langMessage.normalball_  + " " + langMessage.ball_over + "/" + langMessage.powerball_  + " " + langMessage.ball_over; //"일오버/파오버"
                 selIdx = 20;
             }
             setLimitAmount(4);
         } else if (categoryId == 10) {
-            gameName = "일반조합+파 홀짝";
+            gameName = langMessage.normal + langMessage.combination + "+" + langMessage.powerball_+" "+langMessage.ball_odd+langMessage.ball_even; //"일반조합+파 홀짝";
             if (selId == 1) {
-                gameTitle = "홀/언더/파 홀";
+                gameTitle = langMessage.ball_odd + "/" + langMessage.ball_under + "/" + langMessage.powerball_ +langMessage.ball_odd; //"홀/언더/파 홀"
                 selIdx = 31;
             } else if (selId == 2) {
-                gameTitle = "홀/언더/파 짝";
+                gameTitle = langMessage.ball_odd + "/" + langMessage.ball_under + "/" + langMessage.powerball_ +langMessage.ball_even; //"홀/언더/파 짝"
                 selIdx = 32;
             } else if (selId == 3) {
-                gameTitle = "홀/오버/파 홀";
+                gameTitle = langMessage.ball_odd + "/" + langMessage.ball_over + "/" + langMessage.powerball_ +langMessage.ball_odd; //"홀/오버/파 홀"
                 selIdx = 33;
             } else if (selId == 4) {
-                gameTitle = "홀/오버/파 짝";
+                gameTitle = langMessage.ball_odd + "/" + langMessage.ball_over + "/" + langMessage.powerball_ +langMessage.ball_even; //"홀/오버/파 짝"
                 selIdx = 34;
             } else if (selId == 5) {
-                gameTitle = "짝/언더/파 홀";
+                gameTitle = langMessage.ball_even + "/" + langMessage.ball_under + "/" +langMessage.powerball_ + langMessage.ball_odd; //"짝/언더/파 홀"
                 selIdx = 35;
             } else if (selId == 6) {
-                gameTitle = "짝/언더/파 짝";
+                gameTitle = langMessage.ball_even + "/" + langMessage.ball_under + "/" +langMessage.powerball_ + langMessage.ball_even; //"짝/언더/파 짝"
                 selIdx = 36;
             } else if (selId == 7) {
-                gameTitle = "짝/오버/파 홀";
+                gameTitle = langMessage.ball_even + "/" + langMessage.ball_over + "/" +langMessage.powerball_ + langMessage.ball_odd; //"짝/오버/파 홀"
                 selIdx = 37;
             } else if (selId == 8) {
-                gameTitle = "짝/오버/파 짝";
+                gameTitle = langMessage.ball_even + "/" + langMessage.ball_over + "/" +langMessage.powerball_ + langMessage.ball_even; //"짝/오버/파 짝"
                 selIdx = 38;
             }
             setLimitAmount(6);
         } else if (categoryId == 11) {
-            gameName = "파워볼 숫자";
+            gameName =  langMessage.powerball + " " + langMessage.number_//"파워볼 숫자";
             gameTitle = selId;
             selIdx = 30;
             setLimitAmount(7);

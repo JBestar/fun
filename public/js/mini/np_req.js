@@ -297,7 +297,7 @@ function confirm_ok() {
 
             } else if (jResult.status == "logout") {
                 closeTimer();
-                confirmAlert("세션이 만료되었습니다. 다시 로그인하세요.", function() {
+                confirmAlert(langMessage.session_expired, function() {
                     reloadPage();
                 });
             }
@@ -518,7 +518,7 @@ function saveFollow() {
 
             } else if (jResult.status == "logout") {
                 closeTimer();
-                confirmAlert("세션이 만료되었습니다. 다시 로그인하세요.", function() {
+                confirmAlert(langMessage.session_expired, function() {
                     reloadPage();
                 });
             }
@@ -590,8 +590,8 @@ function showCurrentRound(objRound) {
         mRound.round_betend = new Date(objRound.round_bet_end).getTime();
 
         mRoundError = 0;
-        let sDate = mRound.round_date.substr(5, 2) + "월 " + mRound.round_date.substr(8, 2) + "일";
-        let sRound = "[" + (parseInt(mRound.game) == 1 ? mRound.round_id : mRound.round_no) + "회차]";
+        let sDate = mRound.round_date.substr(5, 2) + langMessage.month + mRound.round_date.substr(8, 2) + langMessage.day;
+        let sRound = "[" + (parseInt(mRound.game) == 1 ? mRound.round_id : mRound.round_no) + langMessage.round + "]";
         $("#board_date").text(sDate);
         $("#board_round").text(sRound);
         $("#cart_date").text(sDate);
@@ -692,8 +692,8 @@ function showTime() {
             if(mCancelEnable){
                 reqBetResult();
             }
-            $("#cart_time").html("마감");
-            $("#board_time").html("마감");
+            $("#cart_time").html(langMessage.end);
+            $("#board_time").html(langMessage.end);
 
             if ($(".betting_board_inner").hasClass("betting_board_none") == false) {
                 $(".betting_board_inner").addClass("betting_board_none");
