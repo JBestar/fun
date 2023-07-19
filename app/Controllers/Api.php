@@ -1536,6 +1536,7 @@ class Api extends BaseController
 
 		$jsonData = $_REQUEST['json_'];
 		$arrBetData = json_decode($jsonData, true);
+		$this->setLanguage();
 		
 		if(is_login()) {
 			$modelMoneyhist = new MoneyHist_Model();
@@ -1647,26 +1648,26 @@ class Api extends BaseController
 			}
 			else if($iResult == 2 || $iResult == 3){
 				$arrResult['status'] = "stop";
-				$arrResult['msg'] = "베팅이 차단되었습니다.";
+				$arrResult['msg'] = lang("common.bet_block");
 			} else if($iResult == 4){
 				$arrResult['status'] = "fail";
-				$arrResult['msg'] = "최소베팅금액보다 작은 금액으로는 베팅하실 수 없습니다.";
+				$arrResult['msg'] = lang("common.bet_min_msg");
 			} else if($iResult == 5){
 				$arrResult['status'] = "fail";
-				$arrResult['msg'] = "최대베팅금액을 초과하셨습니다.";
+				$arrResult['msg'] = lang("common.bet_max_msg");
 			} else if($iResult == 6 || $iResult == 8){
 				$arrResult['status'] = "fail";
-				$arrResult['msg'] = "베팅금액이 보유금액을 초과하셨습니다.";
+				$arrResult['msg'] = lang("common.bet_amount_exceed");
 			} else if($iResult == 7){
 				$arrResult['status'] = "fail";
-				$arrResult['msg'] = "최대적중금액을 초과하셨습니다.";
+				$arrResult['msg'] = lang("common.win_max_exceed");
 			} else if($iResult == 9){
 				$arrResult['status'] = "fail";
-				$arrResult['msg'] = "일반볼조합 + Powerball 홀짝 배팅은 한회차에 4구멍만 가능합니다.";
+				$arrResult['msg'] = lang("common.bet_hole");
 			}
 			else{
 				$arrResult['status'] = "fail";
-				$arrResult['msg'] = "베팅이 실패되었습니다.";
+				$arrResult['msg'] = lang("common.bet_fail");
 			}	
 				
 
@@ -1681,6 +1682,7 @@ class Api extends BaseController
 
 	
 	public function bet_cancel(){
+		$this->setLanguage();
 
 		$jsonData = $_REQUEST['json_'];
 		$arrReqData = json_decode($jsonData, true);
@@ -1760,10 +1762,10 @@ class Api extends BaseController
 				$arrResult['status'] = "success";	
 			} else if($iResult == 5){
 				$arrResult['status'] = "fail";	
-				$arrResult['msg'] = "베팅을 취소할수 없습니다.";	
+				$arrResult['msg'] = lang("common.bet_cancel_not");	
 			} else {
 				$arrResult['status'] = "fail";	
-				$arrResult['msg'] = "거절되었습니다.";	
+				$arrResult['msg'] = lang("common.reject");	
 			}
 			echo json_encode($arrResult);	
 

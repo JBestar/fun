@@ -22,6 +22,7 @@
         <script src="/js/worker.js?v=1"></script>
         <script>
         var langMessage = {
+            amount : '<?=lang('common.amount')?>',
             ball_even : '<?=lang('common.ball_even')?>',
             ball_four : '<?=lang('common.ball_four')?>',
             ball_large : '<?=lang('common.ball_large')?>',
@@ -38,9 +39,16 @@
             ball_under_ : '<?=lang('common.ball_under_')?>',
             bet : '<?=lang('common.bet')?>',
             bet_amount : '<?=lang('common.bet_amount')?>',
+            bet_amount_select : '<?=lang('common.bet_amount_select')?>',
+            bet_amount_small : '<?=lang('common.bet_amount_small')?>',
+            bet_ask : '<?=lang('common.bet_ask')?>',
             bet_cancel : '<?=lang('common.bet_cancel')?>',
+            bet_cancel_msg : '<?=lang('common.bet_cancel_msg')?>',
+            bet_complete : '<?=lang('common.bet_complete')?>',
+            bet_enable : '<?=lang('common.bet_enable')?>',
             bet_history : '<?=lang('common.bet_history')?>',
             bet_none : '<?=lang('common.bet_none')?>',
+            bet_rule : '<?=lang('common.bet_rule')?>',
             bet_time : '<?=lang('common.bet_time')?>',
             cancel : '<?=lang('common.cancel')?>',
             combination : '<?=lang('common.combination')?>',
@@ -51,6 +59,7 @@
             game_result_ : '<?=lang('common.game_result_')?>',
             game_result_none : '<?=lang('common.game_result_none')?>',
             game_round : '<?=lang('common.game_round')?>',
+            game_select_amount : '<?=lang('common.game_select_amount')?>',
             game_time : '<?=lang('common.game_time')?>',
             game_type : '<?=lang('common.game_type')?>',
             hide_screen : '<?=lang('common.hide_screen')?>',

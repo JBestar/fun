@@ -3,7 +3,7 @@ var first_click = true;
 function updateCart(money) {
 
     if (money >= 0) {
-        $("#u_money").text(numberWithCommas(money) + " 원");
+        $("#u_money").text(numberWithCommas(money) + " " + langMessage.won);
         $("#u_money").data("amount", money);
     }
 }
@@ -40,7 +40,7 @@ $(function() {
         if (select_rate == 0) {
             bet_min = parseInt($("#bet_min").data("amount"));
             $("#bet_money").val(bet_min);
-            confirmAlert("게임 선택 후 금액을 눌러주세요");
+            confirmAlert(langMessage.game_select_amount);
             return;
         }
 
@@ -95,7 +95,7 @@ $(function() {
         money = Number(money);
 
         if (select_rate == 0) {
-            confirmAlert("게임 선택 후 금액을 눌러주세요");
+            confirmAlert(langMessage.game_select_amount);
             return;
         }
         if (tmp_price == 0) {
@@ -124,7 +124,7 @@ $(function() {
     $("#input_money").keyup(function() {
         if (select_rate == 0) {
             $("#input_money").val("");
-            confirmAlert("게임 선택 후 금액을 눌러주세요");
+            confirmAlert(langMessage.game_select_amount);
             return;
         }
 
@@ -170,11 +170,11 @@ $(function() {
         var bet_min = parseInt($("#bet_min").data("amount"));
 
         if (Number(bet_money) <= 0) {
-            confirmAlert("베팅금액을 선택해 주세요.");
+            confirmAlert(langMessage.bet_amount_select);
             return false;
         }
         if (bet_min>0 && Number(bet_money) < Number(bet_min)) {
-            confirmAlert("베팅금액은 최소 베팅금액보다 커야합니다.");
+            confirmAlert(langMessage.bet_amount_small);
             return;
         }
 
@@ -185,10 +185,10 @@ $(function() {
                 var betRate = $("#board_rate").text();
                 var betRound = $("#cart_round").text();
     
-                var text = betRound + "<br/>" + betTitle + "<br/>배당 : " + betRate + "<br/>금액 : " + bet_money;
+                var text = betRound + "<br/>" + betTitle + "<br/>"+langMessage.game_rate+" : " + betRate + "<br/>"+langMessage.amount+" : " + bet_money;
                 // basicAlert(text + '<br/><br/>베팅 하시겠습니까?', "confirm_ok()");
                 basic2Alert(
-                    text + "<br/><br/>베팅 하시겠습니까?",
+                    text + "<br/><br/>"+langMessage.bet_ask,
                     function() {
                         confirm_ok();
                     },
@@ -203,7 +203,7 @@ $(function() {
             }
 
         } else {
-            confirmAlert("게임 선택 후 베팅 가능합니다.");
+            confirmAlert(langMessage.bet_enable);
         }
     });
 

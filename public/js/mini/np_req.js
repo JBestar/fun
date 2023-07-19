@@ -246,13 +246,13 @@ function confirm_ok() {
         .val()
         .replace(/[^0-9]/g, "");
     if (!$.isNumeric(bet_money)) {
-        confirmAlert("베팅금액은 숫자만 입력 가능합니다.", function() {
+        confirmAlert(langMessage.bet_rule, function() {
             reloadPage();
         });
     }
 
     if (select_idx == "") {
-        confirmAlert("게임 선택 후 베팅 가능합니다.", function() {
+        confirmAlert(langMessage.bet_enable, function() {
             reloadPage();
         });
 
@@ -283,7 +283,7 @@ function confirm_ok() {
             if (jResult.status == "success") {
                 game_reset();
                 reqFollowBet(jResult.data);
-                toast("베팅하였습니다.");
+                toast(langMessage.bet_complete);
                 $(".betting_board_m_close").trigger("click");
                 session_check();
                 setTimeout(function() {
@@ -348,7 +348,7 @@ function reqGameResult() {
 function reqBetCancel(fid, objBtn) {
 
     
-    basic2Alert("베팅을 취소하시겠습니까?", function() {
+    basic2Alert(langMessage.bet_cancel_msg, function() {
 
         var game_id = $(".game_list").attr("id");
         $(objBtn).attr("disabled", true);
