@@ -329,9 +329,9 @@
                         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
                             <button name="lang" id="lang-button" style="position:absolute; right:10px; margin-top:5px; width:80px; padding:0 5px; color: #ffff00; font-size:14px; background:none; height:22px; border:none; text-align:center;" is="ms-dropdown" >
                             <?php if($lang == "cn") :?>
-                                <image id="lang-img" src="/images/common/cn.png" style="width:20px">&nbsp;<span id="lang-code"><?=lang('common.lang_chinese')?></span>&nbsp;&nbsp;&nbsp;<span id="lang-up" style="font-size:12px;">▽</span>
+                                <image id="lang-img" src="/images/common/cn.png" style="width:20px">&nbsp;&nbsp;<span id="lang-code"><?=lang('common.lang_chinese')?></span>
                             <?php else :?>
-                                <image id="lang-img" src="/images/common/ko.png" style="width:20px">&nbsp;<span id="lang-code"><?=lang('common.lang_korean')?></span>&nbsp;&nbsp;&nbsp;<span id="lang-up" style="font-size:12px;">▽</span>
+                                <image id="lang-img" src="/images/common/ko.png" style="width:20px">&nbsp;&nbsp;<span id="lang-code"><?=lang('common.lang_korean')?></span>
                             <?php endif ?>
                             </button>
                         <?php endif ?>
