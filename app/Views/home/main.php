@@ -67,7 +67,7 @@
             <script type="text/javascript" src="/js/lib.js?ver=1"></script>
             <script type="text/javascript" src="/js/common.js?ver=2"></script>
             <script type="text/javascript" src="/js/SLB.js?ver=4"></script>
-            <script type="text/javascript" src="/js/main.js?ver=4"></script>
+            <script type="text/javascript" src="/js/main.js?ver=5"></script>
             <link rel="stylesheet" type="text/css" href="/css/devel.css?v=3" />
         <?php else : ?>
             <script type="text/javascript" src="/js/vue.js"></script>
