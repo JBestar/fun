@@ -51,7 +51,58 @@ $(document).ready(function() {
     $('.pop_close').on('click', function() {
         $(this).parent().parent().hide();
     });
+    
+    let mainNavbarDropDown = document.getElementById("main-navbar-dropdown-container-id");
+    var btnLang = document.getElementById("lang-button");
+    $('#lang-button').on('click', function() {
+        if (mainNavbarDropDown.style.display == "none")
+            mainNavbarDropDown.style.display = "block";
+        else mainNavbarDropDown.style.display = "none";
+    });
+    $('#main-navbar-dropdown-ko-id').on('click', function() {
+        $("#lang-img").attr("src", "/images/common/ko.png");
+        $("#lang-code").text($("#lang-ko").text() );
+        mainNavbarDropDown.style.display = "none";
+        setLang("ko");
+    });
+    $('#main-navbar-dropdown-cn-id').on('click', function() {
+        $("#lang-img").attr("src", "/images/common/cn.png");
+        $("#lang-code").text($("#lang-cn").text());
+        mainNavbarDropDown.style.display = "none";
+        setLang("cn");
+    });
+    
+    let imgLang = document.getElementById("lang-img");
+    let spanLang = document.getElementById("lang-code");
+    let spanLangUp = document.getElementById("lang-up");
+
+    window.onclick = function(event) {
+        if (mainNavbarDropDown.style.display == "block" && event.target != btnLang && event.target != imgLang && event.target != spanLang && event.target != spanLangUp) {
+            mainNavbarDropDown.style.display = "none";
+        }
+    }
 });
+
+function setLang(lang) {
+    console.log(lang);
+    var data = {
+        'lang': lang,
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/api/change_lang',
+        dataType: 'json',
+        data:  data,
+        success: function(jResult) {
+            // console.log(jResult);
+            location.reload();
+        },
+        error: function(request, status, error) {
+            // confirmAlert(langMessage.administrator_ask+"\n" + request.status, 'reloadPage()');
+        }
+    });
+};
 
 var worker; 
 // worker 실행

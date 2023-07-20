@@ -52,6 +52,41 @@ $(document).ready(function() {
             }
         }
     );
+
+
+    let mainNavbarDropDown = document.getElementById("main-navbar-dropdown-container-id");
+    var btnLang = document.getElementById("lang-button");
+    $('#lang-button').on('click', function() {
+        if (mainNavbarDropDown.style.display == "none")
+            mainNavbarDropDown.style.display = "block";
+        else mainNavbarDropDown.style.display = "none";
+    });
+    $('#main-navbar-dropdown-ko-id').on('click', function() {
+        $("#lang-img").attr("src", "/images/common/ko.png");
+        $("#lang-code").text($("#lang-ko").text() );
+        mainNavbarDropDown.style.display = "none";
+        setLang("ko");
+    });
+    $('#main-navbar-dropdown-cn-id').on('click', function() {
+        $("#lang-img").attr("src", "/images/common/cn.png");
+        $("#lang-code").text($("#lang-cn").text());
+        mainNavbarDropDown.style.display = "none";
+        setLang("cn");
+    });
+    
+    let imgLang = document.getElementById("lang-img");
+    let spanLang = document.getElementById("lang-code");
+    let spanLangUp = document.getElementById("lang-up");
+
+    window.onclick = function(event) {
+        if (mainNavbarDropDown.style.display == "block" && event.target != btnLang && event.target != imgLang && event.target != spanLang && event.target != spanLangUp) {
+            mainNavbarDropDown.style.display = "none";
+        }
+    }
+
+
+
+
 });
 
 // 영어/숫자만 입력
@@ -931,12 +966,8 @@ function controlLoginForm(sElement){
     }
 }
 
-// 로그인 버튼 
-$("#lang").change(function(e) {
-    e.preventDefault();
-
-    var lang = $("#lang").val();
-
+function setLang(lang) {
+    console.log(lang);
     var data = {
         'lang': lang,
     };
@@ -954,4 +985,4 @@ $("#lang").change(function(e) {
             // confirmAlert(langMessage.administrator_ask+"\n" + request.status, 'reloadPage()');
         }
     });
-});
+};

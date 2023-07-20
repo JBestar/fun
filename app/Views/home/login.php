@@ -44,12 +44,68 @@
             withdrawal_rule : '<?=lang('common.withdrawal_rule')?>',
         };
     </script>  
+    <style>
+            .main-navbar-dropdown-container {
+                position: fixed;
+                top: 22px;
+                right: 0px;
+                width: 90px;
+                display: none;
+                overflow: auto;
+                padding: 10px;
+                z-index: 2001;
+                
+            }
+
+            .main-navbar-dropdown-div {
+                border: solid 1px #ac5b23;
+                border-radius: 2px;
+                z-index: 3;
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            }
+
+            .main-navbar-dropdown-div::before {
+                content: "";
+                position: absolute;
+                top: -8px;
+                left: 80%;
+                margin-left: -10px;
+                border-width: 8px;
+                border-style: solid;
+                border-color: transparent transparent transparent transparent;
+            }
+
+            .main-navbar-dropdown-container button {
+                text-align: left;
+                color: #ffff00;
+                background: none;
+                padding: 2px 5px;
+                display: block;
+                outline: 0px;
+                border: none;
+                width: 100%;
+                font-size: 14px;
+                text-align:center;
+            }
+
+            .main-navbar-dropdown-container button:hover {
+                /* color: white; */
+            }
+        </style>
 </head>
 <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 <?php else : ?>
 <body>
 <?php endif ?>
+    <div class="main-navbar-dropdown-container" id="main-navbar-dropdown-container-id" style="display: none;">
+        <div class="main-navbar-dropdown-div"> 
+            <button id="main-navbar-dropdown-ko-id"><image src="/images/common/ko.png" style="width:22px">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
+        </div>
+        <div class="main-navbar-dropdown-div"> 
+            <button id="main-navbar-dropdown-cn-id"><image src="/images/common/cn.png" style="width:22px">&nbsp;&nbsp;<span id="lang-cn"><?=lang('common.lang_chinese')?></span></button>
+        </div>
+    </div>
     <div class="alert_wrap basic_alert" id="basic_alert">
         <div class="alert_bot">
             <p class="question_ico" style="white-space:pre-line;" id="alert_content"></p>
@@ -244,10 +300,19 @@
 
     <div id="wrap" class="users_wrap">
         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-            <select name="lang" id="lang" style="position:absolute; right:10px; top:10px; width:65px; padding:0 10px; color: #ffff00; background:none; border:none; text-align:center; border-radius:0; font-size:14px;">
-                <option value="ko" style="background:#dc610d; padding:5px;" <?=$lang=='ko'?'selected':''?> > <?=lang('common.lang_korean')?> </option>
-                <option value="cn" style="background:#dc610d; padding:5px;" <?=$lang=='cn'?'selected':''?> > <?=lang('common.lang_chinese')?> </option>
-            </select>
+            <!-- <select name="lang" id="lang" style="position:absolute; right:10px; top:10px; width:65px; padding:0 10px; color: #ffff00; background:none; border:none; text-align:center; border-radius:0; font-size:14px;">
+                <option value="ko" style="background:#dc610d; padding:5px;" <?=$lang=='ko'?'selected':''?> > <img src="./images/common/ko.png" class="user_level_icon" > <?=lang('common.lang_korean')?> </option>
+                <option value="cn" style="background:#dc610d; padding:5px;" <?=$lang=='cn'?'selected':''?> > <img src="./images/common/cn.png" class="user_level_icon" > <?=lang('common.lang_chinese')?> </option>
+            </select> -->
+            <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
+                <button name="lang" id="lang-button" style="position:absolute; right:10px; margin-top:10px; width:80px; padding:0 5px; color: #ffff00; font-size:16px; background:none; height:22px; border:none; text-align:center;" is="ms-dropdown" >
+                <?php if($lang == "cn") :?>
+                    <image id="lang-img" src="/images/common/cn.png" style="width:22px">&nbsp;<span id="lang-code"><?=lang('common.lang_chinese')?></span>
+                <?php else :?>
+                    <image id="lang-img" src="/images/common/ko.png" style="width:22px">&nbsp;<span id="lang-code"><?=lang('common.lang_korean')?></span>
+                <?php endif ?>
+                </button>
+            <?php endif ?>
         <?php endif ?>
 
         <div class="users_border">

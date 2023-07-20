@@ -186,9 +186,65 @@
                 }
             }
 
+            .main-navbar-dropdown-container {
+                position: fixed;
+                top: 22px;
+                right: 0px;
+                width: 90px;
+                display: none;
+                overflow: auto;
+                padding: 10px;
+                z-index: 2001;
+                
+            }
+
+            .main-navbar-dropdown-div {
+                background-color: var(--bar-bg-color);
+                border: solid 1px #333;
+                border-radius: 2px;
+                z-index: 3;
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            }
+
+            .main-navbar-dropdown-div::before {
+                content: "";
+                position: absolute;
+                top: -8px;
+                left: 80%;
+                margin-left: -10px;
+                border-width: 8px;
+                border-style: solid;
+                border-color: transparent transparent transparent transparent;
+            }
+
+            .main-navbar-dropdown-container button {
+                text-align: left;
+                color: white;
+                background-color: black;
+                padding: 2px 5px;
+                display: block;
+                outline: 0px;
+                border: none;
+                width: 100%;
+                font-size: 14px;
+                text-align:center;
+            }
+
+            .main-navbar-dropdown-container button:hover {
+                background-color: #868686;
+            }
+
         </style>
     </head>
     <body>
+        <div class="main-navbar-dropdown-container" id="main-navbar-dropdown-container-id" style="display: none;">
+            <div class="main-navbar-dropdown-div"> 
+                <button id="main-navbar-dropdown-ko-id"><image src="/images/common/ko.png" style="width:22px">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
+            </div>
+            <div class="main-navbar-dropdown-div"> 
+                <button id="main-navbar-dropdown-cn-id"><image src="/images/common/cn.png" style="width:22px">&nbsp;&nbsp;<span id="lang-cn"><?=lang('common.lang_chinese')?></span></button>
+            </div>
+        </div>
         <div
             id="SLB_film"
             onclick="SLB();"
@@ -271,10 +327,13 @@
                             <?php endif ?>
                         </div>
                         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-                            <select name="lang" id="lang" style="position:absolute; right:10px; top:5px; max-width:65px; padding:0 5px; color: #ffff00; font-size:14px; background:none; height:22px; border:none; text-align:center;">
-                                <option style="background:#000; text-align:center" value="ko" <?=$lang=='ko'?'selected':''?> > <?=lang('common.lang_korean')?> </option>
-                                <option style="background:#000; text-align:center" value="cn" <?=$lang=='cn'?'selected':''?> > <?=lang('common.lang_chinese')?> </option>
-                            </select>
+                            <button name="lang" id="lang-button" style="position:absolute; right:10px; margin-top:5px; width:80px; padding:0 5px; color: #ffff00; font-size:14px; background:none; height:22px; border:none; text-align:center;" is="ms-dropdown" >
+                            <?php if($lang == "cn") :?>
+                                <image id="lang-img" src="/images/common/cn.png" style="width:20px">&nbsp;<span id="lang-code"><?=lang('common.lang_chinese')?></span>&nbsp;&nbsp;&nbsp;<span id="lang-up" style="font-size:12px;">▽</span>
+                            <?php else :?>
+                                <image id="lang-img" src="/images/common/ko.png" style="width:20px">&nbsp;<span id="lang-code"><?=lang('common.lang_korean')?></span>&nbsp;&nbsp;&nbsp;<span id="lang-up" style="font-size:12px;">▽</span>
+                            <?php endif ?>
+                            </button>
                         <?php endif ?>
                         <?php if(!is_login()) :?>
                             <!-- uk-toggle="target: #agentCheckModal"  -->
@@ -457,7 +516,7 @@
                         </div>
                         
                         <script type="text/javascript">
-                            $(".BannerSlider-bgDesktop .field_decoupled_block_bg_image_category_video_slots").bgswitcher({
+                           $(".BannerSlider-bgDesktop .field_decoupled_block_bg_image_category_video_slots").bgswitcher({
                                 <?php if($_ENV['app.name'] == APP_PHANTOM) :?>
                                     images: ["/images/main/banner11.png"],
                                     effect: "hide",
@@ -1772,29 +1831,6 @@
                     }
                 });
 
-                $("#lang").change(function(e) {
-                    e.preventDefault();
-
-                    var lang = $("#lang").val();
-                    console.log("lang="+lang);
-                    var data = {
-                        'lang': lang,
-                    };
-
-                    $.ajax({
-                        type: 'POST',
-                        url: '/api/change_lang',
-                        dataType: 'json',
-                        data:  data,
-                        success: function(jResult) {
-                            // console.log(jResult);
-                            location.reload();
-                        },
-                        error: function(request, status, error) {
-                            // confirmAlert(langMessage.administrator_ask+"\n" + request.status, 'reloadPage()');
-                        }
-                    });
-                });
                 // validate rule check
                 var validationChgRules = {
                     cash: {
