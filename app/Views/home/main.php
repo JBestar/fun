@@ -221,7 +221,7 @@
                 text-align: left;
                 color: white;
                 background-color: black;
-                padding: 2px 5px;
+                padding: 2px 5px 4px 5px;
                 display: block;
                 outline: 0px;
                 border: none;
@@ -239,10 +239,10 @@
     <body>
         <div class="main-navbar-dropdown-container" id="main-navbar-dropdown-container-id" style="display: none;">
             <div class="main-navbar-dropdown-div"> 
-                <button id="main-navbar-dropdown-ko-id"><image src="/images/common/ko.png" style="width:22px">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
+                <button id="main-navbar-dropdown-ko-id"><image src="/images/common/ko.png?v=1" style="width:22px; vertical-align:middle;">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
             </div>
             <div class="main-navbar-dropdown-div"> 
-                <button id="main-navbar-dropdown-cn-id"><image src="/images/common/cn.png" style="width:22px">&nbsp;&nbsp;<span id="lang-cn"><?=lang('common.lang_chinese')?></span></button>
+                <button id="main-navbar-dropdown-cn-id"><image src="/images/common/cn.png?v=1" style="width:22px;  vertical-align:middle;">&nbsp;&nbsp;<span id="lang-cn"><?=lang('common.lang_chinese')?></span></button>
             </div>
         </div>
         <div
@@ -329,9 +329,9 @@
                         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
                             <button name="lang" id="lang-button" style="position:absolute; right:10px; margin-top:5px; width:80px; padding:0 5px; color: #ffff00; font-size:14px; background:none; height:22px; border:none; text-align:center;" is="ms-dropdown" >
                             <?php if($lang == "cn") :?>
-                                <image id="lang-img" src="/images/common/cn.png" style="width:20px">&nbsp;&nbsp;<span id="lang-code"><?=lang('common.lang_chinese')?></span>
+                                <image id="lang-img" src="/images/common/cn.png?v=1" style="width:20px">&nbsp;&nbsp;<span id="lang-code"><?=lang('common.lang_chinese')?></span>
                             <?php else :?>
-                                <image id="lang-img" src="/images/common/ko.png" style="width:20px">&nbsp;&nbsp;<span id="lang-code"><?=lang('common.lang_korean')?></span>
+                                <image id="lang-img" src="/images/common/ko.png?v=1" style="width:20px">&nbsp;&nbsp;<span id="lang-code"><?=lang('common.lang_korean')?></span>
                             <?php endif ?>
                             </button>
                         <?php endif ?>

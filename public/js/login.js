@@ -62,13 +62,13 @@ $(document).ready(function() {
         else mainNavbarDropDown.style.display = "none";
     });
     $('#main-navbar-dropdown-ko-id').on('click', function() {
-        $("#lang-img").attr("src", "/images/common/ko.png");
+        $("#lang-img").attr("src", "/images/common/ko.png?v=1");
         $("#lang-code").text($("#lang-ko").text() );
         mainNavbarDropDown.style.display = "none";
         setLang("ko");
     });
     $('#main-navbar-dropdown-cn-id').on('click', function() {
-        $("#lang-img").attr("src", "/images/common/cn.png");
+        $("#lang-img").attr("src", "/images/common/cn.png?v=1");
         $("#lang-code").text($("#lang-cn").text());
         mainNavbarDropDown.style.display = "none";
         setLang("cn");
