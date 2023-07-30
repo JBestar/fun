@@ -121,7 +121,7 @@
             }
             
             .MainMenu-open-wrapper .MainMenu-LogoSlogan {
-                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=6);
+                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=7);
             }
 
             <?php if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1) :?>
@@ -380,7 +380,7 @@
                     <div class="MainMenu-logo">
                         <?php if(!is_login()) :?>
                             <div class="MainMenu-play" uk-toggle="target: #agentCheckModal" tabindex="0" aria-expanded="false">
-                                <a href="#" class="js-register-open btn-primary btn-normal"><span><?=lang('common.logout')?></span></a>
+                                <a href="#" class="js-register-open btn-primary btn-normal"><span><?=lang('common.signup')?></span></a>
                             </div>
                         <?php else :?>
                             <div class="MainMenu-play" onclick="SLB_POPUP('/mypage')">
