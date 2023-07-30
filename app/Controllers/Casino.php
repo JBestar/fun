@@ -261,6 +261,9 @@ class Casino extends BaseController
 			$headInfo = $this->getSiteConf();
 			$prdId = trim($this->request->getVar('prd'));
 			$objCas = $this->modelCasprd->getById($gameId, $prdId);
+			if(is_null($objCas))
+				$objCas = $this->modelCasprd->getById($gameId, 100);
+
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
 			$sess = $this->modelSess->getByUid($objMember->mb_uid, SESS_TYPE_APP);
             
