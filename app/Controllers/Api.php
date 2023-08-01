@@ -768,7 +768,7 @@ class Api extends BaseController
             $result->status = STATUS_LOGOUT;		
         } else {
 
-			$sAnswer = "<p> ".lang("common.deposit_amount")." : &nbsp;";
+			$sAnswer = "<p> ".lang("common.deposit_account")." : &nbsp;";
 
 			$libApiVacc = new ApiVacc_Lib();
 			$arrResult['status'] = 1;
