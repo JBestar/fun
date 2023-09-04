@@ -384,11 +384,11 @@ class Casino extends BaseController
 				$iCreated = 8;	
 			else if($objMember->mb_hold_uid == ""){
 				//플레이어 창조
-                $createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
-                // $createId = createGameId(strtoupper(substr($_ENV['app.name'], 0, 3))."_".$objMember->mb_uid);//."_".$objMember->mb_uid
-				// $objOther = $this->modelMember->getByHoldId($createId, $objMember->mb_fid);
-				// if(!is_null($objOther))
-				// 	$createId .= "_".$objMember->mb_fid;
+                // $createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
+                $createId = createGameId(strtoupper(substr($_ENV['app.name'], 0, 2))."_".$objMember->mb_uid);//."_".$objMember->mb_uid
+				$objOther = $this->modelMember->getByHoldId($createId, $objMember->mb_fid);
+				if(!is_null($objOther))
+					$createId .= "_".$objMember->mb_fid;
 
 				$arrResult = $this->libApiHold->createUser($createId, $objMember->mb_nickname);
                 

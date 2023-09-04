@@ -417,7 +417,7 @@ class Api extends BaseController
 				$result->status = STATUS_FAIL;                
 			} else{
 				$data = [
-					'mb_pwd' => $pwd,
+					'mb_pwd' => $user_newPw,
 				];
 				$this->modelMember->update($objMember->mb_fid, $data);
 
