@@ -582,7 +582,7 @@ class Api extends BaseController
 
 			$result->status = STATUS_SUCCESS;
 			$bLimit = false;
-			if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 ){
+			if(array_key_exists('app.tree', $_ENV) && intval($_ENV['app.tree']) == 1 ){
 				$bLimit = true;
 
 				$tmNow = time();
@@ -854,10 +854,10 @@ class Api extends BaseController
 
 			$modelCharge = new Charge_Model();
 
-			if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 && $objMember->mb_state_delete == STATE_ACTIVE){
+			if(array_key_exists('app.tree', $_ENV) && intval($_ENV['app.tree']) == 1 && $objMember->mb_state_delete == STATE_ACTIVE){
 				$result->status = STATUS_FAIL;
 				$result->msg = lang("common.deposit_cant"); 
-			} else if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 && $reqData['c_price'] % 10000 != 0){
+			} else if(array_key_exists('app.tree', $_ENV) && intval($_ENV['app.tree']) == 1 && $reqData['c_price'] % 10000 != 0){
 				$result->status = STATUS_FAIL;
 				$result->msg = lang("common.deposit_request_unit"); 
 			} else if($modelCharge->wait($user_id)){

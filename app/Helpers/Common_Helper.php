@@ -47,7 +47,7 @@
         $navInfo['user_grade'] = $objUser->mb_grade;
         $navInfo['user_money'] = floor(allMoney($objUser)); //num_format(allMoney($objUser), NUM_POINT_CNT);
         $navInfo['user_point'] = floor($objUser->mb_point);//num_format(floatval($objUser->mb_point), NUM_POINT_CNT);
-        if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 )
+        if(array_key_exists('app.tree', $_ENV) && intval($_ENV['app.tree']) == 1 )
           $navInfo['user_off'] = intval($objUser->mb_state_delete) > 0;
       }
 
@@ -62,7 +62,7 @@
       $userInfo['user_money'] = floor(allMoney($objUser)); //num_format(allMoney($objUser), NUM_POINT_CNT, 0);
       $userInfo['user_point'] = floor($objUser->mb_point);//num_format(floatval($objUser->mb_point), NUM_POINT_CNT, 0);
       $userInfo['user_off'] = false;
-      if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 )
+      if(array_key_exists('app.tree', $_ENV) && intval($_ENV['app.tree']) == 1 )
         $userInfo['user_off'] = intval($objUser->mb_state_delete) > 0;
       $userInfo['user_bank_name'] = $objUser->mb_bank_name;
 
