@@ -164,6 +164,15 @@
                 top: 2px;
             }
             <?php endif ?>
+
+            <?php if($_ENV['app.name'] == APP_ATM) :?>
+                @media screen and (max-width: 991px) {
+                    .BannerSlider-list .BannerSlider-bgDesktop {
+                        display: none
+                    } 
+                }
+            <?php endif ?>
+
             @media only screen and (max-width: 850px) {
                 .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before{
                     height: 0px;
