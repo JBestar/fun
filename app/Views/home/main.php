@@ -166,10 +166,9 @@
             <?php endif ?>
 
             <?php if($_ENV['app.name'] == APP_ATM) :?>
-                @media screen and (max-width: 991px) {
-                    .BannerSlider-list .BannerSlider-bgDesktop {
-                        display: none
-                    } 
+                .SeoPage .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop .bg-img {
+                    background-size: cover;
+                    background-position: 0% 50%
                 }
             <?php endif ?>
 
