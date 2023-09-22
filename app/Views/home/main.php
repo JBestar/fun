@@ -124,15 +124,15 @@
                 background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=7);
             }
 
-            <?php if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1) :?>
+            <?php if(array_key_exists('app.tree', $_ENV) && $_ENV['app.tree'] == 1) :?>
                 .games-page .categories-wrapper, .SeoPage .categories-wrapper {
                     /* background-image: linear-gradient(90deg,#262626, #363636, #262626); */
-                    background-image: linear-gradient(360deg,#262626, #000000, #000000);
+                    background-image: linear-gradient(360deg,#000000, #000000, #262626);
                     margin-top:16px;
                 }         
                           
                 .scroll_area{
-                    background-color: #000000;
+                    background-color: #111;
                 } 
                 .SeoPage {
                     background-repeat:repeat;
@@ -166,9 +166,19 @@
             <?php endif ?>
 
             <?php if($_ENV['app.name'] == APP_ATM) :?>
+                .MainMenu-top-wrapper {
+                    position: relative;
+                }
+                .MainMenu-open-wrapper {
+                    position: inherit;
+                    height:0px;
+                }
                 .SeoPage .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop .bg-img {
                     background-size: cover;
                     background-position: 0% 50%
+                }
+                .PaymentIconsContainer {
+                    background-image: linear-gradient(90deg,#040914, #192337, #040914);
                 }
             <?php endif ?>
 
@@ -241,6 +251,369 @@
             .main-navbar-dropdown-container button:hover {
                 background-color: #868686;
             }
+
+            .btn {
+                color: #fff;
+                background: #365a92;/*#38383a*/
+                padding:8px 0;
+            }
+            .btn:hover {
+                background: #2e456a;/*4f4f52*/
+                color:#eee;
+            }
+            .pop_layer {
+                position: fixed;
+                width: 370px;
+                height: auto;
+                z-index: 1100;
+            }
+
+            .pop_layer .pop_container {
+                position: relative;
+            }
+
+            .pop_layer .pop_container .pop_top {
+                height: 50px;
+                padding: 0 21px;
+                overflow: hidden;
+                border-radius: 10px 10px 0 0;
+                background: #1c355b; /*#ffcc00;*/
+            }
+
+            .pop_layer .pop_container .pop_top .tit {
+                line-height: 50px;
+                font-size: 20px;
+                font-weight: 600;
+            }
+
+            .pop_layer .pop_container .pop_con {
+                max-height: 530px;
+                overflow-y: auto;
+            }
+
+            .pop_layer .pop_container .pop_con .txt {
+                text-align: center;
+                font-size: 14px;
+                line-height: 30px;
+                font-weight: 600;
+                padding: 40px;
+            }
+
+            .pop_layer .pop_container .pop_con .txt span {
+                font-size: 14px;
+                vertical-align: top;
+            }
+
+            .pop_layer .pop_container .pop_con .txt .underline {
+                text-decoration: underline;
+            }
+
+            .pop_layer .pop_container .pop_con p {
+                /* padding: 0 10px; */
+            }
+
+            .pop_layer .pop_container .pop_con p:first-child {
+                /* padding-top: 20px; */
+            }
+
+            .pop_layer .pop_container .pop_con p:last-child {
+                /* padding-bottom: 20px; */
+            }
+
+            .pop_layer .pop_container .pop_con img {
+                width: 100%;
+            }
+
+            .pop_layer .pop_container .pop_close {
+                position: absolute;
+                top: 18px;
+                right: 21px;
+                width: 10px;
+                height: 10px;
+                background: url(/images/common/pop_close.png) no-repeat left top;
+            }
+
+            .pop_layer .check {
+                text-align: right;
+                margin: 0 0;
+                padding: 5px 10px;
+            }
+
+            .pop_layer .btn_wrap {
+                margin-top: 0;
+                overflow: hidden;
+                border-radius: 0 0 10px 10px;
+            }
+
+            .pop_layer .btn_wrap .btn {
+                width: 50%;
+                border-radius: 0;
+                margin-left: 0;
+            }
+
+            .pop_layer .btn_wrap button:first-child {
+                float: left;
+            }
+
+            .pop_layer .btn_wrap button:last-child {
+                float: right;
+            }
+
+            #layer1, #layer3, #layer4, #layer5, #layer6, #layer7{
+                top: 50%;
+                left: 50%;
+                color:white;
+                z-index: 990;
+            }
+
+            <?php if( count($boards) == 1 ) :?>
+                #layer4
+                {
+                    margin-left: -185px;
+                    margin-top: -280px;
+                }
+                
+                @media screen and (max-width: 800px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                    }
+                }
+            <?php elseif( count($boards) == 2 ) :?>
+                #layer4
+                {
+                    margin-left: -375px;
+                    margin-top: -280px;
+                    z-index: 999;
+                }
+                #layer5
+                {
+                    margin-left: 5px;
+                    margin-top: -280px;
+                    z-index: 998;
+                }
+                @media screen and (max-width: 800px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                    }
+                }
+            <?php elseif( count($boards) == 3 ) :?>
+                #layer4
+                {
+                    margin-left: -560px;
+                    margin-top: -280px;
+                    z-index: 999;
+                }
+                #layer5
+                {
+                    margin-left: -185px;
+                    margin-top: -280px;
+                    z-index: 998;
+                }
+                #layer6
+                {
+                    margin-left: 190px;
+                    margin-top: -280px;
+                    z-index: 997;
+                }
+                
+                @media screen and (max-width: 1120px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                    }
+                }
+            <?php else :?>
+                #layer4
+                {
+                    margin-left: -375px;
+                    margin-top: -280px;
+                    z-index: 999;
+                }
+                #layer5
+                {
+                    margin-left: 5px;
+                    margin-top: -280px;
+                    z-index: 998;
+                }
+                #layer6
+                {
+                    margin-left: -755px;
+                    margin-top: -280px;
+                    z-index: 997;
+                }
+                #layer7
+                {
+                    margin-left: 385px;
+                    margin-top: -280px;
+                    z-index: 996;
+                }
+                #layer1
+                {
+                    margin-left: -755px; /*-610px */
+                    margin-top: -280px; /*-320px;*/
+                    z-index: 995;
+                }
+                #layer3
+                {
+                    margin-left: 385px; /*210px;*/
+                    margin-top: -280px;  /*-320px;*/
+                    z-index: 994;
+                }
+            
+                @media screen and (max-width: 1500px){
+                    #layer4, #layer7  {
+                        margin-left: -560px;
+                        margin-top: -280px;
+                    }
+                    #layer5, #layer1  {
+                        margin-left: -185px;
+                        margin-top: -280px;
+                    }
+                    #layer6, #layer3  {
+                        margin-left: 190px;
+                        margin-top: -280px;
+                    }
+                }
+
+                @media screen and (max-width: 1120px){
+                    #layer1, #layer4, #layer6  {
+                        margin-left: -375px;
+                        margin-top: -280px;
+                    }
+                    #layer3, #layer5, #layer7  {
+                        margin-left: 5px;
+                        margin-top: -280px;
+                    }
+                }
+                
+                @media screen and (max-width: 800px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                    }
+                }
+            <?php endif ?>
+
+            @media screen and (max-height: 700px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -260px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 520px;
+                    padding-bottom:35px;
+                    border-radius:0 0 0 10px;
+                }
+                .pop_layer .btn_wrap{
+                    margin-top:-35px;
+                    opacity: 0.99;
+                }
+                .btn {
+                    background: rgba(54, 90, 146, 0.8);
+                }
+            }
+            
+            @media screen and (max-height: 650px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -235px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 460px;
+                }
+            }
+
+            @media screen and (max-height: 600px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -215px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 420px;
+                }
+            }
+
+            @media screen and (max-height: 550px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -190px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 370px;
+                }
+            }
+            
+            @media screen and (max-height: 500px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -165px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 320px;
+                }
+            }
+            h1, h2, h3, h4, h5, h6{
+                color:white;
+                line-height:0.2;
+                margin-bottom:10px;
+                margin-top:10px;
+            }
+            .pop_layer .pop_container .pop_con {
+                background: #333;
+            }
+
+            <?php if($_ENV['app.name'] == APP_ATM) :?>
+                #MainMenu {
+                    background: linear-gradient(180deg,#292929 ,#2b2b2b);
+                }
+                .MainMenu-play a {
+                    background: #161616;
+                }
+                .MainMenu-play a:hover {
+                    background: #000000;
+                    border-color: #f0bf39;
+                }
+                .pop_layer .pop_container .pop_top{
+                    background: #112035;
+                }
+                .btn {
+                    background: #1b1f25;
+                }
+                .btn:hover {
+                    background: #5f5f5f;
+                    color: #eee;
+                }
+                .uk-modal-dialog {
+                    background: #232323;
+                }
+                .uk-modal-footer, .uk-modal-header {
+                    background: #2f3031;
+                }
+                .ui.form input[type="text"], .ui.form input[type="password"], .ui.form input[type="number"] {
+                    color: #eeeeee;
+                    background: #494949;
+                }
+                .ui.inverted.blue.buttons .button, .ui.inverted.blue.button {
+                    background-color: transparent;
+                    -webkit-box-shadow: 0px 0px 0px 2px #9b9b9b inset;
+                    box-shadow: 0px 0px 0px 2px #9b9b9b inset;
+                    color: #adadad;
+                }
+                .ui.inverted.blue.buttons .button:hover, .ui.inverted.blue.button:hover {
+                    background-color: #6d7477;
+                }
+                .ui.button {
+                    background-color: #4b4b4b;
+                    color: #FFFFFF;
+                }
+                .ui.button:active, .ui.active.button:active,.ui.button:hover {
+                    background-color: #6b6b6b;
+                }
+                /* .ui.primary.buttons .button, .ui.primary.button {
+                    background-color: #ffe794;
+                    color: #000;
+                }
+                .ui.primary.buttons .button:hover, .ui.primary.button:hover {
+                    background-color: #ad9958;
+                    color: #000;
+                } */
+                #dashboard, #SLB_content {
+                    background: #000000;
+                }
+            <?php endif ?>
 
         </style>
     </head>
@@ -1154,58 +1527,14 @@
                     </div>
                 </div>
 
-                <!-- <section class="region region--licensing">
-                    <div class="block block--basic-block block--basic-block--licensing-and-regulation block--licensing-and-regulation">
-                        <h2>Licensing and Regulation</h2>
-                        <div class="field field--text-long">
-                            <p>
-                                WJoy Global Limited is incorporated under the laws of Malta (C65325) at registered address 28, GB Buildings, Level 3, Watar Street, Ta’ Xbiex, XBX 1301, Malta. WJoy Global Limited is licensed and regulated by
-                                the <a href="#">Malta Gaming Authority</a> with licence number MGA/B2C/314/2015 issued on the 5th August 2016 and also by the <a href="#">British Gambling Commission</a> with account 45235. Gambling can be
-                                harmful; our <a href="#">Responsible Gaming page</a> helps you to stay in control.
-                            </p>
-
-                            <p></p>
-
-                            <p>UNDERAGE GAMBLING IS AN OFFENCE.</p>
-
-                            <p></p>
-
-                            <p><a href="#">WJoy Casino ES</a> is also in possession of a Spanish License which is regulated by the Directorate General for the Regulation of Gambling (DGOJ) with licence number GO/2018/027.</p>
-                        </div>
-                        <div class="field field--boolean"></div>
-                    </div>
-                </section> -->
-
+            <?php if($_ENV['app.name'] != APP_ATM) :?>
                 <div class="Footer">
                     <div class="Footer-wrapper">
                     <span  style="font-size:17px; padding:10px;">Copyright 2022 <span style="color:white"><?=$site_name?></span>. All right reserved.</span>
-                        <!-- <ul class="menu menu--footer menu-root">
-                            <li class="menu-item at-privacy-policy-footer-link">
-                                <a href="#">Privacy Policy</a>
-                            </li>
-
-                            <li class="menu-item at-about-us-footer-link">
-                                <a href="#">About Us</a>
-                            </li>
-
-                            <li class="menu-item at-affilliate-program-footer-link">
-                                <a href="#">Affiliate Program</a>
-                            </li>
-
-                            <li class="menu-item at-responsible-gaming-footer-link">
-                                <a href="#">Responsible Gaming</a>
-                            </li>
-
-                            <li class="menu-item at-terms-and-conditions-footer-link">
-                                <a href="#">Terms and Conditions</a>
-                            </li>
-
-                            <li class="menu-item at-bonus-terms-and-conditions-link">
-                                <a href="#">Bonus Terms &amp; Conditions</a>
-                            </li>
-                        </ul> -->
                     </div>
                 </div>
+            <?php endif ?>
+
             </section>
         </div>
 
@@ -2151,311 +2480,7 @@
                 },
             });
         </script>
-         <style>
-            .btn {
-                color: #fff;
-                background: #365a92;/*#38383a*/
-                padding:8px 0;
-            }
-            .btn:hover {
-                background: #2e456a;/*4f4f52*/
-                color:#eee;
-            }
-            .pop_layer {
-                position: fixed;
-                width: 370px;
-                height: auto;
-                z-index: 1100;
-            }
 
-            .pop_layer .pop_container {
-                position: relative;
-            }
-
-            .pop_layer .pop_container .pop_top {
-                height: 50px;
-                padding: 0 21px;
-                overflow: hidden;
-                border-radius: 10px 10px 0 0;
-                background: #1c355b; /*#ffcc00;*/
-            }
-
-            .pop_layer .pop_container .pop_top .tit {
-                line-height: 50px;
-                font-size: 20px;
-                font-weight: 600;
-            }
-
-            .pop_layer .pop_container .pop_con {
-                max-height: 530px;
-                overflow-y: auto;
-            }
-
-            .pop_layer .pop_container .pop_con .txt {
-                text-align: center;
-                font-size: 14px;
-                line-height: 30px;
-                font-weight: 600;
-                padding: 40px;
-            }
-
-            .pop_layer .pop_container .pop_con .txt span {
-                font-size: 14px;
-                vertical-align: top;
-            }
-
-            .pop_layer .pop_container .pop_con .txt .underline {
-                text-decoration: underline;
-            }
-
-            .pop_layer .pop_container .pop_con p {
-                /* padding: 0 10px; */
-            }
-
-            .pop_layer .pop_container .pop_con p:first-child {
-                /* padding-top: 20px; */
-            }
-
-            .pop_layer .pop_container .pop_con p:last-child {
-                /* padding-bottom: 20px; */
-            }
-
-            .pop_layer .pop_container .pop_con img {
-                width: 100%;
-            }
-
-            .pop_layer .pop_container .pop_close {
-                position: absolute;
-                top: 18px;
-                right: 21px;
-                width: 10px;
-                height: 10px;
-                background: url(/images/common/pop_close.png) no-repeat left top;
-            }
-
-            .pop_layer .check {
-                text-align: right;
-                margin: 0 0;
-                padding: 5px 10px;
-            }
-
-            .pop_layer .btn_wrap {
-                margin-top: 0;
-                overflow: hidden;
-                border-radius: 0 0 10px 10px;
-            }
-
-            .pop_layer .btn_wrap .btn {
-                width: 50%;
-                border-radius: 0;
-                margin-left: 0;
-            }
-
-            .pop_layer .btn_wrap button:first-child {
-                float: left;
-            }
-
-            .pop_layer .btn_wrap button:last-child {
-                float: right;
-            }
-
-            #layer1, #layer3, #layer4, #layer5, #layer6, #layer7{
-                top: 50%;
-                left: 50%;
-                color:white;
-                z-index: 990;
-            }
-
-            <?php if( count($boards) == 1 ) :?>
-                #layer4
-                {
-                    margin-left: -185px;
-                    margin-top: -280px;
-                }
-                
-                @media screen and (max-width: 800px){
-                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                        margin-left: -185px;
-                    }
-                }
-            <?php elseif( count($boards) == 2 ) :?>
-                #layer4
-                {
-                    margin-left: -375px;
-                    margin-top: -280px;
-                    z-index: 999;
-                }
-                #layer5
-                {
-                    margin-left: 5px;
-                    margin-top: -280px;
-                    z-index: 998;
-                }
-                @media screen and (max-width: 800px){
-                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                        margin-left: -185px;
-                    }
-                }
-            <?php elseif( count($boards) == 3 ) :?>
-                #layer4
-                {
-                    margin-left: -560px;
-                    margin-top: -280px;
-                    z-index: 999;
-                }
-                #layer5
-                {
-                    margin-left: -185px;
-                    margin-top: -280px;
-                    z-index: 998;
-                }
-                #layer6
-                {
-                    margin-left: 190px;
-                    margin-top: -280px;
-                    z-index: 997;
-                }
-                
-                @media screen and (max-width: 1120px){
-                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                        margin-left: -185px;
-                    }
-                }
-            <?php else :?>
-                #layer4
-                {
-                    margin-left: -375px;
-                    margin-top: -280px;
-                    z-index: 999;
-                }
-                #layer5
-                {
-                    margin-left: 5px;
-                    margin-top: -280px;
-                    z-index: 998;
-                }
-                #layer6
-                {
-                    margin-left: -755px;
-                    margin-top: -280px;
-                    z-index: 997;
-                }
-                #layer7
-                {
-                    margin-left: 385px;
-                    margin-top: -280px;
-                    z-index: 996;
-                }
-                #layer1
-                {
-                    margin-left: -755px; /*-610px */
-                    margin-top: -280px; /*-320px;*/
-                    z-index: 995;
-                }
-                #layer3
-                {
-                    margin-left: 385px; /*210px;*/
-                    margin-top: -280px;  /*-320px;*/
-                    z-index: 994;
-                }
-            
-                @media screen and (max-width: 1500px){
-                    #layer4, #layer7  {
-                        margin-left: -560px;
-                        margin-top: -280px;
-                    }
-                    #layer5, #layer1  {
-                        margin-left: -185px;
-                        margin-top: -280px;
-                    }
-                    #layer6, #layer3  {
-                        margin-left: 190px;
-                        margin-top: -280px;
-                    }
-                }
-
-                @media screen and (max-width: 1120px){
-                    #layer1, #layer4, #layer6  {
-                        margin-left: -375px;
-                        margin-top: -280px;
-                    }
-                    #layer3, #layer5, #layer7  {
-                        margin-left: 5px;
-                        margin-top: -280px;
-                    }
-                }
-                
-                @media screen and (max-width: 800px){
-                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                        margin-left: -185px;
-                    }
-                }
-            <?php endif ?>
-
-            @media screen and (max-height: 700px){
-                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                    margin-top: -260px;
-                }
-                .pop_layer .pop_container .pop_con {
-                    max-height: 520px;
-                    padding-bottom:35px;
-                    border-radius:0 0 0 10px;
-                }
-                .pop_layer .btn_wrap{
-                    margin-top:-35px;
-                    opacity: 0.99;
-                }
-                .btn {
-                    background: rgba(54, 90, 146, 0.8);
-                }
-            }
-            
-            @media screen and (max-height: 650px){
-                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                    margin-top: -235px;
-                }
-                .pop_layer .pop_container .pop_con {
-                    max-height: 460px;
-                }
-            }
-
-            @media screen and (max-height: 600px){
-                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                    margin-top: -215px;
-                }
-                .pop_layer .pop_container .pop_con {
-                    max-height: 420px;
-                }
-            }
-
-            @media screen and (max-height: 550px){
-                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                    margin-top: -190px;
-                }
-                .pop_layer .pop_container .pop_con {
-                    max-height: 370px;
-                }
-            }
-            
-            @media screen and (max-height: 500px){
-                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                    margin-top: -165px;
-                }
-                .pop_layer .pop_container .pop_con {
-                    max-height: 320px;
-                }
-            }
-            h1, h2, h3, h4, h5, h6{
-                color:white;
-                line-height:0.2;
-                margin-bottom:10px;
-                margin-top:10px;
-            }
-            .pop_layer .pop_container .pop_con {
-                background: #333;
-            }
-
-        </style>
 
     <?php if( count($boards) > 4 ) :?>
 

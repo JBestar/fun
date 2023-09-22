@@ -16,7 +16,7 @@ function SLB(url, option)
 	var SLB_content = document.getElementById('SLB_content');
 	var SLB_loading = document.getElementById('SLB_loading');
 	$('#SLB_wide').removeClass().addClass(settings.width);
-
+	
 	if(url) {
 		SLB_film.style.top = 0;
 		SLB_film.style.left = 0;

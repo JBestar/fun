@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" class=""  style="background-color: #1B2430;">
+<html lang="ko" class=""  style="background-color: #000;">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no" />
@@ -84,6 +84,12 @@
                 withdrawal_success : '<?=lang('common.withdrawal_success')?>',
             };
         </script>  
+        <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
+            <link rel="stylesheet" href="/css/darkmode.css?v=3" />
+        <?php else : ?>
+            <link rel="stylesheet" href="/css/darkmode.css?ver=<?=time()?>" />
+        <?php endif ?>
+        <script src="/js/darkmode.js"></script>
         <style>
                         
             @media screen and (min-width:680px) { 
@@ -175,13 +181,86 @@
                 background:#24425b;
             }
 
+            <?php if($_ENV['app.name'] == APP_ATM) :?>
+                .btn {
+                    background: #1b1f25;
+                }
+                .btn:hover {
+                    background: #5f5f5f;
+                    color: #eee;
+                }
+                .uk-modal-dialog {
+                    background: #232323;
+                }
+                .uk-modal-footer, .uk-modal-header {
+                    background: #2f3031;
+                }
+                .ui.form input[type="text"], .ui.form input[type="password"], .ui.form input[type="number"] {
+                    color: #eeeeee;
+                    background: #494949;
+                }
+                .ui.inverted.blue.buttons .button, .ui.inverted.blue.button {
+                    background-color: transparent;
+                    -webkit-box-shadow: 0px 0px 0px 2px #9b9b9b inset;
+                    box-shadow: 0px 0px 0px 2px #9b9b9b inset;
+                    color: #adadad;
+                }
+                .ui.inverted.blue.buttons .button:hover, .ui.inverted.blue.button:hover {
+                    background-color: #6d7477;
+                }
+                .ui.button {
+                    background-color: #4b4b4b;
+                    color: #FFFFFF;
+                }
+                .ui.button:active, .ui.active.button:active,.ui.button:hover {
+                    background-color: #6b6b6b;
+                }
+                /* .ui.primary.buttons .button, .ui.primary.button {
+                    background-color: #ffe794;
+                    color: #000;
+                }
+                .ui.primary.buttons .button:hover, .ui.primary.button:hover {
+                    background-color: #8f8f8f;
+                } */
+                #dashboard, #SLB_content {
+                    background: #000000;
+                }
+                .ui.table, .ui.tab.segment, .ui.table thead th, .ui.table th, .ui.table td {
+                    background: #000000;
+                }
+                #dashboard .ui.table thead th {
+                    background: #484949;
+                }
+                .ui.message, .ui.form textarea {
+                    color: white;
+                    background: #3d3d3d;
+                }
+                .ui.table thead tr > th:first-child, .ui.celled.table tr td:first-child {
+                    border: 1px solid #616161;
+                }
+                .ui.table thead th, .ui.table th, .ui.table td {
+                    border: 1px solid #616161;
+                }
+                .ui.tabular.menu .item {
+                    background: #2d2d2d;
+                }
+                .ui.tabular.menu .item.active, .ui.tabular.menu .item:hover {
+                    background: #858585;
+                    color: white;
+                }
+                .ui.form input[type="date"] {
+                    background: #4d4d4d;
+                }
+                .ui.blue.buttons .button, .ui.blue.button {
+                    background-color: #4d4d4d;
+                }
+                .ui.blue.buttons .button:hover, .ui.blue.button:hover {
+                    background-color: #6d6d6d;
+                }
+            <?php endif ?>
+
         </style>
-        <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <link rel="stylesheet" href="/css/darkmode.css?v=3" />
-        <?php else : ?>
-            <link rel="stylesheet" href="/css/darkmode.css?ver=<?=time()?>" />
-        <?php endif ?>
-        <script src="/js/darkmode.js"></script>
+        
     </head>
     <body style="">
         <div id="dashboard" class="ui loading segment" style="margin: 0px; ">
