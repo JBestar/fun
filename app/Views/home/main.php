@@ -579,7 +579,7 @@
                 .uk-modal-dialog {
                     background: #232323;
                 }
-                .uk-modal-footer, .uk-modal-header {
+                .uk-modal-footer, .uk-modal-header, .SLB_caption {
                     background: #2f3031;
                 }
                 .ui.form input[type="text"], .ui.form input[type="password"], .ui.form input[type="number"] {
