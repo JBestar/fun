@@ -178,7 +178,8 @@
                     background-position: 0% 50%
                 }
                 .PaymentIconsContainer {
-                    background-image: linear-gradient(90deg,#040914, #192337, #040914);
+                    /* background-image: linear-gradient(90deg,#040914, #192337, #040914); */
+                    background-image: linear-gradient(90deg,#2f3031, #2f3031, #2f3031);
                 }
             <?php endif ?>
 
@@ -1527,13 +1528,11 @@
                     </div>
                 </div>
 
-            <?php if($_ENV['app.name'] != APP_ATM) :?>
                 <div class="Footer">
                     <div class="Footer-wrapper">
                     <span  style="font-size:17px; padding:10px;">Copyright 2022 <span style="color:white"><?=$site_name?></span>. All right reserved.</span>
                     </div>
                 </div>
-            <?php endif ?>
 
             </section>
         </div>
