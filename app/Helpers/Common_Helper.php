@@ -47,7 +47,7 @@
         $navInfo['user_grade'] = $objUser->mb_grade;
         $navInfo['user_money'] = floor(allMoney($objUser)); //num_format(allMoney($objUser), NUM_POINT_CNT);
         $navInfo['user_point'] = floor($objUser->mb_point);//num_format(floatval($objUser->mb_point), NUM_POINT_CNT);
-        if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 )
+        if(array_key_exists('app.tree', $_ENV) && intval($_ENV['app.tree']) == 1 )
           $navInfo['user_off'] = intval($objUser->mb_state_delete) > 0;
       }
 
@@ -60,9 +60,10 @@
       $userInfo['user_name'] = $objUser->mb_nickname;
       $userInfo['user_grade'] = $objUser->mb_grade;
       $userInfo['user_money'] = floor(allMoney($objUser)); //num_format(allMoney($objUser), NUM_POINT_CNT, 0);
+      $userInfo['user_egg'] = floor(allEgg($objUser));
       $userInfo['user_point'] = floor($objUser->mb_point);//num_format(floatval($objUser->mb_point), NUM_POINT_CNT, 0);
       $userInfo['user_off'] = false;
-      if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 )
+      if(array_key_exists('app.tree', $_ENV) && intval($_ENV['app.tree']) == 1 )
         $userInfo['user_off'] = intval($objUser->mb_state_delete) > 0;
       $userInfo['user_bank_name'] = $objUser->mb_bank_name;
 
@@ -845,6 +846,16 @@
       return floor($nMoney); //round($nMoney, NUM_POINT_CNT);
     }
 
+    function allEgg($member){
+      $nMoney = 0;
+      if(is_null($member))
+        return $nMoney;
+
+      $nMoney = floatval($member->mb_live_money) + $member->mb_slot_money + $member->mb_fslot_money +
+        $member->mb_kgon_money + $member->mb_gslot_money+ $member->mb_hslot_money + $member->mb_hold_money;
+      return floor($nMoney); //round($nMoney, NUM_POINT_CNT);
+    }
+
     function createGameId($str){
       $createId = $str;
       if(array_key_exists("app.testV", $_ENV) && $_ENV['app.testV'] == 1){
@@ -934,5 +945,44 @@
         default: break;
       }
       return $result;
+    }
+
+    function getExchangeList($arrMember, $count){
+
+      $result = []; 
+      $memCnt = count($arrMember);
+      if($memCnt < $count)
+        return $result;
+
+      $tmNow = time();
+      $delay = 0;
+      for($i=0; $i<$count; $i++){
+        $memCnt = count($arrMember);
+        if($memCnt < 1)
+          break;
+        else if($memCnt > 1)
+          $idx = rand(0, $memCnt-1);
+        else $idx = 0;
+        $member = $arrMember[$idx];
+        if(strlen($member->mb_uid) < 3){
+          $count ++;
+          continue;
+        }
+        $delay += rand(120, 10800);
+        $obj = new \stdClass();
+        $obj->uid = substr($member->mb_uid,0,3)."***";
+        $obj->amount =  number_format(rand(1, 200)*10000);
+        $obj->time = date("Y-m-d H:i:s", $tmNow-$delay); 
+        array_push($result, $obj);
+        array_splice($arrMember, $idx, 1);
+      }
+      return $result;
+
+    }
+
+    function getRandIndex($cnt){
+
+      
+
     }
 ?>

@@ -197,14 +197,14 @@
     text-align: center;
 }
 
-#jackpot {
+/* #jackpot {
     font-size: 2.5rem;
     letter-spacing: 15px;
     font-family: fantasy;
     color: #ffc000;
 
     vertical-align: middle;
-}
+} */
 .BannerItem-container {
     z-index:99999;
 }

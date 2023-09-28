@@ -417,7 +417,7 @@ class Api extends BaseController
 				$result->status = STATUS_FAIL;                
 			} else{
 				$data = [
-					'mb_pwd' => $pwd,
+					'mb_pwd' => $user_newPw,
 				];
 				$this->modelMember->update($objMember->mb_fid, $data);
 
@@ -454,6 +454,24 @@ class Api extends BaseController
 
     }
 		
+	public function change_egg()
+	{
+		
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;
+        } else {
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id);
+			$iResult = $this->alltoGame($objMember);
+
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
 	// public function change_acc(){
 		
 	// 	$result = new \StdClass;
@@ -582,7 +600,7 @@ class Api extends BaseController
 
 			$result->status = STATUS_SUCCESS;
 			$bLimit = false;
-			if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 ){
+			if(array_key_exists('app.tree', $_ENV) && intval($_ENV['app.tree']) == 1 ){
 				$bLimit = true;
 
 				$tmNow = time();
@@ -768,7 +786,7 @@ class Api extends BaseController
             $result->status = STATUS_LOGOUT;		
         } else {
 
-			$sAnswer = "<p> ".lang("common.deposit_amount")." : &nbsp;";
+			$sAnswer = "<p> ".lang("common.deposit_account")." : &nbsp;";
 
 			$libApiVacc = new ApiVacc_Lib();
 			$arrResult['status'] = 1;
@@ -854,10 +872,10 @@ class Api extends BaseController
 
 			$modelCharge = new Charge_Model();
 
-			if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 && $objMember->mb_state_delete == STATE_ACTIVE){
+			if(array_key_exists('app.tree', $_ENV) && intval($_ENV['app.tree']) == 1 && $objMember->mb_state_delete == STATE_ACTIVE){
 				$result->status = STATUS_FAIL;
 				$result->msg = lang("common.deposit_cant"); 
-			} else if(array_key_exists('app.hold', $_ENV) && intval($_ENV['app.hold']) == 1 && $reqData['c_price'] % 10000 != 0){
+			} else if(array_key_exists('app.tree', $_ENV) && intval($_ENV['app.tree']) == 1 && $reqData['c_price'] % 10000 != 0){
 				$result->status = STATUS_FAIL;
 				$result->msg = lang("common.deposit_request_unit"); 
 			} else if($modelCharge->wait($user_id)){
@@ -2156,5 +2174,19 @@ class Api extends BaseController
 		echo json_encode($result);	
 	}
 
+	
+	public function recent_exchanges(){
+
+		$result = new \StdClass;
+
+		$result->status = STATUS_LOGOUT;
+		$arrMember = $this->modelMember->getMemberByLevel(LEVEL_ADMIN, true);
+		$result->charges = getExchangeList($arrMember, 8);
+		$result->dischars = getExchangeList($arrMember, 8);
+
+		$result->status = STATUS_SUCCESS;
+
+		echo json_encode($result);	
+	}
 
 }

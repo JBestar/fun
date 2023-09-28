@@ -60,6 +60,10 @@
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=1"></script>
         <script src="/js/worker.js?v=1"></script>
+        <script src="/js/odometer/odometer.js?v=1"></script>
+        <link rel="stylesheet" href="/js/odometer/odometer.css?v=1" />
+        <link rel="stylesheet" href="/css/real-time-table.css?v=1" />
+        <script src="/js/real-time-table.js?v=1"></script>
         <!--순서중요-->
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
             <script type="text/javascript" src="/js/vue.js"></script>
@@ -67,7 +71,7 @@
             <script type="text/javascript" src="/js/lib.js?ver=1"></script>
             <script type="text/javascript" src="/js/common.js?ver=2"></script>
             <script type="text/javascript" src="/js/SLB.js?ver=4"></script>
-            <script type="text/javascript" src="/js/main.js?ver=4"></script>
+            <script type="text/javascript" src="/js/main.js?ver=5"></script>
             <link rel="stylesheet" type="text/css" href="/css/devel.css?v=3" />
         <?php else : ?>
             <script type="text/javascript" src="/js/vue.js"></script>
@@ -80,10 +84,6 @@
         <?php endif ?>
 
         <!-- JS FILES -->
-
-        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/uikit@latest/dist/css/uikit.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit-icons.min.js"></script> -->
         <link rel="stylesheet" type="text/css" href="/js/uikit/uikit.min.css" />
         <script src="/js/uikit/uikit.min.js"></script>
         <script src="/js/uikit/uikit-icons.min.js"></script>
@@ -93,7 +93,7 @@
 
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=4" />
-        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=3" />
+        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=4" />
         <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=3" />
     <?php else : ?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=<?=time()?>" />
@@ -121,18 +121,17 @@
             }
             
             .MainMenu-open-wrapper .MainMenu-LogoSlogan {
-                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=6);
+                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=7);
             }
 
-            <?php if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1) :?>
+            <?php if(array_key_exists('app.tree', $_ENV) && $_ENV['app.tree'] == 1) :?>
                 .games-page .categories-wrapper, .SeoPage .categories-wrapper {
-                    /* background-image: linear-gradient(90deg,#262626, #363636, #262626); */
-                    background-image: linear-gradient(360deg,#262626, #000000, #000000);
+                    background-image: linear-gradient(360deg,#000000, #000000, #262626);
                     margin-top:16px;
                 }         
                           
                 .scroll_area{
-                    background-color: #000000;
+                    background-color: #111;
                 } 
                 .SeoPage {
                     background-repeat:repeat;
@@ -164,6 +163,24 @@
                 top: 2px;
             }
             <?php endif ?>
+
+            <?php if($_ENV['app.name'] == APP_ATM) :?>
+                .MainMenu-top-wrapper {
+                    position: relative;
+                }
+                .MainMenu-open-wrapper {
+                    position: inherit;
+                    height:0px;
+                }
+                .SeoPage .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop .bg-img {
+                    background-size: cover;
+                    background-position: 0% 50%
+                }
+                .PaymentIconsContainer {
+                    background-image: linear-gradient(90deg,#2f3031, #2f3031, #2f3031);
+                }
+            <?php endif ?>
+
             @media only screen and (max-width: 850px) {
                 .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before{
                     height: 0px;
@@ -221,7 +238,7 @@
                 text-align: left;
                 color: white;
                 background-color: black;
-                padding: 2px 5px;
+                padding: 2px 5px 2px 5px;
                 display: block;
                 outline: 0px;
                 border: none;
@@ -234,15 +251,358 @@
                 background-color: #868686;
             }
 
+            .btn {
+                color: #fff;
+                background: #365a92;/*#38383a*/
+                padding:8px 0;
+            }
+            .btn:hover {
+                background: #2e456a;/*4f4f52*/
+                color:#eee;
+            }
+            .pop_layer {
+                position: fixed;
+                width: 370px;
+                height: auto;
+                z-index: 1100;
+            }
+
+            .pop_layer .pop_container {
+                position: relative;
+            }
+
+            .pop_layer .pop_container .pop_top {
+                height: 50px;
+                padding: 0 21px;
+                overflow: hidden;
+                border-radius: 10px 10px 0 0;
+                background: #1c355b; /*#ffcc00;*/
+            }
+
+            .pop_layer .pop_container .pop_top .tit {
+                line-height: 50px;
+                font-size: 20px;
+                font-weight: 600;
+            }
+
+            .pop_layer .pop_container .pop_con {
+                max-height: 530px;
+                overflow-y: auto;
+            }
+
+            .pop_layer .pop_container .pop_con .txt {
+                text-align: center;
+                font-size: 14px;
+                line-height: 30px;
+                font-weight: 600;
+                padding: 40px;
+            }
+
+            .pop_layer .pop_container .pop_con .txt span {
+                font-size: 14px;
+                vertical-align: top;
+            }
+
+            .pop_layer .pop_container .pop_con .txt .underline {
+                text-decoration: underline;
+            }
+
+            .pop_layer .pop_container .pop_con img {
+                width: 100%;
+            }
+
+            .pop_layer .pop_container .pop_close {
+                position: absolute;
+                top: 18px;
+                right: 21px;
+                width: 10px;
+                height: 10px;
+                background: url(/images/common/pop_close.png) no-repeat left top;
+            }
+
+            .pop_layer .check {
+                text-align: right;
+                margin: 0 0;
+                padding: 5px 10px;
+            }
+
+            .pop_layer .btn_wrap {
+                margin-top: 0;
+                overflow: hidden;
+                border-radius: 0 0 10px 10px;
+            }
+
+            .pop_layer .btn_wrap .btn {
+                width: 50%;
+                border-radius: 0;
+                margin-left: 0;
+            }
+
+            .pop_layer .btn_wrap button:first-child {
+                float: left;
+            }
+
+            .pop_layer .btn_wrap button:last-child {
+                float: right;
+            }
+
+            #layer1, #layer3, #layer4, #layer5, #layer6, #layer7{
+                top: 50%;
+                left: 50%;
+                color:white;
+                z-index: 990;
+            }
+
+            <?php if( count($boards) == 1 ) :?>
+                #layer4
+                {
+                    margin-left: -185px;
+                    margin-top: -280px;
+                }
+                
+                @media screen and (max-width: 800px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                    }
+                }
+            <?php elseif( count($boards) == 2 ) :?>
+                #layer4
+                {
+                    margin-left: -375px;
+                    margin-top: -280px;
+                    z-index: 999;
+                }
+                #layer5
+                {
+                    margin-left: 5px;
+                    margin-top: -280px;
+                    z-index: 998;
+                }
+                @media screen and (max-width: 800px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                    }
+                }
+            <?php elseif( count($boards) == 3 ) :?>
+                #layer4
+                {
+                    margin-left: -560px;
+                    margin-top: -280px;
+                    z-index: 999;
+                }
+                #layer5
+                {
+                    margin-left: -185px;
+                    margin-top: -280px;
+                    z-index: 998;
+                }
+                #layer6
+                {
+                    margin-left: 190px;
+                    margin-top: -280px;
+                    z-index: 997;
+                }
+                
+                @media screen and (max-width: 1120px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                    }
+                }
+            <?php else :?>
+                #layer4
+                {
+                    margin-left: -375px;
+                    margin-top: -280px;
+                    z-index: 999;
+                }
+                #layer5
+                {
+                    margin-left: 5px;
+                    margin-top: -280px;
+                    z-index: 998;
+                }
+                #layer6
+                {
+                    margin-left: -755px;
+                    margin-top: -280px;
+                    z-index: 997;
+                }
+                #layer7
+                {
+                    margin-left: 385px;
+                    margin-top: -280px;
+                    z-index: 996;
+                }
+                #layer1
+                {
+                    margin-left: -755px; 
+                    margin-top: -280px; 
+                    z-index: 995;
+                }
+                #layer3
+                {
+                    margin-left: 385px; 
+                    margin-top: -280px;  
+                    z-index: 994;
+                }
+            
+                @media screen and (max-width: 1500px){
+                    #layer4, #layer7  {
+                        margin-left: -560px;
+                        margin-top: -280px;
+                    }
+                    #layer5, #layer1  {
+                        margin-left: -185px;
+                        margin-top: -280px;
+                    }
+                    #layer6, #layer3  {
+                        margin-left: 190px;
+                        margin-top: -280px;
+                    }
+                }
+
+                @media screen and (max-width: 1120px){
+                    #layer1, #layer4, #layer6  {
+                        margin-left: -375px;
+                        margin-top: -280px;
+                    }
+                    #layer3, #layer5, #layer7  {
+                        margin-left: 5px;
+                        margin-top: -280px;
+                    }
+                }
+                
+                @media screen and (max-width: 800px){
+                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                        margin-left: -185px;
+                    }
+                }
+            <?php endif ?>
+
+            @media screen and (max-height: 700px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -260px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 520px;
+                    padding-bottom:35px;
+                    border-radius:0 0 0 10px;
+                }
+                .pop_layer .btn_wrap{
+                    margin-top:-35px;
+                    opacity: 0.99;
+                }
+                .btn {
+                    background: rgba(54, 90, 146, 0.8);
+                }
+            }
+            
+            @media screen and (max-height: 650px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -235px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 460px;
+                }
+            }
+
+            @media screen and (max-height: 600px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -215px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 420px;
+                }
+            }
+
+            @media screen and (max-height: 550px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -190px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 370px;
+                }
+            }
+            
+            @media screen and (max-height: 500px){
+                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
+                    margin-top: -165px;
+                }
+                .pop_layer .pop_container .pop_con {
+                    max-height: 320px;
+                }
+            }
+            h1, h2, h3, h4, h5, h6{
+                color:white;
+                line-height:0.2;
+                margin-bottom:10px;
+                margin-top:10px;
+            }
+            .pop_layer .pop_container .pop_con {
+                background: #333;
+            }
+
+            <?php if($_ENV['app.name'] == APP_ATM) :?>
+                #MainMenu {
+                    background: linear-gradient(180deg,#292929 ,#2b2b2b);
+                }
+                .MainMenu-play a {
+                    background: #161616;
+                }
+                .MainMenu-play a:hover {
+                    background: #000000;
+                    border-color: #f0bf39;
+                }
+                .pop_layer .pop_container .pop_top{
+                    background: #112035;
+                }
+                .btn {
+                    background: #1b1f25;
+                }
+                .btn:hover {
+                    background: #5f5f5f;
+                    color: #eee;
+                }
+                .uk-modal-dialog {
+                    background: #232323;
+                }
+                .uk-modal-footer, .uk-modal-header, .SLB_caption {
+                    background: #2f3031;
+                }
+                .ui.form input[type="text"], .ui.form input[type="password"], .ui.form input[type="number"] {
+                    color: #eeeeee;
+                    background: #494949;
+                }
+                .ui.inverted.blue.buttons .button, .ui.inverted.blue.button {
+                    background-color: transparent;
+                    -webkit-box-shadow: 0px 0px 0px 2px #9b9b9b inset;
+                    box-shadow: 0px 0px 0px 2px #9b9b9b inset;
+                    color: #adadad;
+                }
+                .ui.inverted.blue.buttons .button:hover, .ui.inverted.blue.button:hover {
+                    background-color: #6d7477;
+                }
+                .ui.button {
+                    background-color: #4b4b4b;
+                    color: #FFFFFF;
+                }
+                .ui.button:active, .ui.active.button:active,.ui.button:hover {
+                    background-color: #6b6b6b;
+                }
+                #dashboard, #SLB_content {
+                    background: #000000;
+                }
+            <?php endif ?>
+
         </style>
     </head>
     <body>
         <div class="main-navbar-dropdown-container" id="main-navbar-dropdown-container-id" style="display: none;">
             <div class="main-navbar-dropdown-div"> 
-                <button id="main-navbar-dropdown-ko-id"><image src="/images/common/ko.png" style="width:22px">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
+                <button id="main-navbar-dropdown-ko-id"><image src="/images/common/ko.png?v=1" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
             </div>
             <div class="main-navbar-dropdown-div"> 
-                <button id="main-navbar-dropdown-cn-id"><image src="/images/common/cn.png" style="width:22px">&nbsp;&nbsp;<span id="lang-cn"><?=lang('common.lang_chinese')?></span></button>
+                <button id="main-navbar-dropdown-cn-id"><image src="/images/common/cn.png?v=1" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-cn"><?=lang('common.lang_chinese')?></span></button>
             </div>
         </div>
         <div
@@ -270,12 +630,9 @@
                     <a href="/" class="MainMenu-LogoSlogan">
                         <div class="star-logo">
                             <img src="./images/common/star1.png">
-                            <!-- <img src="./images/common/star2.png"> -->
-                            <!-- <img src="./images/common/star3.png"> -->
                             <img src="./images/common/star4.png">
                         </div>
                         <div class="MainMenu-LogoSlogan-wrapper"></div>
-
                     </a>
 
                     <div class="MainMenu-ActionsContainer">
@@ -329,9 +686,9 @@
                         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
                             <button name="lang" id="lang-button" style="position:absolute; right:10px; margin-top:5px; width:80px; padding:0 5px; color: #ffff00; font-size:14px; background:none; height:22px; border:none; text-align:center;" is="ms-dropdown" >
                             <?php if($lang == "cn") :?>
-                                <image id="lang-img" src="/images/common/cn.png" style="width:20px">&nbsp;<span id="lang-code"><?=lang('common.lang_chinese')?></span>&nbsp;&nbsp;&nbsp;<span id="lang-up" style="font-size:12px;">▽</span>
+                                <image id="lang-img" src="/images/common/cn.png?v=1" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-code" ><?=lang('common.lang_chinese')?></span>
                             <?php else :?>
-                                <image id="lang-img" src="/images/common/ko.png" style="width:20px">&nbsp;<span id="lang-code"><?=lang('common.lang_korean')?></span>&nbsp;&nbsp;&nbsp;<span id="lang-up" style="font-size:12px;">▽</span>
+                                <image id="lang-img" src="/images/common/ko.png?v=1" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-code" ><?=lang('common.lang_korean')?></span>
                             <?php endif ?>
                             </button>
                         <?php endif ?>
@@ -379,8 +736,8 @@
                 <div class="MainMenu-wrapper">
                     <div class="MainMenu-logo">
                         <?php if(!is_login()) :?>
-                            <div class="MainMenu-play" uk-toggle="target: #agentCheckModal" tabindex="0" aria-expanded="false">
-                                <a href="#" class="js-register-open btn-primary btn-normal"><span><?=lang('common.logout')?></span></a>
+                            <div class="MainMenu-play" onclick="showAgentCheckModal();">
+                                <a href="#" class="js-register-open btn-primary btn-normal"><span><?=lang('common.signup')?></span></a>
                             </div>
                         <?php else :?>
                             <div class="MainMenu-play" onclick="SLB_POPUP('/mypage')">
@@ -395,7 +752,7 @@
 
                     <ul class="menu menu--main MainMenu-List">
                         <?php if(!is_login()) :?>
-                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" uk-toggle="target: #loginModal" tabindex="0" aria-expanded="false">
+                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showLoginModal();">
                             <a><i class="ui sign in icon"></i> <?=lang('common.login')?></a>
                         </li>
                         <?php endif ?>
@@ -490,7 +847,7 @@
                                                                 <div class="wrap">
                                                                     <div class="cont">
                                                                         <div class="field field--text-long">
-                                                                        <?php if(!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) :?>
+                                                                        <?php if(!array_key_exists('main.welcome', $_ENV) || $_ENV['main.welcome'] != 0) :?>
                                                                             <h1><?=lang('common.welcome_to')?>.</h1>
                                                                             <div class="text">
                                                                                 <?=lang('common.welcome_casino')?>
@@ -526,6 +883,9 @@
                                 <?php elseif($_ENV['app.name'] == APP_HERMES) :?>
                                     images: ["/images/main/banner31.png?v=1", "/images/main/banner32.png?v=1"],
                                     effect: "clip",
+                                <?php elseif($_ENV['app.name'] == APP_ATM) :?>
+                                    images: ["/images/main/banner41.png?v=1", "/images/main/banner42.png?v=1", "/images/main/banner43.png?v=1"],
+                                    effect: "clip",
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
                                     effect: "clip",
@@ -536,6 +896,11 @@
                             $(".scroll_text").marquee();
 
                             function showTabMenu(menu) {
+
+                                if(!check_login()){
+                                    return;
+                                }
+
                                 $("#live-casino").hide();
                                 $("#mini").hide();
                                 $("#slots").hide();
@@ -583,7 +948,6 @@
                             $("#MainMenu .MainMenu-play, #MainMenu .MainMenu-item").click(function(e) {
                                 $("#MainMenu-controller").prop("checked", false);
                             });
-
                         </script>
                         <div class="seoCategoryPage-category categories-wrapper js-seo-category-page-categories">
                             <div class="categories categories-desktop js-games-categories-slider slick-initialized slick-slider">
@@ -631,6 +995,128 @@
                                 </div>
                             </div>
                         </div>
+
+                    <?php if( array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1 && !is_login()) :?>
+                        <div class="jackpot-container justify-content-end">
+                            <img class="golden-bull" src="/images/jackpot/jackpot.png" alt="">
+                            <div class="jackpot-amount">
+                                <img src="/images/jackpot/won-sign.png" alt="" style="display:inline-block;">
+                                <div id="jackpot" class=""></div>
+                            </div>
+                        </div>
+
+                        <script>
+                            function playJackpot(){
+                                var jackpot = Date.now() / 32897
+                                var el = document.querySelector('#jackpot');
+
+                                od = new Odometer({
+                                el: el,
+                                auto: false,
+                                selector: '.jackpot',
+                                value: jackpot,
+                                format: '(,ddd).dd',
+                                });
+
+                                setInterval(function(){
+                                    jackpot += 32423.372 
+                                    od.update(jackpot)
+
+                                    if(jackpot > 61233000) {
+                                        jackpot -= 9334909
+                                    }
+                                }, 3000);
+
+                                setInterval(function(){
+                                    reqExchanges();
+                                }, 10000);
+                                
+                            }
+                            playJackpot();
+
+                        </script>
+
+                        <div class="autoscroller">
+                            <div class="autoscroller-d d-flex" >
+                                
+                                <div class="ps-card flex-1 flex-column ps-realtime">
+                                    <div class="scroller-header" >실시간 입금</div>
+                                    <div class="ps-card-body">
+                                        <div class="Loop autoscroll-container">
+                                            <div class="inner" id="recentCharges1">
+                                                <?php if(count($charges) >= 8) :?>
+                                                    <?php for ($i=0; $i<4; $i++):?>
+                                                        <div class="item d-flex justify-content-between" >
+                                                            <span class="item-username "><?=$charges[$i]->uid?></span>
+                                                            <span class="item-amount">
+                                                                <span><?=$charges[$i]->amount?></span>
+                                                                <span>원</span>
+                                                            </span>
+                                                            <span class="item-date "><?=$charges[$i]->time?></span>
+                                                        </div>
+                                                    <?php endfor; ?>
+                                                <?php endif ?>
+                                            </div>
+                                        </div>
+                                        <div class="Loop autoscroll-container">
+                                            <div class="inner" id="recentCharges2">
+                                                <?php if(count($charges) >= 8) :?>
+                                                    <?php for ($i=4; $i<8; $i++):?>
+                                                        <div class="item d-flex justify-content-between" >
+                                                            <span class="item-username "><?=$charges[$i]->uid?></span>
+                                                            <span class="item-amount">
+                                                                <span><?=$charges[$i]->amount?></span>
+                                                                <span>원</span>
+                                                            </span>
+                                                            <span class="item-date "><?=$charges[$i]->time?></span>
+                                                        </div>
+                                                    <?php endfor; ?>
+                                                <?php endif ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="ps-card flex-1 flex-column ps-realtime">
+                                    <div class="scroller-header">실시간 출금</div>
+                                    <div class="ps-card-body">
+                                        <div class="Loop autoscroll-container">
+                                            <div class="inner" id="recentDischars1">
+                                                <?php if(count($dischars) >= 8) :?>
+                                                    <?php for ($i=0; $i<4; $i++):?>
+                                                        <div class="item d-flex justify-content-between" >
+                                                            <span class="item-username "><?=$dischars[$i]->uid?></span>
+                                                            <span class="item-amount">
+                                                                <span><?=$dischars[$i]->amount?></span>
+                                                                <span>원</span>
+                                                            </span>
+                                                            <span class="item-date "><?=$dischars[$i]->time?></span>
+                                                        </div>
+                                                    <?php endfor; ?>
+                                                <?php endif ?>
+                                            </div>
+                                        </div>
+                                        <div class="Loop autoscroll-container">
+                                            <div class="inner" id="recentDischars2">
+                                                <?php if(count($dischars) >= 8) :?>
+                                                    <?php for ($i=4; $i<8; $i++):?>
+                                                        <div class="item d-flex justify-content-between" >
+                                                            <span class="item-username "><?=$dischars[$i]->uid?></span>
+                                                            <span class="item-amount">
+                                                                <span><?=$dischars[$i]->amount?></span>
+                                                                <span>원</span>
+                                                            </span>
+                                                            <span class="item-date "><?=$dischars[$i]->time?></span>
+                                                        </div>
+                                                    <?php endfor; ?>
+                                                <?php endif ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php else: ?>
 
                         <?php if (!$slot_deny):?>
                         <section class="uk-section" id="slots"  style="display: none;">
@@ -1016,6 +1502,7 @@
                         </section>
                         <?php endif ?>
                     </div>
+                <?php endif?>
                 </div>
             </div>
             <section class="FooterSection">
@@ -1143,58 +1630,12 @@
                     </div>
                 </div>
 
-                <!-- <section class="region region--licensing">
-                    <div class="block block--basic-block block--basic-block--licensing-and-regulation block--licensing-and-regulation">
-                        <h2>Licensing and Regulation</h2>
-                        <div class="field field--text-long">
-                            <p>
-                                WJoy Global Limited is incorporated under the laws of Malta (C65325) at registered address 28, GB Buildings, Level 3, Watar Street, Ta’ Xbiex, XBX 1301, Malta. WJoy Global Limited is licensed and regulated by
-                                the <a href="#">Malta Gaming Authority</a> with licence number MGA/B2C/314/2015 issued on the 5th August 2016 and also by the <a href="#">British Gambling Commission</a> with account 45235. Gambling can be
-                                harmful; our <a href="#">Responsible Gaming page</a> helps you to stay in control.
-                            </p>
-
-                            <p></p>
-
-                            <p>UNDERAGE GAMBLING IS AN OFFENCE.</p>
-
-                            <p></p>
-
-                            <p><a href="#">WJoy Casino ES</a> is also in possession of a Spanish License which is regulated by the Directorate General for the Regulation of Gambling (DGOJ) with licence number GO/2018/027.</p>
-                        </div>
-                        <div class="field field--boolean"></div>
-                    </div>
-                </section> -->
-
                 <div class="Footer">
                     <div class="Footer-wrapper">
                     <span  style="font-size:17px; padding:10px;">Copyright 2022 <span style="color:white"><?=$site_name?></span>. All right reserved.</span>
-                        <!-- <ul class="menu menu--footer menu-root">
-                            <li class="menu-item at-privacy-policy-footer-link">
-                                <a href="#">Privacy Policy</a>
-                            </li>
-
-                            <li class="menu-item at-about-us-footer-link">
-                                <a href="#">About Us</a>
-                            </li>
-
-                            <li class="menu-item at-affilliate-program-footer-link">
-                                <a href="#">Affiliate Program</a>
-                            </li>
-
-                            <li class="menu-item at-responsible-gaming-footer-link">
-                                <a href="#">Responsible Gaming</a>
-                            </li>
-
-                            <li class="menu-item at-terms-and-conditions-footer-link">
-                                <a href="#">Terms and Conditions</a>
-                            </li>
-
-                            <li class="menu-item at-bonus-terms-and-conditions-link">
-                                <a href="#">Bonus Terms &amp; Conditions</a>
-                            </li>
-                        </ul> -->
                     </div>
                 </div>
+
             </section>
         </div>
 
@@ -1542,7 +1983,8 @@
                         if(response.code == 9){  //점검중
                             
                         } else {
-                            
+                            $("#loginModal input[name=userid]").val('');
+                            $("#loginModal input[name=passwd]").val('');
                         }
                         alert(response.msg);
                     }
@@ -2031,17 +2473,14 @@
             }
 
             function showAgentCheckModal() {
-                // if(check_login()){
-                //     return;
-                // }
+                $("#agentCheckModal input[name=recommender_id]").val('');
                 SLB(); 
                 UIkit.modal("#agentCheckModal").show();
             }
             
             function showLoginModal() {
-                // if(check_login()){
-                //     return;
-                // }
+                $("#loginModal input[name=userid]").val('');
+                $("#loginModal input[name=passwd]").val('');
                 SLB(); 
                 UIkit.modal("#loginModal").show();
             }
@@ -2140,311 +2579,7 @@
                 },
             });
         </script>
-         <style>
-            .btn {
-                color: #fff;
-                background: #365a92;/*#38383a*/
-                padding:8px 0;
-            }
-            .btn:hover {
-                background: #2e456a;/*4f4f52*/
-                color:#eee;
-            }
-            .pop_layer {
-                position: fixed;
-                width: 370px;
-                height: auto;
-                z-index: 1100;
-            }
 
-            .pop_layer .pop_container {
-                position: relative;
-            }
-
-            .pop_layer .pop_container .pop_top {
-                height: 50px;
-                padding: 0 21px;
-                overflow: hidden;
-                border-radius: 10px 10px 0 0;
-                background: #1c355b; /*#ffcc00;*/
-            }
-
-            .pop_layer .pop_container .pop_top .tit {
-                line-height: 50px;
-                font-size: 20px;
-                font-weight: 600;
-            }
-
-            .pop_layer .pop_container .pop_con {
-                max-height: 530px;
-                overflow-y: auto;
-            }
-
-            .pop_layer .pop_container .pop_con .txt {
-                text-align: center;
-                font-size: 14px;
-                line-height: 30px;
-                font-weight: 600;
-                padding: 40px;
-            }
-
-            .pop_layer .pop_container .pop_con .txt span {
-                font-size: 14px;
-                vertical-align: top;
-            }
-
-            .pop_layer .pop_container .pop_con .txt .underline {
-                text-decoration: underline;
-            }
-
-            .pop_layer .pop_container .pop_con p {
-                /* padding: 0 10px; */
-            }
-
-            .pop_layer .pop_container .pop_con p:first-child {
-                /* padding-top: 20px; */
-            }
-
-            .pop_layer .pop_container .pop_con p:last-child {
-                /* padding-bottom: 20px; */
-            }
-
-            .pop_layer .pop_container .pop_con img {
-                width: 100%;
-            }
-
-            .pop_layer .pop_container .pop_close {
-                position: absolute;
-                top: 18px;
-                right: 21px;
-                width: 10px;
-                height: 10px;
-                background: url(/images/common/pop_close.png) no-repeat left top;
-            }
-
-            .pop_layer .check {
-                text-align: right;
-                margin: 0 0;
-                padding: 5px 10px;
-            }
-
-            .pop_layer .btn_wrap {
-                margin-top: 0;
-                overflow: hidden;
-                border-radius: 0 0 10px 10px;
-            }
-
-            .pop_layer .btn_wrap .btn {
-                width: 50%;
-                border-radius: 0;
-                margin-left: 0;
-            }
-
-            .pop_layer .btn_wrap button:first-child {
-                float: left;
-            }
-
-            .pop_layer .btn_wrap button:last-child {
-                float: right;
-            }
-
-            #layer1, #layer3, #layer4, #layer5, #layer6, #layer7{
-                top: 50%;
-                left: 50%;
-                color:white;
-                z-index: 990;
-            }
-
-            <?php if( count($boards) == 1 ) :?>
-                #layer4
-                {
-                    margin-left: -185px;
-                    margin-top: -280px;
-                }
-                
-                @media screen and (max-width: 800px){
-                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                        margin-left: -185px;
-                    }
-                }
-            <?php elseif( count($boards) == 2 ) :?>
-                #layer4
-                {
-                    margin-left: -375px;
-                    margin-top: -280px;
-                    z-index: 999;
-                }
-                #layer5
-                {
-                    margin-left: 5px;
-                    margin-top: -280px;
-                    z-index: 998;
-                }
-                @media screen and (max-width: 800px){
-                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                        margin-left: -185px;
-                    }
-                }
-            <?php elseif( count($boards) == 3 ) :?>
-                #layer4
-                {
-                    margin-left: -560px;
-                    margin-top: -280px;
-                    z-index: 999;
-                }
-                #layer5
-                {
-                    margin-left: -185px;
-                    margin-top: -280px;
-                    z-index: 998;
-                }
-                #layer6
-                {
-                    margin-left: 190px;
-                    margin-top: -280px;
-                    z-index: 997;
-                }
-                
-                @media screen and (max-width: 1120px){
-                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                        margin-left: -185px;
-                    }
-                }
-            <?php else :?>
-                #layer4
-                {
-                    margin-left: -375px;
-                    margin-top: -280px;
-                    z-index: 999;
-                }
-                #layer5
-                {
-                    margin-left: 5px;
-                    margin-top: -280px;
-                    z-index: 998;
-                }
-                #layer6
-                {
-                    margin-left: -755px;
-                    margin-top: -280px;
-                    z-index: 997;
-                }
-                #layer7
-                {
-                    margin-left: 385px;
-                    margin-top: -280px;
-                    z-index: 996;
-                }
-                #layer1
-                {
-                    margin-left: -755px; /*-610px */
-                    margin-top: -280px; /*-320px;*/
-                    z-index: 995;
-                }
-                #layer3
-                {
-                    margin-left: 385px; /*210px;*/
-                    margin-top: -280px;  /*-320px;*/
-                    z-index: 994;
-                }
-            
-                @media screen and (max-width: 1500px){
-                    #layer4, #layer7  {
-                        margin-left: -560px;
-                        margin-top: -280px;
-                    }
-                    #layer5, #layer1  {
-                        margin-left: -185px;
-                        margin-top: -280px;
-                    }
-                    #layer6, #layer3  {
-                        margin-left: 190px;
-                        margin-top: -280px;
-                    }
-                }
-
-                @media screen and (max-width: 1120px){
-                    #layer1, #layer4, #layer6  {
-                        margin-left: -375px;
-                        margin-top: -280px;
-                    }
-                    #layer3, #layer5, #layer7  {
-                        margin-left: 5px;
-                        margin-top: -280px;
-                    }
-                }
-                
-                @media screen and (max-width: 800px){
-                    #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                        margin-left: -185px;
-                    }
-                }
-            <?php endif ?>
-
-            @media screen and (max-height: 700px){
-                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                    margin-top: -260px;
-                }
-                .pop_layer .pop_container .pop_con {
-                    max-height: 520px;
-                    padding-bottom:35px;
-                    border-radius:0 0 0 10px;
-                }
-                .pop_layer .btn_wrap{
-                    margin-top:-35px;
-                    opacity: 0.99;
-                }
-                .btn {
-                    background: rgba(54, 90, 146, 0.8);
-                }
-            }
-            
-            @media screen and (max-height: 650px){
-                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                    margin-top: -235px;
-                }
-                .pop_layer .pop_container .pop_con {
-                    max-height: 460px;
-                }
-            }
-
-            @media screen and (max-height: 600px){
-                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                    margin-top: -215px;
-                }
-                .pop_layer .pop_container .pop_con {
-                    max-height: 420px;
-                }
-            }
-
-            @media screen and (max-height: 550px){
-                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                    margin-top: -190px;
-                }
-                .pop_layer .pop_container .pop_con {
-                    max-height: 370px;
-                }
-            }
-            
-            @media screen and (max-height: 500px){
-                #layer1, #layer3, #layer4, #layer5, #layer6, #layer7  {
-                    margin-top: -165px;
-                }
-                .pop_layer .pop_container .pop_con {
-                    max-height: 320px;
-                }
-            }
-            h1, h2, h3, h4, h5, h6{
-                color:white;
-                line-height:0.2;
-                margin-bottom:10px;
-                margin-top:10px;
-            }
-            .pop_layer .pop_container .pop_con {
-                background: #333;
-            }
-
-        </style>
 
     <?php if( count($boards) > 4 ) :?>
 

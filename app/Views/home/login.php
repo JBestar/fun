@@ -79,7 +79,7 @@
                 text-align: left;
                 color: #ffff00;
                 background: none;
-                padding: 2px 5px;
+                padding: 2px 5px 4px 5px;
                 display: block;
                 outline: 0px;
                 border: none;
@@ -100,10 +100,10 @@
 <?php endif ?>
     <div class="main-navbar-dropdown-container" id="main-navbar-dropdown-container-id" style="display: none;">
         <div class="main-navbar-dropdown-div"> 
-            <button id="main-navbar-dropdown-ko-id"><image src="/images/common/ko.png" style="width:22px">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
+            <button id="main-navbar-dropdown-ko-id"><image src="/images/common/ko.png?v=1" style="width:22px;margin-top:-2px;">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
         </div>
         <div class="main-navbar-dropdown-div"> 
-            <button id="main-navbar-dropdown-cn-id"><image src="/images/common/cn.png" style="width:22px">&nbsp;&nbsp;<span id="lang-cn"><?=lang('common.lang_chinese')?></span></button>
+            <button id="main-navbar-dropdown-cn-id"><image src="/images/common/cn.png?v=1" style="width:22px;margin-top:-2px;">&nbsp;&nbsp;<span id="lang-cn"><?=lang('common.lang_chinese')?></span></button>
         </div>
     </div>
     <div class="alert_wrap basic_alert" id="basic_alert">
@@ -300,16 +300,12 @@
 
     <div id="wrap" class="users_wrap">
         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-            <!-- <select name="lang" id="lang" style="position:absolute; right:10px; top:10px; width:65px; padding:0 10px; color: #ffff00; background:none; border:none; text-align:center; border-radius:0; font-size:14px;">
-                <option value="ko" style="background:#dc610d; padding:5px;" <?=$lang=='ko'?'selected':''?> > <img src="./images/common/ko.png" class="user_level_icon" > <?=lang('common.lang_korean')?> </option>
-                <option value="cn" style="background:#dc610d; padding:5px;" <?=$lang=='cn'?'selected':''?> > <img src="./images/common/cn.png" class="user_level_icon" > <?=lang('common.lang_chinese')?> </option>
-            </select> -->
             <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
                 <button name="lang" id="lang-button" style="position:absolute; right:10px; margin-top:10px; width:80px; padding:0 5px; color: #ffff00; font-size:16px; background:none; height:22px; border:none; text-align:center;" is="ms-dropdown" >
                 <?php if($lang == "cn") :?>
-                    <image id="lang-img" src="/images/common/cn.png" style="width:22px">&nbsp;<span id="lang-code"><?=lang('common.lang_chinese')?></span>
+                    <image id="lang-img" src="/images/common/cn.png?v=1" style="width:22px;margin-top:-2px;">&nbsp;<span id="lang-code"><?=lang('common.lang_chinese')?></span>
                 <?php else :?>
-                    <image id="lang-img" src="/images/common/ko.png" style="width:22px">&nbsp;<span id="lang-code"><?=lang('common.lang_korean')?></span>
+                    <image id="lang-img" src="/images/common/ko.png?v=1" style="width:22px;margin-top:-2px;">&nbsp;<span id="lang-code"><?=lang('common.lang_korean')?></span>
                 <?php endif ?>
                 </button>
             <?php endif ?>

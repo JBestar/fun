@@ -86,6 +86,23 @@ class Member_Model extends Model {
         
     }
     
+    
+    public function getMemberByLevel($level, $bLowLev = false, $mbFid = 0)
+    {
+
+        $where =" mb_state_active != '".PERMIT_DELETE."' ";
+        if ($bLowLev) {
+            $where .= 'AND mb_level <= '.$level;
+        } else {
+            $where .= 'AND mb_level = '.$level;
+        }
+        if($mbFid > 0)
+            $where .= " AND mb_fid = '".$mbFid."' ";
+        
+        return $this->where($where)->findAll();
+        
+    }
+
     public function updateLiveInfo($member){
         $data = [
             'mb_live_id' => $member->mb_live_id,

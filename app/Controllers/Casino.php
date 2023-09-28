@@ -261,6 +261,9 @@ class Casino extends BaseController
 			$headInfo = $this->getSiteConf();
 			$prdId = trim($this->request->getVar('prd'));
 			$objCas = $this->modelCasprd->getById($gameId, $prdId);
+			if(is_null($objCas))
+				$objCas = $this->modelCasprd->getById($gameId, 100);
+
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
 			$sess = $this->modelSess->getByUid($objMember->mb_uid, SESS_TYPE_APP);
             
@@ -381,11 +384,11 @@ class Casino extends BaseController
 				$iCreated = 8;	
 			else if($objMember->mb_hold_uid == ""){
 				//플레이어 창조
-                $createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
-                // $createId = createGameId(strtoupper(substr($_ENV['app.name'], 0, 3))."_".$objMember->mb_uid);//."_".$objMember->mb_uid
-				// $objOther = $this->modelMember->getByHoldId($createId, $objMember->mb_fid);
-				// if(!is_null($objOther))
-				// 	$createId .= "_".$objMember->mb_fid;
+                // $createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
+                $createId = createGameId(strtoupper(substr($_ENV['app.name'], 0, 2))."_".$objMember->mb_uid);//."_".$objMember->mb_uid
+				$objOther = $this->modelMember->getByHoldId($createId, $objMember->mb_fid);
+				if(!is_null($objOther))
+					$createId .= "_".$objMember->mb_fid;
 
 				$arrResult = $this->libApiHold->createUser($createId, $objMember->mb_nickname);
                 

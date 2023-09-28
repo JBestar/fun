@@ -18,14 +18,23 @@ class Home extends BaseController
             echo view('home/login', $headInfo);
         } else {
             $objMember = null;
+            $charges = [];
+            $dischars = [];
+
             if(is_login()){
                 $user_id = $this->session->user_id;
                 $objMember = $this->modelMember->getByUid($user_id);
+            } else if(array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1) {
+                $arrMember = $this->modelMember->getMemberByLevel(LEVEL_ADMIN, true);
+                $charges = getExchangeList($arrMember, 8);
+                $dischars = getExchangeList($arrMember, 8);
             }
             $navInfo = getNavInfo($objMember);
             $navInfo += $this->casinoPrd($headInfo);
             $navInfo += $this->slotPrd($headInfo);
-    
+            $navInfo['charges'] = $charges;
+            $navInfo['dischars'] = $dischars;
+
             $boards = array();
             $notice_main = '';
             $arrConf = $this->modelConfsite->getNoticeConf();  
