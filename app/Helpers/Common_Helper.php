@@ -86,6 +86,7 @@
       $userInfo['user_join_at'] = $objUser->mb_time_join;
       $userInfo['user_login_last'] = $objUser->mb_time_last;
       $userInfo['user_ip_last'] = $objUser->mb_ip_last;
+      $userInfo['user_alarm'] = $objUser->mb_state_alarm;
       if($objEmp != null)
         $userInfo['user_emp'] = $objEmp->mb_uid;
       else

@@ -35,6 +35,7 @@
                 id_input_4 : '<?=lang('common.id_input_4')?>',
                 id_input_16 : '<?=lang('common.id_input_16')?>',
                 inspection : '<?=lang('common.inspection')?>',
+                message_to_read : '<?=lang('common.message_to_read')?>',
                 nickname_input : '<?=lang('common.nickname_input')?>',
                 ok : '<?=lang('common.ok')?>',
                 password_change_ok : '<?=lang('common.password_change_ok')?>',
@@ -71,7 +72,7 @@
             <script type="text/javascript" src="/js/lib.js?ver=1"></script>
             <script type="text/javascript" src="/js/common.js?ver=2"></script>
             <script type="text/javascript" src="/js/SLB.js?ver=4"></script>
-            <script type="text/javascript" src="/js/main.js?ver=5"></script>
+            <script type="text/javascript" src="/js/main.js?ver=6"></script>
             <link rel="stylesheet" type="text/css" href="/css/devel.css?v=3" />
         <?php else : ?>
             <script type="text/javascript" src="/js/vue.js"></script>
@@ -2216,7 +2217,8 @@
                 );
 
                 $("#slots .openGameBtn").click(function () {
-                    {
+                        if(!checkUnread())
+                            return;
                         var onoff = $(this).data("onoff");
                         var game_id = $(this).data("cid");
                         var message = langMessage.inspection; 
@@ -2225,10 +2227,11 @@
                         } else {
                             alert(message);
                         }
-                    }
                 });
 
                 $("#casinos .openGameBtn, #live-casino .playBtn").click(function () {
+                    if(!checkUnread())
+                        return;
                     var onoff = $(this).data("onoff");
                     if (onoff == "on") {
                         openCasinoGame($(this).data("cid"), $(this).data("gameid"));
@@ -2240,6 +2243,8 @@
                     if(!check_login()){
                         return;
                     }
+                    if(!checkUnread())
+                        return;
                     var onoff = $(this).data("onoff");
                     if (onoff == "on") {
                         window.open("/holdem", "games", "width=1200, height=800, left=100, top=50");
@@ -2265,6 +2270,8 @@
                     if(!check_login()){
                         return;
                     }
+                    if(!checkUnread())
+                        return;
                     var onoff = $(this).data("onoff");
                     if (onoff == "on") {
                         window.open("/mini?gm="+$(this).data("cid"), "games", "width=1200, height=800, left=100, top=50");

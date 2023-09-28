@@ -153,6 +153,10 @@ class Home extends BaseController
             $navInfo['start_at'] = date('Y-m-d', strtotime("-1 month", $tmNow));
             $navInfo['end_at'] = date('Y-m-d', $tmNow);
 
+            $arrSoundConf = $this->modelConfsite->getSoundConf();  
+            $navInfo['alarm_name'] = $arrSoundConf[3]->conf_content;
+            $navInfo['alarm_volume'] = $arrSoundConf[3]->conf_active;
+
             echo view('home/mypage', $navInfo);
         }
 

@@ -261,12 +261,141 @@
                 }
             <?php endif ?>
 
+            /******* ON/OFF Switch ******************/
+
+            .switch {
+                position: relative;
+                display: inline-block;
+                vertical-align: top;
+                width: 65px;
+                height: 25px;
+                padding: 3px;
+                margin-right: 5px;
+                /*background: linear-gradient(to bottom, #eeeeee, #FFFFFF 25px);
+                background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF 25px);
+                
+                box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);*/
+                cursor: pointer;
+                border-radius: 18px;
+            }
+
+            .switch-input {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0;
+            }
+
+            .switch-label {
+                position: relative;
+                display: block;
+                height: inherit;
+                font-size: 10px;
+                text-transform: uppercase;
+                background: #eceeef;
+                border-radius: inherit;
+                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
+            }
+
+            .switch-label:before,
+            .switch-label:after {
+                position: absolute;
+                top: 50%;
+                margin-top: -.5em;
+                line-height: 1;
+                -webkit-transition: inherit;
+                -moz-transition: inherit;
+                -o-transition: inherit;
+                transition: inherit;
+            }
+
+            .switch-label:before {
+                content: attr(data-off);
+                right: 11px;
+                color: #aaaaaa;
+                text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+            }
+
+            .switch-label:after {
+                content: attr(data-on);
+                left: 11px;
+                color: #FFFFFF;
+                text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+                opacity: 0;
+            }
+
+            .switch-input:checked~.switch-label {
+                background: #00af00;
+                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
+            }
+
+            .switch-input:checked~.switch-label:before {
+                opacity: 0;
+            }
+
+            .switch-input:checked~.switch-label:after {
+                opacity: 1;
+            }
+
+            .switch-handle {
+                position: absolute;
+                top: 4px;
+                left: 6px;
+                width: 21px;
+                height: 22px;
+                background: linear-gradient(to bottom, #FFFFFF 40%, #f0f0f0);
+                background-image: -webkit-linear-gradient(top, #FFFFFF 40%, #f0f0f0);
+                border-radius: 100%;
+                box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+            }
+
+            .switch-handle:before {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin: -6px 0 0 -6px;
+                width: 12px;
+                height: 12px;
+                background: linear-gradient(to bottom, #eeeeee, #FFFFFF);
+                background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF);
+                border-radius: 6px;
+                box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+            }
+
+            .switch-input:checked~.switch-handle {
+                left: 39px;
+                box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+            }
+
+
+            /* Transition
+                    ========================== */
+
+            .switch-label,
+            .switch-handle {
+                transition: All 0.3s ease;
+                -webkit-transition: All 0.3s ease;
+                -moz-transition: All 0.3s ease;
+                -o-transition: All 0.3s ease;
+            }
         </style>
         
     </head>
     <body style="">
         <div id="dashboard" class="ui loading segment" style="margin: 0px; ">
-            <div class="ui message inverted"></div>
+            <div class="ui message inverted">
+                <span id="user_welcome"></span>
+                <div style="float:right;">
+                    <i class="bell icon" style="margin-top:0.2em"></i>
+                    <label class="switch">
+                        <input class="switch-input" type="checkbox" id="alarm_check" onchange="changeAlarmState();"/>
+                        <span class="switch-label" data-on="켜기" data-off="끄기"></span>
+                        <span class="switch-handle"></span>
+                    </label>
+                    <!-- <p> <i class="bell icon"></i></p> -->
+			    </div>
+            </div>
             <div class="ui grid top attached tabular menu grey">
                 <a data-tab="my_info" class="item "><?=lang('common.info_user')?></a> 
                 <a data-tab="my_charge" class="item"><?=lang('common.deposit_history')?></a>
@@ -1000,12 +1129,14 @@
 
                     UIkit.modal.confirm(langMessage.recovery_eggs_request, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
                         function () {
+                            $("#dashboard").addClass('loading');
                             $.ajax({
                                 dataType: "json",
                                 type: "POST",
                                 url: "/api/change_egg",
                                 // data: $(this).serialize(),
                                 success: function (response) {
+                                    $("#dashboard").removeClass('loading');
                                     if (response.status == "success") {
                                         UIkit.modal.alert(langMessage.recovery_eggs_result, {labels: {'ok': langMessage.ok}}).then(function () {
                                             objDashBoard.getMyInfo();
@@ -1021,7 +1152,7 @@
                         }
                     );
                 });
-
+                
                 $("#qnaForm").ajaxForm({
                     dataType: "json",
                     type: "POST",
@@ -1147,6 +1278,59 @@
                     function () {}
                 );
             }
+
+            
+            function changeAlarmState() {
+                stopAlarm();
+                if($("#alarm_check").length == 0)
+                    return;
+
+                var alarmState = $("#alarm_check").prop('checked') ? 1 : 0;
+
+                var jsData = { "mb_state_alarm": alarmState }
+                var jsonData = JSON.stringify(jsData);
+                $.ajax({
+                    type: "POST",
+                    data: { json_: jsonData },
+                    dataType: "json",
+                    url: "/api/change_alarmstate",
+                    success: function(jResult) {
+                        // console.log(jResult);
+                        if (jResult.status == "success") {
+
+                        } else if (jResult.status == "fail") {
+
+                        } else if (jResult.status == "logout") {
+                            // window.location.replace( FURL +"/");
+                        }
+                    },
+                    error: function(request, status, error) {
+                        //console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                    }
+                });
+
+            }
+
+            var mAudio = new Audio();
+            var mAlarm = {name:'<?=$alarm_name?>', volume: <?=$alarm_volume?>};
+            
+            function playAlarm(){
+                stopAlarm();
+                if(!$("#alarm_check").prop('checked'))
+                    return;
+                mAudio.src = '/sound/' +mAlarm.name;
+                let nVolume = 1;
+                if (parseInt(mAlarm.volume) <= 100) {
+                    nVolume = mAlarm.volume / 100.0;
+                }
+                mAudio.volume = nVolume;
+                mAudio.load();
+                mAudio.play();
+            } 
+            function stopAlarm(){
+                if(mAudio)
+                    mAudio.pause();
+            }
         </script>
 
         <script>
@@ -1268,8 +1452,9 @@
                                 if (response.status == "success") {
                                     objDashBoard.myInfo = response.data;
 
-                                    $("#dashboard .inverted").text(`${ objDashBoard.myInfo.user_id } (${ objDashBoard.myInfo.user_name }) <?=lang('common.nice_meet')?>.`);
-
+                                    $("#user_welcome").text(`${ objDashBoard.myInfo.user_id } (${ objDashBoard.myInfo.user_name }) <?=lang('common.nice_meet')?>.`);
+                                    if($("#alarm_check").length > 0)
+                                        $("#alarm_check").prop('checked', objDashBoard.myInfo.user_alarm == 1);
                                 } 
                             },
                             "json"
@@ -1396,6 +1581,9 @@
                                     objDashBoard.countAll.memo = response.totalRows;
                                     objDashBoard.totalPageCount.memo = Math.ceil(response.totalRows / objDashBoard.rowCount);
                                     objDashBoard.unreadMemo = response.unread;
+                                    if(objDashBoard.unreadMemo > 0)
+                                        playAlarm();
+                                    else stopAlarm();
                                 } else {
                                     // alert(response.message);
                                 }
@@ -1417,6 +1605,9 @@
                                     objDashBoard.qnaList = response.rows;
                                     objDashBoard.countAll.qna = response.totalRows;
                                     objDashBoard.totalPageCount.qna = Math.ceil(response.totalRows / objDashBoard.rowCount);
+                                    if(response.unread > 0)
+                                        playAlarm();
+                                    else stopAlarm();
 
                                     setTimeout(openFirstNotice, 500);
 

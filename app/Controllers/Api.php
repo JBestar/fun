@@ -1013,6 +1013,7 @@ class Api extends BaseController
 			$reqData['send_uid'] = $this->session->user_id;
 
 			$arrNotice = $this->modelNotice->searchCusList($reqData);
+			$result->unread = $this->modelNotice->unreadCus($reqData['send_uid']);
 			foreach($arrNotice as $notice){
 				if($notice->notice_state_active == STATE_ACTIVE){
 					$reqData['notice_id'] = $notice->notice_fid;
@@ -2187,6 +2188,24 @@ class Api extends BaseController
 		$result->status = STATUS_SUCCESS;
 
 		echo json_encode($result);	
+	}
+
+	public function change_alarmstate(){
+		$jsonData = $_REQUEST['json_'];
+		$arrData = json_decode($jsonData, true);		
+
+		if(is_login())
+		{
+			$user_id = $this->session->user_id;
+			$bResult = $this->modelMember->updateAlarmState($user_id, $arrData);
+			if($bResult)
+				$arrResult['status'] = "success";
+			else $arrResult['status'] = "fail";
+		}
+		else {
+			$arrResult['status'] = "logout";			
+		}
+		echo json_encode($arrResult);	
 	}
 
 }
