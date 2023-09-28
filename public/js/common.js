@@ -671,9 +671,6 @@ $(function(){
     });
 });
 
-
-
-
 function search(findKey, findValue, myArray) {
     for (var i = 0; i < myArray.length; i++) {
         if (myArray[i][findKey] === findValue) {
@@ -681,8 +678,6 @@ function search(findKey, findValue, myArray) {
         }
     }
 }
-
-
 
 function checkDupUserid() {
 

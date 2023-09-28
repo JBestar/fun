@@ -454,6 +454,24 @@ class Api extends BaseController
 
     }
 		
+	public function change_egg()
+	{
+		
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;
+        } else {
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id);
+			$iResult = $this->alltoGame($objMember);
+
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
 	// public function change_acc(){
 		
 	// 	$result = new \StdClass;
@@ -2156,5 +2174,19 @@ class Api extends BaseController
 		echo json_encode($result);	
 	}
 
+	
+	public function recent_exchanges(){
+
+		$result = new \StdClass;
+
+		$result->status = STATUS_LOGOUT;
+		$arrMember = $this->modelMember->getMemberByLevel(LEVEL_ADMIN, true);
+		$result->charges = getExchangeList($arrMember, 8);
+		$result->dischars = getExchangeList($arrMember, 8);
+
+		$result->status = STATUS_SUCCESS;
+
+		echo json_encode($result);	
+	}
 
 }

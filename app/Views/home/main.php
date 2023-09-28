@@ -60,6 +60,10 @@
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=1"></script>
         <script src="/js/worker.js?v=1"></script>
+        <script src="/js/odometer/odometer.js?v=1"></script>
+        <link rel="stylesheet" href="/js/odometer/odometer.css?v=1" />
+        <link rel="stylesheet" href="/css/real-time-table.css?v=1" />
+        <script src="/js/real-time-table.js?v=1"></script>
         <!--순서중요-->
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
             <script type="text/javascript" src="/js/vue.js"></script>
@@ -80,10 +84,6 @@
         <?php endif ?>
 
         <!-- JS FILES -->
-
-        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/uikit@latest/dist/css/uikit.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit-icons.min.js"></script> -->
         <link rel="stylesheet" type="text/css" href="/js/uikit/uikit.min.css" />
         <script src="/js/uikit/uikit.min.js"></script>
         <script src="/js/uikit/uikit-icons.min.js"></script>
@@ -93,7 +93,7 @@
 
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=4" />
-        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=3" />
+        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=4" />
         <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=3" />
     <?php else : ?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=<?=time()?>" />
@@ -126,7 +126,6 @@
 
             <?php if(array_key_exists('app.tree', $_ENV) && $_ENV['app.tree'] == 1) :?>
                 .games-page .categories-wrapper, .SeoPage .categories-wrapper {
-                    /* background-image: linear-gradient(90deg,#262626, #363636, #262626); */
                     background-image: linear-gradient(360deg,#000000, #000000, #262626);
                     margin-top:16px;
                 }         
@@ -178,7 +177,6 @@
                     background-position: 0% 50%
                 }
                 .PaymentIconsContainer {
-                    /* background-image: linear-gradient(90deg,#040914, #192337, #040914); */
                     background-image: linear-gradient(90deg,#2f3031, #2f3031, #2f3031);
                 }
             <?php endif ?>
@@ -309,18 +307,6 @@
                 text-decoration: underline;
             }
 
-            .pop_layer .pop_container .pop_con p {
-                /* padding: 0 10px; */
-            }
-
-            .pop_layer .pop_container .pop_con p:first-child {
-                /* padding-top: 20px; */
-            }
-
-            .pop_layer .pop_container .pop_con p:last-child {
-                /* padding-bottom: 20px; */
-            }
-
             .pop_layer .pop_container .pop_con img {
                 width: 100%;
             }
@@ -449,14 +435,14 @@
                 }
                 #layer1
                 {
-                    margin-left: -755px; /*-610px */
-                    margin-top: -280px; /*-320px;*/
+                    margin-left: -755px; 
+                    margin-top: -280px; 
                     z-index: 995;
                 }
                 #layer3
                 {
-                    margin-left: 385px; /*210px;*/
-                    margin-top: -280px;  /*-320px;*/
+                    margin-left: 385px; 
+                    margin-top: -280px;  
                     z-index: 994;
                 }
             
@@ -603,14 +589,6 @@
                 .ui.button:active, .ui.active.button:active,.ui.button:hover {
                     background-color: #6b6b6b;
                 }
-                /* .ui.primary.buttons .button, .ui.primary.button {
-                    background-color: #ffe794;
-                    color: #000;
-                }
-                .ui.primary.buttons .button:hover, .ui.primary.button:hover {
-                    background-color: #ad9958;
-                    color: #000;
-                } */
                 #dashboard, #SLB_content {
                     background: #000000;
                 }
@@ -652,12 +630,9 @@
                     <a href="/" class="MainMenu-LogoSlogan">
                         <div class="star-logo">
                             <img src="./images/common/star1.png">
-                            <!-- <img src="./images/common/star2.png"> -->
-                            <!-- <img src="./images/common/star3.png"> -->
                             <img src="./images/common/star4.png">
                         </div>
                         <div class="MainMenu-LogoSlogan-wrapper"></div>
-
                     </a>
 
                     <div class="MainMenu-ActionsContainer">
@@ -761,7 +736,7 @@
                 <div class="MainMenu-wrapper">
                     <div class="MainMenu-logo">
                         <?php if(!is_login()) :?>
-                            <div class="MainMenu-play" uk-toggle="target: #agentCheckModal" tabindex="0" aria-expanded="false">
+                            <div class="MainMenu-play" onclick="showAgentCheckModal();">
                                 <a href="#" class="js-register-open btn-primary btn-normal"><span><?=lang('common.signup')?></span></a>
                             </div>
                         <?php else :?>
@@ -777,7 +752,7 @@
 
                     <ul class="menu menu--main MainMenu-List">
                         <?php if(!is_login()) :?>
-                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" uk-toggle="target: #loginModal" tabindex="0" aria-expanded="false">
+                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showLoginModal();">
                             <a><i class="ui sign in icon"></i> <?=lang('common.login')?></a>
                         </li>
                         <?php endif ?>
@@ -921,6 +896,11 @@
                             $(".scroll_text").marquee();
 
                             function showTabMenu(menu) {
+
+                                if(!check_login()){
+                                    return;
+                                }
+
                                 $("#live-casino").hide();
                                 $("#mini").hide();
                                 $("#slots").hide();
@@ -968,7 +948,6 @@
                             $("#MainMenu .MainMenu-play, #MainMenu .MainMenu-item").click(function(e) {
                                 $("#MainMenu-controller").prop("checked", false);
                             });
-
                         </script>
                         <div class="seoCategoryPage-category categories-wrapper js-seo-category-page-categories">
                             <div class="categories categories-desktop js-games-categories-slider slick-initialized slick-slider">
@@ -1016,6 +995,128 @@
                                 </div>
                             </div>
                         </div>
+
+                    <?php if( array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1 && !is_login()) :?>
+                        <div class="jackpot-container justify-content-end">
+                            <img class="golden-bull" src="/images/jackpot/jackpot.png" alt="">
+                            <div class="jackpot-amount">
+                                <img src="/images/jackpot/won-sign.png" alt="" style="display:inline-block;">
+                                <div id="jackpot" class=""></div>
+                            </div>
+                        </div>
+
+                        <script>
+                            function playJackpot(){
+                                var jackpot = Date.now() / 32897
+                                var el = document.querySelector('#jackpot');
+
+                                od = new Odometer({
+                                el: el,
+                                auto: false,
+                                selector: '.jackpot',
+                                value: jackpot,
+                                format: '(,ddd).dd',
+                                });
+
+                                setInterval(function(){
+                                    jackpot += 32423.372 
+                                    od.update(jackpot)
+
+                                    if(jackpot > 61233000) {
+                                        jackpot -= 9334909
+                                    }
+                                }, 3000);
+
+                                setInterval(function(){
+                                    reqExchanges();
+                                }, 10000);
+                                
+                            }
+                            playJackpot();
+
+                        </script>
+
+                        <div class="autoscroller">
+                            <div class="autoscroller-d d-flex" >
+                                
+                                <div class="ps-card flex-1 flex-column ps-realtime">
+                                    <div class="scroller-header" >실시간 입금</div>
+                                    <div class="ps-card-body">
+                                        <div class="Loop autoscroll-container">
+                                            <div class="inner" id="recentCharges1">
+                                                <?php if(count($charges) >= 8) :?>
+                                                    <?php for ($i=0; $i<4; $i++):?>
+                                                        <div class="item d-flex justify-content-between" >
+                                                            <span class="item-username "><?=$charges[$i]->uid?></span>
+                                                            <span class="item-amount">
+                                                                <span><?=$charges[$i]->amount?></span>
+                                                                <span>원</span>
+                                                            </span>
+                                                            <span class="item-date "><?=$charges[$i]->time?></span>
+                                                        </div>
+                                                    <?php endfor; ?>
+                                                <?php endif ?>
+                                            </div>
+                                        </div>
+                                        <div class="Loop autoscroll-container">
+                                            <div class="inner" id="recentCharges2">
+                                                <?php if(count($charges) >= 8) :?>
+                                                    <?php for ($i=4; $i<8; $i++):?>
+                                                        <div class="item d-flex justify-content-between" >
+                                                            <span class="item-username "><?=$charges[$i]->uid?></span>
+                                                            <span class="item-amount">
+                                                                <span><?=$charges[$i]->amount?></span>
+                                                                <span>원</span>
+                                                            </span>
+                                                            <span class="item-date "><?=$charges[$i]->time?></span>
+                                                        </div>
+                                                    <?php endfor; ?>
+                                                <?php endif ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="ps-card flex-1 flex-column ps-realtime">
+                                    <div class="scroller-header">실시간 출금</div>
+                                    <div class="ps-card-body">
+                                        <div class="Loop autoscroll-container">
+                                            <div class="inner" id="recentDischars1">
+                                                <?php if(count($dischars) >= 8) :?>
+                                                    <?php for ($i=0; $i<4; $i++):?>
+                                                        <div class="item d-flex justify-content-between" >
+                                                            <span class="item-username "><?=$dischars[$i]->uid?></span>
+                                                            <span class="item-amount">
+                                                                <span><?=$dischars[$i]->amount?></span>
+                                                                <span>원</span>
+                                                            </span>
+                                                            <span class="item-date "><?=$dischars[$i]->time?></span>
+                                                        </div>
+                                                    <?php endfor; ?>
+                                                <?php endif ?>
+                                            </div>
+                                        </div>
+                                        <div class="Loop autoscroll-container">
+                                            <div class="inner" id="recentDischars2">
+                                                <?php if(count($dischars) >= 8) :?>
+                                                    <?php for ($i=4; $i<8; $i++):?>
+                                                        <div class="item d-flex justify-content-between" >
+                                                            <span class="item-username "><?=$dischars[$i]->uid?></span>
+                                                            <span class="item-amount">
+                                                                <span><?=$dischars[$i]->amount?></span>
+                                                                <span>원</span>
+                                                            </span>
+                                                            <span class="item-date "><?=$dischars[$i]->time?></span>
+                                                        </div>
+                                                    <?php endfor; ?>
+                                                <?php endif ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php else: ?>
 
                         <?php if (!$slot_deny):?>
                         <section class="uk-section" id="slots"  style="display: none;">
@@ -1401,6 +1502,7 @@
                         </section>
                         <?php endif ?>
                     </div>
+                <?php endif?>
                 </div>
             </div>
             <section class="FooterSection">
@@ -1881,7 +1983,8 @@
                         if(response.code == 9){  //점검중
                             
                         } else {
-                            
+                            $("#loginModal input[name=userid]").val('');
+                            $("#loginModal input[name=passwd]").val('');
                         }
                         alert(response.msg);
                     }
@@ -2370,17 +2473,14 @@
             }
 
             function showAgentCheckModal() {
-                // if(check_login()){
-                //     return;
-                // }
+                $("#agentCheckModal input[name=recommender_id]").val('');
                 SLB(); 
                 UIkit.modal("#agentCheckModal").show();
             }
             
             function showLoginModal() {
-                // if(check_login()){
-                //     return;
-                // }
+                $("#loginModal input[name=userid]").val('');
+                $("#loginModal input[name=passwd]").val('');
                 SLB(); 
                 UIkit.modal("#loginModal").show();
             }

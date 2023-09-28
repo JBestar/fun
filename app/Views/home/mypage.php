@@ -64,6 +64,8 @@
                 password_verify : '<?=lang('common.password_verify')?>',
                 password_verify_c : '<?=lang('common.password_verify_c')?>',
                 read_all_ask : '<?=lang('common.read_all_ask')?>',
+                recovery_eggs_request : '<?=lang('common.recovery_eggs_request')?>',
+                recovery_eggs_result : '<?=lang('common.recovery_eggs_result')?>',
                 request_amount_input : '<?=lang('common.request_amount_input')?>',
                 signup_complete : '<?=lang('common.signup_complete')?>',
                 signup_permit : '<?=lang('common.signup_permit')?>',
@@ -316,6 +318,24 @@
                                             <i class="cloud upload icon"></i> <span class="hideOnMobile"><?=lang('common.withdrawal')?></span>
                                         </div>
                                         <?php endif ?>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="collapsing"><?=lang('common.game_egg')?></td>
+                            <td>
+                                <div class="ui grid">
+                                    <div class="six wide column">
+                                        <div class="ui teal basic label">
+                                            {{ myInfo.user_egg }}
+                                            <div class="detail"><?=lang('common.game_egg')?></div>
+                                        </div>
+                                    </div>
+                                    <div class="ten wide column">
+                                        <div id="btnRecoveryEgg" tabindex="0" class="ui tiny yellow labeled icon button">
+                                            <i class="refresh icon"></i> <span class="hideOnMobile"><?=lang('common.recovery_eggs')?></span>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -974,6 +994,32 @@
                         }
                     );
                    
+                });
+
+                $("#btnRecoveryEgg").on("click", function(e) {
+
+                    UIkit.modal.confirm(langMessage.recovery_eggs_request, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
+                        function () {
+                            $.ajax({
+                                dataType: "json",
+                                type: "POST",
+                                url: "/api/change_egg",
+                                // data: $(this).serialize(),
+                                success: function (response) {
+                                    if (response.status == "success") {
+                                        UIkit.modal.alert(langMessage.recovery_eggs_result, {labels: {'ok': langMessage.ok}}).then(function () {
+                                            objDashBoard.getMyInfo();
+                                        });
+                                    } else {
+                                        // alert(response.msg);
+                                    }
+                                },
+                            });
+                        },
+                        function () {
+                            //취소
+                        }
+                    );
                 });
 
                 $("#qnaForm").ajaxForm({
