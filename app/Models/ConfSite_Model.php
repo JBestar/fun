@@ -139,6 +139,11 @@ class ConfSite_Model extends Model {
         return $this->find($confIds);
     }
 
+    public function getSoundConf(){
+        $confIds = [CONF_SOUND_1, CONF_SOUND_2, CONF_SOUND_3, CONF_SOUND_4];  
+        return $this->find($confIds);
+    }
+
     public function readBetConf(){
         $confIds = [CONF_BET_NL_DENY, CONF_BET_NP_DENY, CONF_BET_N2P_DENY, CONF_BET_PN_DENY, CONF_BET_N2P_4EN, CONF_BET_PAN_TYPE];  
         $arrConf = $this->find($confIds);
