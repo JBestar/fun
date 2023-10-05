@@ -11,6 +11,12 @@
 .justify-content-between {
   justify-content: space-between !important;
 }
+.justify-content-center {
+  justify-content: center !important;
+}
+.align-items-center {
+  align-items: center !important;
+}
 .d-flex {
   display: flex !important;
   flex-wrap: wrap;
@@ -25,6 +31,25 @@
 .flex-column {
   flex-direction: column !important;
 }
+.flex-row {
+  flex-direction: row !important;
+}
+.gap-16 {
+  gap: 16px;
+}
+
+
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+.me-1 {
+  margin-right: 0.25rem !important;
+}
+
+.d-inline-block {
+  display: inline-block !important;
+}
+
 
 .autoscroller {
   display: flex;
@@ -78,7 +103,7 @@
   /* white-space: nowrap; */
   /* display: inline-block; */
   animation-name: pan;
-  animation-duration: 15s;
+  animation-duration: 30s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
@@ -155,4 +180,12 @@
   100% {
     transform: translateY(-230px);
 	}
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(720deg);
+}
 }

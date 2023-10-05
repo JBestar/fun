@@ -87,6 +87,7 @@ return [
     'confirm_password' => '비밀번호 확인',
     'current_money' => '현재 보유 머니',
     'customer' => '고객센터',
+    'customer_ask' => '고객센터에 문의 해주세요.',
     'day' => '일',
     'delete' => '삭제',
     'delete_all' => '전체삭제',

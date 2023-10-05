@@ -179,6 +179,12 @@ class BaseController extends Controller
 										$app->ename = $info[0];
 										$app->name = $info[1];
 										$app->path = $info[2];
+										$app->act = 1;
+										if(count($info) > 3){
+											$app->act = intval($info[3]);
+											if($app->act == 0)
+												$app->path = "";
+										}
 										array_push($confs['apps_auto'], $app);
 									}
 
@@ -208,6 +214,15 @@ class BaseController extends Controller
 		$sess_id = $this->session->session_id;
 		$this->modelSess->deleteBySess($sess_id);
 		$this->session->destroy();
+	}
+
+	protected function sess_action(){
+		if(array_key_exists('app.sess_act', $_ENV) && $_ENV['app.sess_act'] == 1){
+			$sess_id = $this->session->session_id;
+			$this->modelSess->updateAction($sess_id);
+			if($_ENV['CI_ENVIRONMENT'] == ENV_DEVELOPMENT)
+				writeLog("[sess_action] sess_id=".$sess_id);
+		}
 	}
 
 	protected function casinoPrd($confs){

@@ -154,7 +154,9 @@ class Notice_Model extends Model {
         $where = "notice_type = '".NOTICE_BOARD."' ";
         $where.= "AND notice_state_active = '".STATE_ACTIVE."' ";
         $where.= "AND notice_state_delete = '".STATE_DISABLE."' ";
-        
+        if(array_key_exists('popup', $reqData))
+            $where.= "AND notice_read_count = '".$reqData['popup']."' ";
+
         $page = $reqData['page'];
         $count = $reqData['count'];
         if($page < 1)

@@ -10,6 +10,7 @@ class Mini extends BaseController
 
         } else {
             $this->setLanguage();
+			$this->sess_action();                
 
             $user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
@@ -94,6 +95,7 @@ class Mini extends BaseController
 
         } else {
             $this->setLanguage();
+			$this->sess_action();                
             $user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
 			$headInfo = $this->getSiteConf();
@@ -146,6 +148,7 @@ class Mini extends BaseController
 
         } else {
             $this->setLanguage();
+			$this->sess_action();                
             $user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
 			$headInfo = $this->getSiteConf();

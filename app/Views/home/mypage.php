@@ -512,10 +512,13 @@
                                             <div class="ui horizontal basic label" style="width:100px"><?=lang('common.bank_name')?></div>
                                             {{ myInfo.user_bank_name }}
                                         </div>
+                                    <?php if($_ENV['app.name'] != APP_ATM) :?>
                                         <div class="" style="margin-bottom:2px;">
                                             <div class="ui horizontal basic label" style="width:100px"><?=lang('common.account_number')?></div>
                                             {{ myInfo.user_bank_num }}
                                         </div>
+                                    <?php endif ?>
+
                                     </div>
                                     <div class="ten wide column">
                                         <!-- <div id="btnChangePwd"  uk-toggle="target: #change_account" tabindex="0" aria-expanded="false"  class="ui tiny red labeled icon button">

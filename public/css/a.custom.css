@@ -514,23 +514,36 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child {
     margin-right: -5px;
 }
 
-@media (max-width: 1480px) {
+@media (max-width: 1600px) {
     #_btn_app{
         display: none;
     }
 }
 
-@media (max-width: 1450px) {
+@media (max-width: 1540px) {
     #_btn_info {
         display: none;
     }
 }
 
-@media (max-width: 1350px) {
+@media (max-width: 1380px) {
     #_btn_notice {
         display: none;
     }
 }
+
+@media (max-width: 1280px) {
+     #_btn_qna  {
+        display: none;
+    }
+}
+
+@media (max-width: 1150px) {
+    #_btn_charge, #_btn_discharge, #_btn_memo, #_btn_partener {
+       display: none;
+   }
+}
+
 
 @media (max-width: 1280px) {
     .after_login, .after_login2,
@@ -540,13 +553,13 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child {
 }
 
 /*<!--MOBILE-->*/
-@media (max-width: 760px) {
+@media (max-width: 900px) {
     .after_login, .after_login2 {
         display: none;
     }
     .BannerSlider-bg {
-        height:350px;
-        min-height:350px;
+        height:450px;
+        min-height:450px;
     }
     .star-container>img:first-child,
     .star-container>img:nth-child(4){

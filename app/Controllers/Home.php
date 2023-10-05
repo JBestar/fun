@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\MemConf_Model;
 use App\Models\SlotPrd_Model;
 use App\Models\SlotGame_Model;
 
@@ -24,6 +25,8 @@ class Home extends BaseController
             if(is_login()){
                 $user_id = $this->session->user_id;
                 $objMember = $this->modelMember->getByUid($user_id);
+
+                $this->sess_action();                
             } else if(array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1) {
                 $arrMember = $this->modelMember->getMemberByLevel(LEVEL_ADMIN, true);
                 $charges = getExchangeList($arrMember, 8);
@@ -78,6 +81,7 @@ class Home extends BaseController
     
             $reqData['page'] = 1;
             $reqData['count'] = 4;
+            $reqData['popup'] = 1;
             $notices = $this->modelNotice->searchBodList($reqData);
             foreach($notices as $notice){
                 $notice->notice_color = '#333';
@@ -93,6 +97,26 @@ class Home extends BaseController
             $navInfo['notice_main'] = $notice_main;
             $navInfo['boards'] = $boards;
     
+            if(!is_null($objMember) && $headInfo['apps_enable'] && array_key_exists('app.sess_act', $_ENV) && $_ENV['app.sess_act'] == 1){
+
+                $memConfModel = new MemConf_Model();
+                $memConf = $memConfModel->getByMember($objMember->mb_fid);
+                $arrMemInfo = [];
+                if(!is_null($memConf) ){
+                    $arrMemInfo = explode('#', $memConf->conf_str_1);
+                }
+                $i=0;
+                foreach($headInfo['apps_auto'] as $app){
+                    if($app->act == 1 && count($arrMemInfo) > $i){
+                        $app->act = intval($arrMemInfo[$i]);
+                        if($app->act == 0)
+                            $app->path = "";
+                    }
+                    $i++;
+                }
+            }
+
+
             $navInfo['part_en'] = true;
             if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1 &&
                 !is_null($objMember) && $objMember->mb_level < LEVEL_ADMIN && floatval($objMember->mb_game_hl_ratio) == 0) {
@@ -138,6 +162,8 @@ class Home extends BaseController
         if(!is_login()){
             print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
         } else{
+            $this->sess_action();                
+
             $tab = $this->request->getVar('tab');
             $user_id = $this->session->user_id;
             $objMember = $this->modelMember->getByUid($user_id);

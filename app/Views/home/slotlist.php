@@ -23,7 +23,7 @@
         <script></script>
     </head>
 
-    <body>
+    <body style="background-color:#141313;">
         <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
         <!--ui.table-->
         <script src="/js/semantic-ui/semantic.js"></script>

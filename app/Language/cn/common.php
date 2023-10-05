@@ -87,6 +87,7 @@ return [
     'confirm_password' => '确认密码',
     'current_money' => '可提取金额',  //现有资金
     'customer' => '客服',           //고객센터
+    'customer_ask' => '请咨询客服中心.',
     'day' => '',
     'delete' => '删除',
     'delete_all' => '删除所有',     //全部删除

@@ -55595,31 +55595,20 @@ a:hover {
 }
 
 .MainMenu-ActionsContainer .btn-register {
-    /* display: none */
-}
-
-.MainMenu-ActionsContainer .btn-register {
     display: inline-flex;
     align-items: center;
     margin-right: 1px;
     font-size: 20px
 }
 
-@media only screen and (max-width: 1250px) {
-    .MainMenu-Left {
-        display: None;
-    }
-}
-
-
-@media only screen and (max-width: 530px) {
+@media only screen and (max-width: 590px) {
     #_btn_user_point {
         display: None;
     }
 }
 
-@media only screen and (max-width: 370px) {
-    #_btn_user_money {
+@media only screen and (max-width: 470px) {
+    #_btn_user_money, #_btn_logout {
         display: None;
     }
 }
@@ -56011,28 +56000,28 @@ html[data-lang=de-de] .MainMenu-home {
 }
 
 .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop {
-    height: auto
+    display: block;
+    height: 600px;
+    padding-bottom: 0;
 }
 
-@media only screen and (min-width: 768px) {
+.MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop .bg-img {
+    background-position: 50%;
+    background-size: cover
+}
+
+@media only screen and (max-width: 768px) {
     .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop {
-        display: block;
         height: 475px;
-        padding-bottom: 0
-    }
-
-    .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop .bg-img {
-        background-position: 50%;
-        background-size: cover
     }
 }
 
-@media only screen and (min-width: 992px) {
+/* @media only screen and (min-width: 992px) {
     .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop {
         padding-bottom: 0;
-        height: 677px
+        height: 577px;
     }
-}
+}  */
 
 .MainBanner-container .BannerSlider-list .BannerSlider-bgMobile {
     height: calc(100vh - 122px);
@@ -64699,7 +64688,7 @@ body.main-menu-active .btn-sidebar-open {
 }
 
 .SeoPage .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop {
-    height: 477px
+    /* height: 677px; */
 }
 
 .SeoPage .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop .bg-img {

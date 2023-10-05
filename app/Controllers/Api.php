@@ -260,7 +260,8 @@ class Api extends BaseController
 			$objMember = $this->modelMember->getByUid($user_id);
 			$sess_id = $this->session->session_id;
 			$this->modelSess->deleteLast();
-
+			$sess = $this->modelSess->getBySess($sess_id);
+			
 			$bPermit = true;
 			if(is_null($objMember)){
 				$bPermit = false;
@@ -272,9 +273,24 @@ class Api extends BaseController
 			else if( !$this->modelMember->isPermitMember($objMember) ){
 				$bPermit = false;
 			}
-			else if( is_null($this->modelSess->getBySess($sess_id)) ){
+			else if( is_null($sess) ){
 				$bPermit = false;
 				writeLog("[check_session] session = null (".$sess_id.")");
+			} else if(array_key_exists('app.sess_act', $_ENV) && $_ENV['app.sess_act'] == 1){
+				$objConf = $this->modelConfsite->find(CONF_DELAY_PLAY);
+				$delayOut = 0;
+				$arrInfo = explode('#', $objConf->conf_idx);
+				if(count($arrInfo) >= 2){
+					if($objMember->mb_level < LEVEL_ADMIN)
+						$delayOut = intval($arrInfo[0]);
+					else
+						$delayOut = intval($arrInfo[1]);
+				}
+
+				if($delayOut > 0 && diffDt(date('Y-m-d H:i:s'), $sess->sess_action) > $delayOut * 60){
+					$bPermit = false;
+					writeLog("[check_session] session_action = ".$sess->sess_action." (".$sess_id.")");
+				}
 			}
 
 			if(!$bPermit){
@@ -343,6 +359,7 @@ class Api extends BaseController
 
 			$reqData['page'] = 1;
 			$reqData['count'] = 4;
+			$reqData['popup'] = 1;
 			$notices = $this->modelNotice->searchBodList($reqData);
             foreach($notices as $notice){
                 $notice->notice_color = '#333';
@@ -399,7 +416,7 @@ class Api extends BaseController
 			$result->status = STATUS_LOGOUT;
 		}
 		else {
-
+			$this->sess_action();                
 			$user_id = $this->session->user_id;
 			$user_pw = $this->request->getPost('pwd_old');
 			$user_newPw = $this->request->getPost('pwd_new');
@@ -436,6 +453,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;
         } else {
+			$this->sess_action();                
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
 
@@ -462,6 +480,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;
         } else {
+			$this->sess_action();                
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
 			$iResult = $this->alltoGame($objMember);
@@ -591,6 +610,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;
         } else {
+			$this->sess_action();                
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id, true);
 
@@ -760,6 +780,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['req_uid'] = $this->session->user_id;
 			$modelExchange = new Exchange_Model();
 			
@@ -785,6 +806,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 
 			$sAnswer = "<p> ".lang("common.deposit_account")." : &nbsp;";
 
@@ -867,6 +889,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;
         } else {
+			$this->sess_action();                
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id, true);
 
@@ -962,6 +985,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['req_uid'] = $this->session->user_id;
 			$modelCharge = new Charge_Model();
 
@@ -1010,6 +1034,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['send_uid'] = $this->session->user_id;
 
 			$arrNotice = $this->modelNotice->searchCusList($reqData);
@@ -1041,6 +1066,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['send_uid'] = $this->session->user_id;
 			$reqData['notice_id'] = $this->request->getVar('idx');
 			$reqData['notice_type'] = NOTICE_CUSTOMER;
@@ -1070,6 +1096,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$data = [  
                 'notice_type' => NOTICE_CUSTOMER,
                 'notice_title' => $this->request->getVar('title'),
@@ -1125,6 +1152,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['send_uid'] = $this->session->user_id;
 
 			$result->totalRows = $this->modelNotice->searchMsgCount($reqData);
@@ -1158,6 +1186,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['send_uid'] = $this->session->user_id;
 			$reqData['notice_id'] = $this->request->getVar('idx');
 
@@ -1184,6 +1213,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['send_uid'] = $this->session->user_id;
 			$reqData['notice_id'] = $this->request->getVar('idx');
 
@@ -1212,6 +1242,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 
 			$result->totalRows = $this->modelNotice->searchBodCount($reqData);
 			$arrNotice = $this->modelNotice->searchBodList($reqData);
@@ -1340,6 +1371,7 @@ class Api extends BaseController
 		{
             $arrResult['status'] = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$game_id = intval($reqData['game']);
 			$arrResult['game'] = $game_id;
 			
@@ -1401,6 +1433,7 @@ class Api extends BaseController
 		{
             $arrResult['status'] = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$game_id = intval($reqData['game']);
 			$arrResult['game'] = $game_id;
 			$reqData['user_id'] = $this->session->user_id;	
@@ -1494,6 +1527,7 @@ class Api extends BaseController
 		$arrReqData = json_decode($jsonData, true);
 		
 		if(is_login()) {
+			$this->sess_action();                
 
 			$modelFollow = new Follow_Model();
 			$user_id = $this->session->user_id;			
@@ -1558,6 +1592,7 @@ class Api extends BaseController
 		$this->setLanguage();
 		
 		if(is_login()) {
+			$this->sess_action();                
 			$modelMoneyhist = new MoneyHist_Model();
 			$modelReward = new Reward_Model();
 
@@ -1707,6 +1742,7 @@ class Api extends BaseController
 		$arrReqData = json_decode($jsonData, true);
 		
 		if(is_login()) {
+			$this->sess_action();                
 			$modelMoneyhist = new MoneyHist_Model();
 			$modelReward = new Reward_Model();
 

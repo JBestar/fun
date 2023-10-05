@@ -87,6 +87,7 @@ return [
     'confirm_password' => 'Confirm Password',
     'current_money' => 'Current Money',
     'customer' => 'CUSTOMER',
+    'customer_ask' => 'Please contact the customer service center.',
     'day' => '',
     'delete' => 'Delete',
     'delete_all' => 'Delete All',
