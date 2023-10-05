@@ -950,7 +950,7 @@
                                     images: ["/images/main/banner31.png?v=1", "/images/main/banner32.png?v=1"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_ATM) :?>
-                                    images: ["/images/main/banner41.png?v=1", "/images/main/banner42.png?v=1", "/images/main/banner43.png?v=1"],
+                                    images: ["/images/main/banner41.png?v=3", "/images/main/banner42.png?v=3", "/images/main/banner43.png?v=3"],
                                     effect: "clip",
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
