@@ -111,6 +111,9 @@ class Home extends BaseController
                         $app->act = intval($arrMemInfo[$i]);
                         if($app->act == 0)
                             $app->path = "";
+                    } else {
+                        $app->act = 0;
+                        $app->path = "";
                     }
                     $i++;
                 }
