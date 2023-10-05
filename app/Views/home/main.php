@@ -7,7 +7,7 @@
         <link rel="shortcut icon" href="/favicon_<?=$_ENV['app.logo']?>.ico?v=1">
 
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <link rel="stylesheet" href="/css/a.min.css?v=5" />
+            <link rel="stylesheet" href="/css/a.min.css?v=6" />
         <?php else : ?>
             <link rel="stylesheet" href="/css/a.min.css?v=<?=time()?>" />
         <?php endif ?>
@@ -950,7 +950,7 @@
                                     images: ["/images/main/banner31.png?v=1", "/images/main/banner32.png?v=1"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_ATM) :?>
-                                    images: ["/images/main/banner41.png?v=3", "/images/main/banner42.png?v=3", "/images/main/banner43.png?v=3"],
+                                    images: ["/images/main/banner41.png?v=2", "/images/main/banner42.png?v=2", "/images/main/banner43.png?v=2"],
                                     effect: "clip",
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
