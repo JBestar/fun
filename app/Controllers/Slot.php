@@ -16,7 +16,7 @@ class Slot extends BaseController
 		$this->setLanguage();
 
 		$prdCode = trim($this->request->getVar('prd'));
-		if(!is_login())
+		if(!is_login(true))
 		{
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
@@ -726,7 +726,7 @@ class Slot extends BaseController
 		$this->setLanguage();
 		$prdCode = trim($this->request->getVar('prd'));
 						
-		if(!is_login())
+		if(!is_login(true))
 		{
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 

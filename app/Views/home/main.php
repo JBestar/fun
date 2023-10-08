@@ -534,7 +534,7 @@
 
             <?php if($_ENV['app.name'] == APP_ATM) :?>
                 .MainMenu-Left {
-                <?php if(is_login()) :?>
+                <?php if(is_login(true)) :?>
                     margin: 5px 2px 0 2px;
                     width: calc(100% - 4px);
                 <?php else : ?>
@@ -651,7 +651,7 @@
         </div>
         <div id="SLB_loading"></div>
 
-        <div id="wrapper" data-login="<?=is_login()?1:0?>" >
+        <div id="wrapper" data-login="<?=is_login(true)?1:0?>" >
             <input type="checkbox" id="MainMenu-controller" />
             <label class="MainMenu-open burger at-hamburger-menu-button" for="MainMenu-controller">
                 <div class="line"></div>
@@ -659,7 +659,7 @@
 
             <div class="MainMenu-top-wrapper">
                 <div class="MainMenu-open-wrapper <?= $_ENV['app.name'] == APP_HERMES? "js-sticky":"" ?>"  >
-                    <?php if($_ENV['app.name'] != APP_ATM || !is_login()) :?>
+                    <?php if($_ENV['app.name'] != APP_ATM || !is_login(true)) :?>
                         <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
                         <a href="/" class="MainMenu-LogoSlogan">
                             <div class="star-logo">
@@ -674,13 +674,13 @@
                         
                         <div class="MainMenu-Left">
 
-                            <?php if($_ENV['app.name'] == APP_ATM && is_login()) :?>
+                            <?php if($_ENV['app.name'] == APP_ATM && is_login(true)) :?>
                             <a href="/" class="js-register-open btn-register btn-tiny at-main-register-button" style="margin-right:30px;">
                                 <span style="padding:0px;"> <img src="/images/main/sample2.logo_at.png?v=1" class="logo_icon" /> </span>
                             </a>
                             <?php endif ?>
 
-                            <?php if(is_login()) :?>
+                            <?php if(is_login(true)) :?>
                                 <?php if ($apps_enable && (!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) ):?>
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_app"  onclick="$('html, body').animate({scrollTop : 450}, 300); showTabMenu('auto');">
                                         <span style="padding:0px;"> <img src="/images/common/logo_app.gif" class="app_icon" /> </span>
@@ -728,7 +728,7 @@
                         </div>
                         <?php if($_ENV['app.name'] != APP_ATM) :?>
                             <div class="MainMenu-Right">
-                                <?php if(is_login()) :?>
+                                <?php if(is_login(true)) :?>
                                 
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="margin-right:0px">
                                         <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
@@ -754,7 +754,7 @@
                             <?php endif ?>
                             </button>
                         <?php endif ?>
-                        <?php if(!is_login()) :?>
+                        <?php if(!is_login(true)) :?>
                             <!-- uk-toggle="target: #agentCheckModal"  -->
                             <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="z-index:1;" onclick="showAgentCheckModal();">
                                 <span><?=lang('common.signup')?></span>
@@ -801,7 +801,7 @@
             <div id="MainMenu" class="MainMenu">
                 <div class="MainMenu-wrapper">
                     <div class="MainMenu-logo">
-                        <?php if(!is_login()) :?>
+                        <?php if(!is_login(true)) :?>
                             <div class="MainMenu-play" onclick="showAgentCheckModal();">
                                 <a href="#" class="js-register-open btn-primary btn-normal"><span><?=lang('common.signup')?></span></a>
                             </div>
@@ -817,7 +817,7 @@
                     </div>
 
                     <ul class="menu menu--main MainMenu-List">
-                        <?php if(!is_login()) :?>
+                        <?php if(!is_login(true)) :?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showLoginModal();">
                             <a><i class="ui sign in icon"></i> <?=lang('common.login')?></a>
                         </li>
@@ -872,7 +872,7 @@
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', 'my_qna')">
                             <a><i class="ui comment alternate icon"></i> <?=lang('common.customer')?><span id="answered_count"></span></a>
                         </li>
-                        <?php if(is_login()) :?>
+                        <?php if(is_login(true)) :?>
 
                             <?php if($part_en) :?>
                             <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="window.open('about:blank').location.href='/home/pt_login'">
@@ -1062,7 +1062,7 @@
                             </div>
                         </div>
 
-                    <?php if( array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1 && !is_login()) :?>
+                    <?php if( array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1 && !is_login(true)) :?>
                         <div class="jackpot-container justify-content-end">
                             <img class="golden-bull" src="/images/jackpot/jackpot.png" alt="">
                             <div class="jackpot-amount">

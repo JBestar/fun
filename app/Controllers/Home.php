@@ -15,14 +15,14 @@ class Home extends BaseController
         $headInfo = $this->getSiteConf();
         $headInfo['lang'] = $this->session->lang;
 
-        if(!is_login() && array_key_exists('app.login', $_ENV) && $_ENV['app.login'] == 1){
+        if(!is_login(true) && array_key_exists('app.login', $_ENV) && $_ENV['app.login'] == 1){
             echo view('home/login', $headInfo);
         } else {
             $objMember = null;
             $charges = [];
             $dischars = [];
 
-            if(is_login()){
+            if(is_login(true)){
                 $user_id = $this->session->user_id;
                 $objMember = $this->modelMember->getByUid($user_id);
 
@@ -151,7 +151,7 @@ class Home extends BaseController
 		$this->setLanguage();
         $headInfo = $this->getSiteConf();
 
-        if(!is_login()){
+        if(!is_login(true)){
             echo view('home/loginip', $headInfo);
         } else {
             $this->response->redirect('/');
@@ -162,7 +162,7 @@ class Home extends BaseController
     public function mypage()
     {
 		$this->setLanguage();
-        if(!is_login()){
+        if(!is_login(true)){
             print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
         } else{
             $this->sess_action();                

@@ -1,11 +1,15 @@
 <?php
 
-  	function is_login(){ 
+  	function is_login($checkCookie = false){ 
+
+      // writeLog("<is_login> logged=".isset($_COOKIE['logged']));
       if(!isset($_SESSION['logged_in']))
         return false;
-      else if(!isset($_COOKIE['logged']))
+      else if($checkCookie && !isset($_COOKIE['logged']))
         return false;
-      else if( $_SESSION['logged_in']==TRUE && $_COOKIE['logged'] === 'yes')
+      else if($checkCookie && $_COOKIE['logged'] !== 'yes')
+        return false;
+      else if( $_SESSION['logged_in']==TRUE)
         return true;
       else return false;  
   	}

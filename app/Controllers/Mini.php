@@ -4,7 +4,7 @@ class Mini extends BaseController
 {
     public function index()
     {
-        if(!is_login())
+        if(!is_login(true))
 		{
 			$this->response->redirect('/');	
 
@@ -89,7 +89,7 @@ class Mini extends BaseController
 
     public function betlist()
     {
-        if(!is_login())
+        if(!is_login(true))
 		{
 			$this->response->redirect('/');	
 
@@ -142,7 +142,7 @@ class Mini extends BaseController
 
     public function rndlist()
     {
-        if(!is_login())
+        if(!is_login(true))
 		{
 			$this->response->redirect('/');	
 
