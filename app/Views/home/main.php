@@ -658,7 +658,7 @@
             </label>
 
             <div class="MainMenu-top-wrapper">
-                <div class="MainMenu-open-wrapper <?= array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1? "js-sticky":"" ?>"  >
+                <div class="MainMenu-open-wrapper <?= $_ENV['app.name'] == APP_HERMES? "js-sticky":"" ?>"  >
                     <?php if($_ENV['app.name'] != APP_ATM || !is_login()) :?>
                         <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
                         <a href="/" class="MainMenu-LogoSlogan">
@@ -1690,7 +1690,7 @@
                     </div>
                     <div class="Payment-icon">
                         <svg>
-                            <use xlink:href="/images/sprite.svg?v=1#color--easyeft2"></use>
+                            <use xlink:href="/images/sprite.svg#color--easyeft2"></use>
                         </svg>
                     </div>
                     <div class="Payment-icon">
@@ -2500,7 +2500,7 @@
                     $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").show();
                     $(".MainMenu-open-wrapper .star-logo").hide();
                 } else {
-                    <?php if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1) :?>
+                    <?php if($_ENV['app.name'] == APP_HERMES) :?>
                         $(".MainMenu-open-wrapper").addClass("js-sticky");
                         $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").show();
                     <?php else :?>
