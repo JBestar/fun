@@ -532,7 +532,7 @@
                 background: #333;
             }
 
-            <?php if($_ENV['app.name'] == APP_ATM) :?>
+            <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
                 .MainMenu-Left {
                 <?php if(is_login(true)) :?>
                     margin: 5px 2px 0 2px;
@@ -659,7 +659,7 @@
 
             <div class="MainMenu-top-wrapper">
                 <div class="MainMenu-open-wrapper <?= $_ENV['app.name'] == APP_HERMES? "js-sticky":"" ?>"  >
-                    <?php if($_ENV['app.name'] != APP_ATM || !is_login(true)) :?>
+                    <?php if(($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) || !is_login(true)) :?>
                         <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
                         <a href="/" class="MainMenu-LogoSlogan">
                             <div class="star-logo">
@@ -674,9 +674,9 @@
                         
                         <div class="MainMenu-Left">
 
-                            <?php if($_ENV['app.name'] == APP_ATM && is_login(true)) :?>
+                            <?php if(($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) && is_login(true)) :?>
                             <a href="/" class="js-register-open btn-register btn-tiny at-main-register-button" style="margin-right:30px;">
-                                <span style="padding:0px;"> <img src="/images/main/sample2.logo_at.png?v=1" class="logo_icon" /> </span>
+                                <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=1" class="logo_icon" /> </span>
                             </a>
                             <?php endif ?>
 
@@ -705,7 +705,7 @@
                                 <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span><?=lang('common.partener')?></span></button>
                                 <?php endif?>
                                 
-                                <?php if($_ENV['app.name'] == APP_ATM) :?>
+                                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="">
                                         <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
                                         <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
@@ -726,7 +726,7 @@
                             <?php endif ?>
 
                         </div>
-                        <?php if($_ENV['app.name'] != APP_ATM) :?>
+                        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
                             <div class="MainMenu-Right">
                                 <?php if(is_login(true)) :?>
                                 
@@ -768,7 +768,7 @@
                                 <span><?=lang('common.login')?></span>
                             </button>
                         <?php else :?>
-                            <?php if($_ENV['app.name'] != APP_ATM) :?>
+                            <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
 
                                 <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" id="_btn_logout" onclick="location.href='/home/logout'"
                                 <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
@@ -949,7 +949,7 @@
                                 <?php elseif($_ENV['app.name'] == APP_HERMES) :?>
                                     images: ["/images/main/banner31.png?v=1", "/images/main/banner32.png?v=1"],
                                     effect: "clip",
-                                <?php elseif($_ENV['app.name'] == APP_ATM) :?>
+                                <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
                                     images: ["/images/main/banner41.png?v=2", "/images/main/banner42.png?v=2", "/images/main/banner43.png?v=2"],
                                     effect: "clip",
                                 <?php else: ?>
@@ -1745,7 +1745,7 @@
             </section>
         </div>
 
-        <?php if($_ENV['app.name'] != APP_ATM) :?>
+        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
 
         <!--MODAL-->
         <div id="loginModal" uk-modal class="uk-modal">
