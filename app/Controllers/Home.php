@@ -173,7 +173,7 @@ class Home extends BaseController
             $navInfo = getNavInfo($objMember);
             $navInfo['lang'] = $this->session->lang;
 
-            if($tab != "my_qna" && $tab != "my_memo" && $tab != "notice"){
+            if($tab != "my_qna" && $tab != "my_memo" && $tab != "notice" && $tab != "my_point"){
                 $tab = "my_info";
             }
             $navInfo['tab'] = $tab;

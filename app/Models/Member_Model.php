@@ -492,7 +492,7 @@ class Member_Model extends Model {
             return RESULT_ERROR;
         $objMember = $this->getByName($arrData['nickname']);
 
-        if(!is_null($objMember) && $objMember->mb_state_active != PERMIT_DELETE)
+        if(!is_null($objMember))
             return RESULT_EXIST_NAME;
 
         if(!array_key_exists('proposer', $arrData))

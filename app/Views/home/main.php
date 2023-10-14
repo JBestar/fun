@@ -533,15 +533,18 @@
             }
 
             <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
-                .MainMenu-Left {
                 <?php if(is_login(true)) :?>
-                    margin: 5px 2px 0 2px;
-                    width: calc(100% - 4px);
+                    .MainMenu-Left {
+                        margin: 5px 2px 0 2px;
+                        width: calc(100% - 4px);
+                    }
                 <?php else : ?>
-                    margin: 10px 200px 0 200px;
-                    width: calc(100% - 400px);
+                    .MainMenu-Left {
+                        margin: 10px 12% 0 12%;
+                        width: 75%;
+                    }
                 <?php endif ?>
-                }
+
                 .logo_icon{
                     width: 150px;
                     margin-top: 55px;
@@ -659,7 +662,7 @@
 
             <div class="MainMenu-top-wrapper">
                 <div class="MainMenu-open-wrapper <?= $_ENV['app.name'] == APP_HERMES? "js-sticky":"" ?>"  >
-                    <?php if(($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) || !is_login(true)) :?>
+                    <?php if(($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN)) :?>
                         <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
                         <a href="/" class="MainMenu-LogoSlogan">
                             <div class="star-logo">
@@ -674,10 +677,24 @@
                         
                         <div class="MainMenu-Left">
 
-                            <?php if(($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) && is_login(true)) :?>
-                            <a href="/" class="js-register-open btn-register btn-tiny at-main-register-button" style="margin-right:30px;">
-                                <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=1" class="logo_icon" /> </span>
-                            </a>
+                            <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                                <a href="/" class="js-register-open btn-register btn-tiny at-main-register-button" style="margin-right:30px; <?=!is_login(true)?"float:left;":""?>">
+                                    <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=1" class="logo_icon" /> </span>
+                                </a>
+                                <?php if(!is_login(true)) :?>
+                                    <!-- uk-toggle="target: #loginModal" -->
+                                    <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="float:right;" onclick="showLoginModal();"  
+                                        <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
+                                            style="margin-top:27px;"
+                                        <?php endif ?>
+                                    >
+                                        <span><?=lang('common.login')?></span>
+                                    </button>
+                                    <!-- uk-toggle="target: #agentCheckModal"  -->
+                                    <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="float:right;" onclick="showAgentCheckModal();">
+                                        <span><?=lang('common.signup')?></span>
+                                    </button>
+                                <?php endif?>
                             <?php endif ?>
 
                             <?php if(is_login(true)) :?>
@@ -754,22 +771,21 @@
                             <?php endif ?>
                             </button>
                         <?php endif ?>
-                        <?php if(!is_login(true)) :?>
-                            <!-- uk-toggle="target: #agentCheckModal"  -->
-                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="z-index:1;" onclick="showAgentCheckModal();">
-                                <span><?=lang('common.signup')?></span>
-                            </button>
-                            <!-- uk-toggle="target: #loginModal" -->
-                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showLoginModal();"  
-                                <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-                                    style="margin-top:27px;"
-                                <?php endif ?>
-                            >
-                                <span><?=lang('common.login')?></span>
-                            </button>
-                        <?php else :?>
-                            <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
-
+                        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
+                            <?php if(!is_login(true)) :?>
+                                <!-- uk-toggle="target: #agentCheckModal"  -->
+                                <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="z-index:1;" onclick="showAgentCheckModal();">
+                                    <span><?=lang('common.signup')?></span>
+                                </button>
+                                <!-- uk-toggle="target: #loginModal" -->
+                                <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showLoginModal();"  
+                                    <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
+                                        style="margin-top:27px;"
+                                    <?php endif ?>
+                                >
+                                    <span><?=lang('common.login')?></span>
+                                </button>
+                            <?php else :?>
                                 <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" id="_btn_logout" onclick="location.href='/home/logout'"
                                 <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
                                     style="margin-top:27px;"
@@ -778,21 +794,6 @@
                                     <span><?=lang('common.logout')?></span>     
                                 </button>
                             <?php endif ?>
-
-                            <!-- <div class="ui uk-navbar-right nav-overlay">
-                                <ul class="uk-navbar-nav after_login" style="gap:10px;">
-                                    <li>
-                                        <a class="bg-btn" onclick="SLB_POPUP('/mypage')">
-                                            <span> <img src="/images/upload/veda_<?=$user_grade?>_icon.png" class="user_level_icon" /> <?=$user_name?> </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <ul class="uk-navbar-nav after_login2" style="gap:20px;">
-                                    <li>
-                                        <a class="bg-btn" href="/home/logout"> <span uk-icon="icon: sign-out; " class="uk-icon"> <?=lang('common.logout')?> </span> </a>
-                                    </li>    
-                                </ul>
-                            </div> -->
                         <?php endif ?>
                     </div>
                 </div>
@@ -2051,9 +2052,15 @@
                             </div>
                         </div>
 
-                        <div class="field">
-                            <label><?=lang('common.nickname')?> </label>
-                            <input type="text" name="nickname" id="nickname" placeholder="nickname" />
+                        <div class="fields">
+                            <div class="twelve wide field">
+                                <label><?=lang('common.nickname')?> </label>
+                                <input type="text" name="nickname" id="nickname" placeholder="<?=lang('common.3to20')?>" minlength="3" maxlength="20" />
+                            </div>
+                            <div class="two wide field">
+                                <label>&nbsp;</label>
+                                <button class="ui teal button" type="button" onclick="checkDupNickname();"><?=lang('common.duplicate_check')?></button>
+                            </div>
                         </div>
 
                         <div class="two fields">
@@ -2857,31 +2864,35 @@
 
             function changePoint() {
 
-                if($("#_btn_user_point ._has_point").text().length < 2){
-                    return;
-                }
-
-                UIkit.modal.confirm(langMessage.change_point_request, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
-                    function () {
-                        $.ajax({
-                            dataType: "json",
-                            type: "POST",
-                            url: "/api/change_point",
-                            success: function (response) {
-                                if (response.status == "success") {
-                                    UIkit.modal.alert(langMessage.change_point_result, {labels: {'ok': langMessage.ok}}).then(function () {
-                                        session_check();
-                                    });
-                                } else {
-                                    // alert(response.msg);
-                                }
-                            },
-                        });
-                    },
-                    function () {
-                        //취소
+                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                    SLB_POPUP('/mypage', 'my_point');
+                <?php else: ?>
+                    if($("#_btn_user_point ._has_point").text().length < 2){
+                        return;
                     }
-                );
+
+                    UIkit.modal.confirm(langMessage.change_point_request, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
+                        function () {
+                            $.ajax({
+                                dataType: "json",
+                                type: "POST",
+                                url: "/api/change_point",
+                                success: function (response) {
+                                    if (response.status == "success") {
+                                        UIkit.modal.alert(langMessage.change_point_result, {labels: {'ok': langMessage.ok}}).then(function () {
+                                            session_check();
+                                        });
+                                    } else {
+                                        // alert(response.msg);
+                                    }
+                                },
+                            });
+                        },
+                        function () {
+                            //취소
+                        }
+                    );
+                <?php endif ?>
 
             }
 

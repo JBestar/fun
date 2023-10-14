@@ -95,14 +95,9 @@ class Api extends BaseController
 			$sess = $this->modelSess->getByUid($objMember->mb_uid);
 
 			$enMultiLogin = $this->modelConfsite->IsMultiLogin();
-			// if(!$enMultiLogin && $objMember->mb_level <= LEVEL_ADMIN && !is_null($sess) ){
-			// 	$modelSessTb = new SessTb_Model();
-			// 	if(!$modelSessTb->isActiveId($sess->sess_id, $sess->sess_mb_uid)){
-			// 		writeLog("Delete Session UserId=".$sess->sess_mb_uid." Id=".$sess->sess_id);
-			// 		$this->modelSess->deleteBySess($sess->sess_id);
-			// 		$sess = null;
-			// 	}
-			// }
+			$enAdminMulti = false;
+			if(array_key_exists('app.login_multi', $_ENV) && intval($_ENV['app.login_multi']) == 1 )
+				$enAdminMulti = true;
 
 			if($objMember->mb_state_active == PERMIT_WAIT){
 				$arrResult['status'] = STATUS_FAIL;
@@ -127,7 +122,7 @@ class Api extends BaseController
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = lang("common.login_duplicate");
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_LOGINING);
-			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view != STATE_ACTIVE 
+			} else if($objMember->mb_level == LEVEL_ADMIN && !$enAdminMulti && $objMember->mb_state_view != STATE_ACTIVE 
 					&& !$enMultiLogin && !is_null($sess) && $sess->sess_id != $sessId && $sess->sess_ip != $user_ip) {
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
@@ -458,14 +453,20 @@ class Api extends BaseController
 			$objMember = $this->modelMember->getByUid($user_id);
 
 			$modelMoneyhist = new MoneyHist_Model();
+			$reqAmount = intval($this->request->getVar('point'));
+			if($reqAmount == 0)
+				$reqAmount = $objMember->mb_point;
 
-			if($objMember->mb_point > 0 && 
-				$this->modelMember->updateAssets($objMember, $objMember->mb_point, 0-$objMember->mb_point)) 
+			$result->status = STATUS_FAIL;
+			if($reqAmount > $objMember->mb_point){
+				$result->status = STATUS_FAIL;
+				$result->msg = "요청금액이 보유포인트를 초과하셨습니다.";
+			} else if($reqAmount > 0 && $objMember->mb_point >= $reqAmount && $this->modelMember->updateAssets($objMember, $reqAmount, 0-$reqAmount))
 			{
-				$modelMoneyhist->registerPointToMoney($objMember, $objMember->mb_point);
+				$modelMoneyhist->registerPointToMoney($objMember, $reqAmount);
+				$result->status = STATUS_SUCCESS;
 			}			
 
-			$result->status = STATUS_SUCCESS;
         }
 		
 		echo json_encode($result);
@@ -794,6 +795,33 @@ class Api extends BaseController
 
     }
 	
+	public function page_point()
+	{
+		$reqData['start_at'] = $this->request->getVar('start_at');
+		$reqData['end_at'] = $this->request->getVar('end_at');
+		$reqData['count'] = $this->request->getVar('rowCount');
+		$reqData['page'] = $this->request->getVar('page');
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$this->sess_action();                
+			$reqData['req_uid'] = $this->session->user_id;
+			$reqData['type'] = POINTCHANGE_EXCHANGE;
+			$modelMoneyhist = new MoneyHist_Model();
+			
+			$result->totalRows = $modelMoneyhist->searchCount($reqData);
+			$result->rows = $modelMoneyhist->searchList($reqData);
+
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
 	public function request_account3()
 	{
 		$this->setLanguage();

@@ -703,15 +703,45 @@ function checkDupUserid() {
     }, 'json')
 }
 
+function checkDupNickname() {
+
+    if(!$('#fregisterform').valid())
+        return;
+
+    var nickname = $('#nickname').val();
+    if(nickname=="") {
+        alert("닉네임을 입력해주세요");
+        return false;
+    }
+    $.post('/api/check_account', {
+        'nickname':nickname
+    }, function (response) {
+        if (response.status == 'success') {
+            alert("사용가능한 닉네임 입니다.");
+            $('#nickname').attr('readonly','readOnly');
+            return true;
+        } else {
+            alert(response.msg);
+            $('#nickname').val('');
+        }
+    }, 'json')
+}
+
 function setMoneyField(id, val) {
     if(val=='0' && id=='amount') {
         objDashBoard.getMyInfo();
     } else if(val=='0') {
         $('#'+id).val(0);
         return;
+    } else if(val=='max'){
+        let max = $('#'+id).data('max');
+        // console.log(max);
+        if(max !== undefined)
+            $('#'+id).val(max);
+        return;
     }
 
-    var value =$('#'+id).val();
+    let value =$('#'+id).val();
     value = Math.floor(value);
     value = value + val;
     $('#'+id).val(value);

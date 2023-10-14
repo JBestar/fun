@@ -183,7 +183,7 @@
                 background:#24425b;
             }
 
-            <?php if($_ENV['app.name'] == APP_ATM) :?>
+            <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
                 .btn {
                     background: #1b1f25;
                 }
@@ -271,10 +271,6 @@
                 height: 25px;
                 padding: 3px;
                 margin-right: 5px;
-                /*background: linear-gradient(to bottom, #eeeeee, #FFFFFF 25px);
-                background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF 25px);
-                
-                box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);*/
                 cursor: pointer;
                 border-radius: 18px;
             }
@@ -368,10 +364,6 @@
                 box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
             }
 
-
-            /* Transition
-                    ========================== */
-
             .switch-label,
             .switch-handle {
                 transition: All 0.3s ease;
@@ -400,6 +392,9 @@
                 <a data-tab="my_info" class="item "><?=lang('common.info_user')?></a> 
                 <a data-tab="my_charge" class="item"><?=lang('common.deposit_history')?></a>
                 <a data-tab="my_exchange" class="item"><?=lang('common.withdrawal_history')?></a> 
+                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                    <a data-tab="my_point" class="item"><?=lang('common.change_point')?></a>
+                <?php endif ?>
                 <a data-tab="my_memo" class="item">&nbsp;&nbsp;&nbsp;&nbsp;<?=lang('common.message')?>&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 <a data-tab="my_qna" class="item"><?=lang('common.customer')?></a>
                 <a data-tab="notice" class="item"><?=lang('common.notice_list')?></a>
@@ -482,7 +477,7 @@
                                     <div class="ten wide column">
                                         <!-- <div id="btnRequestCash" uk-toggle="target: #request_cash" tabindex="0" aria-expanded="false" class="ui tiny yellow labeled icon button"> -->
                                         <div id="btnRequestCash" tabindex="0" class="ui tiny yellow labeled icon button">
-                                            <i class="refresh icon"></i> <span class="hideOnMobile"><?=lang('common.change_point')?></span>
+                                            <i class="refresh icon"></i> <span class="hideOnMobile"><?=lang('common.change_to_money')?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -512,7 +507,7 @@
                                             <div class="ui horizontal basic label" style="width:100px"><?=lang('common.bank_name')?></div>
                                             {{ myInfo.user_bank_name }}
                                         </div>
-                                    <?php if($_ENV['app.name'] != APP_ATM) :?>
+                                    <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
                                         <div class="" style="margin-bottom:2px;">
                                             <div class="ui horizontal basic label" style="width:100px"><?=lang('common.account_number')?></div>
                                             {{ myInfo.user_bank_num }}
@@ -655,7 +650,54 @@
                     </paginate>
                 </div>
             </div>
-            <div data-tab="my_login" id="my_login" class="ui tab segment"></div>
+            <div data-tab="my_point" id="my_point" class="ui tab segment">
+                <div class="ui form">
+                    <div class="inline field">
+                        <div class="ui mini icon input">
+                            <input type="date" v-model="start.point"/> 
+                        </div>
+                        <span>~</span> 
+                        <div class="ui mini icon input">
+                            <input type="date" v-model="end.point"/> 
+                        </div>
+                        <button class="ui tiny blue button" v-on:click="getMyPointList"><?=lang('common.search')?></button>
+                        <button uk-toggle="target:#change_point" class="ui tiny green right floated button" aria-expanded="false"><i class="refresh icon"></i> <?=lang('common.change_point')?></button>
+                    </div>
+                </div>
+                <table class="ui line table">
+                    <thead>
+                        <tr>
+                            <th><?=lang('common.type')?></th>
+                            <th><?=lang('common.changed_amount')?></th>
+                            <th><?=lang('common.proceed_date')?></th>
+                            <th><?=lang('common.money')?></th>
+                            <th><?=lang('common.point')?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in pointList">
+                            <td> <?=lang('common.change_point')?> </td>
+                            <td> {{ item.money_amount }} </td>
+                            <td> {{ item.money_update_time }} </td>
+                            <td> {{ item.money_before }} <img src="/images/common/chevron.png" alt="" style="margin-top: 4px; vertical-align: top;" class="ng-scope"> {{ item.money_after }} </td>
+                            <td> {{ item.money_bet_round != null ? item.money_bet_round : item.money_amount }} <img src="/images/common/chevron.png" alt="" style="margin-top: 4px; vertical-align: top;" class="ng-scope"> {{ item.money_bet_round != null ? (item.money_bet_round - item.money_amount) : 0 }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination_box">
+                    <paginate
+                        v-if="totalPageCount.point"
+                        :page-count="totalPageCount.point"
+                        :page-range="3"
+                        :margin-pages="1"
+                        :click-handler="paginationPoint"
+                        :prev-text="'＜'"
+                        :next-text="'＞'"
+                        :container-class="'_pagination'"
+                        :page-class="''">
+                    </paginate>
+                </div>
+            </div>
             <div data-tab="my_memo" id="my_memo" class="ui tab segment">
                 <div class="ui form">
                     <div class="inline field">
@@ -869,6 +911,8 @@
                         objDashBoard.getNoticeList();
                     } else if (tab == "my_memo") {
                         objDashBoard.getMyMemoList();
+                    } else if (tab == "my_point") {
+                        objDashBoard.getMyPointList();
                     } 
                 }
 
@@ -894,6 +938,8 @@
                         objDashBoard.getNoticeList();
                     } else if (tab == "my_memo") {
                         objDashBoard.getMyMemoList();
+                    } else if (tab == "my_point") {
+                        objDashBoard.getMyPointList();
                     } 
                 });
 
@@ -933,11 +979,11 @@
                         rules: [
                             {
                                 type: "empty",
-                                prompt: "요청하실 롤링금을 숫자로 입력해주세요",
+                                prompt: langMessage.request_amount_input,
                             },
                             {
-                                type: "minLength[5]",
-                                prompt: langMessage.deposit_request_amount,
+                                type: "minLength[4]",
+                                prompt: "최소 1천원 이상 입력해주세요",
                             },
                         ],
                     },
@@ -1042,6 +1088,28 @@
                         if (response.status == "success") {
                             UIkit.modal.alert(langMessage.withdrawal_success, {labels: {'ok': langMessage.ok}}).then(function () {
                                 objDashBoard.getMyInfo();
+                            });
+                        } else if (response.status == "fail") {
+                            alert(response.msg);
+                        } else if (response.status == "logout") {
+                            reloadPage();
+                        }
+                    },
+                });
+
+                $("#ptchangeForm").ajaxForm({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/api/change_point",
+                    data: $(this).serialize(),
+                    beforeSubmit: function () {
+                        return $("#ptchangeForm").valid();
+                    },
+                    success: function (response) {
+                        if (response.status == "success") {
+                            UIkit.modal.alert(langMessage.change_point_result, {labels: {'ok': langMessage.ok}}).then(function () {
+                                objDashBoard.getMyInfo();
+                                objDashBoard.getMyPointList();
                             });
                         } else if (response.status == "fail") {
                             alert(response.msg);
@@ -1428,7 +1496,7 @@
                         this.getMyCashList();
                     },
                     paginationPoint: function (pageNum) {
-                        this.curPage.betting = pageNum;
+                        this.curPage.point = pageNum;
                         this.getMyPointList();
                     },
                     paginationMemo: function (pageNum) {
@@ -1504,28 +1572,27 @@
                             },
                             "json"
                         );
-
-                        // $.ajax({
-
-                        //     dataType: "json",
-                        //     url: "/api/page_exchange",
-                        //     type: "POST",
-                        //     data: {
-                        //         rowCount: this.rowCount,
-                        //         page: this.curPage.exchange,
-                        //         start_at: this.start.exchange + " 00:00:00",
-                        //         end_at: this.end.exchange + " 23:59:59",
-                        //     },
-                        //     beforeSubmit: function () {
-                        //         //return $('#formLogin').valid();
-                        //     },
-                        //     success: function (response) {
-                        //         console.log(response);
-                        //     },
-                        //     error: function(request, status, error) {
-                        //         console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-                        //     }
-                        // });
+                    },
+                    getMyPointList: function () {
+                        $.get(
+                            "/api/page_point",
+                            {
+                                rowCount: this.rowCount,
+                                page: this.curPage.point,
+                                start_at: this.start.point + " 00:00:00",
+                                end_at: this.end.point + " 23:59:59",
+                            },
+                            function (response) {
+                                if (response.status == "success") {
+                                    objDashBoard.pointList = response.rows;
+                                    objDashBoard.countAll.point = response.totalRows;
+                                    objDashBoard.totalPageCount.point = Math.ceil(response.totalRows / objDashBoard.rowCount);
+                                } else {
+                                    // alert(response.message);
+                                }
+                            },
+                            "json"
+                        );
                     },
                     getMyCashList: function () {
                         // $.get(
@@ -1832,6 +1899,12 @@
                         } else 
                             return "<span ></span>";
                     },
+                    strMoney: function (amount){
+                        console.log(numberWithCommas(amount));
+                        if(amount !== undefined)
+                            return numberWithCommas(amount);
+                        return "0";
+                    },
                 },
                 mounted: function () {
 
@@ -1973,9 +2046,9 @@
                     </button>
                 </div>
             </div>
-            <div id="request_cash" uk-modal="" class="uk-modal" tabindex="-1" style="">
+            <div id="change_point" uk-modal="" class="uk-modal" tabindex="-1" style="">
                 <div class="uk-modal-dialog">
-                    <form name="changeForm" id="changeForm" class="ui form equal width">
+                    <form name="ptchangeForm" id="ptchangeForm" class="ui form equal width">
                         <div class="uk-modal-header"><h3 class="uk-modal-title">포인트 전환</h3></div>
                         <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
                         </button>
@@ -1987,11 +2060,13 @@
                                 </div>
                             </div>
                             <div class="field required">
-                                <label>전환 요청금액</label> <input type="number" name="point" id="point" value="" placeholder="전환요청하실 금액을 만원단위로 입력해주세요" class="ui text" />
+                                <label>전환 요청금액</label> <input type="number" name="point" id="point" value="" :data-max="myInfo.user_point" placeholder="전환요청하실 금액을 천원단위로 입력해주세요" class="ui text" />
                                 <div style="padding-top: 5px;">
-                                    <button type="button" onclick="setMoneyField('point',10000)" class="ui inverted blue mini button">1만</button> <button type="button" onclick="setMoneyField('point',50000)" class="ui inverted blue mini button">5만</button>
-                                    <button type="button" onclick="setMoneyField('point',100000)" class="ui inverted blue mini button">10만</button> <button type="button" onclick="setMoneyField('point',500000)" class="ui inverted blue mini button">50만</button>
-                                    <button type="button" onclick="setMoneyField('point',1000000)" class="ui inverted blue mini button">100만</button> <button type="button" onclick="setMoneyField('point',0)" class="ui inverted blue mini button">다시입력</button>
+                                    <button type="button" onclick="setMoneyField('point',1000)" class="ui inverted blue mini button">1천</button> <button type="button" onclick="setMoneyField('point',5000)" class="ui inverted blue mini button">5천</button>
+                                    <button type="button" onclick="setMoneyField('point',10000)" class="ui inverted blue mini button">1만</button> <button type="button" onclick="setMoneyField('point',100000)" class="ui inverted blue mini button">10만</button>
+                                    <button type="button" onclick="setMoneyField('point',1000000)" class="ui inverted blue mini button">100만</button> 
+                                    <button type="button" onclick="setMoneyField('point','max' )" class="ui inverted blue mini button">MAX</button>
+                                    <button type="button" onclick="setMoneyField('point',0)" class="ui inverted blue mini button">다시입력</button>
                                 </div>
                             </div>
                         </div>
