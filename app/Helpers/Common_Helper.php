@@ -981,10 +981,35 @@
       return $result;
 
     }
+    
+    function getFiles($dir, $ext, &$arrInfo)
+    {
+      if (substr($dir, strlen($dir)-1, 1) != DIRECTORY_SEPARATOR)
+          $dir .= DIRECTORY_SEPARATOR;
 
-    function getRandIndex($cnt){
+      if(!file_exists($dir)){
+        return;
+      }
 
-      
 
+      if ($handle = opendir($dir))
+      {
+        writeLog("captchaSrc=".$dir);
+
+          while ($obj = readdir($handle))
+          {
+              if ($obj != '.' && $obj != '..')
+              {
+                  if (is_file($dir.$obj) && strlen($obj) > 4)
+                  {
+                    if( strtoLower(substr($obj, strlen($obj)-4, 4)) === ".".$ext)
+                      array_push($arrInfo, substr($obj, 0, strlen($obj)-4));
+                  }                  
+              }
+          }
+
+          closedir($handle);
+      }
+    
     }
 ?>

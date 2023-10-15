@@ -103,6 +103,11 @@ class Member_Model extends Model {
         
     }
 
+    public function updateData($member, $data){
+        
+        return $this->update($member->mb_fid, $data);
+    }
+
     public function updateLiveInfo($member){
         $data = [
             'mb_live_id' => $member->mb_live_id,

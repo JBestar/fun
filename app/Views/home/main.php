@@ -65,7 +65,7 @@
         <script src="/js/worker.js?v=1"></script>
         <script src="/js/odometer/odometer.js?v=1"></script>
         <link rel="stylesheet" href="/js/odometer/odometer.css?v=1" />
-        <link rel="stylesheet" href="/css/real-time-table.css?v=2" />
+        <link rel="stylesheet" href="/css/real-time-table.css?v=3" />
         <script src="/js/real-time-table.js?v=1"></script>
         <!--순서중요-->
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
@@ -1985,7 +1985,14 @@
                                     <input type="password" name="passwd" placeholder="<?=lang('common.password')?>" style="width:100%;" />
                                 </div>
                             </div>
+                            <div class="input-group mb-4">
+                                <img id="image_id" name="<?=$captcha?>" src="/download/captcha/<?=$captcha?>.jpg" style="width: 100%; height: 30px; margin-bottom: 2px; border-radius: 0.25rem; background-color: beige;" >
+                                <div class="field required">
+                                    <input name="captchacode" placeholder="보안문자" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
+                                </div>
+                            </div>
                             <input type="text" name="ip" id="ip_addr" hidden/>
+                            <input type="text" name="captchasrc" id="captchasrc" value="<?=$captcha?>" hidden/>
                             <div class="button-group">
                                 <button class="btn btn-login ng-scope" type="submit"><?=lang('common.login')?></button>
                             </div>
@@ -1995,9 +2002,6 @@
             </div>
         </div>
         <?php endif ?>
-
-        
-
 
         <div id="agentCheckModal" uk-modal class="uk-modal">
             <div class="uk-modal-dialog">
@@ -2288,9 +2292,14 @@
                         {
                             type: "empty",
                         },
-                        // {
-                        //     type: "minLength[2]",
-                        // },
+                    ],
+                },
+                captchacode: {
+                    identifier: "captchacode",
+                    rules: [
+                        {
+                            type: "empty",
+                        },
                     ],
                 },
             };
@@ -2317,8 +2326,8 @@
                         location.reload();
                         // window.location.href = "/home";
                     } else if (response.status == 'fail') {
-                        if(response.code == 9){  //점검중
-                            
+                        if(response.code == 11){  //보안코드
+                            $("#loginModal input[name=captchacode]").val('');
                         } else {
                             $("#loginModal input[name=userid]").val('');
                             $("#loginModal input[name=passwd]").val('');

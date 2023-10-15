@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\MemConf_Model;
 use App\Models\SlotPrd_Model;
 use App\Models\SlotGame_Model;
+use App\Models\Captcha_Model;
 
 class Home extends BaseController
 {
@@ -21,22 +22,59 @@ class Home extends BaseController
             $objMember = null;
             $charges = [];
             $dischars = [];
+            $captcha = "";
 
             if(is_login(true)){
                 $user_id = $this->session->user_id;
                 $objMember = $this->modelMember->getByUid($user_id);
 
                 $this->sess_action();                
-            } else if(array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1) {
-                $arrMember = $this->modelMember->getMemberByLevel(LEVEL_ADMIN, true);
-                $charges = getExchangeList($arrMember, 8);
-                $dischars = getExchangeList($arrMember, 8);
+            } else {
+                if(array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1) {
+                    $arrMember = $this->modelMember->getMemberByLevel(LEVEL_ADMIN, true);
+                    $charges = getExchangeList($arrMember, 8);
+                    $dischars = getExchangeList($arrMember, 8);
+                }
+
+                if(array_key_exists('login.captcha', $_ENV) && $_ENV['login.captcha'] == 1 ){
+		            $captchaModel = new Captcha_Model();
+                    $captchaSource = PUBLICPATH."captcha_src".DIRECTORY_SEPARATOR;
+                    $captchaPath = PUBLICPATH."download".DIRECTORY_SEPARATOR."captcha".DIRECTORY_SEPARATOR;
+            
+                    $arrCaptcha = [];
+                    getFiles($captchaSource, "jpg", $arrCaptcha);
+                            
+                    $nCount = count($arrCaptcha);
+                    $seed = microtime(true);
+            
+                    if($nCount > 0){
+                        
+                        mt_srand($seed); 
+                        $index = mt_rand(0, $nCount-1);	
+                        $captchaSrc = $arrCaptcha[$index];
+            
+                        $captcha =  $seed;
+                        if (!file_exists($captchaPath)) {
+                            mkdir($captchaPath, 0777, true);
+                        }
+                        if(file_exists($captchaPath.$captcha.".jpg")) {
+                            unlink($captchaPath.$captcha.".jpg");
+                        }
+            
+                        if( copy($captchaSource.$captchaSrc.".jpg", $captchaPath.$captcha.".jpg") ){
+                            $captchaModel->add($captcha, $captchaSrc);
+                        }
+                    }
+                    writeLog("captcha=".$captcha." src=".$captchaSrc);
+                }
             }
+            
             $navInfo = getNavInfo($objMember);
             $navInfo += $this->casinoPrd($headInfo);
             $navInfo += $this->slotPrd($headInfo);
             $navInfo['charges'] = $charges;
             $navInfo['dischars'] = $dischars;
+            $navInfo['captcha'] = $captcha;
 
             $boards = array();
             $notice_main = '';

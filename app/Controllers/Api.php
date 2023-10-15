@@ -10,6 +10,7 @@ use App\Models\Reward_Model;
 use App\Models\Follow_Model;
 use App\Models\Block_Model;
 use App\Libraries\ApiVacc_Lib;
+use App\Models\Captcha_Model;
 
 use App\Models\Round_Model;
 use App\Models\Bet_Model;
@@ -30,6 +31,20 @@ class Api extends BaseController
 		$user_ip = $this->request->getPost('ip');
 		$type = intval($this->request->getPost('type'));
 
+		if($type==0 && array_key_exists('login.captcha', $_ENV) && $_ENV['login.captcha'] == 1){
+			$captchaCode = $this->request->getPost('captchacode');
+			$captchaImg = $this->request->getPost('captchasrc');
+			$captchaModel = new Captcha_Model();
+			$captchaOK = $captchaModel->verify($captchaImg, $captchaCode);
+			if( $captchaOK != RESULT_OK){
+				$arrResult['code'] = RESULT_CAPTCHA_ERR;			//캡쳐오류
+				$arrResult['status'] = STATUS_FAIL;
+				$arrResult['msg'] = "보안코드가 올바르지 않습니다.";
+				echo json_encode($arrResult);
+				return;
+			}
+		}
+
 		writeLog("[login] param:".$user_id.", ".$user_pw.", ".$user_ip.", ".$type);
 		if(strlen($user_ip) < 1 && $type != 1)
 			$user_ip = $this->request->getIPAddress();
@@ -49,10 +64,11 @@ class Api extends BaseController
 			return;
 		}
 		
-		$checkOk = validLoginValue($user_id, $user_pw);
+
+		$isValid = validLoginValue($user_id, $user_pw);
 		
-		if(!$checkOk){
-			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_FAIL);
+		if(strlen($user_id) < 1 || strlen($user_pw) < 1 || !$isValid){
+			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_DENIED);
 			writeLog("[login] check:".$user_id." ,".$user_pw." ");
 
 			$arrResult['code'] = RESULT_FAIL;		
@@ -62,17 +78,56 @@ class Api extends BaseController
 			return;
 		}
 
-		$objMember = null;
-		if(strlen($user_id) > 0 && strlen($user_pw) > 0){
-			$objMember = $this->modelMember->login($user_id, $user_pw);
-		}
-		 
-		if(is_null($objMember) || $objMember->mb_state_active == PERMIT_DELETE)
-		{
+		$objMember = $this->modelMember->login($user_id, $user_pw);
+
+		$modelBlock = new Block_Model();
+		if($modelBlock->isBlockIp($user_ip)){
+			$arrResult['status'] = STATUS_FAIL;
+			$arrResult['code'] = RESULT_FAIL;	
+			$arrResult['msg'] = lang("common.login_ip_block");
+			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IPBLOCK);
+		} else if(is_null($objMember) || $objMember->mb_state_active == PERMIT_DELETE) {
+			$tryLog = TRYLOG_NONE;
+
+			$nFails = 0;
+			$strFail = lang("common.login_fail");;
+			if(is_null($objMember)){
+				$objMember = $this->modelMember->getByUid($user_id);
+				if(is_null($objMember)){
+					$tryLog = TRYLOG_NONE;
+				} else if($objMember->mb_state_active == PERMIT_DELETE){
+					$tryLog = TRYLOG_DELETED;
+				} else {
+					$tryLog = TRYLOG_FAIL;
+
+					if(array_key_exists('app.login_try', $_ENV) && $_ENV['app.login_try'] > 0 && $objMember->mb_state_active == PERMIT_OK){
+					
+						$sessTrys = $modelSessTry->getByUid($user_id);
+						$nFails = 1;
+						foreach($sessTrys as $objTry){
+							if($objTry->log_result !== TRYLOG_FAIL && $objTry->log_result !== TRYLOG_BLOCK)
+								break;
+							$nFails ++;
+						}
+						$strFail .= " (남은회수:".(intval($_ENV['app.login_try']) - $nFails)."회)"; 
+						if($nFails >= $_ENV['app.login_try']){
+							$tryLog =  TRYLOG_BLOCK;
+							$modelBlock->saveByIp($user_ip);
+							if($objMember->mb_level <= LEVEL_ADMIN)
+								$this->modelMember->updateData($objMember, ['mb_state_active' => PERMIT_CANCEL]);
+							$strFail = "과도한 로그인시도로 차단되었습니다.";
+						}
+					}
+				}
+			} else if($objMember->mb_state_active == PERMIT_DELETE){
+				$tryLog = TRYLOG_DELETED;
+			}
+			
 			$arrResult['code'] = RESULT_FAIL;		
 			$arrResult['status'] = STATUS_FAIL;
-			$arrResult['msg'] = lang("common.login_fail");
-			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_FAIL);
+			$arrResult['msg'] = $strFail;
+
+			$modelSessTry->add($user_id, $user_pw, $user_ip, $tryLog);
 		} else if( $objMember->mb_level < LEVEL_ADMIN && $this->modelConfsite->IsMaintain()){
 			$arrResult['status'] = STATUS_FAIL;
 			$arrResult['code'] = RESULT_MAINTAIN;	//Maintain
@@ -88,7 +143,6 @@ class Api extends BaseController
 			$arrResult['code'] = STATUS_FAIL;	
 			$arrResult['msg'] = lang("common.login_refuse");
 		} else {
-			$modelBlock = new Block_Model();
 			$this->modelSess->deleteLast();
 		
 			$sessId = $this->session->session_id;
@@ -105,12 +159,7 @@ class Api extends BaseController
                 $arrResult['msg'] = lang("common.login_wait");
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_WAIT);
 			}
-			else if($objMember->mb_level < LEVEL_ADMIN && $modelBlock->getByIp($user_ip) != null){
-				$arrResult['status'] = STATUS_FAIL;
-				$arrResult['code'] = RESULT_FAIL;	
-				$arrResult['msg'] = lang("common.login_ip_block");
-				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IPBLOCK);
-			} else if($objMember->mb_level >= LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE && 
+			 else if($objMember->mb_level >= LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE && 
 					!isValidIp($objMember->mb_ip_join, $user_ip)){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
