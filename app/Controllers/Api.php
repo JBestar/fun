@@ -33,16 +33,20 @@ class Api extends BaseController
 
 		if($type==0 && array_key_exists('login.captcha', $_ENV) && $_ENV['login.captcha'] == 1){
 			$captchaCode = $this->request->getPost('captchacode');
-			$captchaImg = $this->request->getPost('captchasrc');
-			$captchaModel = new Captcha_Model();
-			$captchaOK = $captchaModel->verify($captchaImg, $captchaCode);
-			if( $captchaOK != RESULT_OK){
-				$arrResult['code'] = RESULT_CAPTCHA_ERR;			//캡쳐오류
-				$arrResult['status'] = STATUS_FAIL;
-				$arrResult['msg'] = "보안코드가 올바르지 않습니다.";
-				echo json_encode($arrResult);
-				return;
+			// writeLog("captchaCod=".$captchaCode);
+			if(strlen($captchaCode) > 0){
+				$captchaImg = $this->request->getPost('captchasrc');
+				$captchaModel = new Captcha_Model();
+				$captchaOK = $captchaModel->verify($captchaImg, $captchaCode);
+				if( $captchaOK != RESULT_OK){
+					$arrResult['code'] = RESULT_CAPTCHA_ERR;			//캡쳐오류
+					$arrResult['status'] = STATUS_FAIL;
+					$arrResult['msg'] = "보안코드가 올바르지 않습니다.";
+					echo json_encode($arrResult);
+					return;
+				}
 			}
+			
 		}
 
 		writeLog("[login] param:".$user_id.", ".$user_pw.", ".$user_ip.", ".$type);
