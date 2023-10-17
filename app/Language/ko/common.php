@@ -295,6 +295,7 @@ return [
     'thanks' => '감사합니다',
     'today' => '오늘',
     'type' => '구분',
+    'updating' => '업데이트중입니다',
     'user' => '회원',
     'user_duplicated' => '중복된 사용자입니다.',
     'user_exist' => '존재하지 않는 사용자입니다.',

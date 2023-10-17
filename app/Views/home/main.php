@@ -51,6 +51,7 @@
                 signup_complete : '<?=lang('common.signup_complete')?>',
                 signup_permit : '<?=lang('common.signup_permit')?>',
                 thanks : '<?=lang('common.thanks')?>',
+                updating : '<?=lang('common.updating')?>',
                 withdrawal_bank_select : '<?=lang('common.withdrawal_bank_select')?>',
                 withdrawal_number_input : '<?=lang('common.withdrawal_number_input')?>',
                 withdrawal_owner_input : '<?=lang('common.withdrawal_owner_input')?>',
@@ -1518,6 +1519,47 @@
                                         </div>
                                     <?php endif ?>
                                     
+                                    <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                                        <div>
+                                            <div class="uk-card uk-card-default uk-card-small">
+                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                    <img src="/images/mini/btn_pbg.png" />
+                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="파워볼" data-onoff="off"  data-cid="PBG">Play </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-card-header">
+                                                    <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
+                                                        <div class="uk-width-expand uk-first-column">
+                                                            <span class="game_title blue">&nbsp;&nbsp;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="uk-card uk-card-default uk-card-small">
+                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                    <img src="/images/mini/btn_ang.png" />
+                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="ANGELS" data-onoff="off"  data-cid="ANG">Play </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-card-header">
+                                                    <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
+                                                        <div class="uk-width-expand uk-first-column">
+                                                            <span class="game_title blue">&nbsp;&nbsp;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endif ?>
+
                                     <!-- item -->
                                 </div>
                             </div>
@@ -2625,7 +2667,7 @@
                     if (onoff == "on") {
                         window.open("/mini?gm="+$(this).data("cid"), "games", "width=1200, height=800, left=100, top=50");
                     } else {
-                        alert(langMessage.inspection);
+                        alert(langMessage.updating);
                     }
                 });
 

@@ -294,6 +294,7 @@ return [
     'thanks' => 'Thank you',
     'today' => 'Today',
     'type' => 'Type',
+    'updating' => 'Updating',
     'user' => 'User',
     'user_duplicated' => 'Duplicated User!',
     'user_exist' => "User don't exist.",

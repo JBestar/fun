@@ -295,6 +295,7 @@ return [
     'thanks' => '谢谢',
     'today' => '今天',
     'type' => '分类', //类别
+    'updating' => '更新中..',
     'user' => '用户',
     'user_duplicated' => '重复的用户.',
     'user_exist' => '不存在的用户.',
