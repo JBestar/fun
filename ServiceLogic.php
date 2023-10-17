@@ -708,7 +708,7 @@ class ServiceLogic
 		$url = $arrInfo[0]."/transaction";
 		$arrIdx = getHistoryDate($objConf->conf_idx);
 		
-		$post = "limmit=300";
+		$post = "limmit=2000";
 		// if($arrIdx['idx'] == ""){
 		// 	$arrIdx['idx'] = date('Y-m-d\TH:i:s', strtotime("-10 hours", time())); 
 		// } 
