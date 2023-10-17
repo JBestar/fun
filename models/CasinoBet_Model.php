@@ -160,8 +160,12 @@ class CasinoBet_Model {
 		}
 		$strSql.= " )";
 
-		if ($this->mDbConn->query($strSql) === TRUE) {
-			return $this->mDbConn->insert_id;
+        try{
+
+			if ($this->mDbConn->query($strSql) === TRUE) 
+				return $this->mDbConn->insert_id;
+		} catch(mysqli_sql_exception $exception){
+			return 0;
 		}
 		return 0;
     } 
@@ -226,9 +230,10 @@ class CasinoBet_Model {
 		$strSql.= " '".$bet['beforeCash']."' ";
 		$strSql.= " )";
 
-		
-		if ($this->mDbConn->query($strSql) === TRUE) {
-			return $this->mDbConn->insert_id;
+		try{
+			if ($this->mDbConn->query($strSql) === TRUE) 
+				return $this->mDbConn->insert_id;
+		} catch(mysqli_sql_exception $exception){
 		}
 		return 0;
     } 

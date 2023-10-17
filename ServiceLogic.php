@@ -839,7 +839,7 @@ class ServiceLogic
 
 			if($bet['gameCategory'] === "casino"){
 				$logHead = "<KGON> CAS>> ";
-				// writeLog($this->fLog, $logHead."bet-".$bet['refId']."=>".$bet['cash']);
+				writeLog($this->fLog, $logHead."bet-".$bet['refId']."=>".$bet['cash']);
 				$bet['txn_id'] = $bet['refId'];
 				$betting = $this->modelCasinoBet->getByBet($bet, $lastCsFid);	//베팅내역체크
 
@@ -860,15 +860,24 @@ class ServiceLogic
 					writeLog($this->fLog, $logHead."Update ACCId=".$betId);
 					$arrMemBet[$objMember->mb_fid] = $bet['createdAt'];
 					
-					if($bet['type'] !== "turn_draw"){	//타이가 아니라면
-						$arrEmpRatio = calcEmpPoint($objMember->ratio_cs, $betting['bet_money'], $betting['bet_time']);
-						foreach($arrEmpRatio as $ratio){
-							if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
-								$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
-							else 
-								$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
+					if($bet['type'] === "turn_draw"){	//타이가 아니라면
+						
+						$arrRewards = $this->modelReward->getByBetId(GAME_CASINO_EVOL, $betId, $rwCsLastFid);
+						foreach($arrRewards as $objReward){
+							writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." mb_fid=".$objReward->rw_mb_fid);
+
+							if(array_key_exists($objReward->rw_mb_fid, $arrEmpPoint )){
+								writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point1 =".$arrEmpPoint[$objReward->rw_mb_fid]);
+								$arrEmpPoint[$objReward->rw_mb_fid] -= $objReward->rw_point;
+								writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point2 =".$arrEmpPoint[$objReward->rw_mb_fid]);
+							}
+							else {
+								$arrEmpPoint[$objReward->rw_mb_fid] = 0-$objReward->rw_point;	
+								writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
+							}
 						}
-						$this->modelReward->insert(GAME_CASINO_EVOL, $betId, $arrEmpRatio, $rwCsLastFid);
+
+						$this->modelReward->deleteByBetId(GAME_CASINO_EVOL, $betId, $rwCsLastFid);
 					}
 
 				} else	//베팅
@@ -885,13 +894,22 @@ class ServiceLogic
 						$arrIdx['fid2'] = $betId;
 						$bInsert = true;
 						writeLog($this->fLog, $logHead."BET-INSERT-".$bet['type']."-".$bet['_id']."=>".$bet['cash']);
+
+						$arrEmpRatio = calcEmpPoint($objMember->ratio_cs, $bet['cash'], $bet['createdAt']);
+						foreach($arrEmpRatio as $ratio){
+							if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
+								$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
+							else 
+								$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
+						}
+						$this->modelReward->insert(GAME_CASINO_EVOL, $betId, $arrEmpRatio, $rwCsLastFid);
 					}
 					
 				}
 			} else if($bet['gameCategory'] === "slot"){
 				$logHead = "<KGON> SLOT>> ";
 
-				// writeLog($this->fLog, $logHead."bet-".$bet['refId']."=>".$bet['cash']);
+				writeLog($this->fLog, $logHead."bet-".$bet['refId']."=>".$bet['cash']);
 				$bet['game_id'] = $gameSlotId;
 				$betting = $this->modelSlotBet->getByKslot($gameSlotId, $bet, $lastSlFid);	//베팅내역체크
 				

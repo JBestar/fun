@@ -31,8 +31,26 @@ class Reward_Model {
 		return $lastFid;
 
 	}
-
 	
+    public function getByBetId($game, $betId, $lastFid){
+    	$strSql = "SELECT * FROM ".$this->mTableName;
+    	$strSql.= " WHERE rw_fid > '".$lastFid."' ";
+    	$strSql.= " AND rw_game = '".$game."' ";
+    	$strSql.= " AND rw_bet_id = '".$betId."' ";
+
+		$arrResult = array();
+    	if($objResult = $this->mDbConn->query($strSql)){
+	    	if ($objResult->num_rows > 0) {
+			  	while($arrRow = $objResult->fetch_assoc()) {
+			    	array_push($arrResult, (object)$arrRow);
+		  		}
+			}
+			$objResult->free();
+		}
+		return $arrResult;
+
+	}
+
     public function deleteByBetId($game, $betId, $lastFid){
     	$strSql = "DELETE FROM ".$this->mTableName;
     	$strSql.= " WHERE rw_fid > '".$lastFid."' ";

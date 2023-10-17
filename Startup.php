@@ -99,8 +99,8 @@
 	$ordGsplay = 0;
 	$logHead = "<Oive>";
 	
-	$secSleep = 11;
-	$secRepeat = 1;
+	$secSleep = 31;
+	$secRepeat = 21;
 
 	writeLog($fLog, $logHead."==============START==============");
 
