@@ -483,7 +483,7 @@ class SlotBet_Model {
 		if($bet['type'] === "turn_bet"){
 			//bet_money
 			$strSql.= " bet_money = '".$bet['cash']."' ";
-		} else {
+		} else if($bet['type'] !== "turn_lose"){
 			//bet_win_money
 			$strSql.= " bet_win_money = '".$bet['cash']."' ";
 		} 
