@@ -16,13 +16,14 @@ class Slot extends BaseController
 		$this->setLanguage();
 
 		$prdCode = trim($this->request->getVar('prd'));
-		if(!is_login())
+		if(!is_login(true))
 		{
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else if($_ENV['app.type'] == APP_TYPE_2){
 			$this->response->redirect('/fslotlist?prd='.$prdCode);	
 		}  else {
+			$this->sess_action();                
 			$gameId = GAME_SLOT_THEPLUS;
 			if($_ENV['app.slot'] == APP_SLOT_KGON)
 				$gameId = GAME_SLOT_KGON;
@@ -86,6 +87,7 @@ class Slot extends BaseController
         } else if($_ENV['app.type'] == APP_TYPE_2){
 			$this->response->redirect('/slot/xslotf?prd='.$prdCode.'&game='.$slotId);	
 		} else {
+			$this->sess_action();                
 
 			$modelSlotgame = new SlotGame_Model();
 
@@ -252,6 +254,7 @@ class Slot extends BaseController
         } else if($_ENV['app.fslot'] == APP_FSLOT_GOLD){
 			$this->response->redirect('/slot/xslotg?prd='.$prdCode.'&game='.$slotId);	
 		} else {
+			$this->sess_action();                
 			$modelSlotgame = new SlotGame_Model();
 
 			$gameId = GAME_SLOT_GSPLAY;
@@ -375,6 +378,7 @@ class Slot extends BaseController
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
+			$this->sess_action();                
 			$modelSlotgame = new SlotGame_Model();
 
 			$gameId = GAME_SLOT_GOLD;
@@ -498,6 +502,7 @@ class Slot extends BaseController
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
+			$this->sess_action();                
 			$modelSlotgame = new SlotGame_Model();
 
 			$gameId = GAME_SLOT_KGON;
@@ -611,6 +616,7 @@ class Slot extends BaseController
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
+			$this->sess_action();                
 			$modelSlotgame = new SlotGame_Model();
 
 			$gameId = GAME_SLOT_STAR;
@@ -720,13 +726,14 @@ class Slot extends BaseController
 		$this->setLanguage();
 		$prdCode = trim($this->request->getVar('prd'));
 						
-		if(!is_login())
+		if(!is_login(true))
 		{
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else if($_ENV['app.type'] == APP_TYPE_1){
 			$this->response->redirect('/xslot_list?prd='.$prdCode);	
 		}  else {
+			$this->sess_action();                
 			$gameId = GAME_SLOT_GSPLAY;
 			if($_ENV['app.fslot'] == APP_FSLOT_GOLD)
 				$gameId = GAME_SLOT_GOLD;

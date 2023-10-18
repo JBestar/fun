@@ -554,7 +554,7 @@ function money_check(){
 }
 
 function session_check() {
-    console.log("session_check");
+    // console.log("session_check");
     $.ajax({
         type: 'POST',
         url: '/api/check_session',
@@ -592,38 +592,38 @@ var htmlMsg = '<p>읽지 않은 쪽지가 있습니다.</p><a href="/message" cl
 var htmlCus = '<p>문의해답이 도착하였습니다.</p><a href="/customer" class="message_btn">해답보기</a>';
 
 function showUnread(msg, cus) {
-    windowWidth = window.innerWidth;
+    // windowWidth = window.innerWidth;
 
-    if (window.location.pathname != "/message" &&
-        window.location.pathname != "/customer") {
-        if (msg > 0) {
-            $('.message_wrap .message_con').html(htmlMsg);
-        } else if (cus > 0) {
-            $('.message_wrap .message_con').html(htmlCus);
-        }
+    // if (window.location.pathname != "/message" &&
+    //     window.location.pathname != "/customer") {
+    //     if (msg > 0) {
+    //         $('.message_wrap .message_con').html(htmlMsg);
+    //     } else if (cus > 0) {
+    //         $('.message_wrap .message_con').html(htmlCus);
+    //     }
 
-        if (msg > 0 || cus) {
-            $('.message_wrap').show();
-            $('.message_bg').show();
-        } else {
-            $('.message_wrap').hide();
-            $('.message_bg').hide();
-        }
-    } else {
-        $('.message_wrap').hide();
-        $('.message_bg').hide();
-    }
+    //     if (msg > 0 || cus) {
+    //         $('.message_wrap').show();
+    //         $('.message_bg').show();
+    //     } else {
+    //         $('.message_wrap').hide();
+    //         $('.message_bg').hide();
+    //     }
+    // } else {
+    //     $('.message_wrap').hide();
+    //     $('.message_bg').hide();
+    // }
 
-    if (windowWidth <= 1279) {
-        $('.message_wrap').animate({
-            bottom: '5px'
-        }, 700);
-    } else if (windowWidth >= 1280) {
-        $('.message_wrap').animate({
-            right: '15px',
-            bottom: '10px'
-        }, 700);
-    }
+    // if (windowWidth <= 1279) {
+    //     $('.message_wrap').animate({
+    //         bottom: '5px'
+    //     }, 700);
+    // } else if (windowWidth >= 1280) {
+    //     $('.message_wrap').animate({
+    //         right: '15px',
+    //         bottom: '10px'
+    //     }, 700);
+    // }
 }
 
 // function showNotice(main, urgent, bank) {

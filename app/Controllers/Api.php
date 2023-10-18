@@ -10,6 +10,7 @@ use App\Models\Reward_Model;
 use App\Models\Follow_Model;
 use App\Models\Block_Model;
 use App\Libraries\ApiVacc_Lib;
+use App\Models\Captcha_Model;
 
 use App\Models\Round_Model;
 use App\Models\Bet_Model;
@@ -30,6 +31,24 @@ class Api extends BaseController
 		$user_ip = $this->request->getPost('ip');
 		$type = intval($this->request->getPost('type'));
 
+		if($type==0 && array_key_exists('login.captcha', $_ENV) && $_ENV['login.captcha'] == 1){
+			$captchaCode = $this->request->getPost('captchacode');
+			// writeLog("captchaCod=".$captchaCode);
+			if(strlen($captchaCode) > 0){
+				$captchaImg = $this->request->getPost('captchasrc');
+				$captchaModel = new Captcha_Model();
+				$captchaOK = $captchaModel->verify($captchaImg, $captchaCode);
+				if( $captchaOK != RESULT_OK){
+					$arrResult['code'] = RESULT_CAPTCHA_ERR;			//캡쳐오류
+					$arrResult['status'] = STATUS_FAIL;
+					$arrResult['msg'] = "보안코드가 올바르지 않습니다.";
+					echo json_encode($arrResult);
+					return;
+				}
+			}
+			
+		}
+
 		writeLog("[login] param:".$user_id.", ".$user_pw.", ".$user_ip.", ".$type);
 		if(strlen($user_ip) < 1 && $type != 1)
 			$user_ip = $this->request->getIPAddress();
@@ -49,10 +68,11 @@ class Api extends BaseController
 			return;
 		}
 		
-		$checkOk = validLoginValue($user_id, $user_pw);
+
+		$isValid = validLoginValue($user_id, $user_pw);
 		
-		if(!$checkOk){
-			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_FAIL);
+		if(strlen($user_id) < 1 || strlen($user_pw) < 1 || !$isValid){
+			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_DENIED);
 			writeLog("[login] check:".$user_id." ,".$user_pw." ");
 
 			$arrResult['code'] = RESULT_FAIL;		
@@ -62,17 +82,56 @@ class Api extends BaseController
 			return;
 		}
 
-		$objMember = null;
-		if(strlen($user_id) > 0 && strlen($user_pw) > 0){
-			$objMember = $this->modelMember->login($user_id, $user_pw);
-		}
-		 
-		if(is_null($objMember) || $objMember->mb_state_active == PERMIT_DELETE)
-		{
+		$objMember = $this->modelMember->login($user_id, $user_pw);
+
+		$modelBlock = new Block_Model();
+		if($modelBlock->isBlockIp($user_ip)){
+			$arrResult['status'] = STATUS_FAIL;
+			$arrResult['code'] = RESULT_FAIL;	
+			$arrResult['msg'] = lang("common.login_ip_block");
+			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IPBLOCK);
+		} else if(is_null($objMember) || $objMember->mb_state_active == PERMIT_DELETE) {
+			$tryLog = TRYLOG_NONE;
+
+			$nFails = 0;
+			$strFail = lang("common.login_fail");;
+			if(is_null($objMember)){
+				$objMember = $this->modelMember->getByUid($user_id);
+				if(is_null($objMember)){
+					$tryLog = TRYLOG_NONE;
+				} else if($objMember->mb_state_active == PERMIT_DELETE){
+					$tryLog = TRYLOG_DELETED;
+				} else {
+					$tryLog = TRYLOG_FAIL;
+
+					if(array_key_exists('app.login_try', $_ENV) && $_ENV['app.login_try'] > 0 && $objMember->mb_state_active == PERMIT_OK){
+					
+						$sessTrys = $modelSessTry->getByUid($user_id);
+						$nFails = 1;
+						foreach($sessTrys as $objTry){
+							if($objTry->log_result !== TRYLOG_FAIL && $objTry->log_result !== TRYLOG_BLOCK)
+								break;
+							$nFails ++;
+						}
+						$strFail .= " (남은회수:".(intval($_ENV['app.login_try']) - $nFails)."회)"; 
+						if($nFails >= $_ENV['app.login_try']){
+							$tryLog =  TRYLOG_BLOCK;
+							$modelBlock->saveByIp($user_ip);
+							if($objMember->mb_level <= LEVEL_ADMIN)
+								$this->modelMember->updateData($objMember, ['mb_state_active' => PERMIT_CANCEL]);
+							$strFail = "과도한 로그인시도로 차단되었습니다.";
+						}
+					}
+				}
+			} else if($objMember->mb_state_active == PERMIT_DELETE){
+				$tryLog = TRYLOG_DELETED;
+			}
+			
 			$arrResult['code'] = RESULT_FAIL;		
 			$arrResult['status'] = STATUS_FAIL;
-			$arrResult['msg'] = lang("common.login_fail");
-			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_FAIL);
+			$arrResult['msg'] = $strFail;
+
+			$modelSessTry->add($user_id, $user_pw, $user_ip, $tryLog);
 		} else if( $objMember->mb_level < LEVEL_ADMIN && $this->modelConfsite->IsMaintain()){
 			$arrResult['status'] = STATUS_FAIL;
 			$arrResult['code'] = RESULT_MAINTAIN;	//Maintain
@@ -88,21 +147,15 @@ class Api extends BaseController
 			$arrResult['code'] = STATUS_FAIL;	
 			$arrResult['msg'] = lang("common.login_refuse");
 		} else {
-			$modelBlock = new Block_Model();
 			$this->modelSess->deleteLast();
 		
 			$sessId = $this->session->session_id;
 			$sess = $this->modelSess->getByUid($objMember->mb_uid);
 
 			$enMultiLogin = $this->modelConfsite->IsMultiLogin();
-			// if(!$enMultiLogin && $objMember->mb_level <= LEVEL_ADMIN && !is_null($sess) ){
-			// 	$modelSessTb = new SessTb_Model();
-			// 	if(!$modelSessTb->isActiveId($sess->sess_id, $sess->sess_mb_uid)){
-			// 		writeLog("Delete Session UserId=".$sess->sess_mb_uid." Id=".$sess->sess_id);
-			// 		$this->modelSess->deleteBySess($sess->sess_id);
-			// 		$sess = null;
-			// 	}
-			// }
+			$enAdminMulti = false;
+			if(array_key_exists('app.login_multi', $_ENV) && intval($_ENV['app.login_multi']) == 1 )
+				$enAdminMulti = true;
 
 			if($objMember->mb_state_active == PERMIT_WAIT){
 				$arrResult['status'] = STATUS_FAIL;
@@ -110,12 +163,7 @@ class Api extends BaseController
                 $arrResult['msg'] = lang("common.login_wait");
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_WAIT);
 			}
-			else if($objMember->mb_level < LEVEL_ADMIN && $modelBlock->getByIp($user_ip) != null){
-				$arrResult['status'] = STATUS_FAIL;
-				$arrResult['code'] = RESULT_FAIL;	
-				$arrResult['msg'] = lang("common.login_ip_block");
-				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IPBLOCK);
-			} else if($objMember->mb_level >= LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE && 
+			 else if($objMember->mb_level >= LEVEL_ADMIN && $objMember->mb_state_view == STATE_ACTIVE && 
 					!isValidIp($objMember->mb_ip_join, $user_ip)){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
@@ -127,7 +175,7 @@ class Api extends BaseController
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = lang("common.login_duplicate");
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_LOGINING);
-			} else if($objMember->mb_level == LEVEL_ADMIN && $objMember->mb_state_view != STATE_ACTIVE 
+			} else if($objMember->mb_level == LEVEL_ADMIN && !$enAdminMulti && $objMember->mb_state_view != STATE_ACTIVE 
 					&& !$enMultiLogin && !is_null($sess) && $sess->sess_id != $sessId && $sess->sess_ip != $user_ip) {
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
@@ -260,7 +308,8 @@ class Api extends BaseController
 			$objMember = $this->modelMember->getByUid($user_id);
 			$sess_id = $this->session->session_id;
 			$this->modelSess->deleteLast();
-
+			$sess = $this->modelSess->getBySess($sess_id);
+			
 			$bPermit = true;
 			if(is_null($objMember)){
 				$bPermit = false;
@@ -272,9 +321,24 @@ class Api extends BaseController
 			else if( !$this->modelMember->isPermitMember($objMember) ){
 				$bPermit = false;
 			}
-			else if( is_null($this->modelSess->getBySess($sess_id)) ){
+			else if( is_null($sess) ){
 				$bPermit = false;
 				writeLog("[check_session] session = null (".$sess_id.")");
+			} else if(array_key_exists('app.sess_act', $_ENV) && $_ENV['app.sess_act'] == 1){
+				$objConf = $this->modelConfsite->find(CONF_DELAY_PLAY);
+				$delayOut = 0;
+				$arrInfo = explode('#', $objConf->conf_idx);
+				if(count($arrInfo) >= 2){
+					if($objMember->mb_level < LEVEL_ADMIN)
+						$delayOut = intval($arrInfo[0]);
+					else
+						$delayOut = intval($arrInfo[1]);
+				}
+
+				if($delayOut > 0 && diffDt(date('Y-m-d H:i:s'), $sess->sess_action) > $delayOut * 60){
+					$bPermit = false;
+					writeLog("[check_session] session_action = ".$sess->sess_action." (".$sess_id.")");
+				}
 			}
 
 			if(!$bPermit){
@@ -343,6 +407,7 @@ class Api extends BaseController
 
 			$reqData['page'] = 1;
 			$reqData['count'] = 4;
+			$reqData['popup'] = 1;
 			$notices = $this->modelNotice->searchBodList($reqData);
             foreach($notices as $notice){
                 $notice->notice_color = '#333';
@@ -399,7 +464,7 @@ class Api extends BaseController
 			$result->status = STATUS_LOGOUT;
 		}
 		else {
-
+			$this->sess_action();                
 			$user_id = $this->session->user_id;
 			$user_pw = $this->request->getPost('pwd_old');
 			$user_newPw = $this->request->getPost('pwd_new');
@@ -436,18 +501,25 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;
         } else {
+			$this->sess_action();                
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
 
 			$modelMoneyhist = new MoneyHist_Model();
+			$reqAmount = intval($this->request->getVar('point'));
+			if($reqAmount == 0)
+				$reqAmount = $objMember->mb_point;
 
-			if($objMember->mb_point > 0 && 
-				$this->modelMember->updateAssets($objMember, $objMember->mb_point, 0-$objMember->mb_point)) 
+			$result->status = STATUS_FAIL;
+			if($reqAmount > $objMember->mb_point){
+				$result->status = STATUS_FAIL;
+				$result->msg = "요청금액이 보유포인트를 초과하셨습니다.";
+			} else if($reqAmount > 0 && $objMember->mb_point >= $reqAmount && $this->modelMember->updateAssets($objMember, $reqAmount, 0-$reqAmount))
 			{
-				$modelMoneyhist->registerPointToMoney($objMember, $objMember->mb_point);
+				$modelMoneyhist->registerPointToMoney($objMember, $reqAmount);
+				$result->status = STATUS_SUCCESS;
 			}			
 
-			$result->status = STATUS_SUCCESS;
         }
 		
 		echo json_encode($result);
@@ -462,6 +534,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;
         } else {
+			$this->sess_action();                
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
 			$iResult = $this->alltoGame($objMember);
@@ -591,6 +664,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;
         } else {
+			$this->sess_action();                
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id, true);
 
@@ -760,6 +834,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['req_uid'] = $this->session->user_id;
 			$modelExchange = new Exchange_Model();
 			
@@ -773,6 +848,33 @@ class Api extends BaseController
 
     }
 	
+	public function page_point()
+	{
+		$reqData['start_at'] = $this->request->getVar('start_at');
+		$reqData['end_at'] = $this->request->getVar('end_at');
+		$reqData['count'] = $this->request->getVar('rowCount');
+		$reqData['page'] = $this->request->getVar('page');
+
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$this->sess_action();                
+			$reqData['req_uid'] = $this->session->user_id;
+			$reqData['type'] = POINTCHANGE_EXCHANGE;
+			$modelMoneyhist = new MoneyHist_Model();
+			
+			$result->totalRows = $modelMoneyhist->searchCount($reqData);
+			$result->rows = $modelMoneyhist->searchList($reqData);
+
+			$result->status = STATUS_SUCCESS;
+        }
+		
+		echo json_encode($result);
+
+    }
+
 	public function request_account3()
 	{
 		$this->setLanguage();
@@ -785,6 +887,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 
 			$sAnswer = "<p> ".lang("common.deposit_account")." : &nbsp;";
 
@@ -867,6 +970,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;
         } else {
+			$this->sess_action();                
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id, true);
 
@@ -962,6 +1066,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['req_uid'] = $this->session->user_id;
 			$modelCharge = new Charge_Model();
 
@@ -1010,9 +1115,11 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['send_uid'] = $this->session->user_id;
 
 			$arrNotice = $this->modelNotice->searchCusList($reqData);
+			$result->unread = $this->modelNotice->unreadCus($reqData['send_uid']);
 			foreach($arrNotice as $notice){
 				if($notice->notice_state_active == STATE_ACTIVE){
 					$reqData['notice_id'] = $notice->notice_fid;
@@ -1040,6 +1147,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['send_uid'] = $this->session->user_id;
 			$reqData['notice_id'] = $this->request->getVar('idx');
 			$reqData['notice_type'] = NOTICE_CUSTOMER;
@@ -1069,6 +1177,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$data = [  
                 'notice_type' => NOTICE_CUSTOMER,
                 'notice_title' => $this->request->getVar('title'),
@@ -1124,6 +1233,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['send_uid'] = $this->session->user_id;
 
 			$result->totalRows = $this->modelNotice->searchMsgCount($reqData);
@@ -1157,6 +1267,7 @@ class Api extends BaseController
 			$result->msg = lang("common.session_expired");
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['send_uid'] = $this->session->user_id;
 			$reqData['notice_id'] = $this->request->getVar('idx');
 
@@ -1183,6 +1294,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$reqData['send_uid'] = $this->session->user_id;
 			$reqData['notice_id'] = $this->request->getVar('idx');
 
@@ -1211,6 +1323,7 @@ class Api extends BaseController
 		{
             $result->status = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 
 			$result->totalRows = $this->modelNotice->searchBodCount($reqData);
 			$arrNotice = $this->modelNotice->searchBodList($reqData);
@@ -1339,6 +1452,7 @@ class Api extends BaseController
 		{
             $arrResult['status'] = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$game_id = intval($reqData['game']);
 			$arrResult['game'] = $game_id;
 			
@@ -1400,6 +1514,7 @@ class Api extends BaseController
 		{
             $arrResult['status'] = STATUS_LOGOUT;		
         } else {
+			$this->sess_action();                
 			$game_id = intval($reqData['game']);
 			$arrResult['game'] = $game_id;
 			$reqData['user_id'] = $this->session->user_id;	
@@ -1493,6 +1608,7 @@ class Api extends BaseController
 		$arrReqData = json_decode($jsonData, true);
 		
 		if(is_login()) {
+			$this->sess_action();                
 
 			$modelFollow = new Follow_Model();
 			$user_id = $this->session->user_id;			
@@ -1557,6 +1673,7 @@ class Api extends BaseController
 		$this->setLanguage();
 		
 		if(is_login()) {
+			$this->sess_action();                
 			$modelMoneyhist = new MoneyHist_Model();
 			$modelReward = new Reward_Model();
 
@@ -1706,6 +1823,7 @@ class Api extends BaseController
 		$arrReqData = json_decode($jsonData, true);
 		
 		if(is_login()) {
+			$this->sess_action();                
 			$modelMoneyhist = new MoneyHist_Model();
 			$modelReward = new Reward_Model();
 
@@ -2187,6 +2305,24 @@ class Api extends BaseController
 		$result->status = STATUS_SUCCESS;
 
 		echo json_encode($result);	
+	}
+
+	public function change_alarmstate(){
+		$jsonData = $_REQUEST['json_'];
+		$arrData = json_decode($jsonData, true);		
+
+		if(is_login())
+		{
+			$user_id = $this->session->user_id;
+			$bResult = $this->modelMember->updateAlarmState($user_id, $arrData);
+			if($bResult)
+				$arrResult['status'] = "success";
+			else $arrResult['status'] = "fail";
+		}
+		else {
+			$arrResult['status'] = "logout";			
+		}
+		echo json_encode($arrResult);	
 	}
 
 }

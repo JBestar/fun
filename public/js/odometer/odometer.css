@@ -45,14 +45,6 @@
     }
 }
 
-/* @media (min-width: 641px) {
-    .jackpot-container {
-        display: flex;
-    }
-} */
-
-/* End jackpot related css */
-
 .odometer {
     font-size: 96px;
     font-family: 'Oswald', sans-serif !important;
@@ -61,11 +53,7 @@
 }
 
 @media (max-width: 1440px) {
-    .jackpot-container {
-        /* flex-direction: column;
-        justify-content: start !important;
-        align-items: end !important; */
-    }
+
     .golden-bull {
         position: absolute;
         left:5%;
@@ -164,11 +152,7 @@
     font-family: 'Oswald', sans-serif !important;
     line-height: 1.1em;
     }
-    .odometer.odometer-auto-theme .odometer-value, .odometer.odometer-theme-default .odometer-value {
-    }
     
-    
-    .odometer-digit-inner {}
     .odometer-value {
     background: linear-gradient(to bottom, #7C3021 5%, #FFB08E 50%, #7C3021 100%);
     -webkit-linear-gradient(#FFB08E, #7C3021);

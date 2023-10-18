@@ -7,7 +7,7 @@
         <link rel="shortcut icon" href="/favicon_<?=$_ENV['app.logo']?>.ico?v=1">
 
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <link rel="stylesheet" href="/css/a.min.css?v=4" />
+            <link rel="stylesheet" href="/css/a.min.css?v=6" />
         <?php else : ?>
             <link rel="stylesheet" href="/css/a.min.css?v=<?=time()?>" />
         <?php endif ?>
@@ -21,10 +21,12 @@
 
         <script>
             var langMessage = {
+                administrator_ask : '<?=lang('common.administrator_ask')?>', 
                 ask_quick : '<?=lang('common.ask_quick')?>',
                 cancel : '<?=lang('common.cancel')?>',
                 change_point_request : '<?=lang('common.change_point_request')?>',
                 change_point_result : '<?=lang('common.change_point_result')?>',
+                customer_ask : '<?=lang('common.customer_ask')?>', 
                 deposit_account_answer : '<?=lang('common.deposit_account_answer')?>',
                 deposit_account_ask : '<?=lang('common.deposit_account_ask')?>',
                 deposit_account_check : '<?=lang('common.deposit_account_check')?>',
@@ -35,6 +37,7 @@
                 id_input_4 : '<?=lang('common.id_input_4')?>',
                 id_input_16 : '<?=lang('common.id_input_16')?>',
                 inspection : '<?=lang('common.inspection')?>',
+                message_to_read : '<?=lang('common.message_to_read')?>',
                 nickname_input : '<?=lang('common.nickname_input')?>',
                 ok : '<?=lang('common.ok')?>',
                 password_change_ok : '<?=lang('common.password_change_ok')?>',
@@ -48,6 +51,7 @@
                 signup_complete : '<?=lang('common.signup_complete')?>',
                 signup_permit : '<?=lang('common.signup_permit')?>',
                 thanks : '<?=lang('common.thanks')?>',
+                updating : '<?=lang('common.updating')?>',
                 withdrawal_bank_select : '<?=lang('common.withdrawal_bank_select')?>',
                 withdrawal_number_input : '<?=lang('common.withdrawal_number_input')?>',
                 withdrawal_owner_input : '<?=lang('common.withdrawal_owner_input')?>',
@@ -62,7 +66,7 @@
         <script src="/js/worker.js?v=1"></script>
         <script src="/js/odometer/odometer.js?v=1"></script>
         <link rel="stylesheet" href="/js/odometer/odometer.css?v=1" />
-        <link rel="stylesheet" href="/css/real-time-table.css?v=1" />
+        <link rel="stylesheet" href="/css/real-time-table.css?v=3" />
         <script src="/js/real-time-table.js?v=1"></script>
         <!--순서중요-->
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
@@ -71,7 +75,7 @@
             <script type="text/javascript" src="/js/lib.js?ver=1"></script>
             <script type="text/javascript" src="/js/common.js?ver=2"></script>
             <script type="text/javascript" src="/js/SLB.js?ver=4"></script>
-            <script type="text/javascript" src="/js/main.js?ver=5"></script>
+            <script type="text/javascript" src="/js/main.js?ver=6"></script>
             <link rel="stylesheet" type="text/css" href="/css/devel.css?v=3" />
         <?php else : ?>
             <script type="text/javascript" src="/js/vue.js"></script>
@@ -92,7 +96,7 @@
         <script type="text/javascript" src="/js/jquery-ui/marquee.js"></script>
 
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-        <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=4" />
+        <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=5" />
         <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=4" />
         <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=3" />
     <?php else : ?>
@@ -121,21 +125,21 @@
             }
             
             .MainMenu-open-wrapper .MainMenu-LogoSlogan {
-                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=7);
+                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=8);
             }
 
             <?php if(array_key_exists('app.tree', $_ENV) && $_ENV['app.tree'] == 1) :?>
                 .games-page .categories-wrapper, .SeoPage .categories-wrapper {
-                    background-image: linear-gradient(360deg,#000000, #000000, #262626);
+                    background-image: linear-gradient(360deg,#2b2b2b, #232323, #262626);
                     margin-top:16px;
                 }         
                           
                 .scroll_area{
-                    background-color: #111;
+                    background-image: linear-gradient(360deg,#3f3f3f, #333333, #2b2b2b);
                 } 
                 .SeoPage {
                     background-repeat:repeat;
-                    background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=2);
+                    background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=3);
                 }
                 .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
                     top: 8px;
@@ -164,29 +168,13 @@
             }
             <?php endif ?>
 
-            <?php if($_ENV['app.name'] == APP_ATM) :?>
-                .MainMenu-top-wrapper {
-                    position: relative;
-                }
-                .MainMenu-open-wrapper {
-                    position: inherit;
-                    height:0px;
-                }
-                .SeoPage .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop .bg-img {
-                    background-size: cover;
-                    background-position: 0% 50%
-                }
-                .PaymentIconsContainer {
-                    background-image: linear-gradient(90deg,#2f3031, #2f3031, #2f3031);
-                }
-            <?php endif ?>
 
             @media only screen and (max-width: 850px) {
                 .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before{
                     height: 0px;
                 }
             }
-            @media only screen and (min-width: 650px) {
+            @media only screen and (min-width: 700px) {
                 .btn-tiny .txt_cash{
                     display:block;
                 } 
@@ -194,7 +182,7 @@
                     display:none;
                 }
             }
-            @media only screen and (max-width: 650px) {
+            @media only screen and (max-width: 700px) {
                 .btn-tiny .txt_cash{
                     display:none;
                 } 
@@ -259,6 +247,9 @@
             .btn:hover {
                 background: #2e456a;/*4f4f52*/
                 color:#eee;
+            }
+            #_btn_user_money ._has_cash, #_btn_user_point ._has_point{
+                color:#ff9600;
             }
             .pop_layer {
                 position: fixed;
@@ -542,7 +533,42 @@
                 background: #333;
             }
 
-            <?php if($_ENV['app.name'] == APP_ATM) :?>
+            <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                <?php if(is_login(true)) :?>
+                    .MainMenu-Left {
+                        margin: 5px 2px 0 2px;
+                        width: calc(100% - 4px);
+                    }
+                <?php else : ?>
+                    .MainMenu-Left {
+                        margin: 10px 12% 0 12%;
+                        width: 75%;
+                    }
+                <?php endif ?>
+
+                .logo_icon{
+                    width: 150px;
+                    margin-top: 55px;
+                    margin-right:0px;
+                }
+                .MainMenu-top-wrapper {
+                    position: relative;
+                }
+                .MainMenu-open-wrapper {
+                    position: inherit;
+                    height:0px;
+                }
+                .SeoPage .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop .bg-img {
+                    background-size: cover;
+                    background-position: 0% 50%
+                }
+                .PaymentIconsContainer {
+                    background-image: linear-gradient(90deg,#2f3031, #2f3031, #2f3031);
+                }
+                .MainMenu-ActionsContainer button{
+                    color: #ffb08e;
+                }
+
                 #MainMenu {
                     background: linear-gradient(180deg,#292929 ,#2b2b2b);
                 }
@@ -552,6 +578,18 @@
                 .MainMenu-play a:hover {
                     background: #000000;
                     border-color: #f0bf39;
+                }
+                #_btn_user_money ._has_cash, #_btn_user_point ._has_point{
+                    color:#ffff00;
+                }
+                #_btn_user_money{
+                    margin-left:30px;
+                    cursor: default;
+                }
+                @media (max-width: 760px) {
+                    #_btn_user_money{
+                        margin-left:0px;
+                    }
                 }
                 .pop_layer .pop_container .pop_top{
                     background: #112035;
@@ -617,37 +655,58 @@
         </div>
         <div id="SLB_loading"></div>
 
-        <div id="wrapper" data-login="<?=is_login()?1:0?>" >
+        <div id="wrapper" data-login="<?=is_login(true)?1:0?>" >
             <input type="checkbox" id="MainMenu-controller" />
             <label class="MainMenu-open burger at-hamburger-menu-button" for="MainMenu-controller">
                 <div class="line"></div>
             </label>
 
             <div class="MainMenu-top-wrapper">
-                <div class="MainMenu-open-wrapper <?= array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1? "js-sticky":"" ?>"  >
-                    <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
-
-                    <a href="/" class="MainMenu-LogoSlogan">
-                        <div class="star-logo">
-                            <img src="./images/common/star1.png">
-                            <img src="./images/common/star4.png">
-                        </div>
-                        <div class="MainMenu-LogoSlogan-wrapper"></div>
-                    </a>
+                <div class="MainMenu-open-wrapper <?= $_ENV['app.name'] == APP_HERMES? "js-sticky":"" ?>"  >
+                    <?php if(($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN)) :?>
+                        <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
+                        <a href="/" class="MainMenu-LogoSlogan">
+                            <div class="star-logo">
+                                <img src="./images/common/star1.png">
+                                <img src="./images/common/star4.png">
+                            </div>
+                            <div class="MainMenu-LogoSlogan-wrapper"></div>
+                        </a>
+                    <?php endif ?>
 
                     <div class="MainMenu-ActionsContainer">
                         
                         <div class="MainMenu-Left">
 
-                            <?php if(is_login()) :?>
+                            <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                                <a href="/" class="js-register-open btn-register btn-tiny at-main-register-button" style="margin-right:30px; <?=!is_login(true)?"float:left;":""?>">
+                                    <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=1" class="logo_icon" /> </span>
+                                </a>
+                                <?php if(!is_login(true)) :?>
+                                    <!-- uk-toggle="target: #loginModal" -->
+                                    <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="float:right;" onclick="showLoginModal();"  
+                                        <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
+                                            style="margin-top:27px;"
+                                        <?php endif ?>
+                                    >
+                                        <span><?=lang('common.login')?></span>
+                                    </button>
+                                    <!-- uk-toggle="target: #agentCheckModal"  -->
+                                    <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="float:right;" onclick="showAgentCheckModal();">
+                                        <span><?=lang('common.signup')?></span>
+                                    </button>
+                                <?php endif?>
+                            <?php endif ?>
+
+                            <?php if(is_login(true)) :?>
                                 <?php if ($apps_enable && (!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) ):?>
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_app"  onclick="$('html, body').animate({scrollTop : 450}, 300); showTabMenu('auto');">
                                         <span style="padding:0px;"> <img src="/images/common/logo_app.gif" class="app_icon" /> </span>
                                     </button>
                                 <?php endif?>
                                 <?php if(!$user_off) :?>
-                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestCharge();"><i class="ui cloud download icon"></i><span><?=lang('common.deposit')?></span></button>
-                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestWithdraw();"><i class="ui cloud upload icon"></i><span><?=lang('common.withdrawal')?></span></button>
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_charge"  onclick="requestCharge();"><i class="ui cloud download icon"></i><span><?=lang('common.deposit')?></span></button>
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_discharge"  onclick="requestWithdraw();"><i class="ui cloud upload icon"></i><span><?=lang('common.withdrawal')?></span></button>
                                 <?php endif?>
                             
                                 <!-- <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestAccount()"><i class="ui question circle icon"></i><span><?=lang('common.ask_account')?></span></button> -->
@@ -661,28 +720,49 @@
                                 </button>
 
                                 <?php if($part_en) :?>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span><?=lang('common.partener')?></span></button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span><?=lang('common.partener')?></span></button>
                                 <?php endif?>
                                 
+                                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                                    <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="">
+                                        <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
+                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
+                                        <span class="_has_cash" style="padding:12px 3px;"><?=number_format($user_money)?></span>
+                                    </button>
+                                
+                                    <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-left:10px">
+                                        <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.point')?></span> 
+                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/point.png?v=1"></span>
+                                        <span class="_has_point" style="padding:12px 3px;"  ><?=number_format($user_point)?></span>
+                                    </button>
+
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_logout" onclick="location.href='/home/logout'">   
+                                        <span><?=lang('common.logout')?></span>     
+                                    </button>
+                                <?php endif ?>
+
                             <?php endif ?>
 
                         </div>
-                        <div class="MainMenu-Right">
-                            <?php if(is_login()) :?>
-                            
-                                <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="margin-right:0px">
-                                    <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
-                                    <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
-                                    <span class="_has_cash" style="padding:12px 3px; color:#ff9600;"><?=number_format($user_money)?></span>
-                                </button>
-                            
-                                <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-left:10px">
-                                    <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.point')?></span> 
-                                    <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/point.png?v=1"></span>
-                                    <span class="_has_point" style="padding:12px 3px; color:#ff9600;"  ><?=number_format($user_point)?></span>
-                                </button>
-                            <?php endif ?>
-                        </div>
+                        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
+                            <div class="MainMenu-Right">
+                                <?php if(is_login(true)) :?>
+                                
+                                    <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="margin-right:0px">
+                                        <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
+                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
+                                        <span class="_has_cash" style="padding:12px 3px;"><?=number_format($user_money)?></span>
+                                    </button>
+                                
+                                    <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-left:10px">
+                                        <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.point')?></span> 
+                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/point.png?v=1"></span>
+                                        <span class="_has_point" style="padding:12px 3px;"  ><?=number_format($user_point)?></span>
+                                    </button>
+                                <?php endif ?>
+                            </div>
+                        <?php endif ?>
+
                         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
                             <button name="lang" id="lang-button" style="position:absolute; right:10px; margin-top:5px; width:80px; padding:0 5px; color: #ffff00; font-size:14px; background:none; height:22px; border:none; text-align:center;" is="ms-dropdown" >
                             <?php if($lang == "cn") :?>
@@ -692,41 +772,29 @@
                             <?php endif ?>
                             </button>
                         <?php endif ?>
-                        <?php if(!is_login()) :?>
-                            <!-- uk-toggle="target: #agentCheckModal"  -->
-                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showAgentCheckModal();">
-                                <span><?=lang('common.signup')?></span>
-                            </button>
-                            <!-- uk-toggle="target: #loginModal" -->
-                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showLoginModal();"  
+                        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
+                            <?php if(!is_login(true)) :?>
+                                <!-- uk-toggle="target: #agentCheckModal"  -->
+                                <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="z-index:1;" onclick="showAgentCheckModal();">
+                                    <span><?=lang('common.signup')?></span>
+                                </button>
+                                <!-- uk-toggle="target: #loginModal" -->
+                                <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showLoginModal();"  
+                                    <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
+                                        style="margin-top:27px;"
+                                    <?php endif ?>
+                                >
+                                    <span><?=lang('common.login')?></span>
+                                </button>
+                            <?php else :?>
+                                <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" id="_btn_logout" onclick="location.href='/home/logout'"
                                 <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
                                     style="margin-top:27px;"
                                 <?php endif ?>
-                            >
-                                <span><?=lang('common.login')?></span>
-                            </button>
-                        <?php else :?>
-                            <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="location.href='/home/logout'"
-                            <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-                                style="margin-top:27px;"
+                                    >   
+                                    <span><?=lang('common.logout')?></span>     
+                                </button>
                             <?php endif ?>
-                                >   
-                                <span><?=lang('common.logout')?></span>     
-                            </button>
-                            <!-- <div class="ui uk-navbar-right nav-overlay">
-                                <ul class="uk-navbar-nav after_login" style="gap:10px;">
-                                    <li>
-                                        <a class="bg-btn" onclick="SLB_POPUP('/mypage')">
-                                            <span> <img src="/images/upload/veda_<?=$user_grade?>_icon.png" class="user_level_icon" /> <?=$user_name?> </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <ul class="uk-navbar-nav after_login2" style="gap:20px;">
-                                    <li>
-                                        <a class="bg-btn" href="/home/logout"> <span uk-icon="icon: sign-out; " class="uk-icon"> <?=lang('common.logout')?> </span> </a>
-                                    </li>    
-                                </ul>
-                            </div> -->
                         <?php endif ?>
                     </div>
                 </div>
@@ -735,7 +803,7 @@
             <div id="MainMenu" class="MainMenu">
                 <div class="MainMenu-wrapper">
                     <div class="MainMenu-logo">
-                        <?php if(!is_login()) :?>
+                        <?php if(!is_login(true)) :?>
                             <div class="MainMenu-play" onclick="showAgentCheckModal();">
                                 <a href="#" class="js-register-open btn-primary btn-normal"><span><?=lang('common.signup')?></span></a>
                             </div>
@@ -751,7 +819,7 @@
                     </div>
 
                     <ul class="menu menu--main MainMenu-List">
-                        <?php if(!is_login()) :?>
+                        <?php if(!is_login(true)) :?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showLoginModal();">
                             <a><i class="ui sign in icon"></i> <?=lang('common.login')?></a>
                         </li>
@@ -806,7 +874,7 @@
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', 'my_qna')">
                             <a><i class="ui comment alternate icon"></i> <?=lang('common.customer')?><span id="answered_count"></span></a>
                         </li>
-                        <?php if(is_login()) :?>
+                        <?php if(is_login(true)) :?>
 
                             <?php if($part_en) :?>
                             <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="window.open('about:blank').location.href='/home/pt_login'">
@@ -883,8 +951,8 @@
                                 <?php elseif($_ENV['app.name'] == APP_HERMES) :?>
                                     images: ["/images/main/banner31.png?v=1", "/images/main/banner32.png?v=1"],
                                     effect: "clip",
-                                <?php elseif($_ENV['app.name'] == APP_ATM) :?>
-                                    images: ["/images/main/banner41.png?v=1", "/images/main/banner42.png?v=1", "/images/main/banner43.png?v=1"],
+                                <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                                    images: ["/images/main/banner41.png?v=2", "/images/main/banner42.png?v=2", "/images/main/banner43.png?v=2"],
                                     effect: "clip",
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
@@ -996,7 +1064,7 @@
                             </div>
                         </div>
 
-                    <?php if( array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1 && !is_login()) :?>
+                    <?php if( array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1 && !is_login(true)) :?>
                         <div class="jackpot-container justify-content-end">
                             <img class="golden-bull" src="/images/jackpot/jackpot.png" alt="">
                             <div class="jackpot-amount">
@@ -1025,11 +1093,11 @@
                                     if(jackpot > 61233000) {
                                         jackpot -= 9334909
                                     }
-                                }, 3000);
+                                }, 5000);
 
                                 setInterval(function(){
                                     reqExchanges();
-                                }, 10000);
+                                }, 300000);
                                 
                             }
                             playJackpot();
@@ -1136,7 +1204,11 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/slot/<?=$item->img?>.png" />
+                                                    <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
+                                                        <img src="/images/slot/<?=$item->img?>_<?=$_ENV['game.img_suf']?>.png" />
+                                                    <?php else :?>
+                                                        <img src="/images/slot/<?=$item->img?>.png" />
+                                                    <?php endif ?>
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="<?=$item->name_kr?>" data-cid="<?=$item->code?>" data-cname="<?=$item->name_kr?>"
@@ -1152,7 +1224,11 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name_kr?></span>
+                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
+                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>">&nbsp;&nbsp;</span>
+                                                            <?php else :?>
+                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name_kr?></span>
+                                                            <?php endif ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1190,7 +1266,11 @@
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-card-media-top">
                                                     <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                        <img src="/images/casino/<?=$item->img?>.png" />
+                                                        <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
+                                                            <img src="/images/casino/<?=$item->img?>_<?=$_ENV['game.img_suf']?>.png" />
+                                                        <?php else :?>
+                                                            <img src="/images/casino/<?=$item->img?>.png" />
+                                                        <?php endif ?>
                                                         <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
 
@@ -1209,7 +1289,11 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand">
-                                                            <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name?></span>
+                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
+                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>">&nbsp;&nbsp;</span>
+                                                            <?php else :?>
+                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name?></span>
+                                                            <?php endif ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1221,7 +1305,11 @@
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-card-media-top">
                                                     <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                        <img src="/images/casino/<?=$item->img?>.png?v=1" />
+                                                        <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
+                                                            <img src="/images/casino/<?=$item->img?>_<?=$_ENV['game.img_suf']?>.png" />
+                                                        <?php else :?>
+                                                            <img src="/images/casino/<?=$item->img?>.png?v=1" />
+                                                        <?php endif ?>
                                                         <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                                 <button class="uk-button uk-button-primary playBtn" id="playBtn" data-cid="<?=$item->cas_id?>" data-gameid="<?=$item->cat?>"
@@ -1238,7 +1326,11 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand">
-                                                            <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name?></span>
+                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
+                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"> </span>
+                                                            <?php else :?>
+                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name?></span>
+                                                            <?php endif ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1290,7 +1382,11 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_bgb.png?v=2" />
+                                                    <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
+                                                        <img src="/images/mini/btn_bgb_<?=$_ENV['game.img_suf']?>.png" />
+                                                    <?php else :?>
+                                                        <img src="/images/mini/btn_bgb.png?v=2" />
+                                                    <?php endif ?>
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="보글파워볼" data-onoff="on" data-cid="BGB">Play </button>
@@ -1300,7 +1396,11 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <span class="game_title blue"><?=lang('common.powerball_boggle')?></span>
+                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
+                                                                <span class="game_title blue">&nbsp;&nbsp;</span>
+                                                            <?php else :?>
+                                                                <span class="game_title blue"><?=lang('common.powerball_boggle')?></span>
+                                                            <?php endif ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1309,7 +1409,11 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_bgl.png?v=2" />
+                                                    <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
+                                                        <img src="/images/mini/btn_bgl_<?=$_ENV['game.img_suf']?>.png" />
+                                                    <?php else :?>
+                                                        <img src="/images/mini/btn_bgl.png?v=2" />
+                                                    <?php endif ?>
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="보글사다리" data-onoff="on"  data-cid="BGL">Play </button>
@@ -1319,7 +1423,11 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <span class="game_title blue"><?=lang('common.powerladder_boggle')?></span>
+                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
+                                                                <span class="game_title blue">&nbsp;&nbsp;</span>
+                                                            <?php else :?>
+                                                                <span class="game_title blue"><?=lang('common.powerladder_boggle')?></span>
+                                                            <?php endif ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1411,6 +1519,47 @@
                                         </div>
                                     <?php endif ?>
                                     
+                                    <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                                        <div>
+                                            <div class="uk-card uk-card-default uk-card-small">
+                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                    <img src="/images/mini/btn_pbg.png" />
+                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="파워볼" data-onoff="off"  data-cid="PBG">Play </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-card-header">
+                                                    <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
+                                                        <div class="uk-width-expand uk-first-column">
+                                                            <span class="game_title blue">&nbsp;&nbsp;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="uk-card uk-card-default uk-card-small">
+                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                    <img src="/images/mini/btn_ang.png" />
+                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="ANGELS" data-onoff="off"  data-cid="ANG">Play </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-card-header">
+                                                    <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
+                                                        <div class="uk-width-expand uk-first-column">
+                                                            <span class="game_title blue">&nbsp;&nbsp;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endif ?>
+
                                     <!-- item -->
                                 </div>
                             </div>
@@ -1481,7 +1630,7 @@
                                                         <img src="/images/app/<?=$item->ename?>.png?v=2" />
                                                         <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                                <button class="uk-button uk-button-primary playBtn" id="playBtn" data-name="<?=$item->name?>" data-path="<?=$item->path?>">Download</button>
+                                                                <button class="uk-button uk-button-primary playBtn" id="playBtn" data-name="<?=$item->name?>" data-path="<?=$item->path?>" data-act="<?=$item->act?>">Download</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1584,7 +1733,7 @@
                     </div>
                     <div class="Payment-icon">
                         <svg>
-                            <use xlink:href="/images/sprite.svg?v=1#color--easyeft2"></use>
+                            <use xlink:href="/images/sprite.svg#color--easyeft2"></use>
                         </svg>
                     </div>
                     <div class="Payment-icon">
@@ -1639,6 +1788,8 @@
             </section>
         </div>
 
+        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
+
         <!--MODAL-->
         <div id="loginModal" uk-modal class="uk-modal">
             <div class="uk-modal-dialog">
@@ -1668,6 +1819,232 @@
                 </form>
             </div>
         </div>
+        <?php else :?>
+        
+        <style>
+            .modal-container {
+                position: fixed;
+                top: 0;
+                left:0;
+                height: 100vh;
+                width: 100vw;
+                opacity: 0;
+                transition: 0.3s;
+                z-index: -1;
+                display: none;
+                pointer-events: none;
+            }
+
+            .modal-container * {
+                transition: 0.3s;
+                /* z-index: -1; */
+            }
+
+
+            .modal-container.show {
+                opacity: 1;
+                z-index: 100;
+                display: block;
+                pointer-events: initial;
+            }
+            #overlay, .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 100vw;
+                background-color: #000;
+                opacity: 0.8;
+                transition: 0.3s;
+                z-index: -1;
+            }
+            
+            .modal-wrapper {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: var(--grey-400);
+                /* box-shadow: var(--box-shadow-500); */
+                /* border-radius: 16px; */
+                z-index: 0;
+                overflow-y: auto;
+            }
+            .login-modal {
+                background-color: #292e2f;
+                padding: 20px;
+                border-radius: 0px;
+                box-shadow: 0;
+                /* height: 100%; */
+                width: 100%;
+                max-width: 720px;
+                color:var(--grey-10);
+            }
+            @media (min-width: 481px){
+                .login-modal {
+                    height: 480px;
+                }
+                .modal-wrapper {
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    /* overflow-x: hidden; */
+                    overflow-y: unset;
+                }
+            }
+            .fs-icon {
+                display: block;
+                height: 24px;
+                width: 24px;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            .fs-icon.x-mark {
+                background-image: url(/images/login/x-mark.svg);
+                cursor: pointer;
+            }
+            .x-mark.spin:hover {
+                animation: 1s spin;
+            }
+            .fs-icon.user {
+                background-image: url(/images/login/user.svg);
+            }
+            .fs-icon.password {
+                background-image: url(/images/login/password.svg);
+            }
+            .px-48 {
+                height: 48px;
+                width: 48px;
+            }
+            .login-modal .fs-icon.x-mark {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                cursor: pointer;
+            }
+            .login-modal input {
+                width: 100%;
+                background-color: #141414;
+                color: #fefefe;
+                display: block;
+                box-sizing: border-box;
+
+                padding: 16px;
+                font-size: 14px;
+                border-radius: 6px;
+                border: 1px solid var(--grey-300);
+                transition: all 0.1s linear;
+            }
+            .login-modal input:focus {
+                border: 1px solid #DBB997;
+                box-shadow: 0 0 0 1px #DBB997;
+            }
+
+            .login-modal button {
+                width: 100%;
+            }
+            .login-image img {
+                position: absolute;
+                bottom: 0;
+                left: -120px;
+                z-index: -1;
+            }
+            .login-form-container .login-title {
+                font-size: 28px;
+                text-align:center;
+            }
+            .login-form {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 20px;
+            }
+            .login-form .input-group:first-child {
+                border-top: 1px solid #6c6d6d;
+                padding-top: 20px;
+            }
+            .login-modal .input-group {
+                width: 100%;
+            }
+            .login-modal .input-group span {
+                display: inline-block;
+                margin-bottom: 8px;
+            }
+            .login-modal .btn {
+                /* height: 36px; */
+                padding: 12px 16px;
+                border-radius: 4px;
+                color: var(--text-color-dark);
+                background-color: #ffb08e;
+                /* background: linear-gradient(180deg, #994131 0%, #FFB08E 36.98%, #F7BCA3 49.48%, #994131 100%); */
+                border-color: #ffb08e;
+                border: 0;
+                border-style: solid;
+                cursor: pointer;
+                line-height: 14px;
+                font-weight: bold;
+                transition: none;
+            }
+            .login-modal .btn-login {
+                font-family: "Noto Sans Kr", sans-seri f;
+                color: #333;
+                font-size: 18px;
+                font-weight: 700;
+            }
+
+        </style>
+
+
+        <div class="modal-container" id="loginModal">
+            <div id="overlay" onclick="hideLoginModal();"></div>
+            <div class="modal-wrapper login-modal d-flex">
+                <a type="button" onclick="hideLoginModal();"> 
+                    <i class="fs-icon x-mark spin px-48"></i>
+                </a>
+                <div class="login-image flex-1 web">
+                    <img src="/images/login/login-img.png" alt="" />
+                </div>
+
+                <div class="login-form-container flex-1 d-flex flex-column gap-16 justify-content-center align-items-center">
+                    <form style="width:100%;" name="formLogin" id="formLogin" autocomplete="off">
+                        <div class="login-title"><?=lang('common.login')?></div>
+                        <div class="login-form d-flex flex-column gap-16">
+                            <div class="input-group mb-4">
+                                <span class="d-flex align-items-center">
+                                    <i class="fs-icon user d-inline-block me-1"></i>
+                                    <?=lang('common.id')?>
+                                </span>
+                                <div class="field required">
+                                    <input type="text" name="userid" placeholder="<?=lang('common.id')?>" style="width:100%;" />
+                                </div>
+                            </div>
+                            <div class="input-group mb-4">
+                                <span>
+                                    <i class="fs-icon password d-inline-block me-1" style="position:relative; top:5px;"></i>
+                                    <?=lang('common.password')?>
+                                </span>
+                                <div class="field required">
+                                    <input type="password" name="passwd" placeholder="<?=lang('common.password')?>" style="width:100%;" />
+                                </div>
+                            </div>
+                            <div class="input-group mb-4">
+                                <img id="image_id" name="<?=$captcha?>" src="/download/captcha/<?=$captcha?>.jpg" style="width: 100%; height: 30px; margin-bottom: 2px; border-radius: 0.25rem; background-color: beige;" >
+                                <div class="field required">
+                                    <input name="captchacode" placeholder="보안문자" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
+                                </div>
+                            </div>
+                            <input type="text" name="ip" id="ip_addr" hidden/>
+                            <input type="text" name="captchasrc" id="captchasrc" value="<?=$captcha?>" hidden/>
+                            <div class="button-group">
+                                <button class="btn btn-login ng-scope" type="submit"><?=lang('common.login')?></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <?php endif ?>
+
         <div id="agentCheckModal" uk-modal class="uk-modal">
             <div class="uk-modal-dialog">
                 <form class="ui form equal width" name="agentCheckForm" id="agentCheckForm" autocomplete="off">
@@ -1721,9 +2098,15 @@
                             </div>
                         </div>
 
-                        <div class="field">
-                            <label><?=lang('common.nickname')?> </label>
-                            <input type="text" name="nickname" id="nickname" placeholder="nickname" />
+                        <div class="fields">
+                            <div class="twelve wide field">
+                                <label><?=lang('common.nickname')?> </label>
+                                <input type="text" name="nickname" id="nickname" placeholder="<?=lang('common.3to20')?>" minlength="3" maxlength="20" />
+                            </div>
+                            <div class="two wide field">
+                                <label>&nbsp;</label>
+                                <button class="ui teal button" type="button" onclick="checkDupNickname();"><?=lang('common.duplicate_check')?></button>
+                            </div>
                         </div>
 
                         <div class="two fields">
@@ -1951,9 +2334,14 @@
                         {
                             type: "empty",
                         },
-                        // {
-                        //     type: "minLength[2]",
-                        // },
+                    ],
+                },
+                captchacode: {
+                    identifier: "captchacode",
+                    rules: [
+                        {
+                            type: "empty",
+                        },
                     ],
                 },
             };
@@ -1980,8 +2368,8 @@
                         location.reload();
                         // window.location.href = "/home";
                     } else if (response.status == 'fail') {
-                        if(response.code == 9){  //점검중
-                            
+                        if(response.code == 11){  //보안코드
+                            $("#loginModal input[name=captchacode]").val('');
                         } else {
                             $("#loginModal input[name=userid]").val('');
                             $("#loginModal input[name=passwd]").val('');
@@ -2129,7 +2517,7 @@
                 success: function (response) {
                     if (response.status == "success") {
                         alert(langMessage.signup_complete+"\n"+langMessage.signup_permit+"\n"+langMessage.thanks);
-                        UIkit.modal("#loginModal").show();
+                        showLoginModal();
                     } else {
                         alert(response.msg);
                     }
@@ -2170,7 +2558,7 @@
                     $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").show();
                     $(".MainMenu-open-wrapper .star-logo").hide();
                 } else {
-                    <?php if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1) :?>
+                    <?php if($_ENV['app.name'] == APP_HERMES) :?>
                         $(".MainMenu-open-wrapper").addClass("js-sticky");
                         $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").show();
                     <?php else :?>
@@ -2216,20 +2604,22 @@
                 );
 
                 $("#slots .openGameBtn").click(function () {
-                    {
-                        var onoff = $(this).data("onoff");
-                        var game_id = $(this).data("cid");
-                        var message = langMessage.inspection; 
+                        if(!checkUnread())
+                            return;
+                        let onoff = $(this).data("onoff");
+                        let game_id = $(this).data("cid");
+                        let message = langMessage.inspection; 
                         if (onoff == "on") {
                             openSlotGame(game_id, $(this).data("cname"));
                         } else {
                             alert(message);
                         }
-                    }
                 });
 
                 $("#casinos .openGameBtn, #live-casino .playBtn").click(function () {
-                    var onoff = $(this).data("onoff");
+                    if(!checkUnread())
+                        return;
+                    let onoff = $(this).data("onoff");
                     if (onoff == "on") {
                         openCasinoGame($(this).data("cid"), $(this).data("gameid"));
                     } else {
@@ -2240,7 +2630,9 @@
                     if(!check_login()){
                         return;
                     }
-                    var onoff = $(this).data("onoff");
+                    if(!checkUnread())
+                        return;
+                    let onoff = $(this).data("onoff");
                     if (onoff == "on") {
                         window.open("/holdem", "games", "width=1200, height=800, left=100, top=50");
                     } else {
@@ -2251,10 +2643,14 @@
                     if(!check_login()){
                         return;
                     }
-                    var name = $(this).data("name");
-                    var path = $(this).data("path");
+                    let name = $(this).data("name");
+                    let path = $(this).data("path");
+                    let act = $(this).data("act");
 
-                    if(name.length > 0 && path.length > 0){
+                    if(act == 0){
+                        alert(langMessage.customer_ask);
+                    }
+                    else if(name.length > 0 && path.length > 0){
                         if(confirm("'" + name + "'을 다운하시겠습니까?")){
                             window.open(path);
                         }
@@ -2265,11 +2661,13 @@
                     if(!check_login()){
                         return;
                     }
-                    var onoff = $(this).data("onoff");
+                    if(!checkUnread())
+                        return;
+                    let onoff = $(this).data("onoff");
                     if (onoff == "on") {
                         window.open("/mini?gm="+$(this).data("cid"), "games", "width=1200, height=800, left=100, top=50");
                     } else {
-                        alert(langMessage.inspection);
+                        alert(langMessage.updating);
                     }
                 });
 
@@ -2482,9 +2880,15 @@
                 $("#loginModal input[name=userid]").val('');
                 $("#loginModal input[name=passwd]").val('');
                 SLB(); 
-                UIkit.modal("#loginModal").show();
+                if($(".modal-container").length > 0)
+                    $("#loginModal").addClass("show");
+                else
+                    UIkit.modal("#loginModal").show();
             }
 
+            function hideLoginModal() {
+                $("#loginModal").removeClass("show");
+            }
             function requestCharge() {
                 if(!check_login()){
                     return;
@@ -2511,31 +2915,35 @@
 
             function changePoint() {
 
-                if($("#_btn_user_point ._has_point").text().length < 2){
-                    return;
-                }
-
-                UIkit.modal.confirm(langMessage.change_point_request, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
-                    function () {
-                        $.ajax({
-                            dataType: "json",
-                            type: "POST",
-                            url: "/api/change_point",
-                            success: function (response) {
-                                if (response.status == "success") {
-                                    UIkit.modal.alert(langMessage.change_point_result, {labels: {'ok': langMessage.ok}}).then(function () {
-                                        session_check();
-                                    });
-                                } else {
-                                    // alert(response.msg);
-                                }
-                            },
-                        });
-                    },
-                    function () {
-                        //취소
+                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                    SLB_POPUP('/mypage', 'my_point');
+                <?php else: ?>
+                    if($("#_btn_user_point ._has_point").text().length < 2){
+                        return;
                     }
-                );
+
+                    UIkit.modal.confirm(langMessage.change_point_request, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
+                        function () {
+                            $.ajax({
+                                dataType: "json",
+                                type: "POST",
+                                url: "/api/change_point",
+                                success: function (response) {
+                                    if (response.status == "success") {
+                                        UIkit.modal.alert(langMessage.change_point_result, {labels: {'ok': langMessage.ok}}).then(function () {
+                                            session_check();
+                                        });
+                                    } else {
+                                        // alert(response.msg);
+                                    }
+                                },
+                            });
+                        },
+                        function () {
+                            //취소
+                        }
+                    );
+                <?php endif ?>
 
             }
 

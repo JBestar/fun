@@ -1,9 +1,15 @@
 <?php
 
-  	function is_login(){ 
+  	function is_login($checkCookie = false){ 
+
+      // writeLog("<is_login> logged=".isset($_COOKIE['logged']));
       if(!isset($_SESSION['logged_in']))
         return false;
-      else if($_SESSION['logged_in']==TRUE)
+      else if($checkCookie && !isset($_COOKIE['logged']))
+        return false;
+      else if($checkCookie && $_COOKIE['logged'] !== 'yes')
+        return false;
+      else if( $_SESSION['logged_in']==TRUE)
         return true;
       else return false;  
   	}
@@ -86,6 +92,7 @@
       $userInfo['user_join_at'] = $objUser->mb_time_join;
       $userInfo['user_login_last'] = $objUser->mb_time_last;
       $userInfo['user_ip_last'] = $objUser->mb_ip_last;
+      $userInfo['user_alarm'] = $objUser->mb_state_alarm;
       if($objEmp != null)
         $userInfo['user_emp'] = $objEmp->mb_uid;
       else
@@ -125,7 +132,7 @@
         date('Y/m/d', strtotime("-4 days", $tmNow)),
       );
     }
-    //회차시작시간과 마감시간, 베팅초과시간 계산하는 함수-파워볼, 파워사다리
+
     function getPbRoundTimes($objConfPb, $bAdvance = true){
 
       //date_default_timezone_set('Asia/Seoul');
@@ -169,12 +176,12 @@
         $tmRoundEnd = strtotime("-".ADVANCE_SEC." seconds", $tmRoundEnd);
       $arrRoundInfo['round_end'] = date("Y-m-d H:i:s", $tmRoundEnd);
       
-      //회차 시작시간설정
+      //회차 시작시간
       $tmRoundStart = strtotime("-5 minutes", $tmRoundEnd);
       $arrRoundInfo['round_start'] = date("Y-m-d H:i:s", $tmRoundStart);
       
       $tmBetEnd = 0;
-      //베팅 마감시간설정
+      //베팅 마감시간
       if($objConfPb->game_time_countdown >= 20 && $objConfPb->game_time_countdown <= 280 ) {
         //$objConfPb->game_time_countdown += 5;
         $tmBetEnd = strtotime("-".$objConfPb->game_time_countdown." seconds", $tmRoundEnd);      
@@ -185,7 +192,6 @@
       return $arrRoundInfo;
     }
 
-    //회차번호로부터 회차시작시간과 마감시간, 베팅초과시간 계산하는 함수-보글파워볼
     function getBbRoundTimes($objConf){
 
       $tmNow = time();
@@ -210,16 +216,16 @@
       $nHour = floor($nHour);
       $nMinute = $nSumMinutes % 60;
 
-      //현재시간설정      
+      //현재시간   
       $tmRoundCurrent = date("Y-m-d H:i:s", $tmNow);        
       $arrRoundInfo['round_current'] = $tmRoundCurrent;
 
-      //회차 마감시간설정
+      //회차 마감시간
       $strRoundEnd = $strDate." ".$nHour.":".$nMinute.":"."0";
       $tmRoundEnd = strtotime($strRoundEnd);
       $arrRoundInfo['round_end'] = date("Y-m-d H:i:s", $tmRoundEnd);
       
-      //회차 시작시간설정
+      //회차 시작시간
       $tmRoundStart = strtotime("-2 minutes", $tmRoundEnd);
       $arrRoundInfo['round_start'] = date("Y-m-d H:i:s", $tmRoundStart);
       
@@ -236,9 +242,7 @@
       
       return $arrRoundInfo;
     }
-
     
-    //회차번호로부터 회차시작시간과 마감시간, 베팅초과시간 계산하는 함수-보글사다리
     function getBsRoundTimes($objConf){
 
       $tmNow = time();
@@ -263,21 +267,21 @@
       $nHour = floor($nHour);
       $nMinute = $nSumMinutes % 60;
 
-      //현재시간설정      
+      //현재시간   
       $tmRoundCurrent = date("Y-m-d H:i:s", $tmNow);        
       $arrRoundInfo['round_current'] = $tmRoundCurrent;
 
-      //회차 마감시간설정
+      //회차 마감시간
       $strRoundEnd = $strDate." ".$nHour.":".$nMinute.":"."0";
       $tmRoundEnd = strtotime($strRoundEnd);
       $arrRoundInfo['round_end'] = date("Y-m-d H:i:s", $tmRoundEnd);
       
-      //회차 시작시간설정
+      //회차 시작시간
       $tmRoundStart = strtotime("-3 minutes", $tmRoundEnd);
       $arrRoundInfo['round_start'] = date("Y-m-d H:i:s", $tmRoundStart);
       
       $tmBetEnd = 0;
-      //베팅 마감시간설정
+      //베팅 마감시간
       if($objConf->game_bet_permit != PERMIT_OK){
         $tmBetEnd = $tmRoundStart;
       } else if($objConf->game_time_countdown >= 20 && $objConf->game_time_countdown <= 150 ) {
@@ -293,7 +297,7 @@
 
     
     function calcRoundId($objLastRound, &$arrRoundData) {
-      $iResult = 0;   //0:비정상 1:정상
+      $iResult = 0;   //
       if($objLastRound->round_date == $arrRoundData['round_date']){
         $arrRoundData['round_id'] = $objLastRound->round_fid + $arrRoundData['round_no'] - $objLastRound->round_num;
         $iResult = 1;
@@ -367,7 +371,6 @@
       return 0;
     }
 
-    //회차번호로부터 베팅가능성 계산하는 함수
     function isEnableBet(&$arrBetData, $objUser, $objConf, $arrRoundData){
 
       //0:오류 1:정상 2:유저베팅차단 3:전체베팅차단 4:최소금액오류 5:최대금액오류 6:보유머니 부족 7:적중최고금액 초과 
@@ -499,7 +502,6 @@
       return 1;
     }
 
-    //회차번호로부터 베팅가능성 계산하는 함수
     function isEnableApiBet(&$arrBetData, $objUser, $objConf, $arrRoundData){
 
       //0:오류 1:정상 3:베팅차단 4:최소금액오류 5:최대금액오류 6:보유머니 부족 7:적중최고금액 초과 
@@ -979,10 +981,35 @@
       return $result;
 
     }
+    
+    function getFiles($dir, $ext, &$arrInfo)
+    {
+      if (substr($dir, strlen($dir)-1, 1) != DIRECTORY_SEPARATOR)
+          $dir .= DIRECTORY_SEPARATOR;
 
-    function getRandIndex($cnt){
+      if(!file_exists($dir)){
+        return;
+      }
 
-      
 
+      if ($handle = opendir($dir))
+      {
+        writeLog("captchaSrc=".$dir);
+
+          while ($obj = readdir($handle))
+          {
+              if ($obj != '.' && $obj != '..')
+              {
+                  if (is_file($dir.$obj) && strlen($obj) > 4)
+                  {
+                    if( strtoLower(substr($obj, strlen($obj)-4, 4)) === ".".$ext)
+                      array_push($arrInfo, substr($obj, 0, strlen($obj)-4));
+                  }                  
+              }
+          }
+
+          closedir($handle);
+      }
+    
     }
 ?>

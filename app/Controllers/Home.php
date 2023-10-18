@@ -2,8 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Models\MemConf_Model;
 use App\Models\SlotPrd_Model;
 use App\Models\SlotGame_Model;
+use App\Models\Captcha_Model;
 
 class Home extends BaseController
 {
@@ -14,26 +16,65 @@ class Home extends BaseController
         $headInfo = $this->getSiteConf();
         $headInfo['lang'] = $this->session->lang;
 
-        if(!is_login() && array_key_exists('app.login', $_ENV) && $_ENV['app.login'] == 1){
+        if(!is_login(true) && array_key_exists('app.login', $_ENV) && $_ENV['app.login'] == 1){
             echo view('home/login', $headInfo);
         } else {
             $objMember = null;
             $charges = [];
             $dischars = [];
+            $captcha = "";
 
-            if(is_login()){
+            if(is_login(true)){
                 $user_id = $this->session->user_id;
                 $objMember = $this->modelMember->getByUid($user_id);
-            } else if(array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1) {
-                $arrMember = $this->modelMember->getMemberByLevel(LEVEL_ADMIN, true);
-                $charges = getExchangeList($arrMember, 8);
-                $dischars = getExchangeList($arrMember, 8);
+
+                $this->sess_action();                
+            } else {
+                if(array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1) {
+                    $arrMember = $this->modelMember->getMemberByLevel(LEVEL_ADMIN, true);
+                    $charges = getExchangeList($arrMember, 8);
+                    $dischars = getExchangeList($arrMember, 8);
+                }
+
+                if(array_key_exists('login.captcha', $_ENV) && $_ENV['login.captcha'] == 1 ){
+		            $captchaModel = new Captcha_Model();
+                    $captchaSource = PUBLICPATH."captcha_src".DIRECTORY_SEPARATOR;
+                    $captchaPath = PUBLICPATH."download".DIRECTORY_SEPARATOR."captcha".DIRECTORY_SEPARATOR;
+            
+                    $arrCaptcha = [];
+                    getFiles($captchaSource, "jpg", $arrCaptcha);
+                            
+                    $nCount = count($arrCaptcha);
+                    $seed = microtime(true);
+            
+                    if($nCount > 0){
+                        
+                        mt_srand($seed); 
+                        $index = mt_rand(0, $nCount-1);	
+                        $captchaSrc = $arrCaptcha[$index];
+            
+                        $captcha =  $seed;
+                        if (!file_exists($captchaPath)) {
+                            mkdir($captchaPath, 0777, true);
+                        }
+                        if(file_exists($captchaPath.$captcha.".jpg")) {
+                            unlink($captchaPath.$captcha.".jpg");
+                        }
+            
+                        if( copy($captchaSource.$captchaSrc.".jpg", $captchaPath.$captcha.".jpg") ){
+                            $captchaModel->add($captcha, $captchaSrc);
+                        }
+                    }
+                    writeLog("captcha=".$captcha." src=".$captchaSrc);
+                }
             }
+            
             $navInfo = getNavInfo($objMember);
             $navInfo += $this->casinoPrd($headInfo);
             $navInfo += $this->slotPrd($headInfo);
             $navInfo['charges'] = $charges;
             $navInfo['dischars'] = $dischars;
+            $navInfo['captcha'] = $captcha;
 
             $boards = array();
             $notice_main = '';
@@ -78,6 +119,7 @@ class Home extends BaseController
     
             $reqData['page'] = 1;
             $reqData['count'] = 4;
+            $reqData['popup'] = 1;
             $notices = $this->modelNotice->searchBodList($reqData);
             foreach($notices as $notice){
                 $notice->notice_color = '#333';
@@ -93,6 +135,29 @@ class Home extends BaseController
             $navInfo['notice_main'] = $notice_main;
             $navInfo['boards'] = $boards;
     
+            if(!is_null($objMember) && $headInfo['apps_enable'] && array_key_exists('app.sess_act', $_ENV) && $_ENV['app.sess_act'] == 1){
+
+                $memConfModel = new MemConf_Model();
+                $memConf = $memConfModel->getByMember($objMember->mb_fid);
+                $arrMemInfo = [];
+                if(!is_null($memConf) ){
+                    $arrMemInfo = explode('#', $memConf->conf_str_1);
+                }
+                $i=0;
+                foreach($headInfo['apps_auto'] as $app){
+                    if($app->act == 1 && count($arrMemInfo) > $i){
+                        $app->act = intval($arrMemInfo[$i]);
+                        if($app->act == 0)
+                            $app->path = "";
+                    } else {
+                        $app->act = 0;
+                        $app->path = "";
+                    }
+                    $i++;
+                }
+            }
+
+
             $navInfo['part_en'] = true;
             if(array_key_exists('app.hold', $_ENV) && $_ENV['app.hold'] == 1 &&
                 !is_null($objMember) && $objMember->mb_level < LEVEL_ADMIN && floatval($objMember->mb_game_hl_ratio) == 0) {
@@ -124,7 +189,7 @@ class Home extends BaseController
 		$this->setLanguage();
         $headInfo = $this->getSiteConf();
 
-        if(!is_login()){
+        if(!is_login(true)){
             echo view('home/loginip', $headInfo);
         } else {
             $this->response->redirect('/');
@@ -135,16 +200,18 @@ class Home extends BaseController
     public function mypage()
     {
 		$this->setLanguage();
-        if(!is_login()){
+        if(!is_login(true)){
             print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
         } else{
+            $this->sess_action();                
+
             $tab = $this->request->getVar('tab');
             $user_id = $this->session->user_id;
             $objMember = $this->modelMember->getByUid($user_id);
             $navInfo = getNavInfo($objMember);
             $navInfo['lang'] = $this->session->lang;
 
-            if($tab != "my_qna" && $tab != "my_memo" && $tab != "notice"){
+            if($tab != "my_qna" && $tab != "my_memo" && $tab != "notice" && $tab != "my_point"){
                 $tab = "my_info";
             }
             $navInfo['tab'] = $tab;
@@ -152,6 +219,10 @@ class Home extends BaseController
             $tmNow = time();
             $navInfo['start_at'] = date('Y-m-d', strtotime("-1 month", $tmNow));
             $navInfo['end_at'] = date('Y-m-d', $tmNow);
+
+            $arrSoundConf = $this->modelConfsite->getSoundConf();  
+            $navInfo['alarm_name'] = $arrSoundConf[3]->conf_content;
+            $navInfo['alarm_volume'] = $arrSoundConf[3]->conf_active;
 
             echo view('home/mypage', $navInfo);
         }

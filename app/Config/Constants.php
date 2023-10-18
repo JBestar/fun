@@ -68,11 +68,13 @@ defined('DECADE') || define('DECADE', 315360000);
 defined('ENV_PRODUCTION')   || define('ENV_PRODUCTION', 'production');
 defined('ENV_DEVELOPMENT')  || define('ENV_DEVELOPMENT', 'development');
 
+defined('PUBLICPATH')           || define('PUBLICPATH', ROOTPATH."public".DIRECTORY_SEPARATOR);
+
 defined('APP_PHANTOM')       || define('APP_PHANTOM', 'Phantom');
 defined('APP_BOLTON')        || define('APP_BOLTON', 'Bolton');
 defined('APP_HERMES')        || define('APP_HERMES', 'Hermes');
 defined('APP_ATM')           || define('APP_ATM', 'ATM');
-
+defined('APP_FUN')           || define('APP_FUN', 'FUN');
 
 defined('APP_TYPE_1')        || define('APP_TYPE_1', 1);      //Slot + FSlot
 defined('APP_TYPE_2')        || define('APP_TYPE_2', 2);      //FSlot
@@ -106,8 +108,8 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest auto
 $base_url = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://'.$_SERVER['HTTP_HOST'] : 'http://'.$_SERVER['HTTP_HOST']."".str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
 defined('BASEURL') || define('BASEURL', $base_url);
 
-defined('LOG_WRITE')            || define('LOG_WRITE', true);
 defined('LOG_FILE')             || define('LOG_FILE', ROOTPATH."logs".DIRECTORY_SEPARATOR);
+defined('LOG_WRITE')            || define('LOG_WRITE', true);
 
 //config site index
 defined('CONF_SITENAME')       || define('CONF_SITENAME', 1);
@@ -202,7 +204,9 @@ defined('RESULT_EXIST_ID')     || define('RESULT_EXIST_ID', 5);
 defined('RESULT_EXIST_NAME')   || define('RESULT_EXIST_NAME', 6);
 defined('RESULT_WAIT')         || define('RESULT_WAIT', 7);
 defined('RESULT_EMP_ERROR')    || define('RESULT_EMP_ERROR', 8);
-defined('RESULT_MAINTAIN')    || define('RESULT_MAINTAIN', 9);
+defined('RESULT_MAINTAIN')     || define('RESULT_MAINTAIN', 9);
+defined('RESULT_CAPTCHA_ERR')  || define('RESULT_CAPTCHA_ERR', 11);
+
 //Json Result Status
 defined('STATUS_SUCCESS')      || define('STATUS_SUCCESS', 'success');
 defined('STATUS_FAIL')         || define('STATUS_FAIL', 'fail');
@@ -349,7 +353,11 @@ defined('PLAY_FAIL_RESPONSE')       || define('PLAY_FAIL_RESPONSE', "1002");    
 
 
 defined('TRYLOG_SUCCESS')           || define('TRYLOG_SUCCESS', "Success");    
+defined('TRYLOG_DENIED')            || define('TRYLOG_DENIED', "Denied");    
 defined('TRYLOG_FAIL')              || define('TRYLOG_FAIL', "Fail");    
+defined('TRYLOG_NONE')              || define('TRYLOG_NONE', "None");    
+defined('TRYLOG_DELETED')           || define('TRYLOG_DELETED', "Deleted");    
+defined('TRYLOG_BLOCK')             || define('TRYLOG_BLOCK', "Block");    
 defined('TRYLOG_MAINTAIN')          || define('TRYLOG_MAINTAIN', "Maintain");    
 defined('TRYLOG_WAIT')              || define('TRYLOG_WAIT', "Waiting");    
 defined('TRYLOG_IDBLOCK')           || define('TRYLOG_IDBLOCK', "Id-Block");    

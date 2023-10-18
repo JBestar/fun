@@ -6,7 +6,7 @@ return [
     '100_thousands' => '十万',
     '500_thousands' => '五十万',
     '1_million' => '一百万',
-    '3to12' => '3字~12字',
+    '3to20' => '3字~20字',
     '4to16' => '4字~16字',
     '8to20' => '8～20', //'8字~20字',
     'account' => '账户',
@@ -75,10 +75,12 @@ return [
     'betting' => 'Betting',
     'cancel' => '取消',
     'casino' => 'CASINO',
-    'change_point' => '转换成现金', //转换为资金
+    'change_point' => '转换积分',
     'change_point_request' => '您想将积分兑换成金钱吗？',
     'change_point_result' => '已转换成现金.',
     'change_to' => '更改',
+    'change_to_money' => '转换成现金', //转换为资金
+    'changed_amount' => '转换的积分',
     'check' => '确认',
     'chinese' => '中文',
     'close' => '关闭',
@@ -87,6 +89,7 @@ return [
     'confirm_password' => '确认密码',
     'current_money' => '可提取金额',  //现有资金
     'customer' => '客服',           //고객센터
+    'customer_ask' => '请咨询客服中心.',
     'day' => '',
     'delete' => '删除',
     'delete_all' => '删除所有',     //全部删除
@@ -239,6 +242,7 @@ return [
     'powerball_happy' => 'Happy Powerball',
     'powerladder_boggle' => 'Boggle Ladder',
     'prepare' => '准备中..',
+    'proceed_date' => '处理日期',
     'read_all' => '阅读全部',
     'read_all_ask' => '您想阅读全文吗？',
     'recommender' => '推荐人',
@@ -291,6 +295,7 @@ return [
     'thanks' => '谢谢',
     'today' => '今天',
     'type' => '分类', //类别
+    'updating' => '更新中..',
     'user' => '用户',
     'user_duplicated' => '重复的用户.',
     'user_exist' => '不存在的用户.',

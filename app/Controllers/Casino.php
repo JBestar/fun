@@ -16,6 +16,7 @@ class Casino extends BaseController
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
+			$this->sess_action();                
             $logHead = "<CAS_EVOL>";
 			$gameId = GAME_CASINO_EVOL;
 			$user_id = $this->session->user_id;
@@ -139,6 +140,7 @@ class Casino extends BaseController
         } else if($_ENV['app.casino'] == APP_CASINO_STAR){
 			$this->response->redirect('/cas_h?prd='.$prdId);	
 		} else {
+			$this->sess_action();                
 			$gameId = GAME_CASINO_KGON;
             $logHead = "<CAS_KGON>";
 
@@ -252,6 +254,7 @@ class Casino extends BaseController
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
+			$this->sess_action();                
 			$gameId = GAME_CASINO_STAR;
             $logHead = "<CAS_HI>";
 
@@ -361,6 +364,7 @@ class Casino extends BaseController
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else {
+			$this->sess_action();                
 			$gameId = GAME_HOLD_CMS;
             $logHead = "<HOLDEM>";
 

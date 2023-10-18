@@ -4,12 +4,13 @@ class Mini extends BaseController
 {
     public function index()
     {
-        if(!is_login())
+        if(!is_login(true))
 		{
 			$this->response->redirect('/');	
 
         } else {
             $this->setLanguage();
+			$this->sess_action();                
 
             $user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
@@ -88,12 +89,13 @@ class Mini extends BaseController
 
     public function betlist()
     {
-        if(!is_login())
+        if(!is_login(true))
 		{
 			$this->response->redirect('/');	
 
         } else {
             $this->setLanguage();
+			$this->sess_action();                
             $user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
 			$headInfo = $this->getSiteConf();
@@ -140,12 +142,13 @@ class Mini extends BaseController
 
     public function rndlist()
     {
-        if(!is_login())
+        if(!is_login(true))
 		{
 			$this->response->redirect('/');	
 
         } else {
             $this->setLanguage();
+			$this->sess_action();                
             $user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
 			$headInfo = $this->getSiteConf();

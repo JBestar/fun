@@ -9,18 +9,20 @@ class Sess_Model extends Model {
     protected $primaryKey = 'sess_fid';
     protected $returnType = 'object'; 
 
-    protected $allowedFields = ['sess_id', 'sess_mb_fid', 'sess_mb_uid', 'sess_ip', 'sess_join', 'sess_update']; 
+    protected $allowedFields = ['sess_id', 'sess_mb_fid', 'sess_mb_uid', 'sess_ip', 'sess_join', 'sess_update', 'sess_action']; 
 
     public function add($member, $sessId){
         $this->deleteBySess($sessId);
         
+        $dtNow = date("Y-m-d H:i:s");
         $data = [
             'sess_id' => $sessId,
             'sess_mb_fid' => $member->mb_fid,
             'sess_mb_uid' => $member->mb_uid,
             'sess_ip' => $member->mb_ip_last,
-            'sess_join' => date("Y-m-d H:i:s"),
-            'sess_update' => date("Y-m-d H:i:s"),
+            'sess_join' => $dtNow,
+            'sess_update' => $dtNow,
+            'sess_action' => $dtNow,
         ];
         
         return $this->insert($data);
@@ -45,6 +47,17 @@ class Sess_Model extends Model {
         
         $data = [
             'sess_update' => date("Y-m-d H:i:s"),
+        ];
+        
+        return $this->set($data)
+                    ->where('sess_id', $sessId)
+                    ->update();
+    }
+
+    public function updateAction($sessId){
+        
+        $data = [
+            'sess_action' => date("Y-m-d H:i:s"),
         ];
         
         return $this->set($data)

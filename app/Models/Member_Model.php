@@ -16,7 +16,7 @@ class Member_Model extends Model {
     protected $allowedFields = ['mb_uid', 'mb_pwd', 'mb_level', 'mb_emp_fid', 'mb_nickname', 
         'mb_email', 'mb_phone', 'mb_bank_name', 'mb_bank_own', 'mb_bank_num', 'mb_bank_pwd',
         'mb_time_join', 'mb_time_last', 'mb_time_bet', 'mb_time_call', 'mb_ip_join', 'mb_ip_last', 
-        'mb_money', 'mb_point', 'mb_grade', 'mb_color', 'mb_state_active', 'mb_state_bet', 
+        'mb_money', 'mb_point', 'mb_grade', 'mb_color', 'mb_state_active', 'mb_state_bet', 'mb_state_alarm',
         'mb_game_pb', 'mb_game_ps', 'mb_game_bb', 'mb_game_bs', 'mb_game_cs', 'mb_game_sl', 'mb_game_eo', 'mb_game_co', 'mb_game_hl', 
         'mb_game_pb_ratio', 'mb_game_pb2_ratio','mb_game_ps_ratio', 'mb_game_bb_ratio', 'mb_game_bb2_ratio', 
         'mb_game_bs_ratio', 'mb_game_cs_ratio', 'mb_game_sl_ratio',  'mb_game_eo_ratio', 'mb_game_eo2_ratio', 
@@ -33,7 +33,7 @@ class Member_Model extends Model {
     ];
   
     private $getFields = ['mb_fid', 'mb_uid', 'mb_level','mb_emp_fid', 'mb_nickname', 'mb_time_call', 'mb_ip_join', 'mb_ip_last',
-        'mb_money', 'mb_point', 'mb_grade', 'mb_state_active', 'mb_state_bet', 'mb_state_delete', 'mb_state_view', 
+        'mb_money', 'mb_point', 'mb_grade', 'mb_state_active', 'mb_state_bet', 'mb_state_delete', 'mb_state_alarm', 'mb_state_view', 
         'mb_game_pb', 'mb_game_ps', 'mb_game_bb', 'mb_game_bs', 'mb_game_cs', 'mb_game_sl',  'mb_game_eo', 'mb_game_co', 'mb_game_hl', 
         'mb_game_pb_ratio', 'mb_game_pb2_ratio','mb_game_ps_ratio', 'mb_game_bb_ratio', 'mb_game_bb2_ratio', 
         'mb_game_bs_ratio', 'mb_game_cs_ratio', 'mb_game_sl_ratio', 'mb_game_eo_ratio', 'mb_game_eo2_ratio',
@@ -101,6 +101,11 @@ class Member_Model extends Model {
         
         return $this->where($where)->findAll();
         
+    }
+
+    public function updateData($member, $data){
+        
+        return $this->update($member->mb_fid, $data);
     }
 
     public function updateLiveInfo($member){
@@ -270,6 +275,18 @@ class Member_Model extends Model {
         } 
 
          return $this->updateBatch($batch, 'mb_fid');    //return updated Count
+    }
+
+    public function updateAlarmState($uid, $arrReqData)
+    {
+
+        if (!array_key_exists('mb_state_alarm', $arrReqData)) {
+            return false;
+        }
+			
+        return $this->builder()->set('mb_state_alarm', $arrReqData['mb_state_alarm'])
+        ->where('mb_uid', $uid)
+        ->update();
     }
 
     public function updateAssets(&$objUser, $inMoney , $inPoint = 0){
@@ -480,7 +497,7 @@ class Member_Model extends Model {
             return RESULT_ERROR;
         $objMember = $this->getByName($arrData['nickname']);
 
-        if(!is_null($objMember) && $objMember->mb_state_active != PERMIT_DELETE)
+        if(!is_null($objMember))
             return RESULT_EXIST_NAME;
 
         if(!array_key_exists('proposer', $arrData))

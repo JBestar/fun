@@ -34,4 +34,12 @@ class SessTry_Model extends Model {
 
     }
 
+    public function getByUid($uid){
+        $where = "log_uid = '".$uid."' ";
+        $count = 10;
+
+        return $this->where($where)
+                ->orderBy('log_fid', 'DESC')
+                ->findAll($count); 
+    }
 }

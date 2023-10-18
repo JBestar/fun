@@ -341,8 +341,8 @@
                         <input type="text" name="input_id" id="input_id" class="english" placeholder="<?=lang('common.4to16')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?>">
                     </li>
                     <li>
-                        <p class="tit"><?=lang('common.nickname')?><span class="desc" id="nickname_desc">※ <?=lang('common.3to12')?></span></p>
-                        <input type="text" name="input_nickname" id="input_nickname" class="korean" placeholder="<?=lang('common.3to12')?>">
+                        <p class="tit"><?=lang('common.nickname')?><span class="desc" id="nickname_desc">※ <?=lang('common.3to20')?></span></p>
+                        <input type="text" name="input_nickname" id="input_nickname" class="korean" placeholder="<?=lang('common.3to20')?>">
                     </li>
                     <li>
                         <p class="tit"><?=lang('common.password')?><span class="desc">※ <?=lang('common.8to20')?>, <?=lang('common.special_chars')?></span></p>

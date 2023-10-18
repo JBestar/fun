@@ -188,7 +188,7 @@ function requestEggInfo() {
 }
 
 function session_check() {
-    console.log("session_check");
+    // console.log("session_check");
     $.ajax({
         type: 'POST',
         url: '/api/check_session',
@@ -245,8 +245,10 @@ function numberWithCommas(x) {
 }
 
 var tmViewForm = 0;
+var mUnreadMsg = 0;
 function showUnread(msg, cus) {
 
+    mUnreadMsg = msg;
     if (msg > 0) {
         $("#_btn_memo").addClass('flicker');
         if(Date.now() - tmViewForm > 60000){
@@ -267,6 +269,15 @@ function showUnread(msg, cus) {
         $("#_btn_qna").removeClass('flicker');
     }
 
+}
+
+function checkUnread(){
+    if(mUnreadMsg > 0){
+        alert(langMessage.message_to_read);
+        SLB_POPUP('/mypage', 'my_memo');
+        return false;
+    } 
+    return true;
 }
 
 function showNotice(main, boards) {
