@@ -75,6 +75,8 @@ return [
     'betting' => 'Betting',
     'cancel' => '取消',
     'casino' => 'CASINO',
+    'change_after' => '转换后',
+    'change_before' => '转换前',
     'change_point' => '转换积分',
     'change_point_request' => '您想将积分兑换成金钱吗？',
     'change_point_result' => '已转换成现金.',
@@ -274,6 +276,7 @@ return [
     'show_screen' => '显示视频', 
     'sign_up' => '注册',                    //加入
     'signup' => '注册',
+    'signup_user' => '注册',
     'signup_check' => '请重新确认一下输入信息.',
     'signup_complete' => '已申请注册.',      //会员注册已完成
     'signup_date' => '注册日期',            //加入日

@@ -339,7 +339,7 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child {
 
 
 #loginModal, #agentCheckModal, #registModal {
-    z-index:9999;
+    z-index:1030;
 }
 
 /* 레이어 헤더색상 변경 steelblue => */

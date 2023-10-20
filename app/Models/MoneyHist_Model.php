@@ -90,6 +90,17 @@ class MoneyHist_Model extends Model {
         return false;
     }
 
+    public function deleteByClient($reqData){
+        
+        $where = " money_mb_uid = ".$this->db->escape($reqData['req_uid'])." ";
+        
+        if($reqData['money_id'] > 0)
+            $where.= " AND money_fid = ".$this->db->escape($reqData['money_id'])." ";
+            
+        return $this->set('money_bet_mode', STATE_ACTIVE)
+                    ->where($where)
+                    ->update();
+    }
     
     public function searchCount($reqData){
 
@@ -99,6 +110,7 @@ class MoneyHist_Model extends Model {
         if(array_key_exists("type", $reqData) && intval($reqData['type']) > 0){
             $where.=" AND money_change_type = ".$this->db->escape($reqData['type']);
         }
+        $where.= " AND money_bet_mode = '".STATE_DISABLE."' ";
 
         $strSql = "SELECT count('money_fid') as count FROM ".$this->table;
         $strSql .= $where;
@@ -121,6 +133,7 @@ class MoneyHist_Model extends Model {
         if(array_key_exists("type", $reqData) && intval($reqData['type']) > 0){
             $where.=" AND money_change_type = ".$this->db->escape($reqData['type']);
         }
+        $where.= " AND money_bet_mode = '".STATE_DISABLE."' ";
 
         $strTbColum = " ".implode(", ", $getFields);
         

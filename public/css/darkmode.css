@@ -78,8 +78,8 @@ html, body {
     font-size: 26px;
     color:#cccccc;
     text-align: center;
-    border:2px solid rgb(255 213 0);
-    border-bottom: 1px solid rgb(109 99 52);
+    border:2px solid #ffb08e;
+    border-bottom: 0px solid #ffb08e;
 }
 
 .SLB_close {

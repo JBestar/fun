@@ -16,17 +16,21 @@
         <script type="text/javascript" src="/js/jquery-ui.js"></script>
         <script type="text/javascript" src="/js/jquery-form/jquery.form.js"></script>
         <script type="text/javascript" src="/js/jquery-form/jquery.validate.js"></script>
-        <script type="text/javascript" src="/js/common.js?v=2"></script>
+        <script type="text/javascript" src="/js/common.js?v=3"></script>
 
         <link rel="stylesheet" type="text/css" href="/js/uikit/uikit.min.css" />
         <script src="/js/uikit/uikit.min.js"></script>
         <script src="/js/uikit/uikit-icons.min.js"></script>
+
+        <link rel="stylesheet" href="/js/sweet/sweetalert2.min.css" />
+        <script type="text/javascript" src="/js/sweet/sweetalert2.min.js"></script>
 
         <script type="text/javascript" src="/js/jquery-form/jquery.form.js"></script>
         <script type="text/javascript" src="/js/jquery-form/jquery.validate.js"></script>
         <!--semantic ui-->
         <!--ui.table-->
         <script src="/js/semantic-ui/semantic.js"></script>
+        <script type="text/javascript" src="/js/toaster.js?v=1"></script>
         <script>
             Vue.component("paginate", VuejsPaginate);
 
@@ -85,6 +89,18 @@
                 withdrawal_quick : '<?=lang('common.withdrawal_quick')?>',
                 withdrawal_success : '<?=lang('common.withdrawal_success')?>',
             };
+
+            function showAlert(msg, type=1){
+                if(!toaster)
+                    alert(msg);
+                else if(type == 0)
+                    toaster.error(msg);
+                else if(type == 2)
+                    toaster.info(msg);
+                else if(type == 3)
+                    toaster.warning(msg);
+                else toaster.success(msg);
+            }
         </script>  
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
             <link rel="stylesheet" href="/css/darkmode.css?v=3" />
@@ -184,6 +200,9 @@
             }
 
             <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                form.ui.form{
+                    border:1px solid #ffb08e;
+                }
                 .btn {
                     background: #1b1f25;
                 }
@@ -217,13 +236,7 @@
                 .ui.button:active, .ui.active.button:active,.ui.button:hover {
                     background-color: #6b6b6b;
                 }
-                /* .ui.primary.buttons .button, .ui.primary.button {
-                    background-color: #ffe794;
-                    color: #000;
-                }
-                .ui.primary.buttons .button:hover, .ui.primary.button:hover {
-                    background-color: #8f8f8f;
-                } */
+
                 #dashboard, #SLB_content {
                     background: #000000;
                 }
@@ -415,7 +428,7 @@
                                     </div>
                                     <div class="ten wide column">
                                     <?php if(!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) :?>
-                                        <div id="btnChangePwd"  uk-toggle="target: #change_pwd" tabindex="0" aria-expanded="false"  class="ui tiny orange labeled icon button">
+                                        <div id="btnChangePwd" onclick="showPwdModal();"  tabindex="0" aria-expanded="false"  class="ui tiny orange labeled icon button">
                                             <i class="key icon"></i> <span class="hideOnMobile"><?=lang('common.password_change')?></span>
                                         </div>
                                         <?php endif ?>
@@ -428,17 +441,17 @@
                             <td>
                                 <div class="ui grid">
                                     <div class="six wide column">
-                                        <div class="ui teal basic label">
-                                            {{ myInfo.user_money }}
+                                        <div class="ui basic label">
+                                            <div class="detail" v-html="strMoney(myInfo.user_money)"></div>
                                             <div class="detail"><?=lang('common.money')?></div>
                                         </div>
                                     </div>
                                     <div class="ten wide column">
                                         <?php if(!$user_off) :?>
-                                        <div id="btnRequestCharge" uk-toggle="target: #request_charge" tabindex="0" aria-expanded="false" class="ui tiny blue labeled icon button">
+                                        <div id="btnRequestCharge" onclick="showChargeModal();" tabindex="0" aria-expanded="false" class="ui tiny blue labeled icon button">
                                             <i class="cloud download icon"></i> <span class="hideOnMobile"><?=lang('common.deposit')?></span>
                                         </div>
-                                        <div id="btnRequestExchange" uk-toggle="target: #request_exchange" tabindex="0" aria-expanded="false" class="ui tiny green labeled icon button">
+                                        <div id="btnRequestExchange" onclick="showWithdrawModal();" tabindex="0" aria-expanded="false" class="ui tiny green labeled icon button">
                                             <i class="cloud upload icon"></i> <span class="hideOnMobile"><?=lang('common.withdrawal')?></span>
                                         </div>
                                         <?php endif ?>
@@ -451,8 +464,8 @@
                             <td>
                                 <div class="ui grid">
                                     <div class="six wide column">
-                                        <div class="ui teal basic label">
-                                            {{ myInfo.user_egg }}
+                                        <div class="ui basic label">
+                                            <div class="detail" v-html="strMoney(myInfo.user_egg)"></div>
                                             <div class="detail"><?=lang('common.game_egg')?></div>
                                         </div>
                                     </div>
@@ -469,8 +482,8 @@
                             <td>
                                 <div class="ui grid">
                                     <div class="six wide column">
-                                        <div class="ui teal basic label">
-                                            {{ myInfo.user_point }}
+                                        <div class="ui basic label">
+                                            <div class="detail" v-html="strMoney(myInfo.user_point)"></div>
                                             <div class="detail"><?=lang('common.point')?></div>
                                         </div>
                                     </div>
@@ -546,19 +559,16 @@
             </div>
             <div data-tab="my_charge" id="my_charge" class="ui tab segment">
                 <div class="ui form">
-                    <div class="fields">
-                        <div class="field">
-                            <div class="inline field">
-                                <div class="ui mini icon input">
-                                    <input type="date" v-model="start.charge"/> 
-                                </div>
-                                <span>~</span> 
-                                <div class="ui mini icon input">
-                                    <input type="date" v-model="end.charge"/> 
-                                </div>
-                                <button class="ui tiny blue button" v-on:click="getMyChargeList"><?=lang('common.search')?></button>
-                            </div>
+                    <div class="inline field">
+                        <div class="ui mini icon input">
+                            <input type="date" v-model="start.charge"/> 
                         </div>
+                        <span>~</span> 
+                        <div class="ui mini icon input">
+                            <input type="date" v-model="end.charge"/> 
+                        </div>
+                        <button class="ui tiny blue button" v-on:click="getMyChargeList"><?=lang('common.search')?></button>
+                        <button class="ui tiny red right floated button" onclick="deleteCharge(0)"><i class="ui times circle icon"></i><?=lang('common.delete_all')?></button>
                     </div>
                 </div>
                 <table class="ui line table">
@@ -575,7 +585,7 @@
                     <tbody>
                         <tr v-for="item in chargeList">
                             <td> {{ strChargeType(item.charge_action_state) }} </td>
-                            <td> {{ item.charge_money }} </td>
+                            <td v-html="strMoney(item.charge_money)"> </td>
                             <td> {{ item.charge_time_require }} </td>
                             <td> {{ item.charge_mb_realname }} </td>
                             <td v-html="strChState(item.charge_action_state)"> </td>
@@ -599,19 +609,16 @@
             </div>
             <div data-tab="my_exchange" id="my_exchange" class="ui tab segment">
                 <div class="ui form">
-                    <div class="fields">
-                        <div class="field">
-                            <div class="inline field">
-                                <div class="ui mini icon input">
-                                    <input type="date" v-model="start.exchange"/> 
-                                </div>
-                                <span>~</span> 
-                                <div class="ui mini icon input">
-                                    <input type="date" v-model="end.exchange"/> 
-                                </div>
-                                <button class="ui tiny blue button" v-on:click="getMyExchangeList"><?=lang('common.search')?></button>
-                            </div>
+                    <div class="inline field">
+                        <div class="ui mini icon input">
+                            <input type="date" v-model="start.exchange"/> 
                         </div>
+                        <span>~</span> 
+                        <div class="ui mini icon input">
+                            <input type="date" v-model="end.exchange"/> 
+                        </div>
+                        <button class="ui tiny blue button" v-on:click="getMyExchangeList"><?=lang('common.search')?></button>
+                        <button class="ui tiny red right floated button" onclick="deleteExchange(0)"><i class="ui times circle icon"></i><?=lang('common.delete_all')?></button>
                     </div>
                 </div>
                 <table class="ui line table">
@@ -628,7 +635,7 @@
                     <tbody>
                         <tr v-for="item in exchangeList">
                             <td> {{ strExchangeType(item.exchange_action_state) }} </td>
-                            <td> {{ item.exchange_money }} </td>
+                            <td v-html="strMoney(item.exchange_money)"> </td>
                             <td> {{ item.exchange_time_require }} </td>
                             <td> {{ item.exchange_bank_name }} : {{ item.exchange_bank_account }} : {{ item.exchange_bank_serial }} </td>
                             <td v-html="strChState(item.exchange_action_state)"> </td>
@@ -661,7 +668,8 @@
                             <input type="date" v-model="end.point"/> 
                         </div>
                         <button class="ui tiny blue button" v-on:click="getMyPointList"><?=lang('common.search')?></button>
-                        <button uk-toggle="target:#change_point" class="ui tiny green right floated button" aria-expanded="false"><i class="refresh icon"></i> <?=lang('common.change_point')?></button>
+                        <button class="ui tiny red right floated button" onclick="deletePoint(0)"><i class="ui times circle icon"></i><?=lang('common.delete_all')?></button>
+                        <button onclick="showPointModal()" class="ui tiny green right floated button" aria-expanded="false"><i class="refresh icon"></i> <?=lang('common.change_point')?></button>
                     </div>
                 </div>
                 <table class="ui line table">
@@ -670,17 +678,17 @@
                             <th><?=lang('common.type')?></th>
                             <th><?=lang('common.changed_amount')?></th>
                             <th><?=lang('common.proceed_date')?></th>
-                            <th><?=lang('common.money')?></th>
-                            <th><?=lang('common.point')?></th>
+                            <th><?=lang('common.change_before')?></th>
+                            <th><?=lang('common.change_after')?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in pointList">
                             <td> <?=lang('common.change_point')?> </td>
-                            <td> {{ item.money_amount }} </td>
+                            <td v-html="strMoney(item.money_amount)"> </td>
                             <td> {{ item.money_update_time }} </td>
-                            <td> {{ item.money_before }} <img src="/images/common/chevron.png" alt="" style="margin-top: 4px; vertical-align: top;" class="ng-scope"> {{ item.money_after }} </td>
-                            <td> {{ item.money_bet_round != null ? item.money_bet_round : item.money_amount }} <img src="/images/common/chevron.png" alt="" style="margin-top: 4px; vertical-align: top;" class="ng-scope"> {{ item.money_bet_round != null ? (item.money_bet_round - item.money_amount) : 0 }} </td>
+                            <td v-html="strMoney(item.money_before)"> </td>
+                            <td v-html="strMoney(item.money_after)"> </td>
                         </tr>
                     </tbody>
                 </table>
@@ -709,8 +717,8 @@
                             <input type="date" v-model="end.memo"/> 
                         </div>
                         <button class="ui tiny blue button" v-on:click="getMyMemoList"><?=lang('common.search')?></button>
-                        <button class="ui tiny red right floated button" onclick="deleteMemo(0)"><?=lang('common.delete_all')?></button>
-                        <button class="ui tiny green right floated button" onclick="readMemo(0)"><?=lang('common.read_all')?></button>
+                        <button class="ui tiny red right floated button" onclick="deleteMemo(0)"><i class="ui times circle icon"></i><?=lang('common.delete_all')?></button>
+                        <button class="ui tiny green right floated button" onclick="readMemo(0)"><i class="ui check circle icon"></i><?=lang('common.read_all')?></button>
                     </div>
                 </div>
                 <table class="ui unstackable accordion celled table">
@@ -768,7 +776,7 @@
                         </div>
                         <button class="ui tiny blue button" v-on:click="getMyQnaList" style="margin-bottom:10px" ><?=lang('common.search')?></button>
                         <button class="ui tiny red right floated button" onclick="deleteCus(0)"><i class="ui times circle icon"></i><?=lang('common.delete_all')?></button>
-                        <button uk-toggle="target:#qnaWriteModal" class="ui tiny blue right floated button" aria-expanded="false"><i class="pencil alternate icon"></i> <?=lang('common.ask_1on1')?></button>
+                        <button onclick="showQnaModal()" class="ui tiny blue right floated button" aria-expanded="false"><i class="pencil alternate icon"></i> <?=lang('common.ask_1on1')?></button>
                         <button class="ui tiny green right floated button" onclick="requestAccount()"><i class="ui question circle icon"></i><?=lang('common.ask_account')?></button>
                     </div>
                 </div>
@@ -893,6 +901,40 @@
                     </form>
                 </div>
             </div>
+            <div id="change_point" uk-modal="" class="uk-modal" tabindex="-1" style="">
+                <div class="uk-modal-dialog">
+                    <form name="ptchangeForm" id="ptchangeForm" class="ui form equal width">
+                        <div class="uk-modal-header"><h3 class="uk-modal-title">포인트 전환</h3></div>
+                        <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
+                        </button>
+                        <div class="uk-modal-body">
+                            <div class="field">
+                                <label>현재 보유포인트</label>
+                                <div class="ui label">
+                                    <span v-html="strMoney(myInfo.user_point)"></span>
+                                    &nbsp;&nbsp;&nbsp;POINT
+                                </div>
+                            </div>
+                            <div class="field required">
+                                <label>전환 요청금액</label> <input type="number" name="point" id="point" value="" placeholder="전환요청하실 금액을 천원단위로 입력해주세요" class="ui text" />
+                                <div style="padding-top: 5px;">
+                                    <button type="button" onclick="setMoneyField('point',1000)" class="ui inverted blue mini button">1천</button> <button type="button" onclick="setMoneyField('point',5000)" class="ui inverted blue mini button">5천</button>
+                                    <button type="button" onclick="setMoneyField('point',10000)" class="ui inverted blue mini button">1만</button> <button type="button" onclick="setMoneyField('point',100000)" class="ui inverted blue mini button">10만</button>
+                                    <button type="button" onclick="setMoneyField('point',1000000)" class="ui inverted blue mini button">100만</button> 
+                                    <button type="button" onclick="setMoneyField('point','max' )" class="ui inverted blue mini button">MAX</button>
+                                    <button type="button" onclick="setMoneyField('point',0)" class="ui inverted blue mini button">다시입력</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-modal-footer">
+                            <div class="ui primary submit button">전환 신청하기</div>
+                            <div class="ui uk-modal-close button">취소</div>
+                        </div>
+                    </form>
+                    <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
+                    </button>
+                </div>
+            </div>
         </div>
 
         <script>
@@ -945,7 +987,7 @@
 
                 $('input[type="number"]').on("keypress", function (e) {
                     if (e.keyCode < 48 || e.keyCode > 57) {
-                        alert("숫자만 입력해주세요");
+                        showAlert("숫자만 입력해주세요", 3);
                         return false;
                     }
                 });
@@ -1066,10 +1108,10 @@
                     },
                     success: function (response) {
                         if (response.status == "success") {
-                            UIkit.modal.alert(langMessage.deposit_success, {labels: {'ok': langMessage.ok}}).then(function () {
-                            });
+                            showAlert(langMessage.deposit_success);
+                            UIkit.modal("#request_charge").hide();
                         } else if (response.status == "fail") {
-                            alert(response.msg);
+                            showAlert(response.msg, 0);
                         } else if (response.status == "logout") {
                             reloadPage();
                         }
@@ -1086,11 +1128,11 @@
                     },
                     success: function (response) {
                         if (response.status == "success") {
-                            UIkit.modal.alert(langMessage.withdrawal_success, {labels: {'ok': langMessage.ok}}).then(function () {
-                                objDashBoard.getMyInfo();
-                            });
+                            showAlert(langMessage.withdrawal_success);
+                            objDashBoard.getMyInfo();
+                            UIkit.modal("#request_exchange").hide();
                         } else if (response.status == "fail") {
-                            alert(response.msg);
+                            showAlert(response.msg, 0);
                         } else if (response.status == "logout") {
                             reloadPage();
                         }
@@ -1107,12 +1149,15 @@
                     },
                     success: function (response) {
                         if (response.status == "success") {
-                            UIkit.modal.alert(langMessage.change_point_result, {labels: {'ok': langMessage.ok}}).then(function () {
-                                objDashBoard.getMyInfo();
-                                objDashBoard.getMyPointList();
-                            });
+                            if(window.parent){
+                                window.parent.postMessage('change_point', '*');
+                            }
+                            showAlert(langMessage.change_point_result);
+                            objDashBoard.getMyInfo();
+                            objDashBoard.getMyPointList();
+                            UIkit.modal("#change_point").hide();
                         } else if (response.status == "fail") {
-                            alert(response.msg);
+                            showAlert(response.msg, 0);
                         } else if (response.status == "logout") {
                             reloadPage();
                         }
@@ -1130,10 +1175,9 @@
                     success: function (response) {
                         // console.log(response);
                         if (response.status == "success") {
-                            UIkit.modal.alert(langMessage.password_change_ok, {labels: {'ok': langMessage.ok}}).then(function () {
-                            });
+                            showAlert(langMessage.password_change_ok);
                         } else if (response.status == "fail") {
-                            alert(response.msg);
+                            showAlert(response.msg, 0);
                         } else if (response.status == "logout") {
                             reloadPage();
                         }
@@ -1155,11 +1199,10 @@
                     success: function (response) {
                         // console.log(response);
                         if (response.status == "success") {
-                            UIkit.modal.alert("계좌정보가 변경되었습니다.", {labels: {'ok': langMessage.ok}}).then(function () {
-                                objDashBoard.getMyInfo();
-                            });
+                            showAlert("계좌정보가 변경되었습니다.");
+                            objDashBoard.getMyInfo();
                         } else if (response.status == "fail") {
-                            alert(response.msg);
+                            showAlert(response.msg, 0);
                         } else if (response.status == "logout") {
                             reloadPage();
                         }
@@ -1180,11 +1223,13 @@
                                 // data: $(this).serialize(),
                                 success: function (response) {
                                     if (response.status == "success") {
-                                        UIkit.modal.alert(langMessage.change_point_result, {labels: {'ok': langMessage.ok}}).then(function () {
-                                            objDashBoard.getMyInfo();
-                                        });
+                                        if(window.parent){
+                                            window.parent.postMessage('change_point', '*');
+                                        }
+                                        showAlert(langMessage.change_point_result);
+                                        objDashBoard.getMyInfo();
                                     } else {
-                                        // alert(response.msg);
+                                        // showAlert(response.msg, 0);
                                     }
                                 },
                             });
@@ -1209,13 +1254,15 @@
                                 success: function (response) {
                                     $("#dashboard").removeClass('loading');
                                     if (response.status == "success") {
-                                        UIkit.modal.alert(langMessage.recovery_eggs_result, {labels: {'ok': langMessage.ok}}).then(function () {
-                                            objDashBoard.getMyInfo();
-                                        });
+                                        showAlert(langMessage.recovery_eggs_result);
+                                        objDashBoard.getMyInfo();
                                     } else {
-                                        // alert(response.msg);
+                                        // showAlert(response.msg, 0);
                                     }
-                                },
+                                }, 
+                                error: function(request, status, error) {
+                                    $("#dashboard").removeClass('loading');
+                                }
                             });
                         },
                         function () {
@@ -1234,16 +1281,45 @@
                     },
                     success: function (response) {
                         if (response.status == "success") {
-                            UIkit.modal.alert(langMessage.ask_receive, {labels: {'ok': langMessage.ok}}).then(function () {
-                                objDashBoard.getMyQnaList();
-                                //location.reload();
-                            });
+                            showAlert(langMessage.ask_receive);
+                            objDashBoard.getMyQnaList();
+                            UIkit.modal("#qnaWriteModal").hide();
                         } else {
-                            alert(response.msg);
+                            showAlert(response.msg, 0);
                         }
                     },
                 });
             });
+
+            function showPwdModal() {
+                $("#pwd_old").val('');
+                $("#pwd_new").val('');
+                UIkit.modal("#change_pwd").show();
+            }
+
+            function showChargeModal() {
+                $("#cash").val('');
+                UIkit.modal("#request_charge").show();
+            }
+
+            function showWithdrawModal() {
+                objMain.getMyInfo();
+                $("#cash_out").val('');
+                $("#bank_passwd").val('');
+                UIkit.modal("#request_exchange").show();
+            }
+
+            function showPointModal() {
+                objDashBoard.getMyInfo();
+                $("#point").val('');
+                UIkit.modal("#change_point").show();
+            }
+
+            function showQnaModal() {
+                $("#qnaWriteModal input[name=title]").val('');
+                $("#qnaWriteModal textarea[name=contents]").val('');
+                UIkit.modal("#qnaWriteModal").show();
+            }
 
             function requestAccount() {
 
@@ -1259,11 +1335,10 @@
                     },
                     function (response) {
                         if (response.status == "success") {
-                            UIkit.modal.alert(langMessage.deposit_account_answer, {labels: {'ok': langMessage.ok}}).then(function () {
-                                objDashBoard.getMyQnaList();
-                            });
+                            showAlert(langMessage.deposit_account_answer);
+                            objDashBoard.getMyQnaList();
                         } else {
-                            alert(response.message);
+                            showAlert(response.message, 0);
                         }
                     },
                     "json"
@@ -1283,7 +1358,7 @@
                                 if (response.status == "success") {
                                     objDashBoard.getMyMemoList();
                                 } else {
-                                    alert(response.msg);
+                                    showAlert(response.msg, 0);
                                 }
                             },
                             "json"
@@ -1294,7 +1369,7 @@
             }
             function deleteMemo(idx) {
                 if(idx==0 && objDashBoard.unreadMemo > 0){
-                    alert(langMessage.delete_check);
+                    showAlert(langMessage.delete_check, 3);
                     return;
                 }
 
@@ -1313,7 +1388,7 @@
                                 if (response.status == "success") {
                                     objDashBoard.getMyMemoList();
                                 } else {
-                                    alert(response.msg);
+                                    showAlert(response.msg, 0);
                                 }
                             },
                             "json"
@@ -1340,7 +1415,7 @@
                                 if (response.status == "success") {
                                     objDashBoard.getMyQnaList();
                                 } else {
-                                    alert(response.msg);
+                                    showAlert(response.msg, 0);
                                 }
                             },
                             "json"
@@ -1350,7 +1425,87 @@
                 );
             }
 
+            function deleteCharge(idx) {
+
+                let msg = langMessage.delete_ask;
+                if(idx == 0)
+                    msg = langMessage.delete_all_ask;
+
+                UIkit.modal.confirm(msg, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
+                    function () {
+                        $.post(
+                            "/api/delete_charge",
+                            {
+                                idx: idx,
+                            },
+                            function (response) {
+                                if (response.status == "success") {
+                                    objDashBoard.getMyChargeList();
+                                } else {
+                                    showAlert(response.msg, 0);
+                                }
+                            },
+                            "json"
+                        );
+                    },
+                    function () {}
+                );
+            }
             
+            function deleteExchange(idx) {
+
+                let msg = langMessage.delete_ask;
+                if(idx == 0)
+                    msg = langMessage.delete_all_ask;
+
+                UIkit.modal.confirm(msg, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
+                    function () {
+                        $.post(
+                            "/api/delete_exchange",
+                            {
+                                idx: idx,
+                            },
+                            function (response) {
+                                if (response.status == "success") {
+                                    objDashBoard.getMyExchangeList();
+                                } else {
+                                    showAlert(response.msg, 0);
+                                }
+                            },
+                            "json"
+                        );
+                    },
+                    function () {}
+                );
+            }
+
+            function deletePoint(idx) {
+
+                let msg = langMessage.delete_ask;
+                if(idx == 0)
+                    msg = langMessage.delete_all_ask;
+
+                UIkit.modal.confirm(msg, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
+                    function () {
+                        $.post(
+                            "/api/delete_point",
+                            {
+                                idx: idx,
+                            },
+                            function (response) {
+                                if (response.status == "success") {
+                                    objDashBoard.getMyPointList();
+                                } else {
+                                    showAlert(response.msg, 0);
+                                }
+                            },
+                            "json"
+                        );
+                    },
+                    function () {}
+                );
+            }
+
             function changeAlarmState() {
                 stopAlarm();
                 if($("#alarm_check").length == 0)
@@ -1545,9 +1700,7 @@
                                     objDashBoard.chargeList = response.rows;
                                     objDashBoard.countAll.charge = response.totalRows;
                                     objDashBoard.totalPageCount.charge = Math.ceil(response.totalRows / objDashBoard.rowCount);
-                                } else {
-                                    // alert(response.message);
-                                }
+                                } 
                             },
                             "json"
                         );
@@ -1566,9 +1719,7 @@
                                     objDashBoard.exchangeList = response.rows;
                                     objDashBoard.countAll.exchange = response.totalRows;
                                     objDashBoard.totalPageCount.exchange = Math.ceil(response.totalRows / objDashBoard.rowCount);
-                                } else {
-                                    // alert(response.message);
-                                }
+                                } 
                             },
                             "json"
                         );
@@ -1587,9 +1738,7 @@
                                     objDashBoard.pointList = response.rows;
                                     objDashBoard.countAll.point = response.totalRows;
                                     objDashBoard.totalPageCount.point = Math.ceil(response.totalRows / objDashBoard.rowCount);
-                                } else {
-                                    // alert(response.message);
-                                }
+                                } 
                             },
                             "json"
                         );
@@ -1608,9 +1757,7 @@
                         //             objDashBoard.cashList = response.rows;
                         //             objDashBoard.countAll.cash = response.totalRows;
                         //             objDashBoard.totalPageCount.cash = Math.ceil(response.totalRows / objDashBoard.rowCount);
-                        //         } else {
-                        //             alert(response.message);
-                        //         }
+                        //         } 
                         //     },
                         //     "json"
                         // );
@@ -1629,9 +1776,7 @@
                         //             objDashBoard.bettingList = response.rows;
                         //             objDashBoard.countAll.betting = response.totalRows;
                         //             objDashBoard.totalPageCount.betting = Math.ceil(response.totalRows / objDashBoard.rowCount);
-                        //         } else {
-                        //             alert(response.message);
-                        //         }
+                        //         } 
                         //     },
                         //     "json"
                         // );
@@ -1654,9 +1799,7 @@
                                     if(objDashBoard.unreadMemo > 0)
                                         playAlarm();
                                     else stopAlarm();
-                                } else {
-                                    // alert(response.message);
-                                }
+                                } 
                             },
                             "json"
                         );
@@ -1681,9 +1824,7 @@
 
                                     setTimeout(openFirstNotice, 500);
 
-                                } else {
-                                    // alert(response.message);
-                                }
+                                } 
                             },
                             "json"
                         );
@@ -1704,9 +1845,7 @@
                                     objDashBoard.totalPageCount.notice = Math.ceil(response.totalRows / objDashBoard.rowCount);
 
                                     setTimeout(openFirstNotice, 500);
-                                } else {
-                                    // alert(response.message);
-                                }
+                                } 
                             },
                             "json"
                         );
@@ -1727,16 +1866,14 @@
                         //             objDashBoard.totalPageCount.event = Math.ceil(response.totalRows / objDashBoard.rowCount);
 
                         //             setTimeout(openFirstEvent, 500);
-                        //         } else {
-                        //             // alert(response.message);
-                        //         }
+                        //         } 
                         //     },
                         //     "json"
                         // );
                     },
                     changeSafe: function () {
                         // if (this.inSafe < 0) {
-                        //     alert("금고에 보관하실 금액을 0보다 크게 입력해주세요");
+                        //     showAlert("금고에 보관하실 금액을 0보다 크게 입력해주세요", 3);
                         //     return;
                         // }
                         // UIkit.modal.confirm("금고보관금액을 " + this.myInfo.cash_safe + " 에서 " + this.inSafe + " 로 변경하시겠습니까?").then(
@@ -1746,10 +1883,10 @@
                         //             { insafe: objDashBoard.inSafe },
                         //             function (response) {
                         //                 if (response.status == 200) {
-                        //                     alert("Success");
+                        //                     showAlert("Success");
                         //                     objDashBoard.getMyInfo();
                         //                 } else {
-                        //                     alert(response.message);
+                        //                     showAlert(response.message, 0);
                         //                 }
                         //             },
                         //             "json"
@@ -1788,7 +1925,7 @@
                                         if (response.status == "success") {
                                             objDashBoard.getMyMemoList();
                                         } else {
-                                            alert(response.msg);
+                                            showAlert(response.msg, 0);
                                         }
                                     },
                                     "json"
@@ -1809,7 +1946,7 @@
                                         if (response.status == "success") {
                                             objDashBoard.getMyQnaList();
                                         } else {
-                                            alert(response.msg);
+                                            showAlert(response.msg, 0);
                                         }
                                     },
                                     "json"
@@ -1841,10 +1978,10 @@
                         //     },
                         //     function (response) {
                         //         if (response.status == 200) {
-                        //             alert("정상적으로 처리 되었습니다");
+                        //             showAlert("정상적으로 처리 되었습니다");
                         //             objDashBoard.getMyQnaList();
                         //         } else {
-                        //             alert(response.message);
+                        //             showAlert(response.message, 0);
                         //         }
                         //     },
                         //     "json"
@@ -1900,9 +2037,8 @@
                             return "<span ></span>";
                     },
                     strMoney: function (amount){
-                        console.log(numberWithCommas(amount));
                         if(amount !== undefined)
-                            return numberWithCommas(amount);
+                            return parseInt(amount).toLocaleString();
                         return "0";
                     },
                 },
@@ -2000,7 +2136,7 @@
                             </div>
                             <div class="inline field">
                             <label style="min-width:80px; margin-right:0px;"><?=lang('common.withdrawal_pwd')?></label>
-                                <div class="ui input"><input type="text" name="bank_passwd" /></div>
+                                <div class="ui input"><input type="text" name="bank_passwd" id="bank_passwd" /></div>
                             </div>
                         </div>
                         <div class="uk-modal-footer">
@@ -2046,39 +2182,7 @@
                     </button>
                 </div>
             </div>
-            <div id="change_point" uk-modal="" class="uk-modal" tabindex="-1" style="">
-                <div class="uk-modal-dialog">
-                    <form name="ptchangeForm" id="ptchangeForm" class="ui form equal width">
-                        <div class="uk-modal-header"><h3 class="uk-modal-title">포인트 전환</h3></div>
-                        <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
-                        </button>
-                        <div class="uk-modal-body">
-                            <div class="field">
-                                <label>현재 보유포인트</label>
-                                <div class="ui label">
-                                    {{ myInfo.user_point }} POINT
-                                </div>
-                            </div>
-                            <div class="field required">
-                                <label>전환 요청금액</label> <input type="number" name="point" id="point" value="" :data-max="myInfo.user_point" placeholder="전환요청하실 금액을 천원단위로 입력해주세요" class="ui text" />
-                                <div style="padding-top: 5px;">
-                                    <button type="button" onclick="setMoneyField('point',1000)" class="ui inverted blue mini button">1천</button> <button type="button" onclick="setMoneyField('point',5000)" class="ui inverted blue mini button">5천</button>
-                                    <button type="button" onclick="setMoneyField('point',10000)" class="ui inverted blue mini button">1만</button> <button type="button" onclick="setMoneyField('point',100000)" class="ui inverted blue mini button">10만</button>
-                                    <button type="button" onclick="setMoneyField('point',1000000)" class="ui inverted blue mini button">100만</button> 
-                                    <button type="button" onclick="setMoneyField('point','max' )" class="ui inverted blue mini button">MAX</button>
-                                    <button type="button" onclick="setMoneyField('point',0)" class="ui inverted blue mini button">다시입력</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="uk-modal-footer">
-                            <div class="ui primary submit button">전환 신청하기</div>
-                            <div class="ui uk-modal-close button">취소</div>
-                        </div>
-                    </form>
-                    <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
-                    </button>
-                </div>
-            </div>
+            
             <div id="change_pwd" uk-modal class="uk-modal">
                 <div class="uk-modal-dialog">
                     <form name="chgpwdForm" id="chgpwdForm" class="ui form equal width">
@@ -2115,7 +2219,7 @@
                         <div class="field">
                             <div class="ui large teal label">
                                 Cash
-                                <div class="detail">4,950</div>
+                                <div class="detail">0</div>
                             </div>
                         </div>
                         <div class="field required">

@@ -12,7 +12,7 @@ class Exchange_Model extends Model {
     protected $allowedFields = ['exchange_emp_fid', 'exchange_mb_uid', 'exchange_mb_phone', 'exchange_money', 
         'exchange_time_require', 'exchange_action_state', 'exchange_action_uid', 'exchange_time_process',
         'exchange_bank_name', 'exchange_bank_account', 'exchange_bank_serial',
-        'exchange_money_before', 'exchange_money_after',  'exchange_state_delete', 'exchange_client_delete']; 
+        'exchange_money_before', 'exchange_money_after',  'exchange_client_delete']; 
 
     public function register($data)
     {
@@ -34,6 +34,19 @@ class Exchange_Model extends Model {
                     ->first();
 
         return !is_null($exchange);
+    }
+
+    public function deleteByClient($reqData){
+        
+        $where = " exchange_mb_uid = ".$this->db->escape($reqData['req_uid'])." ";
+        $where.= " AND exchange_action_state != ".STATE_ACTIVE." AND exchange_action_state != ".STATE_WAIT." ";
+        
+        if($reqData['exchange_id'] > 0)
+            $where.= " AND exchange_fid = ".$this->db->escape($reqData['exchange_id'])." ";
+            
+        return $this->set('exchange_client_delete', STATE_ACTIVE)
+                    ->where($where)
+                    ->update();
     }
 
     public function last($user_id){
@@ -64,6 +77,7 @@ class Exchange_Model extends Model {
         $where = " WHERE exchange_time_require >= ".$this->db->escape($reqData['start_at']);
         $where.= " AND exchange_time_require <= ".$this->db->escape($reqData['end_at']);
         $where.= " AND exchange_mb_uid = ".$this->db->escape($reqData['req_uid']);
+        $where.= " AND exchange_client_delete = '".STATE_DISABLE."' ";
         
         $strSql = "SELECT count('exchange_fid') as count FROM ".$this->table;
         $strSql .= $where;
@@ -84,6 +98,7 @@ class Exchange_Model extends Model {
         $where = " WHERE exchange_time_require >= ".$this->db->escape($reqData['start_at']);
         $where.= " AND exchange_time_require <= ".$this->db->escape($reqData['end_at']);
         $where.= " AND exchange_mb_uid = ".$this->db->escape($reqData['req_uid']);
+        $where.= " AND exchange_client_delete = '".STATE_DISABLE."' ";
         
         $strTbColum = " ".implode(", ", $getFields);
         

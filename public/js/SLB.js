@@ -40,8 +40,9 @@ function SLB(url, option)
 			var window_left = $(window).width()/2-(x/2);
 			var window_top  = $(window).height()/2-(y/2) + $(document).scrollTop();
 
-			//SLB_content.style.left= (window_left+5)+"px";
+			// SLB_content.style.left = (window_left+5)+"px";
 			SLB_content.style.top = (window_top+30)+"px";
+			// console.log("window_left=" + window_left);
 		}
 
 		SLB_content.onclick = '';
@@ -63,10 +64,11 @@ function SLB(url, option)
 		ifr_width = '100%';//'99%';
 		ifr_height = '95%';//'90%';
 		SLB_content.innerHTML +="<iframe id='SLB_iframe' src=" + url + " width="+ ifr_width +" height="+ ifr_height +" " +
-			"class='SLB_center' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' allowTransparency=false style='border:2px solid rgb(0 0 0); border-top:0px;'/></iframe>";
+			"class='SLB_center' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' allowTransparency=false style='border:2px solid #ffb08e; border-top:0px;'/></iframe>";
 
 		//SLB_content.style.width = settings.width+ 'px';
-		SLB_content.style.width = '100%'; //'99%'
+		SLB_content.style.width = 'calc(100% - 25px)'; //'99%'
+		// SLB_content.style.padding = '0 0 0 5px'; //'99%'
 		if(settings.caption) settings.height += 30; //for caption
 		SLB_content.style.height = settings.height+ 'px';
 

@@ -7,7 +7,7 @@
         <link rel="shortcut icon" href="/favicon_<?=$_ENV['app.logo']?>.ico?v=1">
 
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <link rel="stylesheet" href="/css/a.min.css?v=6" />
+            <link rel="stylesheet" href="/css/a.min.css?v=7" />
         <?php else : ?>
             <link rel="stylesheet" href="/css/a.min.css?v=<?=time()?>" />
         <?php endif ?>
@@ -19,6 +19,58 @@
         <script type="text/javascript" src="/js/jquery-form/jquery.form.js"></script>
         <script type="text/javascript" src="/js/jquery-form/jquery.validate.js"></script>
 
+        <link rel="stylesheet" href="/js/sweet/sweetalert2.min.css" />
+        <script type="text/javascript" src="/js/sweet/sweetalert2.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
+        <link rel="stylesheet" href="/css/bootstrap.min.css?ver=1" />
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=1"></script>
+        <script src="/js/worker.js?v=1"></script>
+        <script src="/js/odometer/odometer.js?v=1"></script>
+        <link rel="stylesheet" href="/js/odometer/odometer.css?v=1" />
+        <link rel="stylesheet" href="/css/real-time-table.css?v=3" />
+        <script src="/js/real-time-table.js?v=1"></script>
+        <!--순서중요-->
+        <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
+            <script type="text/javascript" src="/js/vue.js"></script>
+            <script type="text/javascript" src="/js/script.php.js?ver=1"></script>
+            <script type="text/javascript" src="/js/lib.js?ver=1"></script>
+            <script type="text/javascript" src="/js/common.js?ver=2"></script>
+            <script type="text/javascript" src="/js/SLB.js?ver=4"></script>
+            <script type="text/javascript" src="/js/main.js?ver=7"></script>
+            <link rel="stylesheet" type="text/css" href="/css/devel.css?v=3" />
+            <script type="text/javascript" src="/js/toaster.js?v=1"></script>
+        <?php else : ?>
+            <script type="text/javascript" src="/js/vue.js"></script>
+            <script type="text/javascript" src="/js/script.php.js?ver=<?=time()?>"></script>
+            <script type="text/javascript" src="/js/lib.js?ver=1"></script>
+            <script type="text/javascript" src="/js/common.js?ver=<?=time()?>"></script>
+            <script type="text/javascript" src="/js/SLB.js?ver=<?=time()?>"></script>
+            <script type="text/javascript" src="/js/main.js?ver=<?=time()?>"></script>
+            <link rel="stylesheet" type="text/css" href="/css/devel.css?v=<?=time()?>" />
+            <script type="text/javascript" src="/js/toaster.js?v=<?=time()?>"></script>
+        <?php endif ?>
+
+        <!-- JS FILES -->
+        <link rel="stylesheet" type="text/css" href="/js/uikit/uikit.min.css" />
+        <script src="/js/uikit/uikit.min.js"></script>
+        <script src="/js/uikit/uikit-icons.min.js"></script>
+
+        <script src="/js/jquery.bgswitcher.js"></script>
+        <script type="text/javascript" src="/js/jquery-ui/marquee.js"></script>
+
+    <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
+        <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=6" />
+        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=4" />
+        <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=4" />
+    <?php else : ?>
+        <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=<?=time()?>" />
+        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=<?=time()?>" />
+        <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=<?=time()?>" />
+    <?php endif ?>
+
+    
         <script>
             var langMessage = {
                 administrator_ask : '<?=lang('common.administrator_ask')?>', 
@@ -58,52 +110,24 @@
                 withdrawal_password_input : '<?=lang('common.withdrawal_password_input')?>',
                 withdrawal_success : '<?=lang('common.withdrawal_success')?>',
             };
+           
+            function showAlert(msg, type=1){
+                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                    if(!toaster)
+                        alert(msg);
+                    else if(type == 0)
+                        toaster.error(msg);
+                    else if(type == 2)
+                        toaster.info(msg);
+                    else if(type == 3)
+                        toaster.warning(msg);
+                    else toaster.success(msg);
+                <?php else : ?>
+                    alert(msg);
+                <?php endif ?>
+            }
         </script>  
-        <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
-        <link rel="stylesheet" href="/css/bootstrap.min.css?ver=1" />
-        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=1"></script>
-        <script src="/js/worker.js?v=1"></script>
-        <script src="/js/odometer/odometer.js?v=1"></script>
-        <link rel="stylesheet" href="/js/odometer/odometer.css?v=1" />
-        <link rel="stylesheet" href="/css/real-time-table.css?v=3" />
-        <script src="/js/real-time-table.js?v=1"></script>
-        <!--순서중요-->
-        <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <script type="text/javascript" src="/js/vue.js"></script>
-            <script type="text/javascript" src="/js/script.php.js?ver=1"></script>
-            <script type="text/javascript" src="/js/lib.js?ver=1"></script>
-            <script type="text/javascript" src="/js/common.js?ver=2"></script>
-            <script type="text/javascript" src="/js/SLB.js?ver=4"></script>
-            <script type="text/javascript" src="/js/main.js?ver=6"></script>
-            <link rel="stylesheet" type="text/css" href="/css/devel.css?v=3" />
-        <?php else : ?>
-            <script type="text/javascript" src="/js/vue.js"></script>
-            <script type="text/javascript" src="/js/script.php.js?ver=<?=time()?>"></script>
-            <script type="text/javascript" src="/js/lib.js?ver=1"></script>
-            <script type="text/javascript" src="/js/common.js?ver=<?=time()?>"></script>
-            <script type="text/javascript" src="/js/SLB.js?ver=<?=time()?>"></script>
-            <script type="text/javascript" src="/js/main.js?ver=<?=time()?>"></script>
-            <link rel="stylesheet" type="text/css" href="/css/devel.css?v=<?=time()?>" />
-        <?php endif ?>
 
-        <!-- JS FILES -->
-        <link rel="stylesheet" type="text/css" href="/js/uikit/uikit.min.css" />
-        <script src="/js/uikit/uikit.min.js"></script>
-        <script src="/js/uikit/uikit-icons.min.js"></script>
-
-        <script src="/js/jquery.bgswitcher.js"></script>
-        <script type="text/javascript" src="/js/jquery-ui/marquee.js"></script>
-
-    <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-        <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=5" />
-        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=4" />
-        <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=3" />
-    <?php else : ?>
-        <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=<?=time()?>" />
-        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=<?=time()?>" />
-        <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=<?=time()?>" />
-    <?php endif ?>
         <style>
             @media screen and (min-width:680px) { 
                 ::-webkit-scrollbar {width:10px; height:3px; }
@@ -523,7 +547,7 @@
                     max-height: 320px;
                 }
             }
-            h1, h2, h3, h4, h5, h6{
+            .pop_layer h1, .pop_layer h2, .pop_layer h3, .pop_layer h4, .pop_layer h5, .pop_layer h6{
                 color:white;
                 line-height:0.2;
                 margin-bottom:10px;
@@ -531,6 +555,11 @@
             }
             .pop_layer .pop_container .pop_con {
                 background: #333;
+            }
+            @media only screen and (max-width: 727px){
+                .ui.stackable.grid > .wide.column{
+                    width: 100%;
+                }
             }
 
             <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
@@ -541,14 +570,23 @@
                     }
                 <?php else : ?>
                     .MainMenu-Left {
-                        margin: 10px 12% 0 12%;
-                        width: 75%;
+                        margin: 10px 8% 0 8%;
+                        width: 83%;
                     }
                 <?php endif ?>
 
+                .MainMenu-open-wrapper.js-sticky{
+                    width:100%;
+                    height: 70px;
+                    background-color: var(--grey-300);
+                    box-shadow: #ffb08e 1px -1px 0.8em;
+                }
+                form.ui.form{
+                    border:1px solid #ffb08e;
+                }
                 .logo_icon{
                     width: 150px;
-                    margin-top: 55px;
+                    margin-top: 50px;
                     margin-right:0px;
                 }
                 .MainMenu-top-wrapper {
@@ -662,7 +700,7 @@
             </label>
 
             <div class="MainMenu-top-wrapper">
-                <div class="MainMenu-open-wrapper <?= $_ENV['app.name'] == APP_HERMES? "js-sticky":"" ?>"  >
+                <div class="MainMenu-open-wrapper <?= $_ENV['app.name'] == APP_HERMES || $_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN? "js-sticky":"" ?>"  >
                     <?php if(($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN)) :?>
                         <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
                         <a href="/" class="MainMenu-LogoSlogan">
@@ -683,17 +721,15 @@
                                     <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=1" class="logo_icon" /> </span>
                                 </a>
                                 <?php if(!is_login(true)) :?>
-                                    <!-- uk-toggle="target: #loginModal" -->
-                                    <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="float:right;" onclick="showLoginModal();"  
+                                    <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="float:right; font-size:22px;" onclick="showAgentCheckModal();">
+                                        <span><?=lang('common.signup_user')?></span>
+                                    </button>
+                                    <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="float:right; font-size:22px;" onclick="showLoginModal();"  
                                         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
                                             style="margin-top:27px;"
                                         <?php endif ?>
                                     >
                                         <span><?=lang('common.login')?></span>
-                                    </button>
-                                    <!-- uk-toggle="target: #agentCheckModal"  -->
-                                    <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="float:right;" onclick="showAgentCheckModal();">
-                                        <span><?=lang('common.signup')?></span>
                                     </button>
                                 <?php endif?>
                             <?php endif ?>
@@ -774,11 +810,9 @@
                         <?php endif ?>
                         <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
                             <?php if(!is_login(true)) :?>
-                                <!-- uk-toggle="target: #agentCheckModal"  -->
                                 <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="z-index:1;" onclick="showAgentCheckModal();">
                                     <span><?=lang('common.signup')?></span>
                                 </button>
-                                <!-- uk-toggle="target: #loginModal" -->
                                 <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showLoginModal();"  
                                     <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
                                         style="margin-top:27px;"
@@ -870,6 +904,9 @@
                         </li>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', 'notice')">
                             <a><i class="ui bullhorn icon"></i> <?=lang('common.notice')?></a>
+                        </li>
+                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', '')">
+                            <a><i class="ui user icon"></i> <?=lang('common.myinfo')?></a>
                         </li>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', 'my_qna')">
                             <a><i class="ui comment alternate icon"></i> <?=lang('common.customer')?><span id="answered_count"></span></a>
@@ -2028,7 +2065,7 @@
                                 </div>
                             </div>
                             <div class="input-group mb-4">
-                                <img id="image_id" name="<?=$captcha?>" src="/download/captcha/<?=$captcha?>.jpg" style="width: 100%; height: 30px; margin-bottom: 2px; border-radius: 0.25rem; background-color: beige;" >
+                                <img id="image_id" name="<?=$captcha?>" src="/download/captcha/<?=$captcha?>.jpg" style="width: 100%; height: 30px; margin-bottom: 10px; border-radius: 0.25rem; background-color: beige;" >
                                 <div class="field required">
                                     <input name="captchacode" placeholder="보안문자" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
                                 </div>
@@ -2256,7 +2293,7 @@
                             
                             <div class="inline field">
                                 <label style="min-width:80px; margin-right:0px;"><?=lang('common.withdrawal_pwd')?></label>
-                                <div class="ui input"><input type="text" name="bank_passwd" /></div>
+                                <div class="ui input"><input type="text" name="bank_passwd" id="bank_passwd" /></div>
                             </div>
                         </div>
                         <div class="uk-modal-footer">
@@ -2374,7 +2411,7 @@
                             $("#loginModal input[name=userid]").val('');
                             $("#loginModal input[name=passwd]").val('');
                         }
-                        alert(response.msg);
+                        showAlert(response.msg, 0);
                     }
 
                 },
@@ -2516,10 +2553,10 @@
                 },
                 success: function (response) {
                     if (response.status == "success") {
-                        alert(langMessage.signup_complete+"\n"+langMessage.signup_permit+"\n"+langMessage.thanks);
+                        showAlert(langMessage.signup_complete+"\n"+langMessage.signup_permit+"\n"+langMessage.thanks);
                         showLoginModal();
                     } else {
-                        alert(response.msg);
+                        showAlert(response.msg, 0);
                     }
                 },
             });
@@ -2542,7 +2579,7 @@
                         UIkit.modal("#registModal").show();
                         $("#fregisterform #agent_id").val($("#recommender_id").val());
                     } else {
-                        alert(response.msg);
+                        showAlert(response.msg, 0);
                     }
                 },
             });
@@ -2561,6 +2598,8 @@
                     <?php if($_ENV['app.name'] == APP_HERMES) :?>
                         $(".MainMenu-open-wrapper").addClass("js-sticky");
                         $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").show();
+                    <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                        $(".MainMenu-open-wrapper").addClass("js-sticky");
                     <?php else :?>
                         $(".MainMenu-open-wrapper").removeClass("js-sticky");
                         $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").hide();
@@ -2612,7 +2651,7 @@
                         if (onoff == "on") {
                             openSlotGame(game_id, $(this).data("cname"));
                         } else {
-                            alert(message);
+                            showAlert(message, 2);
                         }
                 });
 
@@ -2623,7 +2662,7 @@
                     if (onoff == "on") {
                         openCasinoGame($(this).data("cid"), $(this).data("gameid"));
                     } else {
-                        alert(langMessage.inspection);
+                        showAlert(langMessage.inspection, 2);
                     }
                 });
                 $("#holdem .openGameBtn, #holdem .playBtn").click(function () {
@@ -2636,7 +2675,7 @@
                     if (onoff == "on") {
                         window.open("/holdem", "games", "width=1200, height=800, left=100, top=50");
                     } else {
-                        alert(langMessage.inspection);
+                        showAlert(langMessage.inspection, 2);
                     }
                 });
                 $("#auto .openGameBtn, #auto .playBtn").click(function () {
@@ -2648,7 +2687,7 @@
                     let act = $(this).data("act");
 
                     if(act == 0){
-                        alert(langMessage.customer_ask);
+                        showAlert(langMessage.customer_ask, 3);
                     }
                     else if(name.length > 0 && path.length > 0){
                         if(confirm("'" + name + "'을 다운하시겠습니까?")){
@@ -2667,7 +2706,7 @@
                     if (onoff == "on") {
                         window.open("/mini?gm="+$(this).data("cid"), "games", "width=1200, height=800, left=100, top=50");
                     } else {
-                        alert(langMessage.updating);
+                        showAlert(langMessage.updating, 2);
                     }
                 });
 
@@ -2761,11 +2800,10 @@
                     success: function (response) {
                         // console.log(response);
                         if (response.status == "success") {
-                            UIkit.modal.alert(langMessage.deposit_success, {labels: {'ok': langMessage.ok}}).then(function () {
-                                // location.reload();
-                            });
+                            showAlert(langMessage.deposit_success);
+                            UIkit.modal("#request_charge").hide();
                         } else if (response.status == "fail") {
-                            alert(response.msg);
+                            showAlert(response.msg, 0);
                         } else if (response.status == "logout") {
                             reloadPage();
                         }
@@ -2795,12 +2833,11 @@
                     success: function (response) {
                         // console.log(response);
                         if (response.status == "success") {
-                            UIkit.modal.alert(langMessage.withdrawal_success, {labels: {'ok': langMessage.ok}}).then(function () {
-                                session_check();
-                                //location.reload();
-                            });
+                            showAlert(langMessage.withdrawal_success);
+                            session_check();
+                            UIkit.modal("#request_exchange").hide();
                         } else if (response.status == "fail") {
-                            alert(response.msg);
+                            showAlert(response.msg, 0);
                         } else if (response.status == "logout") {
                             reloadPage();
                         }
@@ -2830,10 +2867,9 @@
                     success: function (response) {
                         // console.log(response);
                         if (response.status == "success") {
-                            UIkit.modal.alert(langMessage.password_change_ok, {labels: {'ok': langMessage.ok}}).then(function () {
-                            });
+                            showAlert(langMessage.password_change_ok);
                         } else if (response.status == "fail") {
-                            alert(response.msg);
+                            showAlert(response.msg, 0);
                         } else if (response.status == "logout") {
                             reloadPage();
                         }
@@ -2861,9 +2897,9 @@
                     },
                     function (response) {
                         if (response.status == "success") {
-                            alert(langMessage.deposit_account_answer+"\n\n"+langMessage.deposit_account_check);
+                            showAlert(langMessage.deposit_account_answer+"\n\n"+langMessage.deposit_account_check, 3);
                         } else {
-                            alert(response.message);
+                            showAlert(response.message, 0);
                         }
                     },
                     "json"
@@ -2894,6 +2930,7 @@
                     return;
                 }
                 SLB(); 
+                $("#cash").val('');
                 UIkit.modal("#request_charge").show();
             }
 
@@ -2903,6 +2940,8 @@
                 }
                 SLB(); 
                 objMain.getMyInfo();
+                $("#cash_out").val('');
+                $("#bank_passwd").val('');
                 UIkit.modal("#request_exchange").show();
             }
 
@@ -2930,11 +2969,10 @@
                                 url: "/api/change_point",
                                 success: function (response) {
                                     if (response.status == "success") {
-                                        UIkit.modal.alert(langMessage.change_point_result, {labels: {'ok': langMessage.ok}}).then(function () {
-                                            session_check();
-                                        });
+                                        showAlert(langMessage.change_point_result);
+                                        session_check();
                                     } else {
-                                        // alert(response.msg);
+                                        // showAlert(response.msg, 0);
                                     }
                                 },
                             });

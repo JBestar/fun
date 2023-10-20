@@ -81,6 +81,13 @@ $(document).ready(function() {
             mainNavbarDropDown.style.display = "none";
         }
     }
+
+    window.onmessage = function(event) {
+        console.log(event.data);
+        if(event.data == "change_point"){
+            session_check();
+        }
+    };
 });
 
 function setLang(lang) {
@@ -151,7 +158,7 @@ function is_login(){
 
 function check_login(){
     if(!is_login()){
-        alert("로그인 해주세요");
+        showAlert("로그인 해주세요", 3);
         return false;
     } return true;
 }
@@ -273,7 +280,7 @@ function showUnread(msg, cus) {
 
 function checkUnread(){
     if(mUnreadMsg > 0){
-        alert(langMessage.message_to_read);
+        showAlert(langMessage.message_to_read, 2);
         SLB_POPUP('/mypage', 'my_memo');
         return false;
     } 

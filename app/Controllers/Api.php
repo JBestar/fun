@@ -848,6 +848,34 @@ class Api extends BaseController
 
     }
 	
+	
+	public function delete_exchange()
+	{
+		$this->setLanguage();
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = lang("common.session_expired");
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$this->sess_action();                
+			$reqData['req_uid'] = $this->session->user_id;
+			$reqData['exchange_id'] = $this->request->getVar('idx');
+			$modelExchange = new Exchange_Model();
+
+			$bResult = $modelExchange->deleteByClient($reqData);
+			
+			if($bResult)
+				$result->status = STATUS_SUCCESS;
+			else {
+				$result->msg = lang("common.delete_fail");
+				$result->status = STATUS_FAIL;
+			}
+        }
+		
+		echo json_encode($result);
+    }
+
 	public function page_point()
 	{
 		$reqData['start_at'] = $this->request->getVar('start_at');
@@ -873,6 +901,34 @@ class Api extends BaseController
 		
 		echo json_encode($result);
 
+    }
+
+	public function delete_point()
+	{
+		$this->setLanguage();
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = lang("common.session_expired");
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$this->sess_action();                
+			$reqData['req_uid'] = $this->session->user_id;
+			$reqData['type'] = POINTCHANGE_EXCHANGE;
+			$reqData['money_id'] = $this->request->getVar('idx');
+			$modelMoneyhist = new MoneyHist_Model();
+
+			$bResult = $modelMoneyhist->deleteByClient($reqData);
+			
+			if($bResult)
+				$result->status = STATUS_SUCCESS;
+			else {
+				$result->msg = lang("common.delete_fail");
+				$result->status = STATUS_FAIL;
+			}
+        }
+		
+		echo json_encode($result);
     }
 
 	public function request_account3()
@@ -1077,7 +1133,34 @@ class Api extends BaseController
         }
 		
 		echo json_encode($result);
+    }
 
+	
+	public function delete_charge()
+	{
+		$this->setLanguage();
+		$result = new \StdClass;
+		if(!is_login())
+		{
+			$result->msg = lang("common.session_expired");
+            $result->status = STATUS_LOGOUT;		
+        } else {
+			$this->sess_action();                
+			$reqData['req_uid'] = $this->session->user_id;
+			$reqData['charge_id'] = $this->request->getVar('idx');
+			$modelCharge = new Charge_Model();
+
+			$bResult = $modelCharge->deleteByClient($reqData);
+			
+			if($bResult)
+				$result->status = STATUS_SUCCESS;
+			else {
+				$result->msg = lang("common.delete_fail");
+				$result->status = STATUS_FAIL;
+			}
+        }
+		
+		echo json_encode($result);
     }
 
 	public function count_customer()
