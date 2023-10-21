@@ -633,6 +633,7 @@
 
                 .MainMenu-ActionsContainer .btn-box{
                     float:right; 
+                    display: inline-block;
                     width:110px;
                     padding: 7px 0 8px 0;
                     border: #69583a;
@@ -659,6 +660,9 @@
                 @media (max-width: 760px) {
                     #_btn_user_money{
                         margin-left:0px;
+                    }
+                    .MainMenu-ActionsContainer .btn-logo {
+                        margin-right: 20px;
                     }
                 }
                 .pop_layer .pop_container .pop_top{
