@@ -1176,6 +1176,7 @@
                         // console.log(response);
                         if (response.status == "success") {
                             showAlert(langMessage.password_change_ok);
+                            UIkit.modal("#change_pwd").hide();
                         } else if (response.status == "fail") {
                             showAlert(response.msg, 0);
                         } else if (response.status == "logout") {

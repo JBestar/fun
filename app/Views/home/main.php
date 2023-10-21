@@ -570,8 +570,8 @@
                     }
                 <?php else : ?>
                     .MainMenu-Left {
-                        margin: 10px 8% 0 8%;
-                        width: 83%;
+                        margin: 10px 7% 0 7%;
+                        width: 85%;
                     }
                 <?php endif ?>
 
@@ -624,9 +624,18 @@
                     margin-left:30px;
                     cursor: default;
                 }
+                .MainMenu-ActionsContainer .btn-register{
+                    margin-right: 8px;
+                }
+
                 @media (max-width: 760px) {
                     #_btn_user_money{
                         margin-left:0px;
+                    }
+                }
+                @media (max-width: 1700px) {
+                    .MainMenu-ActionsContainer .btn-register{
+                        margin-right: 1px;
                     }
                 }
                 .pop_layer .pop_container .pop_top{
