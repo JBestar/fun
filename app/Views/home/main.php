@@ -621,21 +621,44 @@
                     color:#ffff00;
                 }
                 #_btn_user_money{
-                    margin-left:30px;
+                    margin-left:60px;
                     cursor: default;
                 }
                 .MainMenu-ActionsContainer .btn-register{
-                    margin-right: 8px;
+                    margin-right: 3px;
+                }
+                .MainMenu-ActionsContainer .btn-logo{
+                    margin-right:60px;
                 }
 
-                @media (max-width: 760px) {
-                    #_btn_user_money{
-                        margin-left:0px;
-                    }
+                .MainMenu-ActionsContainer .btn-box{
+                    float:right; 
+                    width:110px;
+                    padding: 7px 0 8px 0;
+                    border: #69583a;
+                    color: #fff4d5;
+                    font-size:20px;
+                    font-family: 'Noto Sans KR Regular';
+                    font-weight: 900;
+                    background: linear-gradient(180deg, #ffbe05, #735300);
+                    margin-top: 3px;
+                    margin-left: 5px;
                 }
+                
                 @media (max-width: 1700px) {
                     .MainMenu-ActionsContainer .btn-register{
                         margin-right: 1px;
+                    }
+                    .MainMenu-ActionsContainer .btn-logo{
+                        margin-right:30px;
+                    }
+                    #_btn_user_money{
+                        margin-left:30px;
+                    }
+                }
+                @media (max-width: 760px) {
+                    #_btn_user_money{
+                        margin-left:0px;
                     }
                 }
                 .pop_layer .pop_container .pop_top{
@@ -726,19 +749,19 @@
                         <div class="MainMenu-Left">
 
                             <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
-                                <a href="/" class="js-register-open btn-register btn-tiny at-main-register-button" style="margin-right:30px; <?=!is_login(true)?"float:left;":""?>">
+                                <a href="/" class="js-register-open btn-register btn-tiny btn-logo" style=" <?=!is_login(true)?"float:left;":""?>">
                                     <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=1" class="logo_icon" /> </span>
                                 </a>
                                 <?php if(!is_login(true)) :?>
-                                    <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="float:right; font-size:22px;" onclick="showAgentCheckModal();">
-                                        <span><?=lang('common.signup_user')?></span>
+                                    <button class="js-login-open btn-login btn-register btn-box" style="" onclick="showAgentCheckModal();">
+                                        <span>JOIN</span>
                                     </button>
-                                    <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="float:right; font-size:22px;" onclick="showLoginModal();"  
+                                    <button class="js-login-open btn-login btn-register btn-box" style="" onclick="showLoginModal();"  
                                         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
                                             style="margin-top:27px;"
                                         <?php endif ?>
                                     >
-                                        <span><?=lang('common.login')?></span>
+                                        <span>LOGIN</span>
                                     </button>
                                 <?php endif?>
                             <?php endif ?>
