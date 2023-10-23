@@ -112,7 +112,7 @@
             };
            
             function showAlert(msg, type=1){
-                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                     if(!toaster)
                         alert(msg);
                     else if(type == 0)
@@ -562,7 +562,7 @@
                 }
             }
 
-            <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+            <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                 <?php if(is_login(true)) :?>
                     .MainMenu-Left {
                         margin: 5px 2px 0 2px;
@@ -737,7 +737,7 @@
 
             <div class="MainMenu-top-wrapper">
                 <div class="MainMenu-open-wrapper <?= $_ENV['app.name'] == APP_HERMES || $_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN? "js-sticky":"" ?>"  >
-                    <?php if(($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN)) :?>
+                    <?php if(($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN && $_ENV['app.name'] != APP_DUNK)) :?>
                         <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
                         <a href="/" class="MainMenu-LogoSlogan">
                             <div class="star-logo">
@@ -752,7 +752,7 @@
                         
                         <div class="MainMenu-Left">
 
-                            <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                            <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                                 <a href="/" class="js-register-open btn-register btn-tiny btn-logo" style=" <?=!is_login(true)?"float:left;":""?>">
                                     <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=1" class="logo_icon" /> </span>
                                 </a>
@@ -795,7 +795,7 @@
                                 <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span><?=lang('common.partener')?></span></button>
                                 <?php endif?>
                                 
-                                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="">
                                         <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
                                         <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
@@ -816,7 +816,7 @@
                             <?php endif ?>
 
                         </div>
-                        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
+                        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN && $_ENV['app.name'] != APP_DUNK) :?>
                             <div class="MainMenu-Right">
                                 <?php if(is_login(true)) :?>
                                 
@@ -844,7 +844,7 @@
                             <?php endif ?>
                             </button>
                         <?php endif ?>
-                        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
+                        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN && $_ENV['app.name'] != APP_DUNK) :?>
                             <?php if(!is_login(true)) :?>
                                 <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="z-index:1;" onclick="showAgentCheckModal();">
                                     <span><?=lang('common.signup')?></span>
@@ -1024,7 +1024,7 @@
                                 <?php elseif($_ENV['app.name'] == APP_HERMES) :?>
                                     images: ["/images/main/banner31.png?v=1", "/images/main/banner32.png?v=1"],
                                     effect: "clip",
-                                <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                                <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                                     images: ["/images/main/banner41.png?v=2", "/images/main/banner42.png?v=2", "/images/main/banner43.png?v=2"],
                                     effect: "clip",
                                 <?php else: ?>
@@ -1592,7 +1592,7 @@
                                         </div>
                                     <?php endif ?>
                                     
-                                    <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                                    <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
@@ -1861,7 +1861,7 @@
             </section>
         </div>
 
-        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
+        <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN && $_ENV['app.name'] != APP_DUNK) :?>
 
         <!--MODAL-->
         <div id="loginModal" uk-modal class="uk-modal">
@@ -2634,7 +2634,7 @@
                     <?php if($_ENV['app.name'] == APP_HERMES) :?>
                         $(".MainMenu-open-wrapper").addClass("js-sticky");
                         $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").show();
-                    <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                    <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                         $(".MainMenu-open-wrapper").addClass("js-sticky");
                     <?php else :?>
                         $(".MainMenu-open-wrapper").removeClass("js-sticky");
@@ -2990,7 +2990,7 @@
 
             function changePoint() {
 
-                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                     SLB_POPUP('/mypage', 'my_point');
                 <?php else: ?>
                     if($("#_btn_user_point ._has_point").text().length < 2){

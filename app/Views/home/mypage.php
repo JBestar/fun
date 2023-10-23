@@ -199,7 +199,7 @@
                 background:#24425b;
             }
 
-            <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+            <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                 form.ui.form{
                     border:1px solid #ffb08e;
                 }
@@ -405,7 +405,7 @@
                 <a data-tab="my_info" class="item "><?=lang('common.info_user')?></a> 
                 <a data-tab="my_charge" class="item"><?=lang('common.deposit_history')?></a>
                 <a data-tab="my_exchange" class="item"><?=lang('common.withdrawal_history')?></a> 
-                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN) :?>
+                <?php if($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                     <a data-tab="my_point" class="item"><?=lang('common.change_point')?></a>
                 <?php endif ?>
                 <a data-tab="my_memo" class="item">&nbsp;&nbsp;&nbsp;&nbsp;<?=lang('common.message')?>&nbsp;&nbsp;&nbsp;&nbsp;</a>
@@ -520,7 +520,7 @@
                                             <div class="ui horizontal basic label" style="width:100px"><?=lang('common.bank_name')?></div>
                                             {{ myInfo.user_bank_name }}
                                         </div>
-                                    <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN) :?>
+                                    <?php if($_ENV['app.name'] != APP_ATM && $_ENV['app.name'] != APP_FUN && $_ENV['app.name'] != APP_DUNK) :?>
                                         <div class="" style="margin-bottom:2px;">
                                             <div class="ui horizontal basic label" style="width:100px"><?=lang('common.account_number')?></div>
                                             {{ myInfo.user_bank_num }}

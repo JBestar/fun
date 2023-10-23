@@ -75,6 +75,7 @@ defined('APP_BOLTON')        || define('APP_BOLTON', 'Bolton');
 defined('APP_HERMES')        || define('APP_HERMES', 'Hermes');
 defined('APP_ATM')           || define('APP_ATM', 'ATM');
 defined('APP_FUN')           || define('APP_FUN', 'FUN');
+defined('APP_DUNK')          || define('APP_DUNK', 'DUNK');
 
 defined('APP_TYPE_1')        || define('APP_TYPE_1', 1);      //Slot + FSlot
 defined('APP_TYPE_2')        || define('APP_TYPE_2', 2);      //FSlot
