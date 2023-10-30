@@ -129,8 +129,4 @@ nb-configuration.xml
 /public/download
 /public/assets
 /public/*.config
-<<<<<<< HEAD
 /public/.well-known
-=======
-/public/.well-known
->>>>>>> master

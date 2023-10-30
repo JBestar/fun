@@ -11,6 +11,7 @@ use App\Models\Follow_Model;
 use App\Models\Block_Model;
 use App\Libraries\ApiVacc_Lib;
 use App\Models\Captcha_Model;
+use App\Models\MemConf_Model;
 
 use App\Models\Round_Model;
 use App\Models\Bet_Model;
@@ -955,10 +956,25 @@ class Api extends BaseController
 				if($arrResult['status'] == 1){
 					$sAnswer .= "<b style='color:#ffff00'>".$arrResult['message']."</b>";
 				} 
-				// writeLog($sAnswer);
 			} else {
 				$objConf = $this->modelConfsite->find(CONF_CHARGEINFO);
 				$arrInfo = explode("#", $objConf->conf_content);
+				if(array_key_exists('app.sess_act', $_ENV) && $_ENV['app.sess_act'] == 1){
+					$user_id = $this->session->user_id;
+                	$objMember = $this->modelMember->getByUid($user_id);
+
+					$memConfModel = new MemConf_Model();
+					$memConf = $memConfModel->getByMember($objMember->mb_fid);
+					$arrChargeInfo = [];
+					if(!is_null($memConf) ){
+						$arrChargeInfo = explode('#', $memConf->conf_str_5);
+						if( count($arrChargeInfo) >= 3 && ( strlen($arrChargeInfo[0]) > 0 || strlen($arrChargeInfo[1]) > 0 || strlen($arrChargeInfo[2]) > 0) ){
+							$arrInfo = $arrChargeInfo;
+						}
+					}
+				}
+
+
 				if(count($arrInfo) >= 1){
 					if(strpos($arrInfo[0], 'http') !== false){
 						$sAnswer .= "<a style='color:#ffff00' href='".trim($arrInfo[0])."' target='_blank'>".$arrInfo[0]."</a>";
@@ -976,7 +992,7 @@ class Api extends BaseController
 			$sAnswer .= "</p>";
 
 			if($arrResult['status'] == 0){
-				$result->msg = lang("account_fail");
+				$result->msg = lang("common.account_fail");
 				$result->status = STATUS_FAIL;
 			} else {
 				$objConf = $this->modelConfsite->find(CONF_CHARGEMACRO);
@@ -1001,7 +1017,7 @@ class Api extends BaseController
 				$bResult = $this->modelNotice->registerNotice($data);
 				
 				if($bResult){
-					$result->msg = lang("common.session_expired");
+					$result->msg = lang("common.deposit_account_answer");
 					$result->status = STATUS_SUCCESS;
 				}
 				else {
