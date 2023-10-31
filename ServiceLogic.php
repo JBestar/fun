@@ -797,9 +797,9 @@ class ServiceLogic
 		$slExist = false;
 		$csExist = false;
 		foreach ($arrBet as $bet) {
-			if($bet['gameCategory'] === "casino")
+			if($bet['gameCategory'] == "casino")
 				$csExist = true;
-			else if($bet['gameCategory'] === "slot")
+			else if($bet['gameCategory'] == "slot")
 				$slExist = true;
 			if(!in_array($bet['siteUsername'], $arrLiveUids))
 				array_push($arrLiveUids, $bet['siteUsername']);
@@ -831,19 +831,22 @@ class ServiceLogic
 			$lastIdx = $bet['utcCreatedAt'];
 			
 			$objMember = findMemberByLiveId($arrMember, $bet['siteUsername'], $gameSlotId);
-			if(is_null($objMember))
+			if(is_null($objMember)){
+				$logHead = "<KGON>";
+				writeLog($this->fLog, $logHead."No member-".$bet['gameCategory']." ".$bet['siteUsername']." ".$bet['refId']."=>".$bet['cash']);
 				continue;
+			}
 
 			$bet['agent_id'] = $arrInfo[1];			//agent code			
 			$bet['user_id'] = $objMember->mb_kgon_id;
 
-			if($bet['gameCategory'] === "casino"){
+			if($bet['gameCategory'] == "casino"){
 				$logHead = "<KGON> CAS>> ";
 				writeLog($this->fLog, $logHead."bet-".$bet['refId']."=>".$bet['cash']);
 				$bet['txn_id'] = $bet['refId'];
 				$betting = $this->modelCasinoBet->getByBet($bet, $lastCsFid);	//베팅내역체크
 
-				if($bet['type'] !== "turn_bet")			//청산
+				if($bet['type'] != "turn_bet")			//청산
 				{		
 					if(is_null($betting)){
 						writeLog($this->fLog, $logHead."ACC-Not Found-".$bet['refId']."=>".$bet['cash']);
@@ -860,16 +863,16 @@ class ServiceLogic
 					writeLog($this->fLog, $logHead."Update ACCId=".$betId);
 					$arrMemBet[$objMember->mb_fid] = $bet['createdAt'];
 					
-					if($bet['type'] === "turn_draw"){	//타이가 아니라면
+					if($bet['type'] == "turn_draw"){	//타이라면
 						
 						$arrRewards = $this->modelReward->getByBetId(GAME_CASINO_EVOL, $betId, $rwCsLastFid);
 						foreach($arrRewards as $objReward){
 							writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." mb_fid=".$objReward->rw_mb_fid);
 
 							if(array_key_exists($objReward->rw_mb_fid, $arrEmpPoint )){
-								writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point1 =".$arrEmpPoint[$objReward->rw_mb_fid]);
+								// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point1 =".$arrEmpPoint[$objReward->rw_mb_fid]);
 								$arrEmpPoint[$objReward->rw_mb_fid] -= $objReward->rw_point;
-								writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point2 =".$arrEmpPoint[$objReward->rw_mb_fid]);
+								writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
 							}
 							else {
 								$arrEmpPoint[$objReward->rw_mb_fid] = 0-$objReward->rw_point;	
@@ -906,14 +909,14 @@ class ServiceLogic
 					}
 					
 				}
-			} else if($bet['gameCategory'] === "slot"){
+			} else if($bet['gameCategory'] == "slot"){
 				$logHead = "<KGON> SLOT>> ";
 
 				writeLog($this->fLog, $logHead."bet-".$bet['refId']."=>".$bet['cash']);
 				$bet['game_id'] = $gameSlotId;
 				$betting = $this->modelSlotBet->getByKslot($gameSlotId, $bet, $lastSlFid);	//베팅내역체크
 				
-				if($bet['type'] !== "turn_bet")			//청산
+				if($bet['type'] != "turn_bet")			//청산
 				{	
 					if(is_null($betting)){
 						writeLog($this->fLog, $logHead."ACC-Not Found-".$bet['refId']."=>".$bet['cash']);
@@ -977,6 +980,9 @@ class ServiceLogic
 					}
 				}
 
+			} else{
+				$logHead = "<KGON>";
+				writeLog($this->fLog, $logHead."No Category-".$bet['gameCategory']." ".$bet['siteUsername']." ".$bet['refId']."=>".$bet['cash']);
 			}
 			
 		}
