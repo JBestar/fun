@@ -796,7 +796,10 @@ class ServiceLogic
 		$arrLiveUids = [];
 		$slExist = false;
 		$csExist = false;
+		$logHead = "<KGON> BET ";
 		foreach ($arrBet as $bet) {
+			writeLog($this->fLog, $logHead.$bet['gameCategory'].", ".$bet['siteUsername'].", ".$bet['refId']."=>".$bet['cash']);
+
 			if($bet['gameCategory'] == "casino")
 				$csExist = true;
 			else if($bet['gameCategory'] == "slot")
@@ -833,7 +836,7 @@ class ServiceLogic
 			$objMember = findMemberByLiveId($arrMember, $bet['siteUsername'], $gameSlotId);
 			if(is_null($objMember)){
 				$logHead = "<KGON>";
-				writeLog($this->fLog, $logHead."No member-".$bet['gameCategory']." ".$bet['siteUsername']." ".$bet['refId']."=>".$bet['cash']);
+				writeLog($this->fLog, $logHead."No member-".$bet['gameCategory'].", ".$bet['siteUsername'].", ".$bet['refId']."=>".$bet['cash']);
 				continue;
 			}
 
@@ -982,7 +985,7 @@ class ServiceLogic
 
 			} else{
 				$logHead = "<KGON>";
-				writeLog($this->fLog, $logHead."No Category-".$bet['gameCategory']." ".$bet['siteUsername']." ".$bet['refId']."=>".$bet['cash']);
+				writeLog($this->fLog, $logHead."No Category-".$bet['gameCategory'].", ".$bet['siteUsername'].", ".$bet['refId']."=>".$bet['cash']);
 			}
 			
 		}
