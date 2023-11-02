@@ -734,6 +734,8 @@ class ServiceLogic
 		$confId = CONF_API_KGON;
 		$logHead = "<KGON> ";
 
+		$arrCasPrd = $this->modelCasinoPrd->getByCat($gameCasId);
+		$arrSlotPrd = $this->modelSlotPrd->getByCat($gameSlotId);
 		$objConf = $this->modelConfSite->getById($confId);
 		
 		// $arrPrd = $this->modelSlotPrd->getByCat($gameSlotId);
@@ -774,6 +776,16 @@ class ServiceLogic
 			return false;
 		}
 
+		$arrCasIds = [];
+		foreach ($arrCasPrd as $casPrd) {
+			array_push($arrCasIds, $casPrd->vendor_id);
+		}
+
+		$arrSlotIds = [];
+		foreach ($arrSlotPrd as $slotPrd) {
+			array_push($arrSlotIds, $slotPrd->code);
+		}
+
 		$nBetCnt = count($arrBet);
 		writeLog($this->fLog, $logHead."Bet Count-".count($arrBet));
 
@@ -798,12 +810,23 @@ class ServiceLogic
 		$csExist = false;
 		$logHead = "<KGON> BET ";
 		foreach ($arrBet as $bet) {
-			writeLog($this->fLog, $logHead.$bet['gameCategory'].", ".$bet['siteUsername'].", ".$bet['refId']."=>".$bet['cash']);
+			writeLog($this->fLog, $logHead.$bet['gameCategory'].", vendorId=".$bet['vendorId'].", ".$bet['siteUsername'].", ".$bet['refId']."=>".$bet['cash']);
 
 			if($bet['gameCategory'] == "casino")
 				$csExist = true;
 			else if($bet['gameCategory'] == "slot")
 				$slExist = true;
+			else {
+				if(in_array(strval($bet['vendorId']), $arrCasIds)){
+					$bet['gameCategory'] = "casino";
+					// writeLog($this->fLog, $logHead.$bet['gameCategory'].", vendorId=".$bet['vendorId'].", ".$bet['siteUsername'].", ".$bet['refId']."=>".$bet['cash']);
+					$csExist = true;
+				}
+				else if(in_array(strval($bet['vendorId']), $arrSlotIds)){
+					$bet['gameCategory'] = "slot";
+					$slExist = true;
+				}
+			}
 			if(!in_array($bet['siteUsername'], $arrLiveUids))
 				array_push($arrLiveUids, $bet['siteUsername']);
 		}
@@ -829,6 +852,10 @@ class ServiceLogic
 			$rwCsLastFid = $rwCsLastFid - FID_OFFSET*3;
 		}
 
+		$lastIdx2 = "";
+		$tmNow = time();
+		$lastTime2 = date('Y-m-d H:i:s', strtotime("-10 minutes", $tmNow));
+
 		foreach ($arrBet as $bet) {
 
 			$lastIdx = $bet['utcCreatedAt'];
@@ -840,12 +867,23 @@ class ServiceLogic
 				continue;
 			}
 
+			if(strlen($bet['gameCategory']) == 0){
+				if( in_array(strval($bet['vendorId']), $arrCasIds)){
+					$bet['gameCategory'] = "casino";
+					// writeLog($this->fLog, $logHead.$bet['gameCategory'].", vendorId=".$bet['vendorId'].", ".$bet['siteUsername'].", ".$bet['refId']."=>".$bet['cash']);
+				}
+				else if(in_array(strval($bet['vendorId']), $arrSlotIds)){
+					$bet['gameCategory'] = "slot";
+				}
+			}
+			
+
 			$bet['agent_id'] = $arrInfo[1];			//agent code			
 			$bet['user_id'] = $objMember->mb_kgon_id;
 
 			if($bet['gameCategory'] == "casino"){
 				$logHead = "<KGON> CAS>> ";
-				writeLog($this->fLog, $logHead."bet-".$bet['refId']."=>".$bet['cash']);
+				writeLog($this->fLog, $logHead.$bet['gameCategory'].", vendorId=".$bet['vendorId'].", ".$bet['siteUsername'].", bet-".$bet['refId']."=>".$bet['cash']);
 				$bet['txn_id'] = $bet['refId'];
 				$betting = $this->modelCasinoBet->getByBet($bet, $lastCsFid);	//베팅내역체크
 
@@ -856,13 +894,39 @@ class ServiceLogic
 						continue;
 					}
 
+					$bSpec = false;
+					$betId = $betting['bet_fid'];
 					if(strlen(trim($betting['bet_result'])) > 0 ){
 						writeLog($this->fLog, $logHead."ACC-Already-".$bet['refId']."=>".$bet['cash']);
+
+						if($bet['vendorKey'] == "evolution_casino" || $bet['vendorKey'] == "dreamgaming_casino"){
+							if(strlen(trim($betting['bet_spec'])) == 0 ){
+								$bSpec = $this->modelCasinoBet->updateKSpec($betId, $bet);
+								writeLog($this->fLog, $logHead."ACC-Update Spec1-".$bet['refId'].", createdAt=".$bet['createdAt'].", lastIdx2=".$lastIdx2."=>".$bSpec);
+
+								if(!$bSpec && $bet['createdAt'] > $lastTime2 && ( strlen($lastIdx2) == 0 || $lastIdx2 > $bet['utcCreatedAt']) ){
+									$lastIdx2 = $bet['utcCreatedAt'];
+									writeLog($this->fLog, $logHead."ACC-Update Spec2-".$bet['refId'].", utcCreatedAt=".$bet['utcCreatedAt'].", lastIdx2=".$lastIdx2."=>".$bSpec);
+								}
+							}
+						}
 						continue;
 					}
 
-					$betId = $betting['bet_fid'];
-					$this->modelCasinoBet->updateK($betId, $bet);
+					if($bet['vendorKey'] == "evolution_casino" || $bet['vendorKey'] == "dreamgaming_casino"){
+						if(strlen(trim($betting['bet_spec'])) == 0 ){
+							$bSpec = $this->modelCasinoBet->updateKSpec($betId, $bet);
+							writeLog($this->fLog, $logHead."ACC-Update Spec1-".$bet['refId'].", createdAt=".$bet['createdAt'].", lastIdx2=".$lastIdx2."=>".$bSpec);
+
+							if(!$bSpec && $bet['createdAt'] > $lastTime2 && ( strlen($lastIdx2) == 0 || $lastIdx2 > $bet['utcCreatedAt'])){
+								$lastIdx2 = $bet['utcCreatedAt'];
+								writeLog($this->fLog, $logHead."ACC-Update Spec2-".$bet['refId'].", utcCreatedAt=".$bet['utcCreatedAt'].", lastIdx2=".$lastIdx2."=>".$bSpec);
+							}
+						}
+					} 
+					if(!$bSpec)
+						$this->modelCasinoBet->updateK($betId, $bet);
+
 					writeLog($this->fLog, $logHead."Update ACCId=".$betId);
 					$arrMemBet[$objMember->mb_fid] = $bet['createdAt'];
 					
@@ -875,11 +939,11 @@ class ServiceLogic
 							if(array_key_exists($objReward->rw_mb_fid, $arrEmpPoint )){
 								// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point1 =".$arrEmpPoint[$objReward->rw_mb_fid]);
 								$arrEmpPoint[$objReward->rw_mb_fid] -= $objReward->rw_point;
-								writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
+								// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
 							}
 							else {
 								$arrEmpPoint[$objReward->rw_mb_fid] = 0-$objReward->rw_point;	
-								writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
+								// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
 							}
 						}
 
@@ -897,6 +961,17 @@ class ServiceLogic
 					writeLog($this->fLog, $logHead."Insert BetId=".$betId);
 					$arrMemBet[$objMember->mb_fid] = $bet['createdAt'];
 					if($betId > 0){
+						
+						if($bet['vendorKey'] == "evolution_casino" || $bet['vendorKey'] == "dreamgaming_casino"){
+							$bSpec = $this->modelCasinoBet->updateKSpec($betId, $bet);
+							writeLog($this->fLog, $logHead."BET-INSERT Spec1-".$bet['refId'].", createdAt=".$bet['createdAt'].", lastIdx2=".$lastIdx2."=>".$bSpec);
+
+							if(!$bSpec && $bet['createdAt'] > $lastTime2 && ( strlen($lastIdx2) == 0 || $lastIdx2 > $bet['utcCreatedAt']) ){
+								$lastIdx2 = $bet['utcCreatedAt'];
+								writeLog($this->fLog, $logHead."BET-INSERT Spec2-".$bet['refId'].", utcCreatedAt=".$bet['utcCreatedAt'].", lastIdx2=".$lastIdx2."=>".$bSpec);
+							}
+						} 
+						
 						$arrIdx['fid2'] = $betId;
 						$bInsert = true;
 						writeLog($this->fLog, $logHead."BET-INSERT-".$bet['type']."-".$bet['_id']."=>".$bet['cash']);
@@ -988,6 +1063,15 @@ class ServiceLogic
 				writeLog($this->fLog, $logHead."No Category-".$bet['gameCategory'].", ".$bet['siteUsername'].", ".$bet['refId']."=>".$bet['cash']);
 			}
 			
+		}
+		writeLog($this->fLog, "<KGON> END lasdIdx=".$lastIdx." lastIdx2=".$lastIdx2);
+		if(strlen($lastIdx2) > 0){
+
+			$tmDt = strtotime($lastIdx2);
+			$tmDt = strtotime("-9 hours", $tmDt);
+			$tmDt = strtotime("-1 second", $tmDt);
+
+			$lastIdx = date("Y-m-d", $tmDt)."T".date("H:i:s", $tmDt).".000Z";
 		}
 
 		if(strlen($lastIdx) > 0)

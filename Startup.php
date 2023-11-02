@@ -99,9 +99,9 @@
 	$ordGsplay = 0;
 	$logHead = "<Oive>";
 	
-	$secSleep = 31;
-	$secRepeat = 21;
-
+	$secSleep = 41;
+	$secRepeat = 31;
+	
 	writeLog($fLog, $logHead."==============START==============");
 
 	writeLog($fLog, $logHead."ThePlus=".$bPlus." KGON=".$bKgon." GSPlay=".$bGsplay." STAR=".$bStar." GOLD=".$bGold );

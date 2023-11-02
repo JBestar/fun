@@ -241,14 +241,82 @@ class CasinoBet_Model {
 
 	public function updateK($fid, $bet){
 
+		$bUpdate = false;
+		if(array_key_exists('detail', $bet) && $bet['detail'] ) {
+			$bUpdate = $this->updateKSpec($fid, $bet);
+		} 
+
+		if($bUpdate)
+			return true;
+
 		$strSql = "UPDATE ".$this->mTableName." SET ";	
-		
+	
+		//bet_round_no
+		$strSql.= " bet_round_no ='".$bet['gameName']."', ";	//"Speed Baccarat 1"
 		if($bet['type'] == "turn_win" || $bet['type'] == "turn_draw"){ 
-		// if($bet['beforeCash'] < $bet['afterCash']){ 
-        	$strSql.= "  bet_win_money = '".$bet['cash']."', ";
+			$strSql.= "  bet_win_money = '".$bet['cash']."', ";
 		}
 		//bet_result
 		$strSql.= " bet_result = '".$bet['afterCash']."'";
+
+		$strSql.= " WHERE bet_fid = '".$fid."' ";
+
+		return $this->mDbConn->query($strSql);
+		
+	}
+
+	
+	public function updateKSpec($fid, $bet){
+
+		$betSpec = "";
+		if(array_key_exists('detail', $bet) && !is_null($bet['detail']) ) {
+
+			if(array_key_exists('participants', $bet['detail']) ) {
+				if(is_array($bet['detail']['participants']) && count($bet['detail']['participants']) > 0 && array_key_exists('bets', $bet['detail']['participants'][0]) ){
+					foreach($bet['detail']['participants'][0]['bets'] as $detail){
+						$betSpec.= $detail['code'].",".$detail['stake'].",";
+						$betSpec.= $detail['payout']."#";
+					}
+				} 
+			} else if(array_key_exists('betDetail', $bet['detail'])){
+				$arrDetail = json_decode($bet['detail']['betDetail'], true);
+				if(!is_null($arrDetail) && is_array($arrDetail)) {
+					$arrBet = [];
+					foreach(array_keys($arrDetail) as $key){
+
+						if(count($arrBet) > 0 && in_array($key, array_keys($arrBet))){
+							$arrBet[$key] .= ",".strval($arrDetail[$key]);
+						} else {
+							$arrBet[$key."W"] = strval($arrDetail[$key]);
+						}
+					}
+					foreach(array_keys($arrBet) as $key){
+						$side = str_replace("W", "", $key); 
+						$betSpec.= $side.",".$arrBet[$key]."#";
+					}
+				}
+			}
+		} 
+
+		if(strlen($betSpec) < 1)
+			return false;
+
+		$strSql = "UPDATE ".$this->mTableName." SET ";	
+		
+		//bet_round_no
+		$strSql.= " bet_round_no ='".$bet['gameName']."', ";	//"Speed Baccarat 1"
+		if($bet['type'] == "turn_win" || $bet['type'] == "turn_draw"){ 
+        	$strSql.= "  bet_win_money = '".$bet['cash']."', ";
+		}
+		
+		//bet_game_type
+		$strSql.= " bet_game_type = '".$bet['gameType']."', ";
+		//bet_table_code
+		$strSql.= " bet_table_code = '".$bet['gameId']."', ";
+		//bet_result
+		$strSql.= " bet_result = '".$bet['afterCash']."', ";
+		// bet_spec
+		$strSql.= " bet_spec = '".$betSpec."'";
 
         $strSql.= " WHERE bet_fid = '".$fid."' ";
 
