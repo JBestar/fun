@@ -25,7 +25,7 @@
         <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
         <link rel="stylesheet" href="/css/bootstrap.min.css?ver=1" />
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=1"></script>
+        <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=2"></script>
         <script src="/js/worker.js?v=1"></script>
         <script src="/js/odometer/odometer.js?v=1"></script>
         <link rel="stylesheet" href="/js/odometer/odometer.css?v=1" />
@@ -662,9 +662,33 @@
                         margin-left:0px;
                     }
                     .MainMenu-ActionsContainer .btn-logo {
-                        margin-right: 20px;
+                        margin-right: 5px;
+                    }
+                    .MainMenu-ActionsContainer .btn-box{
+                        width:80px;
+                    }
+                    .logo_icon{
+                        width:120px;
+                        margin-top:40px;
+                    }
+                    .MainMenu-Left{
+                        margin: 10px 5px 0 40px;
                     }
                 }
+                @media (max-width: 400px) {
+                    .MainMenu-ActionsContainer .btn-box{
+                        width:60px;
+                        font-size:16px;
+                        margin-top:5px;
+                    }
+                    .SeoPage {
+                        background-image: url(/images/main/sample2.main_bg_b.jpg?v=1);
+                    }
+                    .BannerSlider-list{
+                        width:0px;
+                    }
+                }
+
                 .pop_layer .pop_container .pop_top{
                     background: #112035;
                 }
@@ -1948,9 +1972,9 @@
                 padding: 20px;
                 border-radius: 0px;
                 box-shadow: 0;
-                /* height: 100%; */
                 width: 100%;
                 max-width: 720px;
+                min-width: 250px;
                 color:var(--grey-10);
             }
             @media (min-width: 481px){
@@ -2022,6 +2046,11 @@
                 bottom: 0;
                 left: -120px;
                 z-index: -1;
+            }
+            @media (max-width: 470px) {
+                .login-image {
+                    display: none;
+                }
             }
             .login-form-container .login-title {
                 font-size: 28px;

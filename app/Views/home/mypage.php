@@ -1347,7 +1347,6 @@
             }
                   
             function readMemo(idx) {
-
                 UIkit.modal.confirm(langMessage.read_all_ask, {labels: {'ok': langMessage.ok, 'cancel': langMessage.cancel}}).then(
                     function () {
                         $.post(
@@ -1358,6 +1357,9 @@
                             function (response) {
                                 if (response.status == "success") {
                                     objDashBoard.getMyMemoList();
+                                    if(window.parent){
+                                        window.parent.postMessage('change_point', '*');
+                                    }
                                 } else {
                                     showAlert(response.msg, 0);
                                 }
@@ -1901,7 +1903,7 @@
                     viewMemo: function (idx, read) {
                         if(read > 0)
                             return;
-                        
+                        console.log("viewMemo="+idx);
                         $.post(
                             "/api/check_message",
                             {
@@ -1909,6 +1911,9 @@
                             },
                             function (response) {
                                 objDashBoard.getMyMemoList();
+                                if(window.parent){
+                                    window.parent.postMessage('change_point', '*');
+                                }
                             },
                             "json"
                         );
