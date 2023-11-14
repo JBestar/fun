@@ -93,7 +93,9 @@ class MoneyHist_Model extends Model {
     public function deleteByClient($reqData){
         
         $where = " money_mb_uid = ".$this->db->escape($reqData['req_uid'])." ";
-        
+        if(array_key_exists("type", $reqData) && intval($reqData['type']) > 0){
+            $where.=" AND money_change_type = ".$this->db->escape($reqData['type']);
+        }
         if($reqData['money_id'] > 0)
             $where.= " AND money_fid = ".$this->db->escape($reqData['money_id'])." ";
             

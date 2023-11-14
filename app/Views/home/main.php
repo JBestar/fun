@@ -2135,7 +2135,7 @@
                                     <input name="captchacode" placeholder="보안문자" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
                                 </div>
                             </div>
-                            <input type="text" name="ip" id="ip_addr" hidden/>
+                            <!-- <input type="text" name="ip" id="ip_addr" hidden/> -->
                             <input type="text" name="captchasrc" id="captchasrc" value="<?=$captcha?>" hidden/>
                             <div class="button-group">
                                 <button class="btn btn-login ng-scope" type="submit"><?=lang('common.login')?></button>
