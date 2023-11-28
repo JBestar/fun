@@ -8,7 +8,7 @@ use App\Models\Bet_Model;
 
 class ApiSite extends BaseController
 {
-    private $modelMoneyhist;
+    // private $modelMoneyhist;
     private $modelReward;
 	public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
 	{
@@ -18,7 +18,7 @@ class ApiSite extends BaseController
         header('Access-Control-Allow-Origin: *');
 		header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 		
-        $this->modelMoneyhist = new MoneyHist_Model();
+        // $this->modelMoneyhist = new MoneyHist_Model();
         $this->modelReward = new Reward_Model();
     }
 
@@ -323,9 +323,9 @@ class ApiSite extends BaseController
         if($iResult == 1){
             $arrEmpRatio = $this->modelMember->getEmployeeRatio($objUser, $arrBetData['amount'], $arrBetData['game'], $arrBetData['mode']);
             //Change User money
-            if($this->modelMember->updateAssets($objUser, 0-$arrBetData['amount'])){
+            if($this->modelMember->updateAssets($objUser, 0-$arrBetData['amount'], 0, $iMoneyType)){
                 $iBetId = $modelBet->register($arrBetData, $objUser);
-                $this->modelMoneyhist->registerBet($objUser, $arrBetData, $iMoneyType);
+                // $this->modelMoneyhist->registerBet($objUser, $arrBetData, $iMoneyType);
             }
         }
 

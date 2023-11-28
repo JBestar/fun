@@ -289,7 +289,7 @@ class Member_Model extends Model {
         ->update();
     }
 
-    public function updateAssets(&$objUser, $inMoney , $inPoint = 0){
+    public function updateAssets(&$objUser, $inMoney , $inPoint = 0, $iChange=-1, $spec=""){
 
         $inMoney = floatval($inMoney);
         $inPoint = floatval($inPoint);
@@ -303,7 +303,9 @@ class Member_Model extends Model {
         if($inMoney != 0){
             $strSql2.= "mb_money = mb_money";
             $strSql2.= $inMoney > 0 ? " + ":" ";
-            $strSql2.= $inMoney;            
+            $strSql2.= $inMoney;   
+            $strSql2.= ", mb_change = ".$iChange;
+            $strSql2.= ", mb_spec = '".$spec."'";
         }
         
         if($inPoint != 0){
@@ -324,7 +326,7 @@ class Member_Model extends Model {
 
         $bResult = false;
 
-        if (false === $this->db->transStatus()) {
+        if ($this->db->transStatus() === false) {
             $this->db->transRollback();
             $bResult = false;
         } else {

@@ -506,7 +506,7 @@ class Api extends BaseController
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id);
 
-			$modelMoneyhist = new MoneyHist_Model();
+			// $modelMoneyhist = new MoneyHist_Model();
 			$reqAmount = intval($this->request->getVar('point'));
 			if($reqAmount == 0)
 				$reqAmount = $objMember->mb_point;
@@ -515,9 +515,9 @@ class Api extends BaseController
 			if($reqAmount > $objMember->mb_point){
 				$result->status = STATUS_FAIL;
 				$result->msg = "요청금액이 보유포인트를 초과하셨습니다.";
-			} else if($reqAmount > 0 && $objMember->mb_point >= $reqAmount && $this->modelMember->updateAssets($objMember, $reqAmount, 0-$reqAmount))
+			} else if($reqAmount > 0 && $objMember->mb_point >= $reqAmount && $this->modelMember->updateAssets($objMember, $reqAmount, 0-$reqAmount, POINTCHANGE_EXCHANGE))
 			{
-				$modelMoneyhist->registerPointToMoney($objMember, $reqAmount);
+				// $modelMoneyhist->registerPointToMoney($objMember, $reqAmount);
 				$result->status = STATUS_SUCCESS;
 			}			
 
@@ -756,7 +756,7 @@ class Api extends BaseController
 					if($reqData['c_price'] > $objMember->mb_money){
 						$result->msg = lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.").";
 						$result->status = STATUS_FAIL;
-					} else if($reqData['c_price'] > 0 && $this->modelMember->updateAssets($objMember, 0-$reqData['c_price'])){
+					} else if($reqData['c_price'] > 0 && $this->modelMember->updateAssets($objMember, 0-$reqData['c_price'], 0, MONEYCHANGE_EXCHANGE)){
 						$data =[
 							'exchange_emp_fid' => $objMember->mb_emp_fid,
 							'exchange_mb_uid' => $objMember->mb_uid,
@@ -769,7 +769,6 @@ class Api extends BaseController
 							'exchange_bank_serial' => $objMember->mb_bank_num,
 							'exchange_money_before' => allMoney($objMember),
 							'exchange_money_after' => allMoney($objMember)-$reqData['c_price']
-		
 						];
 		
 						$modelExchange->register($data);
@@ -1773,7 +1772,7 @@ class Api extends BaseController
 		
 		if(is_login()) {
 			$this->sess_action();                
-			$modelMoneyhist = new MoneyHist_Model();
+			// $modelMoneyhist = new MoneyHist_Model();
 			$modelReward = new Reward_Model();
 
 			$user_id = $this->session->user_id;			
@@ -1861,9 +1860,9 @@ class Api extends BaseController
 					if($iResult == 1){
 						$arrEmpRatio = $this->modelMember->getEmployeeRatio($objUser, $arrBetData['amount'], $arrBetData['game'], $arrBetData['mode']);
 						//Success in Betting
-						if($this->modelMember->updateAssets($objUser, 0-$arrBetData['amount'])){
+						if($this->modelMember->updateAssets($objUser, 0-$arrBetData['amount'], 0, $iMoneyType)){
 							$iBetId = $modelBet->register($arrBetData, $objUser);
-							$modelMoneyhist->registerBet($objUser, $arrBetData, $iMoneyType);
+							// $modelMoneyhist->registerBet($objUser, $arrBetData, $iMoneyType);
 						}
 					}
 				}
@@ -1923,7 +1922,7 @@ class Api extends BaseController
 		
 		if(is_login()) {
 			$this->sess_action();                
-			$modelMoneyhist = new MoneyHist_Model();
+			// $modelMoneyhist = new MoneyHist_Model();
 			$modelReward = new Reward_Model();
 
 			$user_id = $this->session->user_id;			
@@ -1983,8 +1982,8 @@ class Api extends BaseController
 					$iResult = 5;		//Can't Cancel
 				} else {
 					if($modelBet->delete($objBet->bet_fid)){
-						if( $objBet->bet_money > 0 && $this->modelMember->updateAssets($objUser, $objBet->bet_money)){
-							$modelMoneyhist->register($objUser, $objBet->bet_money, $iChangeType);
+						if( $objBet->bet_money > 0 && $this->modelMember->updateAssets($objUser, $objBet->bet_money, 0, $iChangeType)){
+							// $modelMoneyhist->register($objUser, $objBet->bet_money, $iChangeType);
 						}
 						$iResult = 1;		
 					}
@@ -2018,7 +2017,7 @@ class Api extends BaseController
 		$arrReqData = json_decode($jsonData, true);
 		
 		if(is_login()) {
-			$modelMoneyhist = new MoneyHist_Model();
+			// $modelMoneyhist = new MoneyHist_Model();
 			$modelReward = new Reward_Model();
 			$modelFollow = new Follow_Model();
 
@@ -2120,9 +2119,9 @@ class Api extends BaseController
 						if($iResult == 1){
 							$arrEmpRatio = $this->modelMember->getEmployeeRatio($member, $arrBetData['amount'], $arrBetData['game'], $arrBetData['mode']);
 							//Add Money hisotry and Update User money
-							if($this->modelMember->updateAssets($member, 0-$arrBetData['amount'])){
+							if($this->modelMember->updateAssets($member, 0-$arrBetData['amount'], 0, $iMoneyChangeType)){
 								$iBetId = $modelBet->register($arrBetData, $member);
-								$modelMoneyhist->registerBet($member, $arrBetData, $iMoneyChangeType);
+								// $modelMoneyhist->registerBet($member, $arrBetData, $iMoneyChangeType);
 							}
 						}
 
@@ -2179,7 +2178,7 @@ class Api extends BaseController
 		$arrReqData = json_decode($jsonData, true);
 		
 		if(is_login()) {
-			$modelMoneyhist = new MoneyHist_Model();
+			// $modelMoneyhist = new MoneyHist_Model();
 			$modelReward = new Reward_Model();
 
 			$user_id = $this->session->user_id;			
@@ -2225,8 +2224,8 @@ class Api extends BaseController
 							continue;
 						if($modelBet->delete($objBet->bet_fid)){
 							$objMember = $this->modelMember->getByUid($objBet->bet_mb_uid);
-							if(!is_null($objMember) && $objBet->bet_money > 0 && $this->modelMember->updateAssets($objMember, $objBet->bet_money)){
-								$modelMoneyhist->register($objMember, $objBet->bet_money, $iChangeType);
+							if(!is_null($objMember) && $objBet->bet_money > 0 && $this->modelMember->updateAssets($objMember, $objBet->bet_money, 0, $iChangeType)){
+								// $modelMoneyhist->register($objMember, $objBet->bet_money, $iChangeType);
 							}
 						}	
 					}
