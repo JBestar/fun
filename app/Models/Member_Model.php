@@ -291,6 +291,9 @@ class Member_Model extends Model {
 
     public function updateAssets(&$objUser, $inMoney , $inPoint = 0, $iChange=-1, $spec=""){
 
+        if(is_null($objUser))
+            return false;
+        
         $inMoney = floatval($inMoney);
         $inPoint = floatval($inPoint);
 
@@ -317,22 +320,25 @@ class Member_Model extends Model {
         }
 
         $strSql2.= " WHERE mb_fid=".$objUser->mb_fid;
-
+        if($inMoney < 0){
+            $strSql2.= " AND mb_money >= ".abs($inMoney);
+        }
         $this->db->transBegin();
 
-        $objResult = $this->db->query($strSql1)->getRow();
-
-        $this->db->query($strSql2);
+        $objMember = $this->db->query($strSql1)->getRow();
+        $objUpdate = $this->db->query($strSql2);
+        $affectedRows = $objUpdate->connID->affected_rows;
 
         $bResult = false;
-
         if ($this->db->transStatus() === false) {
             $this->db->transRollback();
             $bResult = false;
         } else {
             $this->db->transCommit();
-            $objUser->mb_money = $objResult->mb_money;
-            $bResult = true;
+            if(!is_null($objMember))
+                $objUser->mb_money = $objMember->mb_money;
+            if($affectedRows > 0)
+                $bResult = true;
         }
 
         return $bResult;

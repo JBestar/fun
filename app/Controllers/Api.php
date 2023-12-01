@@ -19,6 +19,21 @@ use App\Models\Bet_Model;
 
 class Api extends BaseController
 {
+	// public function test(){
+	// 	if(!is_login())
+	// 	{
+    //         $result->status = STATUS_LOGOUT;
+    //     } else {
+	// 		$user_id = $this->session->user_id;
+	// 		$objMember = $this->modelMember->getByUid($user_id);
+	// 		$bResult = $this->modelMember->updateAssets($objMember, -100, 0, POINTCHANGE_EXCHANGE);
+	// 		if($bResult)
+	// 			echo "updateAssets = success";
+	// 		else  
+	// 			echo "updateAssets = fail";
+	// 	}
+	// }
+
 	public function index(){
 		$this->response->redirect('/');	
 	}
