@@ -13,7 +13,7 @@
 
         <!-- JS FILES -->
         <script type="text/javascript" src="/js/jquery-1.12.4.min.js"></script>
-        <script type="text/javascript" src="/js/jquery-ui.js"></script>
+        <script type="text/javascript" src="/js/jquery-ui.js?v=1"></script>
         <script type="text/javascript" src="/js/jquery-form/jquery.form.js"></script>
         <script type="text/javascript" src="/js/jquery-form/jquery.validate.js"></script>
         <script type="text/javascript" src="/js/common.js?v=3"></script>

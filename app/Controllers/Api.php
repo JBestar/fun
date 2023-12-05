@@ -262,6 +262,14 @@ class Api extends BaseController
 		if(array_key_exists('app.level_limit', $_ENV) && intval($_ENV['app.level_limit']) > 0 ){
 			$minLevel = LEVEL_MAX - intval($_ENV['app.level_limit']);
 		}
+		$recommenderDeny = false;
+		if(!is_null($objEmp) && array_key_exists('app.sess_act', $_ENV) && $_ENV['app.sess_act'] == 1){
+			$memConfModel = new MemConf_Model();
+			$memConf = $memConfModel->getByMember($objEmp->mb_fid);
+			if(!is_null($memConf) ){
+				$recommenderDeny = $memConf->conf_num_2 == STATE_ACTIVE;
+			}
+		}
 
 		if(is_null($objEmp)){
 			$result->msg = lang("common.recommender_mistake");
@@ -269,7 +277,7 @@ class Api extends BaseController
 		} else if($objEmp->mb_level <= $minLevel){
 			$result->msg = lang("common.recommender_nopermitted");
 			$result->status = STATUS_FAIL;
-		} else if(!$this->modelMember->isPermitMember($objEmp) || $objEmp->mb_level > LEVEL_COMPANY){
+		} else if($recommenderDeny || !$this->modelMember->isPermitMember($objEmp) || $objEmp->mb_level > LEVEL_COMPANY){
 			$result->msg = lang("common.recommender_nopermitted");
 			$result->status = STATUS_FAIL;
 		} else {
@@ -649,6 +657,18 @@ class Api extends BaseController
 				$result->msg = lang("common.password_rule");
 		}
 
+		if($checkOk && array_key_exists('app.sess_act', $_ENV) && $_ENV['app.sess_act'] == 1){
+			$objEmp = $this->modelMember->getByUid($arrData['proposer']);
+			if(!is_null($objEmp)){
+				$memConfModel = new MemConf_Model();
+				$memConf = $memConfModel->getByMember($objMember->mb_fid);
+				if(!is_null($memConf) && $memConf->conf_num_2 == STATE_ACTIVE ){
+					$checkOk = false;
+					$result->msg = lang("common.recommender_nopermitted");
+				}
+			}
+		}
+
 		if($checkOk)
 			$iResult = $this->modelMember->register($reqData);
 
@@ -771,7 +791,7 @@ class Api extends BaseController
 					if($reqData['c_price'] > $objMember->mb_money){
 						$result->msg = lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.").";
 						$result->status = STATUS_FAIL;
-					} else if($reqData['c_price'] > 0 && $this->modelMember->updateAssets($objMember, 0-$reqData['c_price'], 0, MONEYCHANGE_EXCHANGE)){
+					} else if($reqData['c_price'] > 0 /*&& $this->modelMember->updateAssets($objMember, 0-$reqData['c_price'], 0, MONEYCHANGE_EXCHANGE)*/){
 						$data =[
 							'exchange_emp_fid' => $objMember->mb_emp_fid,
 							'exchange_mb_uid' => $objMember->mb_uid,
@@ -783,13 +803,13 @@ class Api extends BaseController
 							'exchange_bank_account' => $objMember->mb_bank_own,
 							'exchange_bank_serial' => $objMember->mb_bank_num,
 							'exchange_money_before' => allMoney($objMember),
-							'exchange_money_after' => allMoney($objMember)-$reqData['c_price']
+							// 'exchange_money_after' => allMoney($objMember)-$reqData['c_price']
 						];
 		
 						$modelExchange->register($data);
 
 						$objInfo = new \StdClass;
-						$objInfo->money = allMoney($objMember)-$reqData['c_price'];
+						$objInfo->money = allMoney($objMember)/*-$reqData['c_price']*/;
 						$objInfo->point = floor($objMember->mb_point);
 				
 						$result->data = $objInfo;
