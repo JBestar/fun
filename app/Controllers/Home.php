@@ -6,6 +6,7 @@ use App\Models\MemConf_Model;
 use App\Models\SlotPrd_Model;
 use App\Models\SlotGame_Model;
 use App\Models\Captcha_Model;
+use App\Models\Domain_Model;
 
 class Home extends BaseController
 {
@@ -165,11 +166,24 @@ class Home extends BaseController
             }
 
             echo view('home/main', $headInfo+$navInfo);
-    
+        }
+    }
+
+	public function domain(){
+        $headInfo = $this->getSiteConf();
+        
+        $domainModel = new Domain_Model();
+        $domains = [];
+        $arrDomain = $domainModel->search();
+		foreach($arrDomain as $objDomain){
+            array_push($domains, $objDomain->conf_domain);
         }
 
-
-    }
+        $headInfo['check_domain'] = "에이티엠.com";
+        $headInfo['height'] = count($domains) * 60 + 230;
+        $headInfo['domains'] = $domains;
+        echo view('home/domain', $headInfo);
+	}
 
 	public function getaddr(){
 		$ip = $this->request->getIPAddress();

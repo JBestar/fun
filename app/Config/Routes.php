@@ -75,6 +75,7 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Home::index');
 $routes->get('logout', 'Home::logout');
 $routes->get('mypage', 'Home::mypage');
+$routes->get('domain', 'Home::domain');
 $routes->get('mini', 'Mini::index');
 $routes->get('betlist', 'Mini::betlist');
 $routes->get('rndlist', 'Mini::rndlist');
