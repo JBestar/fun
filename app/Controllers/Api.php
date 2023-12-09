@@ -658,10 +658,10 @@ class Api extends BaseController
 		}
 
 		if($checkOk && array_key_exists('app.sess_act', $_ENV) && $_ENV['app.sess_act'] == 1){
-			$objEmp = $this->modelMember->getByUid($arrData['proposer']);
+			$objEmp = $this->modelMember->getByUid($reqData['proposer']);
 			if(!is_null($objEmp)){
 				$memConfModel = new MemConf_Model();
-				$memConf = $memConfModel->getByMember($objMember->mb_fid);
+				$memConf = $memConfModel->getByMember($objEmp->mb_fid);
 				if(!is_null($memConf) && $memConf->conf_num_2 == STATE_ACTIVE ){
 					$checkOk = false;
 					$result->msg = lang("common.recommender_nopermitted");
