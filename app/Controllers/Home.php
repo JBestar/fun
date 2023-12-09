@@ -16,8 +16,9 @@ class Home extends BaseController
         $this->setLanguage();
         $headInfo = $this->getSiteConf();
         $headInfo['lang'] = $this->session->lang;
-
-        if(!is_login(true) && array_key_exists('app.login', $_ENV) && $_ENV['app.login'] == 1){
+        if($_ENV['app.name'] == APP_ATM && strpos($_SERVER['HTTP_HOST'], "xn--hi5b6a25g9xy.com") === 0){
+		    $this->response->redirect('/domain');
+        } else if(!is_login(true) && array_key_exists('app.login', $_ENV) && $_ENV['app.login'] == 1){
             echo view('home/login', $headInfo);
         } else {
             $objMember = null;
@@ -170,19 +171,23 @@ class Home extends BaseController
     }
 
 	public function domain(){
-        $headInfo = $this->getSiteConf();
+        if($_ENV['app.name'] == APP_ATM){
+            $headInfo = $this->getSiteConf();
         
-        $domainModel = new Domain_Model();
-        $domains = [];
-        $arrDomain = $domainModel->search();
-		foreach($arrDomain as $objDomain){
-            array_push($domains, $objDomain->conf_domain);
-        }
-
-        $headInfo['check_domain'] = "에이티엠.com";
-        $headInfo['height'] = count($domains) * 60 + 230;
-        $headInfo['domains'] = $domains;
-        echo view('home/domain', $headInfo);
+            $domainModel = new Domain_Model();
+            $domains = [];
+            $arrDomain = $domainModel->search();
+            foreach($arrDomain as $objDomain){
+                array_push($domains, $objDomain->conf_domain);
+            }
+    
+            $headInfo['check_domain'] = "에이티엠.com";
+            $headInfo['height'] = count($domains) * 60 + 230;
+            $headInfo['domains'] = $domains;
+            echo view('home/domain', $headInfo);
+        } else 
+		    $this->response->redirect('/');
+        
 	}
 
 	public function getaddr(){
@@ -214,7 +219,9 @@ class Home extends BaseController
     public function mypage()
     {
 		$this->setLanguage();
-        if(!is_login(true)){
+        if($_ENV['app.name'] == APP_ATM && strpos($_SERVER['HTTP_HOST'], "xn--hi5b6a25g9xy.com") === 0){
+		    $this->response->redirect('/domain');
+        } else if(!is_login(true)){
             print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
         } else{
             $this->sess_action();                

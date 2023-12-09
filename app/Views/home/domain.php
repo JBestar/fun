@@ -102,7 +102,7 @@
             font-size: 20px;
             line-height: 30px; 
         }
-        .footerDesktop span {
+        .footerDesktop a {
             color: #f15a00;
         }
         #id01 {
@@ -156,7 +156,7 @@
             </div>
 
             <div class="footerDesktop">
-                <p>도메인 변경 시에도 항상 <span id="hangul02"><?=$check_domain?></span> 확인하실 수 있습니다.</p>
+                <p>도메인 변경 시에도 항상 <a id="hangul02" href="http://<?=$check_domain?>"><?=$check_domain?></a> 확인하실 수 있습니다.</p>
             </div>
         </div>
     </div>
