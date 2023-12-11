@@ -710,11 +710,12 @@ class Api extends BaseController
 
 			$result->status = STATUS_SUCCESS;
 			$bLimit = false;
+			$strNow = date("Y-m-d H:i:s");        
+
 			if(array_key_exists('app.tree', $_ENV) && intval($_ENV['app.tree']) == 1 ){
 				$bLimit = true;
 
 				$tmNow = time();
-				$strNow = date("Y-m-d H:i:s");        
 				
 				$arrConf = $this->modelConfsite->getExchangePolicy();
 				foreach($arrConf as $objConf){
@@ -775,10 +776,10 @@ class Api extends BaseController
 			} else if($reqData['c_price'] < 10000){
 				$result->status = STATUS_FAIL;
 				$result->msg = lang("common.withdrawal_fail_amount");
-			} else if($_ENV['mem.delay_play'] > 0 && $_ENV['mem.withdeny_play'] &&  diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet) < $_ENV['mem.delay_play']){
+			} else if($_ENV['mem.delay_play'] > 0 && $_ENV['mem.withdeny_play'] &&  diffDt($strNow, $objMember->mb_time_bet) < $_ENV['mem.delay_play']){
 				$result->status = STATUS_FAIL;
-				// writeLog($_ENV['mem.delay_play']." > ".diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet));
-				$result->msg = langTo($this->session->lang, "withdrawal_deny", intval($_ENV['mem.delay_play']/60-diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_bet)/60)+1);
+				// writeLog($_ENV['mem.delay_play']." > ".diffDt($strNow, $objMember->mb_time_bet));
+				$result->msg = langTo($this->session->lang, "withdrawal_deny", intval($_ENV['mem.delay_play']/60-diffDt($strNow, $objMember->mb_time_bet)/60)+1);
 			} else {
 				$iResult = 1;
 				if($reqData['c_price'] > $objMember->mb_money){
@@ -791,25 +792,25 @@ class Api extends BaseController
 					if($reqData['c_price'] > $objMember->mb_money){
 						$result->msg = lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.").";
 						$result->status = STATUS_FAIL;
-					} else if($reqData['c_price'] > 0 /*&& $this->modelMember->updateAssets($objMember, 0-$reqData['c_price'], 0, MONEYCHANGE_EXCHANGE)*/){
+					} else if($reqData['c_price'] > 0 && $this->modelMember->updateAssets($objMember, 0-$reqData['c_price'], 0, MONEYCHANGE_EXCHANGE)){
 						$data =[
 							'exchange_emp_fid' => $objMember->mb_emp_fid,
 							'exchange_mb_uid' => $objMember->mb_uid,
 							'exchange_mb_phone' => $objMember->mb_phone,
 							'exchange_money' => $reqData['c_price'],
-							'exchange_time_require' => date("Y-m-d H:i:s"),
+							'exchange_time_require' => $strNow,
 							'exchange_action_state' => STATE_ACTIVE,
 							'exchange_bank_name' => $objMember->mb_bank_name,
 							'exchange_bank_account' => $objMember->mb_bank_own,
 							'exchange_bank_serial' => $objMember->mb_bank_num,
 							'exchange_money_before' => allMoney($objMember),
-							// 'exchange_money_after' => allMoney($objMember)-$reqData['c_price']
+							'exchange_money_after' => allMoney($objMember)-$reqData['c_price']
 						];
 		
 						$modelExchange->register($data);
 
 						$objInfo = new \StdClass;
-						$objInfo->money = allMoney($objMember)/*-$reqData['c_price']*/;
+						$objInfo->money = allMoney($objMember)-$reqData['c_price'];
 						$objInfo->point = floor($objMember->mb_point);
 				
 						$result->data = $objInfo;
