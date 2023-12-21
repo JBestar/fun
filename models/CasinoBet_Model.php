@@ -314,7 +314,9 @@ class CasinoBet_Model {
 		//bet_table_code
 		$strSql.= " bet_table_code = '".$bet['gameId']."', ";
 		//bet_result
-		$strSql.= " bet_result = '".$bet['afterCash']."', ";
+		if($bet['type'] == "turn_win" || $bet['type'] == "turn_draw"){ 
+			$strSql.= " bet_result = '".$bet['afterCash']."', ";
+		}
 		// bet_spec
 		$strSql.= " bet_spec = '".$betSpec."'";
 
