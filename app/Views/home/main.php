@@ -1906,7 +1906,7 @@
                                 <label><?=lang('common.password')?> </label>
                                 <input type="password" name="passwd" placeholder="password" />
                             </div>
-                            <input type="text" name="ip" id="ip_addr" hidden/>
+                            <input type="text" name="ip" class="ip_addr" hidden/>
                         </div>
                     </div>
                     <div class="uk-modal-footer">
@@ -2135,7 +2135,7 @@
                                     <input name="captchacode" placeholder="보안문자" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
                                 </div>
                             </div>
-                            <!-- <input type="text" name="ip" id="ip_addr" hidden/> -->
+                            <input type="text" name="ip" class="ip_addr" hidden/>
                             <input type="text" name="captchasrc" id="captchasrc" value="<?=$captcha?>" hidden/>
                             <div class="button-group">
                                 <button class="btn btn-login ng-scope" type="submit"><?=lang('common.login')?></button>
@@ -2181,7 +2181,7 @@
                             <div class="twelve wide field">
                                 <label><?=lang('common.id_user')?> </label>
                                 <input type="text" name="userid" id="userid" placeholder="<?=lang('common.4to16')?>, <?=lang('common.english')?> <?=lang('common.or')?> <?=lang('common.number')?>" minlength="4" maxlength="16" />
-                                <input type="text" name="ip" id="ip_addr" hidden/>
+                                <input type="text" name="ip" class="ip_addr" hidden/>
                             </div>
                             <div class="two wide field">
                                 <label>&nbsp;</label>
@@ -2691,7 +2691,7 @@
                     function(json) {
                         // console.log("ip2="+json.ip);
                         if(json.ip !== undefined && json.ip.length > 0){
-                            $("#ip_addr").val(json.ip);
+                            $(".ip_addr").val(json.ip);
                             console.log("jsonip="+json.ip);
                         }
                     }
@@ -2701,7 +2701,7 @@
                     function(json) {
                         // console.log("ip1="+json.ip);
                         if(json.ip !== undefined && json.ip.length > 0){
-                            $("#ip_addr").val(json.ip)
+                            $(".ip_addr").val(json.ip)
                             console.log("ipify="+json.ip);
                         }
                     }

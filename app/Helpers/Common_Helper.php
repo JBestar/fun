@@ -1012,4 +1012,40 @@
       }
     
     }
+    
+    function getAllFiles($dir, $ext, &$arrInfo)
+    {
+      if (substr($dir, strlen($dir)-1, 1) != DIRECTORY_SEPARATOR)
+          $dir .= DIRECTORY_SEPARATOR;
+
+      if(!file_exists($dir)){
+        return;
+      }
+
+      if ($handle = opendir($dir))
+      {
+
+          while ($obj = readdir($handle))
+          {
+              if ($obj != '.' && $obj != '..')
+              {
+                  if (is_file($dir.$obj) && strlen($obj) > 4)
+                  {
+                    if( strtoLower(substr($obj, strlen($obj)-4, 4)) === ".".$ext){
+                      $file = new \StdClass;
+                      $file->path = $dir.$obj;
+                      $file->name = $obj;
+                      array_push($arrInfo, $file);
+
+                    }
+                  } else if(is_dir($dir.$obj)){
+                      getAllFiles($dir.$obj, $ext, $arrInfo);
+                  }                  
+              }
+          }
+
+          closedir($handle);
+      }
+    
+    }
 ?>
