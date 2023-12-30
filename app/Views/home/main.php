@@ -2619,7 +2619,10 @@
                 success: function (response) {
                     if (response.status == "success") {
                         showAlert(langMessage.signup_complete+"\n"+langMessage.signup_permit+"\n"+langMessage.thanks);
-                        showLoginModal();
+                        setTimeout(() => {
+                            location.reload();
+                        }, 5000);
+                        // showLoginModal();
                     } else {
                         showAlert(response.msg, 0);
                     }

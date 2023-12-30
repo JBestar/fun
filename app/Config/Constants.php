@@ -193,7 +193,8 @@ defined('STATE_HOT')          || define('STATE_HOT', 5);
 //permit state
 defined('PERMIT_CANCEL')       || define('PERMIT_CANCEL', 0);
 defined('PERMIT_OK')           || define('PERMIT_OK', 1);
-defined('PERMIT_WAIT')         || define('PERMIT_WAIT', 2);
+defined('PERMIT_REQ')         || define('PERMIT_REQ', 2);
+defined('PERMIT_WAIT')         || define('PERMIT_WAIT', 3);
 defined('PERMIT_DELETE')       || define('PERMIT_DELETE', 4);
 
 //Json Result Code
