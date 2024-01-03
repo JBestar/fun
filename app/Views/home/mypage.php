@@ -51,7 +51,6 @@
                 deposit_account_request : '<?=lang('common.deposit_account_request')?>',
                 deposit_permit : '<?=lang('common.deposit_permit')?>',
                 deposit_quick : '<?=lang('common.deposit_quick')?>',
-                deposit_request_amount : '<?=lang('common.deposit_request_amount')?>',
                 deposit_success : '<?=lang('common.deposit_success')?>',
                 id_input : '<?=lang('common.id_input')?>',
                 id_input_4 : '<?=lang('common.id_input_4')?>',
@@ -70,6 +69,7 @@
                 read_all_ask : '<?=lang('common.read_all_ask')?>',
                 recovery_eggs_request : '<?=lang('common.recovery_eggs_request')?>',
                 recovery_eggs_result : '<?=lang('common.recovery_eggs_result')?>',
+                request_amount_10th : '<?=lang('common.request_amount_10th')?>',
                 request_amount_input : '<?=lang('common.request_amount_input')?>',
                 signup_complete : '<?=lang('common.signup_complete')?>',
                 signup_permit : '<?=lang('common.signup_permit')?>',
@@ -395,7 +395,7 @@
                     <i class="bell icon" style="margin-top:0.2em"></i>
                     <label class="switch">
                         <input class="switch-input" type="checkbox" id="alarm_check" onchange="changeAlarmState();"/>
-                        <span class="switch-label" data-on="켜기" data-off="끄기"></span>
+                        <span class="switch-label" data-on="<?=lang('common.on')?>" data-off="<?=lang('common.off')?>"></span>
                         <span class="switch-handle"></span>
                     </label>
                     <!-- <p> <i class="bell icon"></i></p> -->
@@ -904,31 +904,31 @@
             <div id="change_point" uk-modal="" class="uk-modal" tabindex="-1" style="">
                 <div class="uk-modal-dialog">
                     <form name="ptchangeForm" id="ptchangeForm" class="ui form equal width">
-                        <div class="uk-modal-header"><h3 class="uk-modal-title">포인트 전환</h3></div>
+                        <div class="uk-modal-header"><h3 class="uk-modal-title"><?=lang('common.change_point')?></h3></div>
                         <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
                         </button>
                         <div class="uk-modal-body">
                             <div class="field">
-                                <label>현재 보유포인트</label>
+                                <label><?=lang('common.current_point')?></label>
                                 <div class="ui label">
                                     <span v-html="strMoney(myInfo.user_point)"></span>
                                     &nbsp;&nbsp;&nbsp;POINT
                                 </div>
                             </div>
                             <div class="field required">
-                                <label>전환 요청금액</label> <input type="number" name="point" id="point" value="" placeholder="전환요청하실 금액을 천원단위로 입력해주세요" class="ui text" />
+                                <label><?=lang('common.request_amount')?></label> <input type="number" name="point" id="point" value="" placeholder="<?=lang('common.request_point_msg')?>" class="ui text" />
                                 <div style="padding-top: 5px;">
-                                    <button type="button" onclick="setMoneyField('point',1000)" class="ui inverted blue mini button">1천</button> <button type="button" onclick="setMoneyField('point',5000)" class="ui inverted blue mini button">5천</button>
-                                    <button type="button" onclick="setMoneyField('point',10000)" class="ui inverted blue mini button">1만</button> <button type="button" onclick="setMoneyField('point',100000)" class="ui inverted blue mini button">10만</button>
-                                    <button type="button" onclick="setMoneyField('point',1000000)" class="ui inverted blue mini button">100만</button> 
+                                    <button type="button" onclick="setMoneyField('point',1000)" class="ui inverted blue mini button"><?=lang('common.1_thousand')?></button> <button type="button" onclick="setMoneyField('point',5000)" class="ui inverted blue mini button"><?=lang('common.5_thousands')?></button>
+                                    <button type="button" onclick="setMoneyField('point',10000)" class="ui inverted blue mini button"><?=lang('common.10_thousands')?></button> <button type="button" onclick="setMoneyField('point',100000)" class="ui inverted blue mini button"><?=lang('common.100_thousands')?></button>
+                                    <button type="button" onclick="setMoneyField('point',1000000)" class="ui inverted blue mini button"><?=lang('common.1_million')?></button> 
                                     <button type="button" onclick="setMoneyField('point','max' )" class="ui inverted blue mini button">MAX</button>
-                                    <button type="button" onclick="setMoneyField('point',0)" class="ui inverted blue mini button">다시입력</button>
+                                    <button type="button" onclick="setMoneyField('point',0)" class="ui inverted blue mini button"><?=lang('common.reenter')?></button>
                                 </div>
                             </div>
                         </div>
                         <div class="uk-modal-footer">
-                            <div class="ui primary submit button">전환 신청하기</div>
-                            <div class="ui uk-modal-close button">취소</div>
+                            <div class="ui primary submit button"><?=lang('common.point_change_to')?></div>
+                            <div class="ui uk-modal-close button"><?=lang('common.cancel')?></div>
                         </div>
                     </form>
                     <button uk-close="" class="uk-button uk-modal-close-default uk-icon uk-close">
@@ -1012,7 +1012,7 @@
                             },
                             {
                                 type: "minLength[5]",
-                                prompt: langMessage.deposit_request_amount,
+                                prompt: langMessage.request_amount_10th,
                             },
                         ],
                     },
@@ -1025,7 +1025,7 @@
                             },
                             {
                                 type: "minLength[4]",
-                                prompt: "최소 1천원 이상 입력해주세요",
+                                prompt: langMessage.request_amount_1th,
                             },
                         ],
                     },

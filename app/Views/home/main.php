@@ -83,7 +83,6 @@
                 deposit_account_ask : '<?=lang('common.deposit_account_ask')?>',
                 deposit_account_check : '<?=lang('common.deposit_account_check')?>',
                 deposit_account_request : '<?=lang('common.deposit_account_request')?>',
-                deposit_request_amount : '<?=lang('common.deposit_request_amount')?>',
                 deposit_success : '<?=lang('common.deposit_success')?>',
                 id_input : '<?=lang('common.id_input')?>',
                 id_input_4 : '<?=lang('common.id_input_4')?>',
@@ -99,7 +98,9 @@
                 password_new_input : '<?=lang('common.password_new_input')?>',
                 password_verify : '<?=lang('common.password_verify')?>',
                 password_verify_c : '<?=lang('common.password_verify_c')?>',
+                request_amount_10th : '<?=lang('common.request_amount_10th')?>',
                 request_amount_input : '<?=lang('common.request_amount_input')?>',
+                security_character_input : '<?=lang('common.security_character_input')?>',
                 signup_complete : '<?=lang('common.signup_complete')?>',
                 signup_permit : '<?=lang('common.signup_permit')?>',
                 thanks : '<?=lang('common.thanks')?>',
@@ -860,7 +861,7 @@
                         <?php endif ?>
 
                         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-                            <button name="lang" id="lang-button" style="position:absolute; right:10px; margin-top:5px; width:80px; padding:0 5px; color: #ffff00; font-size:14px; background:none; height:22px; border:none; text-align:center;" is="ms-dropdown" >
+                            <button name="lang" id="lang-button" style="z-index:2; position:absolute; right:10px; margin-top:24px; width:80px; padding:0 5px; color: #ffff00; font-size:14px; background:none; height:22px; border:none; text-align:center;" is="ms-dropdown" >
                             <?php if($lang == "cn") :?>
                                 <image id="lang-img" src="/images/common/cn.png?v=1" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-code" ><?=lang('common.lang_chinese')?></span>
                             <?php else :?>
@@ -1205,7 +1206,7 @@
                             <div class="autoscroller-d d-flex" >
                                 
                                 <div class="ps-card flex-1 flex-column ps-realtime">
-                                    <div class="scroller-header" >실시간 입금</div>
+                                    <div class="scroller-header" ><?=lang('common.realtime')?><?=lang('common.deposit')?></div>
                                     <div class="ps-card-body">
                                         <div class="Loop autoscroll-container">
                                             <div class="inner" id="recentCharges1">
@@ -1215,7 +1216,7 @@
                                                             <span class="item-username "><?=$charges[$i]->uid?></span>
                                                             <span class="item-amount">
                                                                 <span><?=$charges[$i]->amount?></span>
-                                                                <span>원</span>
+                                                                <span><?=lang('common.won')?></span>
                                                             </span>
                                                             <span class="item-date "><?=$charges[$i]->time?></span>
                                                         </div>
@@ -1231,7 +1232,7 @@
                                                             <span class="item-username "><?=$charges[$i]->uid?></span>
                                                             <span class="item-amount">
                                                                 <span><?=$charges[$i]->amount?></span>
-                                                                <span>원</span>
+                                                                <span><?=lang('common.won')?></span>
                                                             </span>
                                                             <span class="item-date "><?=$charges[$i]->time?></span>
                                                         </div>
@@ -1243,7 +1244,7 @@
                                 </div>
 
                                 <div class="ps-card flex-1 flex-column ps-realtime">
-                                    <div class="scroller-header">실시간 출금</div>
+                                    <div class="scroller-header"><?=lang('common.realtime')?><?=lang('common.withdrawal')?></div>
                                     <div class="ps-card-body">
                                         <div class="Loop autoscroll-container">
                                             <div class="inner" id="recentDischars1">
@@ -1253,7 +1254,7 @@
                                                             <span class="item-username "><?=$dischars[$i]->uid?></span>
                                                             <span class="item-amount">
                                                                 <span><?=$dischars[$i]->amount?></span>
-                                                                <span>원</span>
+                                                                <span><?=lang('common.won')?></span>
                                                             </span>
                                                             <span class="item-date "><?=$dischars[$i]->time?></span>
                                                         </div>
@@ -1269,7 +1270,7 @@
                                                             <span class="item-username "><?=$dischars[$i]->uid?></span>
                                                             <span class="item-amount">
                                                                 <span><?=$dischars[$i]->amount?></span>
-                                                                <span>원</span>
+                                                                <span><?=lang('common.won')?></span>
                                                             </span>
                                                             <span class="item-date "><?=$dischars[$i]->time?></span>
                                                         </div>
@@ -2132,7 +2133,7 @@
                             <div class="input-group mb-4">
                                 <img id="image_id" name="<?=$captcha?>" src="/download/captcha/<?=$captcha?>.jpg" style="width: 100%; height: 30px; margin-bottom: 10px; border-radius: 0.25rem; background-color: beige;" >
                                 <div class="field required">
-                                    <input name="captchacode" placeholder="보안문자" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
+                                    <input name="captchacode" placeholder="<?=lang('common.security_character')?>" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
                                 </div>
                             </div>
                             <input type="text" name="ip" class="ip_addr" hidden/>
@@ -2421,6 +2422,7 @@
                     rules: [
                         {
                             type: "empty",
+                            prompt: langMessage.id_input,
                         },
                         // {
                         //     type: "minLength[2]",
@@ -2435,6 +2437,7 @@
                     rules: [
                         {
                             type: "empty",
+                            prompt: langMessage.password_input
                         },
                     ],
                 },
@@ -2443,6 +2446,7 @@
                     rules: [
                         {
                             type: "empty",
+                            prompt: langMessage.security_character_input
                         },
                     ],
                 },
@@ -2789,7 +2793,7 @@
                             },
                             {
                                 type: "minLength[5]",
-                                prompt: langMessage.deposit_request_amount,
+                                prompt: langMessage.request_amount_10th,
                             },
                         ],
                     },
@@ -2802,7 +2806,7 @@
                             },
                             {
                                 type: "minLength[5]",
-                                prompt: langMessage.deposit_request_amount,
+                                prompt: langMessage.request_amount_10th,
                             },
                         ],
                     },

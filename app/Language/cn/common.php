@@ -1,6 +1,8 @@
 <?php
 
 return [
+    '1_thousand' => '一千',
+    '5_thousands' => '五千',
     '10_thousands' => '一万',
     '50_thousands' => '五万',
     '100_thousands' => '十万',
@@ -90,6 +92,7 @@ return [
     'combination' => 'Mix', //Combination
     'confirm_password' => '确认密码',
     'current_money' => '可提取金额',  //现有资金
+    'current_point' => '可转换积分',  //
     'customer' => '客服',           //고객센터
     'customer_ask' => '请咨询客服中心.',
     'day' => '',
@@ -114,7 +117,6 @@ return [
     'deposit_ok' => '已申请存款. 管理员批准的时候请稍等.',
     'deposit_permit' => '申请存款',
     'deposit_request' => '申请存款',
-    'deposit_request_amount' => '请输入存款金额在10,000韩元以上.',
     'deposit_request_to' => '立即存款', //申请存款
     'deposit_request_unit' => '请以万元为单位申请.',
     'deposit_quick' => '快速存款',
@@ -207,6 +209,8 @@ return [
     'number_' => 'Number',
     'number_result' => 'Number Result',
     'ok' => '好的', //确认
+    'off' => '关闭',
+    'on' => '打开',
     'or' => '或',
     'order_alphabet' => '字母顺序',
     'order_korean' => '韩语顺序',
@@ -233,6 +237,8 @@ return [
     'phone_msg' => '请只输入数字',
     'play' => '开始',
     'point' => '积分',          //포인트
+    'point_change_fail' => '转换金额超过了持有积分.',
+    'point_change_to' => '申请转换',
     'powerball' => 'Power',
     'powerball_' => 'P',
     'powerball_boggle' => 'Boggle Powerball',
@@ -247,6 +253,7 @@ return [
     'proceed_date' => '处理日期',
     'read_all' => '阅读全部',
     'read_all_ask' => '您想阅读全文吗？',
+    'realtime' => '实时',
     'recommender' => '推荐人',
     'recommender_id' => '推荐人ID',
     'recommender_in' => '请输入推荐人代码',
@@ -260,15 +267,21 @@ return [
     'reenter' => '重新输入',
     'reject' => '被拒绝了.',
     'request_amount' => '申请金额',
+    'request_amount_1th' => '请输入金额在1,000韩元以上.',
+    'request_amount_10th' => '请输入存款金额在10,000韩元以上.',
     'request_amount_input' => '请输入金额',
     'request_date' => '申请日期',
     'request_deposit_msg' => '请输入您希望请求存款的金额(以10,000韩元为单位)', // 请输入您希望请求存款的金额(以10,000韩元为单位)请以1万元为单位输入存款申请金额
+    'request_point_msg' => '请以1万元为单位输入要求转换的积分',
     'request_withdrawal_msg' => '请以1万元为单位输入要求取款的金额',
     'reset' => 'RESET',
     'round' => ' ROUND',
     'save' => '保存',
     'search' => '搜索',
     'seconds' => '秒',
+    'security_character' => '安全字符',
+    'security_character_input' => '请输入安全字符.',
+    'security_character_mistake' => '安全字符不对的.',
     'select_bank' => '银行选择',
     'send_date' => '发送日期',
     'sender' => '发送人',

@@ -55,9 +55,9 @@ class Api extends BaseController
 				$captchaModel = new Captcha_Model();
 				$captchaOK = $captchaModel->verify($captchaImg, $captchaCode);
 				if( $captchaOK != RESULT_OK){
-					$arrResult['code'] = RESULT_CAPTCHA_ERR;			//캡쳐오류
+					$arrResult['code'] = RESULT_CAPTCHA_ERR;			//Security Character is mistake
 					$arrResult['status'] = STATUS_FAIL;
-					$arrResult['msg'] = "보안코드가 올바르지 않습니다.";
+					$arrResult['msg'] = lang("common.security_character_mistake");
 					echo json_encode($arrResult);
 					return;
 				}
@@ -537,7 +537,7 @@ class Api extends BaseController
 			$result->status = STATUS_FAIL;
 			if($reqAmount > $objMember->mb_point){
 				$result->status = STATUS_FAIL;
-				$result->msg = "요청금액이 보유포인트를 초과하셨습니다.";
+				$result->msg = lang("common.point_change_fail"); 
 			} else if($reqAmount > 0 && $objMember->mb_point >= $reqAmount && $this->modelMember->updateAssets($objMember, $reqAmount, 0-$reqAmount, POINTCHANGE_EXCHANGE))
 			{
 				// $modelMoneyhist->registerPointToMoney($objMember, $reqAmount);
