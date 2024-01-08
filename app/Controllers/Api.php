@@ -1662,10 +1662,6 @@ class Api extends BaseController
 					$arrInfo['follow_id'] = $objFollow->fl_pb_uid;
 					$arrInfo['follow_rate'] = $objFollow->fl_pb_rate;
 					$arrInfo['follow_stop'] = $objFollow->fl_pb_stop;
-				} else if($arrReqData['game'] == GAME_EVOL_BALL){
-					$arrInfo['follow_id'] = $objFollow->fl_ps_uid;
-					$arrInfo['follow_rate'] = $objFollow->fl_ps_rate;
-					$arrInfo['follow_stop'] = $objFollow->fl_ps_stop;
 				} else if($arrReqData['game'] == GAME_BOGLE_BALL){
 					$arrInfo['follow_id'] = $objFollow->fl_bb_uid;
 					$arrInfo['follow_rate'] = $objFollow->fl_bb_rate;
@@ -1727,11 +1723,6 @@ class Api extends BaseController
 				$arrInfo['fl_pb_uid'] = $arrReqData['uid'];
 				$arrInfo['fl_pb_rate'] = $arrReqData['rate'];
 				$arrInfo['fl_pb_stop'] = $arrReqData['stop'];
-				$modelFollow->saveByUser($arrInfo);
-			} else if($arrReqData['game'] == GAME_EVOL_BALL){
-				$arrInfo['fl_ps_uid'] = $arrReqData['uid'];
-				$arrInfo['fl_ps_rate'] = $arrReqData['rate'];
-				$arrInfo['fl_ps_stop'] = $arrReqData['stop'];
 				$modelFollow->saveByUser($arrInfo);
 			} else if($arrReqData['game'] == GAME_BOGLE_BALL){
 				$arrInfo['fl_bb_uid'] = $arrReqData['uid'];
@@ -2010,6 +2001,7 @@ class Api extends BaseController
 				} else {
 					if($modelBet->delete($objBet->bet_fid)){
 						if( $objBet->bet_money > 0 && $this->modelMember->updateAssets($objUser, $objBet->bet_money, 0, $iChangeType)){
+							$modelReward->deleteByBetId($objBet->bet_game, $objBet->bet_fid);
 							// $modelMoneyhist->register($objUser, $objBet->bet_money, $iChangeType);
 						}
 						$iResult = 1;		
@@ -2059,7 +2051,6 @@ class Api extends BaseController
 			}
 
 			$arrMember = $this->modelMember->getByFids($fids);
-
 			$objConfig = $this->modelConfgame->find($arrReqData['game']);
 
 			$iResult = 0;
@@ -2076,52 +2067,58 @@ class Api extends BaseController
 				$iMoneyChangeType = 0;
 				$modelBet = new Bet_Model();
 				$modelRound = new Round_Model();	
+				$objBet = $modelBet->find($arrReqData['betId']);
 
 				if($arrBetData['game'] == GAME_PBG_BALL){					//PBG 
-					if(!InvalidGameTime()){
-						$objBet = $modelBet->find($arrReqData['betId']);
-						$arrRoundData = getPbRoundTimes($objConfig);
-						$iMoneyChangeType = MONEYCHANGE_BET_PB;
-					}
+					$arrRoundData = getPbRoundTimes($objConfig);
+					$iMoneyChangeType = MONEYCHANGE_BET_PB;
 				} else if($arrBetData['game'] == GAME_EVOL_BALL){					//Evo 
-					if(!InvalidGameTime()){
-						$objBet = $modelBet->find($arrReqData['betId']);
-						$arrRoundData = getPbRoundTimes($objConfig);
-						$iMoneyChangeType = MONEYCHANGE_BET_EB;
+					$reqData['game'] = $arrBetData['game'];
+					$reqData['page'] = 1;
+					$reqData['count'] = 1;
+					$arrRound = $modelRound->searchList($reqData);
+					if(count($arrRound)>0){
+						$objRound = $arrRound[0]; 
+						$arrRoundData['round_no'] = $objRound->round_num;
+						$arrRoundData['round_date'] = $objRound->round_date;
+						$arrRoundData['round_current'] = date("Y-m-d H:i:s", time());
+						$arrRoundData['round_start'] = $objRound->round_time;
+
+						$tmRoundStart = strtotime($objRound->round_time);
+						$tmRoundEnd = strtotime("+".floor($objRound->round_period)." seconds", $tmRoundStart);
+						$arrRoundData['round_bet_end'] = date("Y-m-d H:i:s", $tmRoundEnd);
+
+						// $tmRoundEnd = strtotime("+".floor($objRound->round_period+20)." seconds", $tmRoundStart);
+						$arrRoundData['round_end'] = date("Y-m-d H:i:s", $tmRoundEnd);
 					}
+					$iMoneyChangeType = MONEYCHANGE_BET_EB;
 				} else if($arrBetData['game'] == GAME_BOGLE_BALL){					//Boggle 
-					$objBet = $modelBet->find($arrReqData['betId']);
 					$arrRoundData = getBbRoundTimes($objConfig);
 					$iMoneyChangeType = MONEYCHANGE_BET_BB;
 				} else if($arrBetData['game'] == GAME_BOGLE_LADDER){					//Boggle 
-					$objBet = $modelBet->find($arrReqData['betId']);
 					$arrRoundData = getBsRoundTimes($objConfig);
 					$iMoneyChangeType = MONEYCHANGE_BET_BS;
 				} else if($arrBetData['game'] == GAME_EOS5_BALL){					//Eos5 
-					$objBet = $modelBet->find($arrReqData['betId']);
 					$arrRoundData = getPbRoundTimes($objConfig);
 					$iMoneyChangeType = MONEYCHANGE_BET_EO5;
 				} else if($arrBetData['game'] == GAME_EOS3_BALL){					//Eos3 
-					$objBet = $modelBet->find($arrReqData['betId']);
 					$arrRoundData = getBsRoundTimes($objConfig);
 					$iMoneyChangeType = MONEYCHANGE_BET_EO3;
 				} else if($arrBetData['game'] == GAME_RAND5_BALL){					//Rand5 
-					$objBet = $modelBet->find($arrReqData['betId']);
 					$arrRoundData = getPbRoundTimes($objConfig);
 					$iMoneyChangeType = MONEYCHANGE_BET_RD5;
 				} else if($arrBetData['game'] == GAME_RAND3_BALL){					//Rand3 
-					$objBet = $modelBet->find($arrReqData['betId']);
 					$arrRoundData = getBsRoundTimes($objConfig);
 					$iMoneyChangeType = MONEYCHANGE_BET_RD3;
 				} else if($arrBetData['game'] == GAME_SPKN_BALL){					//Keno 
-					$objBet = $modelBet->find($arrReqData['betId']);
 					$arrRoundData = getPbRoundTimes($objConfig);
-					$iMoneyChangeType = MONEYCHANGE_BET_PB;
+					$iMoneyChangeType = MONEYCHANGE_BET_SK;
 				} 
 				
 				if(is_null($objBet)){
 					$iResult = 0;
 				} else {
+					writeLog("followCnt=".count($arrMember)." MoneyType=".$iMoneyChangeType);
 					
 					$arrBetData['roundno'] = $objBet->bet_round_no;
 					$arrBetData['roundid'] = $objBet->bet_round_fid;

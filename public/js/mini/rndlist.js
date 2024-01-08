@@ -114,9 +114,7 @@ function showPage(game, data) {
         } else {
             data.forEach((round) => {
                 html += '<li>';
-                if (game == 1)
-                    html += '<p class="round">' + round.round_fid.substr(0, 4) + '<em>' + round.round_fid.substr(4) + '</em></p>';
-                else html += '<p class="round">' + round.round_num + '</p>';
+                html += '<p class="round">' + round.round_num + '</p>';
                 html += '<p class="time">' + getRoundTime(game, round).substring(5) + '</p>';
                 if (game == 6) {
                     if (round.round_state > 0) {
@@ -211,10 +209,8 @@ function showPage(game, data) {
             data.forEach((round) => {
                 html += '<li class="row_wrap">';
                 html += '<div class="row">';
-                if (game == 1)
-                    html += '<p class="round">' + round.round_fid.substr(0, 4) + '<em>' + round.round_fid.substr(4) + '</em></p>';
-                else html += '<p class="round">' + round.round_num + '</p>';
-                if (game == 2 || game == 6) {
+                html += '<p class="round">' + round.round_num + '</p>';
+                if (game == 6) {
                     html += '<p class="rst_c">' + getRoundTime(game, round).substring(5) + '</p>';
                     html += '<p class="rst_c">';
                     if (round.round_state > 0) {
@@ -305,26 +301,29 @@ function getRoundNum(round) {
 }
 
 function getRoundTime(game, round) {
-    let rt = 5;
-    if (game == 5) {
-        rt = 2;
-    } else if (game == 6 || game == 10 || game == 12) {
-        rt = 3;
-    }
 
-    let hh = parseInt(round.round_num * rt / 60);
-    let mm = (round.round_num * rt) % 60;
-    var dt = new Date(round.round_date + " " + hh + ":" + mm + ":0");
-    if(game == 1 || game == 2)      //동행복권
-        dt.setSeconds(dt.getSeconds() - 25);
+    return round.round_time;
 
-    var year = dt.getFullYear().toString();
-    var month = (dt.getMonth() + 101).toString().slice(-2);
-    var date = (dt.getDate() + 100).toString().slice(-2);
-    var hour = (dt.getHours() + 100).toString().slice(-2);
-    var min = (dt.getMinutes() + 100).toString().slice(-2);
-    var sec = (dt.getSeconds() + 100).toString().slice(-2);
+    // let rt = 5;
+    // if (game == 5) {
+    //     rt = 2;
+    // } else if (game == 6 || game == 10 || game == 12) {
+    //     rt = 3;
+    // }
 
-    return year + "-" + month + "-" + date + " " + hour + ":" + min + ":" + sec;
+    // let hh = parseInt(round.round_num * rt / 60);
+    // let mm = (round.round_num * rt) % 60;
+    // var dt = new Date(round.round_date + " " + hh + ":" + mm + ":0");
+    // if(game == 1 || game == 2)      //동행복권
+    //     dt.setSeconds(dt.getSeconds() - 25);
+
+    // var year = dt.getFullYear().toString();
+    // var month = (dt.getMonth() + 101).toString().slice(-2);
+    // var date = (dt.getDate() + 100).toString().slice(-2);
+    // var hour = (dt.getHours() + 100).toString().slice(-2);
+    // var min = (dt.getMinutes() + 100).toString().slice(-2);
+    // var sec = (dt.getSeconds() + 100).toString().slice(-2);
+
+    // return year + "-" + month + "-" + date + " " + hour + ":" + min + ":" + sec;
 
 }

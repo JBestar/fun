@@ -697,7 +697,6 @@ function showTime() {
 
             if ($(".betting_board_inner").hasClass("betting_board_none") == false) {
                 $(".betting_board_inner").addClass("betting_board_none");
-
             }
             game_reset();
 
@@ -705,7 +704,9 @@ function showTime() {
     } else {
         if (mRoundState != 3) {
             mRoundState = 3;
-
+            if ($(".betting_board_inner").hasClass("betting_board_none") == false) {
+                $(".betting_board_inner").addClass("betting_board_none");
+            }
             // initBet();
         }
     }

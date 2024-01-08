@@ -57,7 +57,7 @@ function getModeName(game, mode) {
         } else if (mode == 30) {
             sMode = langMessage.powerball + " " + langMessage.number_;// "파워볼 숫자";
         } else if (mode >= 31 && mode <= 38) {
-            sMode = langMessage.normalball_mix + " " + langMessage.powerball + " " + + langMessage.ball_odd + langMessage.ball_even;// "일반볼조합 + 파워볼 홀짝";
+            sMode = langMessage.normalball_mix + " " + langMessage.powerball + " " + langMessage.ball_odd + langMessage.ball_even;// "일반볼조합 + 파워볼 홀짝";
         }
     } else if (game == 6) {
         if (mode >= 1 && mode <= 3) {
@@ -79,7 +79,7 @@ function getModeName(game, mode) {
         } else if (mode >= 9 && mode <= 12) {
             sMode = langMessage.superball + " " + langMessage.combination;// "슈퍼볼 조합";
         } else if (mode >= 13 && mode <= 20) {
-            sMode = langMessage.normalball + " + " + langMessage.powerball + " " + langMessage.combination;// "일반볼 + 파워볼 조합";
+            sMode = langMessage.superball + " + " + langMessage.powerball + " " + langMessage.combination;// "일반볼 + 파워볼 조합";
         } else if (mode == 21) {
             sMode = langMessage.hupball + " " + langMessage.ball_odd + langMessage.ball_even; //"숫자합 홀짝"
         } else if (mode == 22) {
@@ -89,7 +89,7 @@ function getModeName(game, mode) {
         } else if (mode == 30) {
             sMode = langMessage.powerball + " " + langMessage.number_;// "파워볼 숫자";
         } else if (mode >= 31 && mode <= 38) {
-            sMode = langMessage.normalball_mix + " " + langMessage.powerball + " " + + langMessage.ball_odd + langMessage.ball_even;// "일반볼조합 + 파워볼 홀짝";
+            sMode = langMessage.superball_mix + " " + langMessage.powerball + " " + langMessage.ball_odd + langMessage.ball_even;// "일반볼조합 + 파워볼 홀짝";
         }
     }
     return sMode;
@@ -336,7 +336,7 @@ function getTargetName(game, mode, target) {
                 break;
             case 22:
                 if(game == 14){
-                    sTarget = target == "P" ? getTargetHtml(1, langMessage.ball_odd) : getTargetHtml(2, langMessage.ball_even);
+                    sTarget = target == "P" ? getTargetHtml(1, langMessage.ball_under) : getTargetHtml(2, langMessage.ball_over);
                 } else sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_medium);
                 break;
             case 23:
@@ -462,13 +462,7 @@ function getBetResultHtml(gameId, list) {
 
                 html += '<li class="checked_li" id="' + element.bet_fid + '">';
                 html += '<input type="hidden" name="cbox' + element.bet_fid + '" value="' + element.bet_fid + '">';
-
-                if (gameId == 1) {
-                    html += '<p class="round">' + element.bet_round_fid.slice(0, -3) + "<em>" + element.bet_round_fid.slice(-3) + "</em></p>";
-                } else {
-                    html += '<p class="round">' + element.bet_round_no + "</p>";
-                }
-
+                html += '<p class="round">' + element.bet_round_no + "</p>";
                 html += '<p class="time">' + element.bet_time.slice(5) + "</p>";
                 html += '<div class="con">';
 
@@ -497,7 +491,7 @@ function getBetResultHtml(gameId, list) {
                 }
                 if(typeof mCancelEnable !== 'undefined' && mCancelEnable){
                     if(element.bet_round_no == mRound.round_no && mRoundState == 1)
-                        html += "<button class='btn' onclick='reqBetCancel(" + element.bet_fid + ", this);'>베팅취소</button>";
+                        html += "<button class='btn' onclick='reqBetCancel(" + element.bet_fid + ", this);'>"+langMessage.bet_cancel+"</button>";
                     else html += '<p class="money"></p>';
                 }
                 html += "</li>";
@@ -534,11 +528,7 @@ function getBetResultHtml(gameId, list) {
                 html += '<div class="betting_history_m_con">';
 
                 html += "<div><dl><dt>회차</dt>";
-                if (gameId == 1) {
-                    html += "<dd>" + element.bet_round_fid.slice(0, -3) + "<em>" + element.bet_round_fid.slice(-3) + "</em></dd>";
-                } else {
-                    html += '<dd>' + element.bet_round_no + "</dd>";
-                }
+                html += '<dd>' + element.bet_round_no + "</dd>";
                 html += "</dl></div>";
 
                 html += "<div><dl><dt>"+langMessage.bet_time+"</dt>";

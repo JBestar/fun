@@ -751,11 +751,13 @@
         if($follow->fl_mb_fid == $mb_fid){
           switch($game){
             case GAME_PBG_BALL: 
-            case GAME_SPKN_BALL: 
               $rate = $follow->fl_pb_rate;
               break;
+            case GAME_SPKN_BALL: 
+              $rate = $follow->fl_sk_rate;
+              break;
             case GAME_EVOL_BALL: 
-              $rate = $follow->fl_ps_rate;
+              $rate = $follow->fl_ev_rate;
               break;
             case GAME_BOGLE_BALL: 
               $rate = $follow->fl_bb_rate;

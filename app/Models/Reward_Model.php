@@ -30,4 +30,16 @@ class Reward_Model extends Model {
         
         return $this->insertBatch($batch);
     }
+
+    public function deleteByBetId($game, $betId){
+        
+        $data = [
+            'rw_game' => $game,
+            'rw_bet_id' => $betId,
+        ];
+        
+        return $this->where($data)
+                    ->delete();
+
+    }
 }

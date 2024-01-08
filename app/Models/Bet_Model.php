@@ -21,7 +21,7 @@ class Bet_Model extends Model {
     }
 
     public function followBet($fid){
-        $where = "auto_config_id = '".$fid."' ";
+        $where = "bet_fol_fid = '".$fid."' ";
         return $this->where($where)
                     ->findAll(); 
     }
