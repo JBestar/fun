@@ -1459,7 +1459,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_pbg.png?v=2" />
+                                                    <img src="/images/mini/btn_pbg.png?v=1" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="PBG파워볼" data-onoff="on" data-cid="PBG">Play </button>
@@ -1643,7 +1643,7 @@
                                                     <img src="/images/mini/btn_rand5.png?v=2" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="코인5분파워볼" data-onoff="on" data-cid="RAND5">Play </button>
+                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="랜덤5분파워볼" data-onoff="on" data-cid="RAND5">Play </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1668,7 +1668,7 @@
                                                     <img src="/images/mini/btn_rand3.png?v=2" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="코인3분파워볼" data-onoff="on" data-cid="RAND3">Play </button>
+                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="랜덤3분파워볼" data-onoff="on" data-cid="RAND3">Play </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1691,7 +1691,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_pbg.png" />
+                                                    <img src="/images/mini/btn_pb.png" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="파워볼" data-onoff="off"  data-cid="PBG">Play </button>

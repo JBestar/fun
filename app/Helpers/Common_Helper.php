@@ -356,8 +356,8 @@
 
       switch($iGame){
           case GAME_PBG_BALL: return $objMember->mb_game_pb;
-          case GAME_SPKN_BALL: return $objMember->mb_game_ks;
           case GAME_EVOL_BALL: return $objMember->mb_game_ps;
+          case GAME_SPKN_BALL: return $objMember->mb_game_ks;
           case GAME_CASINO_EVOL:
           case GAME_CASINO_KGON:
           case GAME_CASINO_STAR: return $objMember->mb_game_cs;
