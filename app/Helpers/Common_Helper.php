@@ -109,12 +109,14 @@
           'gm_bgl' => '',
           'gm_e5' => '',
           'gm_e3' => '',
-          'gm_c5' => '',
-          'gm_c3' => '',
+          'gm_r5' => '',
+          'gm_r3' => '',
           'gm_bg' => '',
           'gm_eos' => '',
-          'gm_co' => '',
-          'gm_hpb' => '',
+          'gm_ro' => '',
+          'gm_pbg' => '',
+          'gm_evp' => '',
+          'gm_spk' => '',
           'ls_rnd' => '',
           'ls_bet' => '',
       );
@@ -133,11 +135,13 @@
       );
     }
 
-    function getPbRoundTimes($objConfPb, $bAdvance = true){
+    function getPbRoundTimes($objConfPb, $bAdvance = false){
 
       //date_default_timezone_set('Asia/Seoul');
       //$tmNow = mktime('23','59','40','5','25','2021')+TM_OFFSET;
       $tmNow = time()+ ($bAdvance ? ADVANCE_SEC:0);
+      if($objConfPb->game_index == GAME_SPKN_BALL)
+        $tmNow += 3*60; 
       $nYear = date("Y",$tmNow);
       $nMonth = date("m",$tmNow);
       $nDay = date("d",$tmNow);
@@ -173,7 +177,10 @@
       $strRoundEnd = $strDate." ".$nHour.":".$nMinute.":"."0";
       $tmRoundEnd = strtotime($strRoundEnd);
       if($bAdvance)
-        $tmRoundEnd = strtotime("-".ADVANCE_SEC." seconds", $tmRoundEnd);
+        $tmRoundEnd -= ADVANCE_SEC;
+        // $tmRoundEnd = strtotime("-".ADVANCE_SEC." seconds", $tmRoundEnd);
+      if($objConfPb->game_index == GAME_SPKN_BALL)
+        $tmRoundEnd -= (3*60-5); 
       $arrRoundInfo['round_end'] = date("Y-m-d H:i:s", $tmRoundEnd);
       
       //회차 시작시간
@@ -348,9 +355,9 @@
     function getStateByGame($objMember, $iGame){
 
       switch($iGame){
-          case GAME_POWER_BALL: 
-          case GAME_HAPPY_BALL: return $objMember->mb_game_pb;
-          case GAME_POWER_LADDER: return $objMember->mb_game_ps;
+          case GAME_PBG_BALL: return $objMember->mb_game_pb;
+          case GAME_SPKN_BALL: return $objMember->mb_game_ks;
+          case GAME_EVOL_BALL: return $objMember->mb_game_ps;
           case GAME_CASINO_EVOL:
           case GAME_CASINO_KGON:
           case GAME_CASINO_STAR: return $objMember->mb_game_cs;
@@ -364,8 +371,8 @@
           case GAME_HOLD_CMS: return $objMember->mb_game_hl;
           case GAME_EOS5_BALL: 
           case GAME_EOS3_BALL:  return $objMember->mb_game_eo;
-          case GAME_COIN5_BALL: 
-          case GAME_COIN3_BALL:  return $objMember->mb_game_co;
+          case GAME_RAND5_BALL: 
+          case GAME_RAND3_BALL:  return $objMember->mb_game_co;
           default: break;
       } 
       return 0;
@@ -432,9 +439,9 @@
       }
 
       $iType = 0; 
-      if($arrBetData['game'] == GAME_POWER_BALL || $arrBetData['game'] == GAME_BOGLE_BALL
-        || ( $arrBetData['game'] >= GAME_EOS5_BALL && $arrBetData['game'] <= GAME_COIN3_BALL) 
-        || $arrBetData['game'] == GAME_HAPPY_BALL) {
+      if($arrBetData['game'] == GAME_PBG_BALL || $arrBetData['game'] == GAME_BOGLE_BALL
+        || ( $arrBetData['game'] >= GAME_EOS5_BALL && $arrBetData['game'] <= GAME_RAND3_BALL) 
+        || $arrBetData['game'] == GAME_SPKN_BALL || $arrBetData['game'] == GAME_EVOL_BALL) {
 
          switch ($nMode) {
            case 1: $ratioBet = $objConf->game_ratio_1; $iType = 1; break;
@@ -548,9 +555,9 @@
       }
       
       $iType = 0; 
-      if($arrBetData['game'] == GAME_POWER_BALL || $arrBetData['game'] == GAME_BOGLE_BALL
-      || ( $arrBetData['game'] >= GAME_EOS5_BALL && $arrBetData['game'] <= GAME_COIN3_BALL) 
-      || $arrBetData['game'] >= GAME_HAPPY_BALL) {
+      if($arrBetData['game'] == GAME_PBG_BALL || $arrBetData['game'] == GAME_BOGLE_BALL
+      || ( $arrBetData['game'] >= GAME_EOS5_BALL && $arrBetData['game'] <= GAME_RAND3_BALL) 
+      || $arrBetData['game'] >= GAME_SPKN_BALL) {
 
          switch ($nMode) {
            case 1: $ratioBet = $objConf->game_ratio_1; $iType = 1; break;
@@ -681,23 +688,23 @@
     function getRatioByGame($objMember, $iGame, $iMode = 0){
       $fRatio = 0;
       switch($iGame){
-          case GAME_POWER_BALL: 
-          case GAME_HAPPY_BALL: 
+          case GAME_PBG_BALL: 
+          case GAME_SPKN_BALL: 
+          case GAME_EVOL_BALL: 
+          case GAME_BOGLE_BALL: 
+          case GAME_EOS5_BALL:
+          case GAME_EOS3_BALL: 
+          case GAME_RAND5_BALL:
+          case GAME_RAND3_BALL: 
                 $fRatio = $iMode<5 ? $objMember->mb_game_pb_ratio : $objMember->mb_game_pb2_ratio;
                 break;
-          case GAME_POWER_LADDER: 
-                $fRatio = $objMember->mb_game_ps_ratio;
-                break;
+          case GAME_BOGLE_LADDER: 
+              $fRatio = $objMember->mb_game_pb_ratio;
+              break;
           case GAME_CASINO_EVOL: 
           case GAME_CASINO_KGON: 
           case GAME_CASINO_STAR: 
                 $fRatio = $objMember->mb_game_cs_ratio;
-                break;
-          case GAME_BOGLE_BALL: 
-                $fRatio = $iMode<5 ? $objMember->mb_game_bb_ratio : $objMember->mb_game_bb2_ratio;
-                break;
-          case GAME_BOGLE_LADDER: 
-                $fRatio = $objMember->mb_game_bs_ratio;
                 break;
           case GAME_SLOT_THEPLUS:
           case GAME_SLOT_GSPLAY: 
@@ -709,14 +716,6 @@
           case GAME_HOLD_CMS: 
                   $fRatio = $objMember->mb_game_hl_ratio;
                   break;
-          case GAME_EOS5_BALL:
-          case GAME_EOS3_BALL: 
-                $fRatio = $iMode<5 ? $objMember->mb_game_eo_ratio : $objMember->mb_game_eo2_ratio;
-                break;
-          case GAME_COIN5_BALL:
-          case GAME_COIN3_BALL: 
-                $fRatio = $iMode<5 ? $objMember->mb_game_co_ratio : $objMember->mb_game_co2_ratio;
-                break;
           default: break;
       } 
       $fRatio = floatval($fRatio);
@@ -751,11 +750,11 @@
       foreach($arrFollow as $follow){
         if($follow->fl_mb_fid == $mb_fid){
           switch($game){
-            case GAME_POWER_BALL: 
-            case GAME_HAPPY_BALL: 
+            case GAME_PBG_BALL: 
+            case GAME_SPKN_BALL: 
               $rate = $follow->fl_pb_rate;
               break;
-            case GAME_POWER_LADDER: 
+            case GAME_EVOL_BALL: 
               $rate = $follow->fl_ps_rate;
               break;
             case GAME_BOGLE_BALL: 
@@ -770,10 +769,10 @@
             case GAME_EOS3_BALL: 
               $rate = $follow->fl_e3_rate;
               break;
-            case GAME_COIN5_BALL: 
+            case GAME_RAND5_BALL: 
               $rate = $follow->fl_c5_rate;
               break;
-            case GAME_COIN3_BALL: 
+            case GAME_RAND3_BALL: 
               $rate = $follow->fl_c3_rate;
               break;
             default: break;

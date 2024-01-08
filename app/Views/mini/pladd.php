@@ -17,21 +17,6 @@
                                         style="transform: scale(0.851393); position: inherit; width: 830px; height: 646px;"
                                     ></iframe>
                                 </div>
-                                <?php } else { ?>
-                                    <div class="game_area nsl_game" style="height: 550px;">
-                                    <iframe
-                                        marginwidth="0"
-                                        marginheight="0"
-                                        frameborder="0"
-                                        scrolling="no"
-                                        id="game"
-                                        loading="lazy"
-                                        class="lazy"
-                                        data-loader="frame"
-                                        src="http://ntry.com/scores/power_ladder/live.php"
-                                        style="transform: scale(0.851393); position: inherit; width: 830px; height: 646px;"
-                                    ></iframe>
-                                </div>
                                 <?php } ?>
                                 <!--//game_area -->
                             </div>

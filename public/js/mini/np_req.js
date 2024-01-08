@@ -591,7 +591,7 @@ function showCurrentRound(objRound) {
 
         mRoundError = 0;
         let sDate = mRound.round_date.substr(5, 2) + langMessage.month + mRound.round_date.substr(8, 2) + langMessage.day;
-        let sRound = "[" + (parseInt(mRound.game) == 1 ? mRound.round_id : mRound.round_no) + langMessage.round + "]";
+        let sRound = "[" + mRound.round_no + langMessage.round + "]";
         $("#board_date").text(sDate);
         $("#board_round").text(sRound);
         $("#cart_date").text(sDate);
@@ -711,7 +711,7 @@ function showTime() {
     }
 
     //회차요청
-    if (mRoundError < 20 && mRound.round_current >= mRound.round_end &&
+    if (mRoundError < 180 && mRound.round_current >= mRound.round_end &&
         mRound.round_current < mRound.round_end + 600000) {
         reqCurrentRound();
     }

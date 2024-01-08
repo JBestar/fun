@@ -10,9 +10,9 @@ class Follow_Model extends Model {
 
     protected $returnType = 'object'; 
     protected $allowedFields = ['fl_mb_fid', 
-        'fl_pb_uid', 'fl_ps_uid', 'fl_bb_uid', 'fl_bs_uid', 'fl_e5_uid', 'fl_e3_uid', 'fl_c5_uid', 'fl_c3_uid', 
-        'fl_pb_stop', 'fl_ps_stop', 'fl_bb_stop', 'fl_bs_stop', 'fl_e5_stop', 'fl_e3_stop', 'fl_c5_stop', 'fl_c3_stop',  
-        'fl_pb_rate', 'fl_ps_rate', 'fl_bb_rate', 'fl_bs_rate', 'fl_e5_rate', 'fl_e3_rate', 'fl_c5_rate', 'fl_c3_rate', 'fl_update' ];
+        'fl_pb_uid', 'fl_ps_uid', 'fl_bb_uid', 'fl_bs_uid', 'fl_e5_uid', 'fl_e3_uid', 'fl_c5_uid', 'fl_c3_uid', 'fl_sk_uid', 'fl_ev_uid', 
+        'fl_pb_stop', 'fl_ps_stop', 'fl_bb_stop', 'fl_bs_stop', 'fl_e5_stop', 'fl_e3_stop', 'fl_c5_stop', 'fl_c3_stop', 'fl_sk_stop', 'fl_ev_stop',  
+        'fl_pb_rate', 'fl_ps_rate', 'fl_bb_rate', 'fl_bs_rate', 'fl_e5_rate', 'fl_e3_rate', 'fl_c5_rate', 'fl_c3_rate', 'fl_sk_rate', 'fl_sk_rate', 'fl_update' ];
 
     public function get($fid){
         return $this->find($fid);
@@ -26,10 +26,10 @@ class Follow_Model extends Model {
     public function getFollower($game, $uid){
 
         $where = "";
-        if($game == GAME_POWER_BALL || $game == GAME_HAPPY_BALL){
+        if($game == GAME_PBG_BALL){
             $where = "fl_pb_uid = '".$uid."' ";
             $where.= " AND fl_pb_stop = '".STATE_DISABLE."' ";
-        } else if($game == GAME_POWER_LADDER){
+        } else if($game == GAME_EVOL_BALL){
             $where = "fl_ps_uid = '".$uid."' ";
             $where.= " AND fl_ps_stop = '".STATE_DISABLE."' ";
         } else if($game == GAME_BOGLE_BALL){
@@ -44,12 +44,18 @@ class Follow_Model extends Model {
         } else if($game == GAME_EOS3_BALL){
             $where = "fl_e3_uid = '".$uid."' ";
             $where.= " AND fl_e3_stop = '".STATE_DISABLE."' ";
-        } else if($game == GAME_COIN5_BALL){
+        } else if($game == GAME_RAND5_BALL){
             $where = "fl_c5_uid = '".$uid."' ";
             $where.= " AND fl_c5_stop = '".STATE_DISABLE."' ";
-        } else if($game == GAME_COIN3_BALL){
+        } else if($game == GAME_RAND3_BALL){
             $where = "fl_c3_uid = '".$uid."' ";
             $where.= " AND fl_c3_stop = '".STATE_DISABLE."' ";
+        } else if($game == GAME_SPKN_BALL){
+            $where = "fl_sk_uid = '".$uid."' ";
+            $where.= " AND fl_sk_stop = '".STATE_DISABLE."' ";
+        } else if($game == GAME_EVOL_BALL){
+            $where = "fl_ev_uid = '".$uid."' ";
+            $where.= " AND fl_ev_stop = '".STATE_DISABLE."' ";
         } else return [];
 
         return $this->where($where)

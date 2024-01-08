@@ -45,23 +45,33 @@ class Mini extends BaseController
     				$bPermit = false;
                 $navInfo['gm_e3'] = 'active';
                 $navInfo['gm_eos'] = 'active';
-            } else if($game === "COIN5"){
-                $gameId = GAME_COIN5_BALL;
-                if($headInfo['coin5_deny'])
+            } else if($game === "RAND5"){
+                $gameId = GAME_RAND5_BALL;
+                if($headInfo['rand5_deny'])
     				$bPermit = false;
-                $navInfo['gm_c5'] = 'active';
-                $navInfo['gm_co'] = 'active';
-            } else if($game === "COIN3"){
-                $gameId = GAME_COIN3_BALL;
-                if($headInfo['coin3_deny'])
+                $navInfo['gm_r5'] = 'active';
+                $navInfo['gm_ro'] = 'active';
+            } else if($game === "RAND3"){
+                $gameId = GAME_RAND3_BALL;
+                if($headInfo['rand3_deny'])
     				$bPermit = false;
-                $navInfo['gm_c3'] = 'active';
-                $navInfo['gm_co'] = 'active';
-            } else if($game === "HPB"){
-                $gameId = GAME_HAPPY_BALL;
-                if($headInfo['hpg_deny'])
+                $navInfo['gm_r3'] = 'active';
+                $navInfo['gm_ro'] = 'active';
+            } else if($game === "PBG"){
+                $gameId = GAME_PBG_BALL;
+                if($headInfo['pbg_deny'])
     				$bPermit = false;
-                $navInfo['gm_hpb'] = 'active';
+                $navInfo['gm_pbg'] = 'active';
+            } else if($game === "SPKN"){
+                $gameId = GAME_SPKN_BALL;
+                if($headInfo['spk_deny'])
+    				$bPermit = false;
+                $navInfo['gm_spk'] = 'active';
+            } else if($game === "EVP"){
+                $gameId = GAME_EVOL_BALL;
+                if($headInfo['evp_deny'])
+    				$bPermit = false;
+                $navInfo['gm_evp'] = 'active';
             } else 
                 $bPermit = false;
 
@@ -78,6 +88,8 @@ class Mini extends BaseController
                 echo view('mini/navbar', $navInfo);	
                 if($gameId == GAME_BOGLE_LADDER)
                     echo view('mini/pladd');	
+                else if($gameId == GAME_SPKN_BALL)
+                    echo view('mini/keno');	
                 else echo view('mini/pball');	
                 echo view('mini/pfooter');	
             } else {
@@ -112,12 +124,16 @@ class Mini extends BaseController
                 $gameId = GAME_EOS5_BALL;
             } else if($game === "EOS3"){
                 $gameId = GAME_EOS3_BALL;
-            } else if($game === "COIN5"){
-                $gameId = GAME_COIN5_BALL;
-            } else if($game === "COIN3"){
-                $gameId = GAME_COIN3_BALL;
-            } else if($game === "HPB"){
-                $gameId = GAME_HAPPY_BALL;
+            } else if($game === "RAND5"){
+                $gameId = GAME_RAND5_BALL;
+            } else if($game === "RAND3"){
+                $gameId = GAME_RAND3_BALL;
+            } else if($game === "PBG"){
+                $gameId = GAME_PBG_BALL;
+            } else if($game === "SPKN"){
+                $gameId = GAME_SPKN_BALL;
+            } else if($game === "EVP"){
+                $gameId = GAME_EVOL_BALL;
             } else 
                 $bPermit = false;
 
@@ -165,12 +181,16 @@ class Mini extends BaseController
                 $gameId = GAME_EOS5_BALL;
             } else if($game === "EOS3"){
                 $gameId = GAME_EOS3_BALL;
-            } else if($game === "COIN5"){
-                $gameId = GAME_COIN5_BALL;
-            } else if($game === "COIN3"){
-                $gameId = GAME_COIN3_BALL;
-            } else if($game === "HPB"){
-                $gameId = GAME_HAPPY_BALL;
+            } else if($game === "RAND5"){
+                $gameId = GAME_RAND5_BALL;
+            } else if($game === "RAND3"){
+                $gameId = GAME_RAND3_BALL;
+            } else if($game === "PBG"){
+                $gameId = GAME_PBG_BALL;
+            } else if($game === "SPKN"){
+                $gameId = GAME_SPKN_BALL;
+            } else if($game === "EVP"){
+                $gameId = GAME_EVOL_BALL;
             } else 
                 $bPermit = false;
 

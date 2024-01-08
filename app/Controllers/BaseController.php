@@ -137,9 +137,9 @@ class BaseController extends Controller
     
 	protected function getSiteConf(){
 		
-		$confs = ['site_name'=>"", "bpg_deny"=>false, "evol_deny"=>false, 
-			"slot_deny"=>false, "cas_deny"=>false, "eos5_deny"=>false, "eos3_deny"=>false,
-			"coin5_deny"=>false, "coin3_deny"=>false, "hpg_deny"=>false, "apps_enable"=>false, "hold_deny"=>false];
+		$confs = ['site_name'=>"", "bpg_deny"=>false, "evol_deny"=>false, "slot_deny"=>false, "cas_deny"=>false, 
+			"eos5_deny"=>false, "eos3_deny"=>false, "evp_deny"=>false, "spk_deny"=>false,  
+			"rand5_deny"=>false, "rand3_deny"=>false, "pbg_deny"=>false, "apps_enable"=>false, "hold_deny"=>false];
 		$arrConf = $this->modelConfsite->getSiteConf();  
 		
 		foreach($arrConf as $objConf){
@@ -158,11 +158,15 @@ class BaseController extends Controller
 					break;
 				case CONF_EOS3_DENY:	$confs['eos3_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_COIN5_DENY:	$confs['coin5_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_RAND5_DENY:	$confs['rand5_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_COIN3_DENY:	$confs['coin3_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_RAND3_DENY:	$confs['rand3_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_HPG_DENY:	$confs['hpg_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_PBG_DENY:	$confs['pbg_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+					break;
+				case CONF_EVP_DENY:	$confs['evp_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+					break;
+				case CONF_SPK_DENY:	$confs['spk_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
 				case CONF_AUTOAPPS:	$confs['apps_enable'] = $objConf->conf_idx == STATE_ACTIVE?true:false;
 					if($confs['apps_enable']){

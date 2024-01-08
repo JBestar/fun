@@ -55,9 +55,9 @@ class ApiSite extends BaseController
             $objUser->emp_state_active = STATE_ACTIVE;
             $objConfig = null;
             if($arrData['game'] == 1)
-			    $objConfig = $this->modelConfgame->find(GAME_HAPPY_BALL);
-            // else if($arrData['game'] == 2)
-            //     $objConfig = $this->modelConfgame->find(GAME_POWER_LADDER);
+			    $objConfig = $this->modelConfgame->find(GAME_PBG_BALL);
+            else if($arrData['game'] == 2)
+                $objConfig = $this->modelConfgame->find(GAME_EVOL_BALL);
             else if($arrData['game'] == 3)
                 $objConfig = $this->modelConfgame->find(GAME_BOGLE_BALL);
             else if($arrData['game'] == 4)
@@ -67,9 +67,9 @@ class ApiSite extends BaseController
             else if($arrData['game'] == 6)
                 $objConfig = $this->modelConfgame->find(GAME_EOS3_BALL);
             else if($arrData['game'] == 7)
-                $objConfig = $this->modelConfgame->find(GAME_COIN5_BALL);
+                $objConfig = $this->modelConfgame->find(GAME_RAND5_BALL);
             else if($arrData['game'] == 8)
-                $objConfig = $this->modelConfgame->find(GAME_COIN3_BALL);
+                $objConfig = $this->modelConfgame->find(GAME_RAND3_BALL);
         
             
             $arrBalance = checkApiBalance($arrData['balance']);
@@ -85,62 +85,53 @@ class ApiSite extends BaseController
 				$iSubResult = 9;
             } else if(count($arrBalance) < 1){
 				$iSubResult = 2;
-			} else if($arrData['game'] == 1 || $arrData['game'] == 3 
+			} else if($arrData['game'] == 1 || $arrData['game'] == 2 || $arrData['game'] == 3 
                 || $arrData['game'] == 5 || $arrData['game'] == 6
                 || $arrData['game'] == 7 || $arrData['game'] == 8
-                ) {	                                    //Bogle, EOS, Coin 
-                if($arrData['game'] == 1){                  //Happy ball
-                    $arrBetData['game'] = GAME_HAPPY_BALL;
-                    $modelBet->setType($arrBetData['game']);
-				    $modelRound->setType($arrBetData['game']);
+                ) {	                                    
+                if($arrData['game'] == 1){                  //PBG
+                    $arrBetData['game'] = GAME_PBG_BALL;
 				
                     $arrRoundInfo = $modelRound->gets(1);
-                    $arrRoundData = getPbRoundTimes($objConfig, false);
+                    $arrRoundData = getPbRoundTimes($objConfig);
                     $iMoneyType = MONEYCHANGE_BET_PB;
-    
-                    // if(InvalidGameTime()) {
-                    //     $objUser->emp_state_active = STATE_DISABLE;
-                    // }
+                } else if($arrData['game'] == 2){                      //Evo
+                    $arrBetData['game'] = GAME_EVOL_BALL;
+
+                    $arrRoundInfo = $modelRound->gets(1);
+                    $arrRoundData = getPbRoundTimes($objConfig);
+                    $iMoneyType = MONEYCHANGE_BET_EB;
+                    
                 } else if($arrData['game'] == 3){           //Bogle
                     $arrBetData['game'] = GAME_BOGLE_BALL;
-                    $modelBet->setType($arrBetData['game']);
-				    $modelRound->setType($arrBetData['game']);
                     
                     $arrRoundInfo = $modelRound->gets(1);
                     $arrRoundData = getBbRoundTimes($objConfig);
                     $iMoneyType = MONEYCHANGE_BET_BB;
                 } else if($arrData['game'] == 5){           //EOS5M
                     $arrBetData['game'] = GAME_EOS5_BALL;
-                    $modelBet->setType($arrBetData['game']);
-				    $modelRound->setType($arrBetData['game']);
 				
                     $arrRoundInfo = $modelRound->gets(1);
-                    $arrRoundData = getPbRoundTimes($objConfig, false);
+                    $arrRoundData = getPbRoundTimes($objConfig);
                     $iMoneyType = MONEYCHANGE_BET_EO5;
                 } else if($arrData['game'] == 6){           //EOS3M
                     $arrBetData['game'] = GAME_EOS3_BALL;
-                    $modelBet->setType($arrBetData['game']);
-				    $modelRound->setType($arrBetData['game']);
 
                     $arrRoundInfo = $modelRound->gets(1);
                     $arrRoundData = getBsRoundTimes($objConfig);
                     $iMoneyType = MONEYCHANGE_BET_EO3;
-                } else if($arrData['game'] == 7){           //Coin5M
-                    $arrBetData['game'] = GAME_COIN5_BALL;
-                    $modelBet->setType($arrBetData['game']);
-				    $modelRound->setType($arrBetData['game']);
+                } else if($arrData['game'] == 7){           //Rand5M
+                    $arrBetData['game'] = GAME_RAND5_BALL;
 				
                     $arrRoundInfo = $modelRound->gets(1);
-                    $arrRoundData = getPbRoundTimes($objConfig, false);
-                    $iMoneyType = MONEYCHANGE_BET_CO5;
-                } else if($arrData['game'] == 8){           //Coin3M
-                    $arrBetData['game'] = GAME_COIN3_BALL;
-                    $modelBet->setType($arrBetData['game']);
-				    $modelRound->setType($arrBetData['game']);
+                    $arrRoundData = getPbRoundTimes($objConfig);
+                    $iMoneyType = MONEYCHANGE_BET_RD5;
+                } else if($arrData['game'] == 8){           //Rand3M
+                    $arrBetData['game'] = GAME_RAND3_BALL;
 
                     $arrRoundInfo = $modelRound->gets(1);
                     $arrRoundData = getBsRoundTimes($objConfig);
-                    $iMoneyType = MONEYCHANGE_BET_CO3;
+                    $iMoneyType = MONEYCHANGE_BET_RD3;
                 } 
                 
                 $arrBetData['roundno'] = $arrRoundData['round_no'];
@@ -214,22 +205,9 @@ class ApiSite extends BaseController
                 }
 
 				
-			} else if(/*$arrData['game'] == 2 ||*/ $arrData['game'] == 4 ){				
-				if($arrData['game'] == 2){                      //Powerladder
-                    $arrBetData['game'] = GAME_POWER_LADDER;
-                    $modelBet->setType($arrBetData['game']);
-				    $modelRound->setType($arrBetData['game']);
-
-                    $arrRoundInfo = $modelRound->gets(1);
-                    $arrRoundData = getPbRoundTimes($objConfig);
-                    $iMoneyType = MONEYCHANGE_BET_PS;
-                    if(InvalidGameTime()) {
-                        $objUser->emp_state_active = STATE_DISABLE;
-                    }
-                } else if($arrData['game'] == 4){				//Bogleladder
+			} else if( $arrData['game'] == 4 ){				
+				if($arrData['game'] == 4){				//Bogleladder
                     $arrBetData['game'] = GAME_BOGLE_LADDER;
-                    $modelBet->setType($arrBetData['game']);
-				    $modelRound->setType($arrBetData['game']);
                     
                     $arrRoundInfo = $modelRound->gets(1);
                     $arrRoundData = getBsRoundTimes($objConfig);

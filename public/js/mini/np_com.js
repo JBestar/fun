@@ -3,10 +3,10 @@ function getGameName(game) {
     var sGame = "";
     switch (game) {
         case 1:
-            sGame = "파워볼";
+            sGame = langMessage.powerball_pbg;
             break;
         case 2:
-            sGame = "파워사다리";
+            sGame = langMessage.powerball_evol;
             break;
         case 5:
             sGame = langMessage.powerball_boggle;
@@ -21,13 +21,13 @@ function getGameName(game) {
             sGame = langMessage.powerball_eos3;
             break;
         case 11:
-            sGame = langMessage.powerball_coin5;
+            sGame = langMessage.powerball_rand5;
             break; 
         case 12:
-            sGame = langMessage.powerball_coin3;
+            sGame = langMessage.powerball_rand3;
             break;
         case 14:
-            sGame = langMessage.powerball_happy;
+            sGame = langMessage.powerball_spkn;
             break;
         default:
             break;
@@ -37,7 +37,7 @@ function getGameName(game) {
 
 function getModeName(game, mode) {
     var sMode = "";
-    if (game == 1 || game == 5 || (game >= 9 && game <= 12) || game == 14 ) {
+    if (game == 1 || game == 5 || (game >= 9 && game <= 12) || game == 2 ) {
         if (mode == 1) {
             sMode = langMessage.powerball + " " + langMessage.ball_odd + langMessage.ball_even; //"파워볼 홀짝"
         } else if (mode == 2) {
@@ -59,11 +59,37 @@ function getModeName(game, mode) {
         } else if (mode >= 31 && mode <= 38) {
             sMode = langMessage.normalball_mix + " " + langMessage.powerball + " " + + langMessage.ball_odd + langMessage.ball_even;// "일반볼조합 + 파워볼 홀짝";
         }
-    } else if (game == 2 || game == 6) {
+    } else if (game == 6) {
         if (mode >= 1 && mode <= 3) {
             sMode = langMessage.normal; // "일반";
         } else if (mode >= 4 && mode <= 7) {
             sMode = langMessage.combination; // "조합";
+        }
+    } else if (game == 14 ) {
+        if (mode == 1) {
+            sMode = langMessage.powerball + " " + langMessage.ball_odd + langMessage.ball_even; //"파워볼 홀짝"
+        } else if (mode == 2) {
+            sMode = langMessage.powerball + " " + langMessage.ball_under_ + langMessage.ball_over; //"파워볼 언오버"
+        } else if (mode == 3) {
+            sMode = langMessage.superball + " " + langMessage.ball_odd + langMessage.ball_even; //"슈퍼볼 홀짝"
+        } else if (mode == 4) {
+            sMode = langMessage.superball + " " + langMessage.ball_under_ + langMessage.ball_over;// "슈퍼볼 언오버";
+        } else if (mode >= 5 && mode <= 8) {
+            sMode = langMessage.powerball + " " + langMessage.combination;// "파워볼 조합";
+        } else if (mode >= 9 && mode <= 12) {
+            sMode = langMessage.superball + " " + langMessage.combination;// "슈퍼볼 조합";
+        } else if (mode >= 13 && mode <= 20) {
+            sMode = langMessage.normalball + " + " + langMessage.powerball + " " + langMessage.combination;// "일반볼 + 파워볼 조합";
+        } else if (mode == 21) {
+            sMode = langMessage.hupball + " " + langMessage.ball_odd + langMessage.ball_even; //"숫자합 홀짝"
+        } else if (mode == 22) {
+            sMode = langMessage.hupball + " " + langMessage.ball_under_ + langMessage.ball_over; //"숫자합 언오버"
+        } else if (mode >= 23 && mode <= 26) {
+            sMode = langMessage.hupball + " " + langMessage.combination;// "숫자합 조합";
+        } else if (mode == 30) {
+            sMode = langMessage.powerball + " " + langMessage.number_;// "파워볼 숫자";
+        } else if (mode >= 31 && mode <= 38) {
+            sMode = langMessage.normalball_mix + " " + langMessage.powerball + " " + + langMessage.ball_odd + langMessage.ball_even;// "일반볼조합 + 파워볼 홀짝";
         }
     }
     return sMode;
@@ -90,7 +116,7 @@ function getTargetHtml(side, name) {
 
 function getResultName(game, mode, result) {
     var sResult = "";
-    if (game == 1 || game == 5 || (game >= 9 && game <= 12) || game == 14 ) {
+    if (game == 1 || game == 2 || game == 5 || (game >= 9 && game <= 12) || game == 14 ) {
         switch (parseInt(mode)) {
             case 1:
             case 3:
@@ -149,18 +175,35 @@ function getResultName(game, mode, result) {
             case 24:
             case 25:
             case 26:
-                if (result == "PL")
-                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_large);
-                else if (result == "PM")
-                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_medium);
-                else if (result == "PS")
-                    sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_small);
-                else if (result == "BL")
-                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_large);
-                else if (result == "BM")
-                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_medium);
-                else if (result == "BS")
-                    sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_small);
+                if(game == 14){
+                    if(mode == 21)
+                        sResult = result == "P" ? getTargetHtml(1, langMessage.ball_odd) : getTargetHtml(2, langMessage.ball_even);
+                    else if(mode == 22)
+                        sResult = result == "P" ? getTargetHtml(1, langMessage.ball_under) : getTargetHtml(2, langMessage.ball_over);
+                    else {
+                        if (result == "PP")
+                            sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(1, langMessage.ball_under);
+                        else if (result == "PB")
+                            sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(2, langMessage.ball_over);
+                        else if (result == "BP")
+                            sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(1, langMessage.ball_under);
+                        else if (result == "BB")
+                            sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(2, langMessage.ball_over);
+                    }
+                } else {
+                    if (result == "PL")
+                        sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_large);
+                    else if (result == "PM")
+                        sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_medium);
+                    else if (result == "PS")
+                        sResult = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_small);
+                    else if (result == "BL")
+                        sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_large);
+                    else if (result == "BM")
+                        sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_medium);
+                    else if (result == "BS")
+                        sResult = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_small);
+                }
                 break;
             case 27:
             case 28:
@@ -203,7 +246,7 @@ function getResultName(game, mode, result) {
             default:
                 break;
         }
-    } else if (game == 2 || game == 6) {
+    } else if (game == 6) {
         switch (parseInt(mode)) {
             case 1:
                 sResult = result == "P" ? getTargetHtml(1, langMessage.ball_left) : getTargetHtml(2, langMessage.ball_right);
@@ -236,7 +279,7 @@ function getResultName(game, mode, result) {
 
 function getTargetName(game, mode, target) {
     var sTarget = "";
-    if (game == 1 || game == 5 || (game >= 9 && game <= 12) || game == 14) {
+    if (game == 1 || game == 5 || (game >= 9 && game <= 12) || game == 2 || game == 14) {
         switch (parseInt(mode)) {
             case 1:
             case 3:
@@ -287,22 +330,35 @@ function getTargetName(game, mode, target) {
                 sTarget = getTargetHtml(2, langMessage.normalball_ + " " + langMessage.ball_over) + " / " + getTargetHtml(2, langMessage.powerball_ + " " + langMessage.ball_over);
                 break;
             case 21:
-                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_large);
+                if(game == 14){
+                    sTarget = target == "P" ? getTargetHtml(1, langMessage.ball_odd) : getTargetHtml(2, langMessage.ball_even);
+                } else sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_large);
                 break;
             case 22:
-                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_medium);
+                if(game == 14){
+                    sTarget = target == "P" ? getTargetHtml(1, langMessage.ball_odd) : getTargetHtml(2, langMessage.ball_even);
+                } else sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_medium);
                 break;
             case 23:
-                sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_small);
+                if(game == 14){
+                    sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(1, langMessage.ball_under);
+                } else sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(3, langMessage.ball_small);
                 break;
             case 24:
-                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_large);
+                if(game == 14){
+                    sTarget = getTargetHtml(1, langMessage.ball_odd) + " / " + getTargetHtml(2, langMessage.ball_over);
+                } else sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_large);
                 break;
             case 25:
-                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_medium);
+                if(game == 14){
+                    sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(1, langMessage.ball_under);
+                } else sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_medium);
                 break;
             case 26:
-                sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_small);
+                if(game == 14){
+                    sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(2, langMessage.ball_over);
+                } else 
+                    sTarget = getTargetHtml(2, langMessage.ball_even) + " / " + getTargetHtml(3, langMessage.ball_small);
                 break;
             case 27:
                 sTarget = getTargetHtml(3, langMessage.ball_large);
@@ -344,7 +400,7 @@ function getTargetName(game, mode, target) {
             default:
                 break;
         }
-    } else if (game == 2 || game == 6) {
+    } else if (game == 6) {
         switch (parseInt(mode)) {
             case 1:
                 sTarget = target == "P" ? getTargetHtml(1, langMessage.ball_left) : getTargetHtml(2, langMessage.ball_right);
