@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 
 class Reward_Model extends Model {
 
-    protected $table      = 'bet_reward';
+    protected $table      = 'bet_reward_mn';
     protected $primaryKey = 'rw_fid';
 
     protected $returnType = 'object'; 

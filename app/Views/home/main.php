@@ -61,7 +61,7 @@
         <script type="text/javascript" src="/js/jquery-ui/marquee.js"></script>
 
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-        <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=6" />
+        <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=7" />
         <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=4" />
         <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=4" />
     <?php else : ?>
@@ -199,7 +199,7 @@
                     height: 0px;
                 }
             }
-            @media only screen and (min-width: 700px) {
+            @media only screen and (min-width: 800px) {
                 .btn-tiny .txt_cash{
                     display:block;
                 } 
@@ -207,7 +207,7 @@
                     display:none;
                 }
             }
-            @media only screen and (max-width: 700px) {
+            @media only screen and (max-width: 800px) {
                 .btn-tiny .txt_cash{
                     display:none;
                 } 
@@ -646,16 +646,30 @@
                     margin-top: 3px;
                     margin-left: 5px;
                 }
-                
-                @media (max-width: 1700px) {
+                #lang-button{
+                    z-index: 2;
+                    position: absolute;
+                    right: 10px;
+                    margin-top: 24px;
+                    width: 80px;
+                    padding: 0 5px;
+                    color: #ffff00;
+                    font-size: 14px;
+                    background: none;
+                    height: 22px;
+                    border: none;
+                    text-align: center;
+                }   
+
+                @media (max-width: 1800px) {
                     .MainMenu-ActionsContainer .btn-register{
                         margin-right: 1px;
                     }
                     .MainMenu-ActionsContainer .btn-logo{
-                        margin-right:30px;
+                        margin-right:20px;
                     }
                     #_btn_user_money{
-                        margin-left:30px;
+                        margin-left:20px;
                     }
                 }
                 @media (max-width: 760px) {
@@ -673,7 +687,11 @@
                         margin-top:40px;
                     }
                     .MainMenu-Left{
-                        margin: 10px 5px 0 40px;
+                        margin: 10px 5px 0 0px;
+                    }
+                    #lang-button{
+                        margin-top: 30px;
+                        right:0px;
                     }
                 }
                 @media (max-width: 400px) {
@@ -861,7 +879,7 @@
                         <?php endif ?>
 
                         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-                            <button name="lang" id="lang-button" style="z-index:2; position:absolute; right:10px; margin-top:24px; width:80px; padding:0 5px; color: #ffff00; font-size:14px; background:none; height:22px; border:none; text-align:center;" is="ms-dropdown" >
+                            <button name="lang" id="lang-button" is="ms-dropdown" >
                             <?php if($lang == "cn") :?>
                                 <image id="lang-img" src="/images/common/cn.png?v=1" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-code" ><?=lang('common.lang_chinese')?></span>
                             <?php else :?>

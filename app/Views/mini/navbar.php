@@ -72,17 +72,18 @@
                 <ul class="gamezone-menu result_menu">
                     <?php if(!$pbg_deny) :?>
                     <li class="dropdown">
-                        <a class="<?=$gm_pbg?>" href="/mini?gm=PBG"><?=lang('common.game_pbg')?></a>
+                        <!-- <a class="<?=$gm_pbg?>" href="/mini?gm=PBG"><?=lang('common.game_pbg')?></a> -->
+                        <button class="dropbtn <?=$gm_pbg?>" onclick="location.href='/mini?gm=PBG'"><?=lang('common.game_pbg')?></button>
                     </li>
                     <?php endif ?>
                     <?php if(!$evp_deny) :?>
                     <li class="dropdown">
-                        <a class="<?=$gm_evp?>" href="/mini?gm=EVP"><?=lang('common.game_evol')?></a>
+                        <button class="dropbtn <?=$gm_evp?>" onclick="location.href='/mini?gm=EVP'"><?=lang('common.game_evol')?></button>
                     </li>
                     <?php endif ?>
                     <?php if(!$spk_deny) :?>
                     <li class="dropdown">
-                        <a class="<?=$gm_spk?>" href="/mini?gm=SPKN"><?=lang('common.game_keno')?></a>
+                        <button class="dropbtn <?=$gm_spk?>" onclick="location.href='/mini?gm=SPKN'"><?=lang('common.game_keno')?></button>
                     </li>
                     <?php endif ?>
                     <?php if(!$bpg_deny) :?>
@@ -123,8 +124,12 @@
                     </li>
                     <?php endif ?>
                     
-                    <li><a class="<?=$ls_rnd?>" href="/rndlist?gm=<?=$gm_ref?>" style="margin-right:3px"><?=lang('common.game_result')?></a></li>
-                    <li><a class="<?=$ls_bet?>" href="/betlist?gm=<?=$gm_ref?>"><?=lang('common.game_history')?></a></li>
+                    <li  class="dropdown">
+                        <button class="dropbtn <?=$ls_rnd?>" onclick="location.href='/rndlist?gm=<?=$gm_ref?>'" style="margin-right:3px"><?=lang('common.game_result')?></button>
+                    </li>
+                    <li  class="dropdown">
+                        <button class="dropbtn <?=$ls_bet?>" onclick="location.href='/betlist?gm=<?=$gm_ref?>'"><?=lang('common.game_history')?></button>
+                    </li>
                 </ul>
                 <!-- <div class="content_inner" style="display:none;">
                     <p class="inspection_none">운영시간이 아닙니다.</p>

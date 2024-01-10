@@ -1877,7 +1877,7 @@ class Api extends BaseController
 					
 					$iResult = isEnableBet($arrBetData, $objUser, $objConfig, $arrRoundData);
 					if($iResult == 1){
-						$arrEmpRatio = $this->modelMember->getEmployeeRatio($objUser, $arrBetData['amount'], $arrBetData['game'], $arrBetData['mode']);
+						// $arrEmpRatio = $this->modelMember->getEmployeeRatio($objUser, $arrBetData['amount'], $arrBetData['game'], $arrBetData['mode']);
 						//Success in Betting
 						if($this->modelMember->updateAssets($objUser, 0-$arrBetData['amount'], 0, $iMoneyType)){
 							$iBetId = $modelBet->register($arrBetData, $objUser);
@@ -1890,7 +1890,7 @@ class Api extends BaseController
 			
 			if($iResult == 1 && $iBetId > 0){			
 				// $this->modelMember->updateRewards($arrEmpRatio);			//Add Point 
-				$modelReward->register($arrBetData['game'], $iBetId, $arrEmpRatio);
+				// $modelReward->register($arrBetData['game'], $iBetId, $arrEmpRatio);
 			}
 
 			$arrResult['data'] = $iResult;
@@ -2001,7 +2001,7 @@ class Api extends BaseController
 				} else {
 					if($modelBet->delete($objBet->bet_fid)){
 						if( $objBet->bet_money > 0 && $this->modelMember->updateAssets($objUser, $objBet->bet_money, 0, $iChangeType)){
-							$modelReward->deleteByBetId($objBet->bet_game, $objBet->bet_fid);
+							// $modelReward->deleteByBetId($objBet->bet_game, $objBet->bet_fid);
 							// $modelMoneyhist->register($objUser, $objBet->bet_money, $iChangeType);
 						}
 						$iResult = 1;		
@@ -2139,7 +2139,7 @@ class Api extends BaseController
 
 						$iResult = isEnableBet($arrBetData, $member, $objConfig, $arrRoundData);
 						if($iResult == 1){
-							$arrEmpRatio = $this->modelMember->getEmployeeRatio($member, $arrBetData['amount'], $arrBetData['game'], $arrBetData['mode']);
+							// $arrEmpRatio = $this->modelMember->getEmployeeRatio($member, $arrBetData['amount'], $arrBetData['game'], $arrBetData['mode']);
 							//Add Money hisotry and Update User money
 							if($this->modelMember->updateAssets($member, 0-$arrBetData['amount'], 0, $iMoneyChangeType)){
 								$iBetId = $modelBet->register($arrBetData, $member);
@@ -2149,7 +2149,7 @@ class Api extends BaseController
 
 						if($iResult == 1 && $iBetId > 0){	
 							// $this->modelMember->updateRewards($arrEmpRatio);
-							$modelReward->register($arrBetData['game'], $iBetId, $arrEmpRatio);
+							// $modelReward->register($arrBetData['game'], $iBetId, $arrEmpRatio);
 						}
 								
 

@@ -113,6 +113,12 @@
         #container .content .betting_board .betting_board_inner.betting_board_none:after {
             content: "<?=lang('common.bet_cannot')?>";
         }
+        .dropdown button {
+            width:90px;
+        }
+        .result_menu li{
+            margin-right:1px;
+        }
     </style>
     </head>
 
