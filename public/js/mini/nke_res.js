@@ -116,7 +116,7 @@ $(function() {
             } else {
                 gameTitle = langMessage.ball_even;
             }
-            setLimitAmount(1);
+            setLimitAmount(5);
         } else if (categoryId == 8) {
             gameName = langMessage.hupball;
             selIdx = 22;
@@ -125,7 +125,7 @@ $(function() {
             } else {
                 gameTitle = langMessage.ball_over;
             }
-            setLimitAmount(1);
+            setLimitAmount(5);
         } else if (categoryId == 12) {
             gameName = langMessage.hupball + " " + langMessage.combination; //"파워볼 조합"
             if (selId == 1) {
@@ -141,7 +141,7 @@ $(function() {
                 gameTitle = langMessage.ball_even + "/" + langMessage.ball_over; //"짝/오버"
                 selIdx = 26;
             }
-            setLimitAmount(2);
+            setLimitAmount(5);
         } else if (categoryId == 9) {
             gameName = langMessage.superball + " + " + langMessage.powerball + " " + langMessage.combination; //"일반볼+파워볼 조합";
             if (selId == 1) {
