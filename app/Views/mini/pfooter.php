@@ -58,7 +58,7 @@
                                 <div class="betting_board_box">
                                     <div class="betting_board_box_input">
                                         <span class="tit"> <?=lang('common.amount')?></span>
-                                        <input type="text" class="betting_board_box_input_bet" id="bet_money" value="0" placeholder="" readonly="" />
+                                        <input type="text" class="betting_board_box_input_bet" id="bet_money" value="0" placeholder=""  />
                                     </div>
                                     <div class="betting_board_box_input">
                                         <span class="tit"><?=lang('common.win_amount')?></span>
