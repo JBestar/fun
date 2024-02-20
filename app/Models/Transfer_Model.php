@@ -20,7 +20,7 @@ class Transfer_Model extends Model {
         $data = [
             'trans_mb_fid' => $objUser->mb_fid,
             'trans_mb_uid' => $objUser->mb_uid,
-            'trans_mb_emp_fid' => $objUser->mb_emp_fid,
+            'trans_emp_fid' => $objUser->mb_emp_fid,
             'trans_amount' => $balance,
             'money_before' => $objUser->mb_money,
             'money_after' => $objUser->mb_money - $balance,

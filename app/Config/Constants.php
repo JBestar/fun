@@ -222,7 +222,8 @@ defined('STATUS_LOGOUT')       || define('STATUS_LOGOUT', 'logout');
 defined('ADVANCE_SEC')    	   || define('ADVANCE_SEC', 0);
 
 defined('SESS_TYPE_SITE')       || define('SESS_TYPE_SITE', 0);
-defined('SESS_TYPE_APP')       || define('SESS_TYPE_APP', 1);
+defined('SESS_TYPE_EVOL')       || define('SESS_TYPE_EVOL', 1);
+defined('SESS_TYPE_PRAG')       || define('SESS_TYPE_PRAG', 2);
 
 defined('CURL_TIMEOUT_MIN')       || define('CURL_TIMEOUT_MIN', 5);
 defined('CURL_TIMEOUT_MAX')       || define('CURL_TIMEOUT_MAX', 100);

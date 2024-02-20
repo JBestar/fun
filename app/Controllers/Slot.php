@@ -107,7 +107,7 @@ class Slot extends BaseController
 			$objSlot = $modelSlotgame->getById($gameId, $prdCode, $slotId);
 			$headInfo = $this->getSiteConf();
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
-			$sess = $this->modelSess->getByUid($objMember->mb_uid, SESS_TYPE_APP);
+			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
 
             $iCreated = 0;
 			if(is_null($objMember) || is_null($objConfig))
@@ -267,7 +267,7 @@ class Slot extends BaseController
 			$objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
 			$objSlot = $modelSlotgame->getById($gameId, $prdCode, $slotId);
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
-			$sess = $this->modelSess->getByUid($objMember->mb_uid, SESS_TYPE_APP);
+			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
 
             $iCreated = 0;
 			if(is_null($objMember) || is_null($objConfig))
@@ -393,7 +393,7 @@ class Slot extends BaseController
 			$objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
 			$objSlot = $modelSlotgame->getById($gameId, $prdCode, $slotId);
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
-			$sess = $this->modelSess->getByUid($objMember->mb_uid, SESS_TYPE_APP);
+			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
 
             $iCreated = 0;
 			if(is_null($objMember) || is_null($objConfig))
@@ -517,7 +517,7 @@ class Slot extends BaseController
 			$objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
 			$objSlot = $modelSlotgame->getById($gameId, $prdCode, $slotId);
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
-			$sess = $this->modelSess->getByUid($objMember->mb_uid, SESS_TYPE_APP);
+			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
 
             $iCreated = 0;
 			if(is_null($objMember) || is_null($objConfig))
@@ -631,7 +631,7 @@ class Slot extends BaseController
 			$objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
 			$objSlot = $modelSlotgame->getById($gameId, $prdCode, $slotId);
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
-			$sess = $this->modelSess->getByUid($objMember->mb_uid, SESS_TYPE_APP);
+			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
 
             $iCreated = 0;
 			if(is_null($objMember) || is_null($objConfig))

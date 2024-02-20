@@ -35,9 +35,13 @@ class Sess_Model extends Model {
     }
 
     
-    public function getByUid($uid, $type=SESS_TYPE_SITE){
-        $where = "sess_mb_uid = '".$uid."' AND sess_type = '".$type."' ";
-        
+    public function getByUid($uid, $bSite = true){
+        $where = "sess_mb_uid = '".$uid."' ";
+        if($bSite)
+            $where.= " AND sess_type = ".SESS_TYPE_SITE." ";
+        else 
+            $where.= " AND sess_type <> ".SESS_TYPE_SITE." ";
+
         return $this->where($where)
                     ->first();
 

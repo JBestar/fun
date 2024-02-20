@@ -27,7 +27,7 @@ class Casino extends BaseController
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
 			$sess = null;
 			if(array_key_exists('app.transEg', $_ENV) && $_ENV['app.transEg'] == 1){
-				$sess = $this->modelSess->getByUid($objMember->mb_uid, SESS_TYPE_APP);
+				$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
 			}
 
 			writeLog($logHead.$objMember->mb_uid." Call Play");
@@ -152,7 +152,7 @@ class Casino extends BaseController
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
             $sess = null;
 			if(array_key_exists('app.transEg', $_ENV) && $_ENV['app.transEg'] == 1){
-				$sess = $this->modelSess->getByUid($objMember->mb_uid, SESS_TYPE_APP);
+				$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
 			}
 
             $iCreated = 0;
@@ -268,7 +268,7 @@ class Casino extends BaseController
 				$objCas = $this->modelCasprd->getById($gameId, 100);
 
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
-			$sess = $this->modelSess->getByUid($objMember->mb_uid, SESS_TYPE_APP);
+			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
             
             $iCreated = 0;
 			if(is_null($objMember) || is_null($objConfig))
