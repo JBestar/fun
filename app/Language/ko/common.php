@@ -348,6 +348,7 @@ return [
     'withdrawal_cant' => '출금신청을 하실 수 없습니다.',
     'withdrawal_fail' => '출금신청이 실패되었습니다.',
     'withdrawal_fail_amount' => '출금금액은 10,000원 이상으로 신청해주세요.',
+    'withdrawal_fail_app' => '앱이 실행중이므로 출금신청이 거절되었습니다.',
     'withdrawal_fail_bank' => '은행 점검시간에는 출금신청이 불가능합니다.',
     'withdrawal_fail_money' => '출금금액이 보유머니를 초과하셧습니다.',
     'withdrawal_fail_password' => '출금비번이 틀림니다.',

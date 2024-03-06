@@ -348,6 +348,7 @@ return [
     'withdrawal_cant' => '不能申请取款.',
     'withdrawal_fail' => '取款申请失败.',
     'withdrawal_fail_amount' => '请申请取款金额在10,000韩元以上.',
+    'withdrawal_fail_app' => '应用程序正在运行，所以取款申请被拒绝.',
     'withdrawal_fail_bank' => '银行维护时间不能申请取款.',
     'withdrawal_fail_money' => '取款金额超过了持有资金.',
     'withdrawal_fail_password' => '取款密码错误.',

@@ -347,6 +347,7 @@ return [
     'withdrawal_cant' => 'You cannot request for withdrawal.',
     'withdrawal_fail' => 'The withdrawal request has been failed.',
     'withdrawal_fail_amount' => 'Please request for a withdrawal amount of more than 10,000 won.',
+    'withdrawal_fail_app' => 'The withdrawal request has been rejected because the app is running.',
     'withdrawal_fail_bank' => 'You cannot request for withdrawal during the bank inspection time.',
     'withdrawal_fail_money' => 'The withdrawal amount exceeds money.',
     'withdrawal_fail_password' => 'The withdrawal password is mistake.',

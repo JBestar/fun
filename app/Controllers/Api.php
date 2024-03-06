@@ -759,6 +759,8 @@ class Api extends BaseController
 					$result->msg = lang("common.deposit_request_unit"); 
 				} 
 			}
+			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
+
 			if($bLimit && $result->status == STATUS_FAIL){
 				$result->status = STATUS_FAIL;
 			} else if($bLimit && $objMember->mb_state_delete == STATE_ACTIVE){
@@ -776,6 +778,9 @@ class Api extends BaseController
 			} else if($reqData['c_price'] < 10000){
 				$result->status = STATUS_FAIL;
 				$result->msg = lang("common.withdrawal_fail_amount");
+			} else if($_ENV['mem.withdeny_play'] && !is_null($sess)) {
+				$result->status = STATUS_FAIL;
+				$result->msg = lang("common.withdrawal_fail_app");
 			} else if($_ENV['mem.delay_play'] > 0 && $_ENV['mem.withdeny_play'] &&  diffDt($strNow, $objMember->mb_time_bet) < $_ENV['mem.delay_play']){
 				$result->status = STATUS_FAIL;
 				// writeLog($_ENV['mem.delay_play']." > ".diffDt($strNow, $objMember->mb_time_bet));
