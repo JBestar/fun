@@ -194,6 +194,7 @@ return [
     'message_to_read' => '미확인 쪽지가 있습니다.',
     'mini_games' => '미니게임',
     'money' => '보유머니',
+    'money_site' => '사이트머니',
     'month' => '월 ',
     'myinfo' => '내정보',
     'name' => '네임',

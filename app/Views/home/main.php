@@ -2218,12 +2218,14 @@
                                     <input type="password" name="passwd" placeholder="<?=lang('common.password')?>" style="width:100%;" />
                                 </div>
                             </div>
+                            <?php if(strlen($captcha) > 0) :?>
                             <div class="input-group mb-4">
                                 <img id="image_id" name="<?=$captcha?>" src="/download/captcha/<?=$captcha?>.jpg" style="width: 100%; height: 30px; margin-bottom: 10px; border-radius: 0.25rem; background-color: beige;" >
                                 <div class="field required">
                                     <input name="captchacode" placeholder="<?=lang('common.security_character')?>" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
                                 </div>
                             </div>
+                            <?php endif ?>
                             <input type="text" name="ip" class="ip_addr" hidden/>
                             <input type="text" name="captchasrc" id="captchasrc" value="<?=$captcha?>" hidden/>
                             <div class="button-group">

@@ -194,6 +194,7 @@ return [
     'message_to_read' => 'You have unread messages.',
     'mini_games' => 'Mini Games',
     'money' => 'Money',
+    'money_site' => 'Site Money',
     'month' => '-',
     'myinfo' => 'My Info',
     'name' => 'Name',

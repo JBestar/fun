@@ -242,7 +242,133 @@ class Casino extends BaseController
 			}
 			
         }
+    }
 
+    public function casino()
+	{
+		$result = new \StdClass;
+		$prdId = trim($this->request->getVar('prd'));
+						
+		if(!is_login())
+		{
+			$result->status = STATUS_LOGOUT;
+        } else {
+			$gameId = GAME_CASINO_KGON;
+            $logHead = "<CAS_KGON>";
+
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id);
+			$objConfig = $this->modelConfgame->find($gameId);  //Casino config
+			$headInfo = $this->getSiteConf();
+			$objCas = $this->modelCasprd->getById($gameId, $prdId);
+			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
+            $sess = null;
+			if(array_key_exists('app.transEg', $_ENV) && $_ENV['app.transEg'] == 1){
+				$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
+			}
+
+            $iCreated = 0;
+			if(is_null($objMember) || is_null($objConfig))
+				$iCreated = 0;
+            else if(is_null($objCas))
+				$iCreated = 6;									//Error of game
+            else if($objCas->maintain == STATE_ACTIVE || $objCas->hidden == STATE_ACTIVE)
+				$iCreated = 7;
+			else if($objConfig->game_bet_permit != PERMIT_OK)
+				$iCreated = 4;									//Preparing
+            else if($headInfo['cas_deny'])
+                $iCreated = 3;									//Stop
+			else if(!$this->modelMember->isPermitMember($objMember, $gameId))
+				$iCreated = 3;									//Stop
+			else if($diffDt < DELAY_GAME)
+				$iCreated = 8;	
+			else if(!is_null($sess))
+				$iCreated = 9;	
+			else if($objMember->mb_kgon_id == 0){
+				//플레이어 창조
+                $createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
+				$arrResult = $this->libApiKgon->createUser($createId, $objMember->mb_nickname, $objMember->mb_uid);
+                
+                if($arrResult['status'] == 1){
+                    $objMember->mb_kgon_id = $arrResult['id'];
+                    $objMember->mb_kgon_uid = $createId;
+                    $this->modelMember->updateKgonInfo($objMember);
+                    $iCreated = 1;
+
+                    writeLog($logHead.$objMember->mb_uid."-CreateUser Sucess !!");
+                } else {
+                    if(array_key_exists('code', $arrResult) && $arrResult['code'] == -500)
+                        $iCreated = 5;								//Duplicated User
+                    else $iCreated = 2;								//Fail in Creation of user
+                    
+                    if(array_key_exists('code', $arrResult))
+                        writeLog($logHead.$objMember->mb_uid."-CreateUser Error code=".$arrResult['code']." Msg".$arrResult['msg']); 
+                }
+			} else{
+				$iCreated = 1;
+			}
+
+			if($iCreated == 0){
+				$result->status = STATUS_FAIL;
+				$result->code = RESULT_FAIL;
+			} else if($iCreated == 2){
+				$result->status = STATUS_FAIL;
+				$result->code = RESULT_FAIL;
+			} else if($iCreated == 3){
+				$result->status = STATUS_FAIL;
+				$result->code = RESULT_STOP;
+			} else if($iCreated == 4){
+				$result->status = STATUS_FAIL;
+				$result->code = RESULT_STOP;
+			} else if($iCreated == 5){
+				$result->status = STATUS_FAIL;
+				$result->code = RESULT_EXIST_ID;
+			} else if($iCreated == 6){
+				$result->status = STATUS_FAIL;
+				$result->code = RESULT_ERROR;
+			} else if($iCreated == 7){
+				$result->status = STATUS_FAIL;
+				$result->code = RESULT_STOP;
+			} else if($iCreated == 8){
+				$result->status = STATUS_FAIL;
+				$result->code = RESULT_STOP;
+			} else if($iCreated == 9){
+				$result->status = STATUS_FAIL;
+				$result->code = RESULT_STOP;
+			} else if($iCreated == 1){
+				if(array_key_exists('app.transEg', $_ENV) && $_ENV['app.transEg'] == 1)
+					$iResult = $this->alltoGame($objMember, $gameId);
+				else $iResult = 1;
+                if($iResult != 1){
+					$result->status = STATUS_FAIL;
+					$result->code = RESULT_ERROR;		
+                } else {
+                    $arrResult = $this->libApiKgon->auth($objMember->mb_kgon_uid, $objMember->mb_nickname, $objMember->mb_uid, $objCas->key, $objCas->lobby);
+                    if($arrResult['status'] == 1){
+                        writeLog($logHead.$objMember->mb_uid."-Login Sucess !!");
+                        writeLog($logHead.$arrResult['url']);
+						$this->modelMember->updateBetTm($objMember);
+                        
+						$result->status = STATUS_SUCCESS;
+						$result->code = RESULT_OK;	
+						$result->url = $arrResult['url'];	
+
+                    } else {
+                        if(array_key_exists('code', $arrResult)){
+							$log = $logHead.$objMember->mb_uid."-Auth Error code=".$arrResult['code'];
+							if(array_key_exists('msg', $arrResult))
+								$log.=" msg=".$arrResult['msg'];
+							writeLog($log); 
+						}
+						$result->status = STATUS_FAIL;
+						$result->code = RESULT_ERROR;	
+                    }
+                }
+				
+			}
+			
+        }
+		echo json_encode($result);	
     }
 
 	public function cas_h()

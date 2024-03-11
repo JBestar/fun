@@ -65,6 +65,7 @@
       $userInfo['user_id'] = $objUser->mb_uid;
       $userInfo['user_name'] = $objUser->mb_nickname;
       $userInfo['user_grade'] = $objUser->mb_grade;
+      $userInfo['user_wallet'] = floor($objUser->mb_money);
       $userInfo['user_money'] = floor(allMoney($objUser)); //num_format(allMoney($objUser), NUM_POINT_CNT, 0);
       $userInfo['user_egg'] = floor(allEgg($objUser));
       $userInfo['user_point'] = floor($objUser->mb_point);//num_format(floatval($objUser->mb_point), NUM_POINT_CNT, 0);

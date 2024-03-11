@@ -193,9 +193,10 @@ return [
     'message' => '通知',        //쪽지
     'message_to_read' => '有未确认的通知.',
     'mini_games' => 'MINIGAME',//迷你游戏
-    'money' => '持有金额',      //보유머니
-    'month' => '-',      //보유머니
-    'myinfo' => '个人信息',     //내정보
+    'money' => '持有金额',      //Current Money
+    'money_site' => '站点金额',      //Site Money
+    'month' => '-',      //
+    'myinfo' => '个人信息',     //My info
     'name' => '名字',
     'name_comment' => '使用相同的名字和账户人',
     'next' => '下一步', //下面

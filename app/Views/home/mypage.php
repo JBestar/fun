@@ -437,13 +437,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="collapsing"><?=lang('common.money')?></td>
+                            <td class="collapsing"><?=lang('common.money_site')?></td>
                             <td>
                                 <div class="ui grid">
                                     <div class="six wide column">
                                         <div class="ui basic label">
-                                            <div class="detail" v-html="strMoney(myInfo.user_money)"></div>
-                                            <div class="detail"><?=lang('common.money')?></div>
+                                            <div class="detail" v-html="strMoney(myInfo.user_wallet)"></div>
+                                            <div class="detail"><?=lang('common.money_site')?></div>
                                         </div>
                                     </div>
                                     <div class="ten wide column">
