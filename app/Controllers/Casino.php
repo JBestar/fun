@@ -250,6 +250,7 @@ class Casino extends BaseController
 		$prdId = trim($this->request->getVar('prd'));
 						
 		if(!is_login())
+		// if(false)
 		{
 			$result->status = STATUS_LOGOUT;
         } else {
@@ -257,6 +258,7 @@ class Casino extends BaseController
             $logHead = "<CAS_KGON>";
 
 			$user_id = $this->session->user_id;
+			// $user_id = 'jbestar';
 			$objMember = $this->modelMember->getByUid($user_id);
 			$objConfig = $this->modelConfgame->find($gameId);  //Casino config
 			$headInfo = $this->getSiteConf();

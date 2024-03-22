@@ -16,7 +16,7 @@ class Member_Model extends Model {
     protected $allowedFields = ['mb_uid', 'mb_pwd', 'mb_level', 'mb_emp_fid', 'mb_nickname', 
         'mb_email', 'mb_phone', 'mb_bank_name', 'mb_bank_own', 'mb_bank_num', 'mb_bank_pwd',
         'mb_time_join', 'mb_time_last', 'mb_time_bet', 'mb_time_call', 'mb_ip_join', 'mb_ip_last', 
-        'mb_money', 'mb_point', 'mb_grade', 'mb_color', 'mb_state_active', 'mb_state_bet', 'mb_state_delete', 'mb_state_alarm',
+        'mb_money', 'mb_point', 'mb_grade', 'mb_color', 'mb_state_active', 'mb_state_bet', 'mb_state_delete', 'mb_state_test', 'mb_state_alarm', 
         'mb_game_pb', 'mb_game_ps', 'mb_game_ks', 'mb_game_bb', 'mb_game_bs', 'mb_game_cs', 'mb_game_sl', 'mb_game_eo', 'mb_game_co', 'mb_game_hl', 
         'mb_game_pb_ratio', 'mb_game_pb2_ratio', 'mb_game_cs_ratio', 'mb_game_sl_ratio', 'mb_game_hl_ratio', 
         'mb_game_pb_percent', 'mb_game_pb2_percent',
@@ -30,7 +30,7 @@ class Member_Model extends Model {
     ];
   
     private $getFields = ['mb_fid', 'mb_uid', 'mb_level','mb_emp_fid', 'mb_nickname', 'mb_time_call', 'mb_ip_join', 'mb_ip_last',
-        'mb_money', 'mb_point', 'mb_grade', 'mb_state_active', 'mb_state_bet', 'mb_state_delete', 'mb_state_alarm', 'mb_state_view', 
+        'mb_money', 'mb_point', 'mb_grade', 'mb_state_active', 'mb_state_bet', 'mb_state_delete', 'mb_state_test', 'mb_state_alarm', 'mb_state_view', 
         'mb_game_pb', 'mb_game_ps', 'mb_game_ks', 'mb_game_bb', 'mb_game_bs', 'mb_game_cs', 'mb_game_sl',  'mb_game_eo', 'mb_game_co', 'mb_game_hl', 
         'mb_game_pb_ratio', 'mb_game_pb2_ratio', 'mb_game_cs_ratio', 'mb_game_sl_ratio', 'mb_game_hl_ratio', 
         'mb_live_id', 'mb_live_uid', 'mb_live_money', 
@@ -540,6 +540,8 @@ class Member_Model extends Model {
             } 
 
             $arrData['mb_color'] = $objEmp->mb_color;
+            $arrData['mb_state_test'] = $objEmp->mb_state_test;
+
         } else return RESULT_ERROR;        
 
         if(strlen($arrData['password']) == 0)
@@ -556,20 +558,21 @@ class Member_Model extends Model {
             'mb_grade' => GRADE_1,
             'mb_color' => $arrData['mb_color'],        
             'mb_state_active' => PERMIT_REQ,
+            'mb_state_test' => $arrData['mb_state_test'],
             'mb_bank_name' => $arrData['bank_name'],
             'mb_bank_own' => $arrData['name'],
             'mb_bank_num' => $arrData['account_number'],
             'mb_bank_pwd' => $arrData['refund_password'],
-            'mb_game_pb' => '1',
-            'mb_game_ps' => '1',
-            'mb_game_ks' => '1',
-            'mb_game_bb' => '1',
-            'mb_game_bs' => '1',
-            'mb_game_cs' => '1',
-            'mb_game_sl' => '1',
-            'mb_game_eo' => '1',
-            'mb_game_co' => '1',
-            'mb_game_hl' => '1',
+            'mb_game_pb' => STATE_ACTIVE,
+            'mb_game_ps' => STATE_ACTIVE,
+            'mb_game_ks' => STATE_ACTIVE,
+            'mb_game_bb' => STATE_ACTIVE,
+            'mb_game_bs' => STATE_ACTIVE,
+            'mb_game_cs' => STATE_ACTIVE,
+            'mb_game_sl' => STATE_ACTIVE,
+            'mb_game_eo' => STATE_ACTIVE,
+            'mb_game_co' => STATE_ACTIVE,
+            'mb_game_hl' => STATE_ACTIVE,
             'mb_game_pb_percent' => '100',
             'mb_game_pb2_percent' => '100',
         ];
