@@ -173,7 +173,7 @@ class Api extends BaseController
 			if(array_key_exists('app.login_multi', $_ENV) && intval($_ENV['app.login_multi']) == 1 )
 				$enAdminMulti = true;
 
-			if($objMember->mb_state_active == PERMIT_WAIT){
+			if($objMember->mb_state_active == PERMIT_WAIT || $objMember->mb_state_active == PERMIT_REQ){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_WAIT;
                 $arrResult['msg'] = lang("common.login_wait");
