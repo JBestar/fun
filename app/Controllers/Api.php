@@ -88,7 +88,8 @@ class Api extends BaseController
 		$isValid = validLoginValue($user_id, $user_pw);
 		
 		if(strlen($user_id) < 1 || strlen($user_pw) < 1 || !$isValid){
-			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_DENIED);
+			if(strlen($user_id) > 0)
+				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_DENIED);
 			writeLog("[login] check:".$user_id." ,".$user_pw." ");
 
 			$arrResult['code'] = RESULT_FAIL;		

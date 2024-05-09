@@ -151,7 +151,9 @@ class Home extends BaseController
                         $app->act = intval($arrMemInfo[$i]);
                         if($app->act == 0)
                             $app->path = "";
-                    } else {
+                    } else if($app->act == 1 && $objMember->mb_level >= LEVEL_ADMIN){
+                    
+                    }else {
                         $app->act = 0;
                         $app->path = "";
                     }
