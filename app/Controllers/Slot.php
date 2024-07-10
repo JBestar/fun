@@ -145,7 +145,7 @@ class Slot extends BaseController
 					$iCreated = 101;
 				else if($objMember->mb_slot_uid == ""){
 					//Creation of Player
-					$createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
+					$createId = createGameId(substr($_ENV['app.gm_prefix'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 					$arrResult =  $this->libApiSlot->createUser($createId);
 					if($arrResult['status'] == 1){
 						$objMember->mb_slot_uid = $createId;
@@ -289,7 +289,7 @@ class Slot extends BaseController
 				$iCreated = 9;
 			else if($objMember->mb_fslot_id == 0){
 				//Create Player
-				$createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
+				$createId = createGameId(substr($_ENV['app.gm_prefix'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 				$arrResult = $this->libApiFslot->createUser($createId, $objMember->mb_nickname);
 				if($arrResult['status'] == 1){
 					$objMember->mb_fslot_id = $arrResult['gs_user_id'];
@@ -415,7 +415,7 @@ class Slot extends BaseController
 				$iCreated = 9;
 			else if($objMember->mb_gslot_uid == ""){
 				//Create Player
-				$createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
+				$createId = createGameId(substr($_ENV['app.gm_prefix'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 				$arrResult = $this->libApiGslot->createUser($createId);
 				if($arrResult['status'] == 1){
 					$objMember->mb_gslot_uid = $createId;
@@ -539,7 +539,7 @@ class Slot extends BaseController
 				$iCreated = 9;
 			else if($objMember->mb_kgon_id == 0){
 				//Create Player
-				$createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
+				$createId = createGameId(substr($_ENV['app.gm_prefix'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 				$arrResult = $this->libApiKgon->createUser($createId, $objMember->mb_nickname, $objMember->mb_uid);
 				if($arrResult['status'] == 1){
 					$objMember->mb_kgon_id = $arrResult['id'];

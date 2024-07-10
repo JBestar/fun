@@ -50,7 +50,7 @@ class Casino extends BaseController
 				$iCreated = 9;	
 			else if($objMember->mb_live_id == 0){
 				//Creation of Player
-				$createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
+				$createId = createGameId(substr($_ENV['app.gm_prefix'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 				$arrResult = $this->libApiCas->createUser($createId, $objMember->mb_nickname);
                 
                 if($arrResult['status'] == 1){
@@ -174,7 +174,7 @@ class Casino extends BaseController
 				$iCreated = 9;	
 			else if($objMember->mb_kgon_id == 0){
 				//플레이어 창조
-                $createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
+                $createId = createGameId(substr($_ENV['app.gm_prefix'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 				$arrResult = $this->libApiKgon->createUser($createId, $objMember->mb_nickname, $objMember->mb_uid);
                 
                 if($arrResult['status'] == 1){
@@ -288,7 +288,7 @@ class Casino extends BaseController
 				$iCreated = 9;	
 			else if($objMember->mb_kgon_id == 0){
 				//플레이어 창조
-                $createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
+                $createId = createGameId(substr($_ENV['app.gm_prefix'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 				$arrResult = $this->libApiKgon->createUser($createId, $objMember->mb_nickname, $objMember->mb_uid);
                 
                 if($arrResult['status'] == 1){
@@ -516,8 +516,8 @@ class Casino extends BaseController
 				$iCreated = 8;	
 			else if($objMember->mb_hold_uid == ""){
 				//플레이어 창조
-                // $createId = createGameId(substr($_ENV['app.name'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
-                $createId = createGameId(strtoupper(substr($_ENV['app.name'], 0, 2))."_".$objMember->mb_uid);//."_".$objMember->mb_uid
+                // $createId = createGameId(substr($_ENV['app.gm_prefix'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
+                $createId = createGameId(strtoupper(substr($_ENV['app.gm_prefix'], 0, 2))."_".$objMember->mb_uid);//."_".$objMember->mb_uid
 				$objOther = $this->modelMember->getByHoldId($createId, $objMember->mb_fid);
 				if(!is_null($objOther))
 					$createId .= "_".$objMember->mb_fid;
