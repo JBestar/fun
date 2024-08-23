@@ -838,7 +838,7 @@
                                 <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span><?=lang('common.partener')?></span></button>
                                 <?php endif?>
                                 
-                                <?php if($_ENV['app.name'] == 1) :?>
+                                <?php if($_ENV['app.home'] == 1) :?>
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="">
                                         <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
                                         <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
