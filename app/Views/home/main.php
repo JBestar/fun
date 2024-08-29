@@ -150,7 +150,7 @@
             }
             
             .MainMenu-open-wrapper .MainMenu-LogoSlogan {
-                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=8);
+                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=2);
             }
 
             <?php if(array_key_exists('app.tree', $_ENV) && $_ENV['app.tree'] == 1) :?>
@@ -797,7 +797,7 @@
 
                             <?php if($_ENV['app.home'] == 1) :?>
                                 <a href="/" class="js-register-open btn-register btn-tiny btn-logo" style=" <?=!is_login(true)?"float:left;":""?>">
-                                    <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=1" class="logo_icon" /> </span>
+                                    <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=2" class="logo_icon" /> </span>
                                 </a>
                                 <?php if(!is_login(true)) :?>
                                     <button class="js-login-open btn-login btn-register btn-box" style="" onclick="showAgentCheckModal();">
