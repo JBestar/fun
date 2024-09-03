@@ -116,11 +116,13 @@
                                         loading="lazy"
                                         class="lazy"
                                         data-loader="frame"
-                                        data-width="840"
-                                        data-height="650"
-                                        src="https://rdombox.com/games/evopowerball"
-                                        style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
+                                        data-width="900"
+                                        data-height="760"
+                                        src="https://gopick.com/games/powerball_evo_05/live"
+                                        style="transform: scale(0.859375); position: inherit; width: 900px; height: 760px;"
                                     ></iframe>
+                                        <!-- src="https://rdombox.com/games/evopowerball" -->
+
                                 </div>
                                 <?php else :?>
                                 <div class="game_area npl_game" style="height: 550px;">

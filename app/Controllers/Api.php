@@ -1998,11 +1998,11 @@ class Api extends BaseController
 					$iResult = 2;		//Error of Bet Id
 				} else if($objBet->bet_state != 1){				//Finish Account
 					$iResult = 1;
-				} else if($objBet->bet_round_no != $arrRoundData['round_no']){
+				} else if($arrReqData['game'] != GAME_EVOL_BALL && $objBet->bet_round_no != $arrRoundData['round_no']){
 					$iResult = 3;		//Error of Bet Id
-				} else if($objBet->bet_time < $arrRoundData['round_start'] || $objBet->bet_time > $arrRoundData['round_bet_end']){
+				} else if($arrReqData['game'] != GAME_EVOL_BALL && $objBet->bet_time < $arrRoundData['round_start'] || $objBet->bet_time > $arrRoundData['round_bet_end']){
 					$iResult = 4;		//Error of Bet Id
-				} else if(!isEnableBetTime($arrRoundData)){
+				} else if($arrReqData['game'] != GAME_EVOL_BALL && !isEnableBetTime($arrRoundData)){
 					$iResult = 5;		//Can't Cancel
 				} else {
 					if($modelBet->delete($objBet->bet_fid)){
