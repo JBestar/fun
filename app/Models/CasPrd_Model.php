@@ -17,7 +17,7 @@ class CasPrd_Model extends Model {
             $where.= "AND cat = '".$cat."' ";
         }
         return $this->where($where)
-                    ->orderBy('fid', 'ASC')
+                    ->orderBy('cas_id', 'ASC')
                     ->findAll(); 
     }
 

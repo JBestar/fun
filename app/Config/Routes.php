@@ -90,10 +90,12 @@ $routes->get('xslotf', 'Slot::xslotf');
 $routes->get('xslotg', 'Slot::xslotg');
 $routes->get('xslotk', 'Slot::xslotk');
 $routes->get('xsloth', 'Slot::xsloth');
+$routes->get('xslotr', 'Slot::xslotr');
 
 $routes->get('evl', 'Casino::evl');
 $routes->get('cas', 'Casino::cas');
 $routes->get('cas_h', 'Casino::cas_h');
+$routes->get('cas_r', 'Casino::cas_r');
 $routes->get('holdem', 'Casino::holdem');
 
 $routes->get('casino', 'Casino::casino');

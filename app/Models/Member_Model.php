@@ -27,6 +27,7 @@ class Member_Model extends Model {
         'mb_gslot_uid', 'mb_gslot_money', 
         'mb_hslot_token', 'mb_hslot_money', 
         'mb_hold_uid', 'mb_hold_money', 
+        'mb_rave_id', 'mb_rave_uid', 'mb_rave_money' ,
     ];
   
     private $getFields = ['mb_fid', 'mb_uid', 'mb_level','mb_emp_fid', 'mb_nickname', 'mb_time_call', 'mb_ip_join', 'mb_ip_last',
@@ -40,6 +41,7 @@ class Member_Model extends Model {
         'mb_gslot_uid', 'mb_gslot_money', 
         'mb_hslot_token', 'mb_hslot_money', 
         'mb_hold_uid', 'mb_hold_money', 
+        'mb_rave_id', 'mb_rave_uid', 'mb_rave_money' ,
     ];
 
     public function getByUid($uid, $all = false){
@@ -184,7 +186,6 @@ class Member_Model extends Model {
             'mb_kgon_money' => $member->mb_kgon_money,
         ];
         return $this->update($member->mb_fid, $data);
-
     }
     
     public function updateGslotInfo($member){
@@ -193,7 +194,6 @@ class Member_Model extends Model {
             'mb_gslot_money' => $member->mb_gslot_money,
         ];
         return $this->update($member->mb_fid, $data);
-
     }
 
     public function updateGslotMoney($member){
@@ -242,8 +242,24 @@ class Member_Model extends Model {
         return $this->select($this->getFields)
                     ->where($where)
                     ->first(); 
-        
     }
+
+    public function updateRaveInfo($member){
+        $data = [
+            'mb_rave_id' => $member->mb_rave_id,
+            'mb_rave_uid' => $member->mb_rave_uid,
+            'mb_rave_money' => $member->mb_rave_money,
+        ];
+        return $this->update($member->mb_fid, $data);
+    }
+
+    public function updateRaveMoney($member){
+        $data = [
+            'mb_rave_money' => $member->mb_rave_money,
+        ];
+        return $this->update($member->mb_fid, $data);
+    }
+    
 
     public function updateBetTm($member){
         $data = [

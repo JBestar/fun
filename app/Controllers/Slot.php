@@ -29,6 +29,8 @@ class Slot extends BaseController
 				$gameId = GAME_SLOT_KGON;
 			else if($_ENV['app.slot'] == APP_SLOT_STAR)
 				$gameId = GAME_SLOT_STAR;
+			else if($_ENV['app.slot'] == APP_SLOT_RAVE)
+				$gameId = GAME_SLOT_RAVE;
 
 			$modelSlotgame = new SlotGame_Model();
             $prdCode = trim($this->request->getVar('prd'));
@@ -67,7 +69,7 @@ class Slot extends BaseController
 
 				$games = $modelSlotgame->gets($gameId, $objPrd->code);
 
-				writeLog("<SLOT PRD> Code:".$objPrd->code." Count:".count($games));
+				writeLog("<XSLOT PRD> Code:".$objPrd->code." Count:".count($games));
 
                 echo view('home/slotlist', array("prd" => $objPrd->code, "games" => $games));
 
@@ -96,6 +98,8 @@ class Slot extends BaseController
 				$gameId = GAME_SLOT_KGON;
 			else if($_ENV['app.slot'] == APP_SLOT_STAR)
 				$gameId = GAME_SLOT_STAR;
+			else if($_ENV['app.slot'] == APP_SLOT_RAVE)
+				$gameId = GAME_SLOT_RAVE;
 			$logHead = "<XSLOT>";
 			
 			$user_id = $this->session->user_id;
@@ -140,8 +144,8 @@ class Slot extends BaseController
 					writeLog("<FSLOT>".$objMember->mb_uid." PRD=".$objFslot->prd_code." NAME=".$objFslot->name_ko);
 					$iCreated = 100;
 				} else if($objConfig->game_bet_permit != PERMIT_OK){			//Preparing
-						$iCreated = 4;									
-				} else if($_ENV['app.slot'] == APP_SLOT_KGON || $_ENV['app.slot'] == APP_SLOT_STAR)
+					$iCreated = 4;									
+				} else if($_ENV['app.slot'] == APP_SLOT_KGON || $_ENV['app.slot'] == APP_SLOT_STAR || $_ENV['app.slot'] == APP_SLOT_RAVE)
 					$iCreated = 101;
 				else if($objMember->mb_slot_uid == ""){
 					//Creation of Player
@@ -198,10 +202,14 @@ class Slot extends BaseController
 				else 
 					$this->response->redirect('/xslotf?prd='.$objFslot->prd_code.'&game='.$objFslot->uuid);	
 			} else if($iCreated == 101){
+				writeLog("<XSLOT>".$objMember->mb_uid." PRD=".$objSlot->prd_code." NAME=".$objSlot->name_ko);
+
 				if($_ENV['app.slot'] == APP_SLOT_KGON)
 					$this->response->redirect('/xslotk?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid);	
 				else if($_ENV['app.slot'] == APP_SLOT_STAR)
 					$this->response->redirect('/xsloth?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid);	
+				else if($_ENV['app.slot'] == APP_SLOT_RAVE)
+					$this->response->redirect('/xslotr?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid);	
 			} else if($iCreated == 1){
 				writeLog($logHead.$objMember->mb_uid."-Slot Game=>".$objSlot->name ); 
 				$iResult = $this->alltoGame($objMember, $gameId);
@@ -721,6 +729,113 @@ class Slot extends BaseController
 		}
 	}
 
+	public function xslotr(){
+		$this->setLanguage();
+		if(!is_login())
+		{
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
+
+        } else {
+			$this->sess_action();                
+			$modelSlotgame = new SlotGame_Model();
+
+			$gameId = GAME_SLOT_RAVE;
+			$logHead = "<RSLOT>";
+			
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id);
+			$objConfig = $this->modelConfgame->find($gameId);  //Slot 3
+
+			$prdCode = trim($this->request->getVar('prd'));
+			$slotId = trim($this->request->getVar('game'));
+			$objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
+			$objSlot = $modelSlotgame->getById($gameId, $prdCode, $slotId);
+			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
+			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
+
+            $iCreated = 0;
+			if(is_null($objMember) || is_null($objConfig))
+				$iCreated = 0;
+			else if($objConfig->game_bet_permit != PERMIT_OK){
+				$iCreated = 4;									//Preparing
+			}
+			// else if($_ENV['app.type'] == APP_TYPE_3 && !$this->modelMember->isPermitMember($objMember, $gameId))
+			// 	$iCreated = 3;									//Stop
+			else if(is_null($objSlot) || is_null($objPrd)){
+				$iCreated = 6;
+			} 
+			// else if($_ENV['app.type'] == APP_TYPE_3 && $objSlot->maintain == STATE_ACTIVE){
+			// 	$iCreated = 7;
+			// } 
+			else if($diffDt < DELAY_GAME)
+				$iCreated = 8;
+			else if(!is_null($sess))
+				$iCreated = 9;
+			else if($objMember->mb_rave_id == 0){
+				//Create Player
+				$arrResult = $this->libApiRave->createUser($objMember->mb_fid, $objMember->mb_nickname, $objMember->mb_uid);
+				if($arrResult['status'] == 1){
+					$objMember->mb_rave_id = $arrResult['userId'];
+                    $objMember->mb_rave_uid = $arrResult['username'];
+                    $this->modelMember->updateRaveInfo($objMember);
+                    $iCreated = 1;
+
+                    writeLog($logHead.$objMember->mb_uid."-CreateUser Sucess !!");
+				} else {
+                    $iCreated = 2;								//Fail in Creation of user
+				}
+			} else {
+				$iCreated = 1;
+			}
+
+			if($iCreated == 0){
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
+			} else if($iCreated == 2){
+				print "<script language=javascript> alert('계정생성중 오류가 발생하였습니다.'); self.close(); </script>";
+			} else if($iCreated == 3){
+				print "<script language=javascript> alert('게임실행이 중지되었습니다.'); self.close(); </script>";
+			} else if($iCreated == 4){
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
+			} else if($iCreated == 5){
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
+			} else if($iCreated == 6){
+				print "<script language=javascript> alert('존재하지 않는 게임입니다.'); self.close(); </script>";
+			} else if($iCreated == 7){
+				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
+			} else if($iCreated == 8){
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
+			} else if($iCreated == 9){
+				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
+			} else if($iCreated == 1){
+				writeLog($logHead.$objMember->mb_uid." Game=>".$objSlot->prd_code.":".$objSlot->name_ko ); 
+
+				$iResult = $this->alltoGame($objMember, $gameId);
+				if($iResult == 1){
+                    $arrResult = $this->libApiRave->createToken($objMember->mb_rave_uid, $objSlot->provider);
+                    if($arrResult['status'] == 1){
+                        writeLog($logHead.$objMember->mb_uid." Token=".$arrResult['token']);
+						$arrResult = $this->libApiRave->gameUrl($arrResult['token'], $objSlot->provider, $objSlot->game_code);
+
+						if($arrResult['status'] == 1){
+							writeLog($logHead.$objMember->mb_uid."-Login Sucess !!");
+							writeLog($logHead.$arrResult['url']);
+							$this->modelMember->updateBetTm($objMember);
+							$this->response->redirect($arrResult['url']);
+						} else {
+							print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+						}
+					} else {
+						print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+					}
+				} else { //Fail in Transfering of money
+					print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+				}
+				 
+			}
+
+		}
+	}
+
 	public function fslotlist()
 	{
 		$this->setLanguage();
@@ -745,7 +860,7 @@ class Slot extends BaseController
 			$objMember = $this->modelMember->getByUid($user_id);
 			$objConfig = $this->modelConfgame->find($gameId);  //Slot 1
 			$headInfo = $this->getSiteConf();
-			writeLog("<SLOT PRD> Code:".$objPrd->code." Game:".$gameId);
+			writeLog("<FSLOT PRD> Code:".$objPrd->code." Game:".$gameId);
 
             $iCreated = 0;
 			if(is_null($objMember) || is_null($objConfig) || is_null($objPrd))
@@ -774,7 +889,7 @@ class Slot extends BaseController
 
 				$games = $modelSlotgame->gets($gameId, $objPrd->code);
 
-				writeLog("<SLOT PRD> Code:".$objPrd->code." Count:".count($games));
+				writeLog("<FSLOT PRD> Code:".$objPrd->code." Count:".count($games));
 
                 echo view('home/slotlist', array("prd" => $objPrd->code, "games" => $games));
 

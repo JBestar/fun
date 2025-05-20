@@ -1346,7 +1346,8 @@
                                                             <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title <?=$item->maintain==1?'gray':'blue'?>">&nbsp;&nbsp;</span>
                                                             <?php else :?>
-                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name_kr?></span>
+                                                                <!-- <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name_kr?></span> -->
+                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>">&nbsp;&nbsp;</span>
                                                             <?php endif ?>
                                                         </div>
                                                     </div>
@@ -1411,7 +1412,8 @@
                                                             <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title <?=$item->maintain==1?'gray':'blue'?>">&nbsp;&nbsp;</span>
                                                             <?php else :?>
-                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name?></span>
+                                                                <!-- <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name?></span> -->
+                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>">&nbsp;&nbsp;</span>
                                                             <?php endif ?>
                                                         </div>
                                                     </div>
@@ -1427,7 +1429,7 @@
                                                         <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
                                                             <img src="/images/casino/<?=$item->img?>_<?=$_ENV['game.img_suf']?>.png" />
                                                         <?php else :?>
-                                                            <img src="/images/casino/<?=$item->img?>.png?v=1" />
+                                                            <img src="/images/casino/<?=$item->img?>.png?v=2" />
                                                         <?php endif ?>
                                                         <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
@@ -1448,7 +1450,8 @@
                                                             <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"> </span>
                                                             <?php else :?>
-                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name?></span>
+                                                                <!-- <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"><?=$item->name?></span> -->
+                                                                <span class="game_title <?=$item->maintain==1?'gray':'blue'?>"> </span>
                                                             <?php endif ?>
                                                         </div>
                                                     </div>
@@ -1490,11 +1493,8 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title blue">&nbsp;&nbsp;</span>
-                                                            <?php else :?>
-                                                                <span class="game_title blue"><?=lang('common.powerball_pbg')?></span>
-                                                            <?php endif ?>
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_pbg')?></span> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1515,11 +1515,8 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title blue">&nbsp;&nbsp;</span>
-                                                            <?php else :?>
-                                                                <span class="game_title blue"><?=lang('common.powerball_evol')?></span>
-                                                            <?php endif ?>
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_evol')?></span> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1540,11 +1537,8 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title blue">&nbsp;&nbsp;</span>
-                                                            <?php else :?>
-                                                                <span class="game_title blue"><?=lang('common.powerball_spkn')?></span>
-                                                            <?php endif ?>
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_spkn')?></span> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1569,11 +1563,8 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title blue">&nbsp;&nbsp;</span>
-                                                            <?php else :?>
-                                                                <span class="game_title blue"><?=lang('common.powerball_boggle')?></span>
-                                                            <?php endif ?>
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_boggle')?></span> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1596,11 +1587,8 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title blue">&nbsp;&nbsp;</span>
-                                                            <?php else :?>
-                                                                <span class="game_title blue"><?=lang('common.powerladder_boggle')?></span>
-                                                            <?php endif ?>
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerladder_boggle')?></span> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1621,11 +1609,8 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title blue">&nbsp;&nbsp;</span>
-                                                            <?php else :?>
-                                                                <span class="game_title blue"><?=lang('common.powerball_eos5')?></span>
-                                                            <?php endif ?>
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_eos5')?></span> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1646,11 +1631,8 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title blue">&nbsp;&nbsp;</span>
-                                                            <?php else :?>
-                                                                <span class="game_title blue"><?=lang('common.powerball_eos3')?></span>
-                                                            <?php endif ?>
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_eos3')?></span> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1671,11 +1653,8 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title blue">&nbsp;&nbsp;</span>
-                                                            <?php else :?>
-                                                                <span class="game_title blue"><?=lang('common.powerball_rand5')?></span>
-                                                            <?php endif ?>
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_rand5')?></span> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1696,11 +1675,8 @@
                                                 <div class="uk-card-header">
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
-                                                            <?php if(array_key_exists('game.img_suf', $_ENV)) :?>
                                                                 <span class="game_title blue">&nbsp;&nbsp;</span>
-                                                            <?php else :?>
-                                                                <span class="game_title blue"><?=lang('common.powerball_rand3')?></span>
-                                                            <?php endif ?>
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_rand3')?></span> -->
                                                         </div>
                                                     </div>
                                                 </div>
