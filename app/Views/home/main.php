@@ -161,7 +161,9 @@
                     .games-page .categories-wrapper, .SeoPage .categories-wrapper {
                         background-image: linear-gradient(360deg, #041a2c, #041624, #041a2c);
                         margin-top:16px;
-                        box-shadow:#415c81 10px 80px 60px 60px;
+                        <?php if(is_login(true)) :?>
+                            box-shadow:#415c81 10px 80px 60px 60px;
+                        <?php endif?>
                     }         
                     .scroll_area{
                         background-image: linear-gradient(360deg, #00111c, #03121c, #041a29);
@@ -179,7 +181,7 @@
                 <?php endif?>
                 .SeoPage {
                     background-repeat:repeat;
-                    background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=3);
+                    background-image: url(/images/main/sample2.main_bg.jpg?v=3);
                 }
                 .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
                     top: 8px;
@@ -749,7 +751,7 @@
                         margin-top:5px;
                     }
                     .SeoPage {
-                        background-image: url(/images/main/sample2.main_bg_b.jpg?v=1);
+                        background-image: url(/images/main/sample2.main_bg.jpg?v=1);
                     }
                     .BannerSlider-list{
                         width:0px;
