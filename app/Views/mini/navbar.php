@@ -5,10 +5,10 @@
     <body class="theme01 slot_black">
 <?php endif ?>
 
-<?php if(array_key_exists("app.produce", $_ENV)) :?>
-    <script src="<?php echo base_url('/js/mini/navbar.js?t='.time());?>"></script>
+<?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
+    <script src="/js/mini/navbar.js?v=1"></script>
 <?php else : ?>
-    <script src="<?php echo base_url('/js/mini/navbar.js?v=1');?>"></script>
+    <script src="/js/mini/navbar.js?t=<?=time()?>"></script>
 <?php endif ?>
 
     <div id="wrap">

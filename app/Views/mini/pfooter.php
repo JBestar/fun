@@ -110,10 +110,10 @@
                                 <li><a href="/betlist">전체베팅내역</a></li>
                             </ul>
                         </div> -->
-                        <?php if(array_key_exists("app.produce", $_ENV)) :?>
-                            <script src="<?php echo base_url('/js/mini/np_bet.js?t='.time());?>"></script>
+                        <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
+                            <script src="/js/mini/np_bet.js?v=1"></script>
                         <?php else : ?>
-                            <script src="<?php echo base_url('/js/mini/np_bet.js?v=1');?>"></script>
+                            <script src="/js/mini/np_bet.js?t=<?=time()?>"></script>
                         <?php endif ?>
 
                         <div class="betting_wrapper">
@@ -179,14 +179,14 @@
             </div>
 
 
-            <?php if(array_key_exists("app.produce", $_ENV)) :?>
-                <script src="<?php echo base_url('/js/mini/np_com.js?t='.time());?>"></script>
-                <script src="<?php echo base_url('/js/mini/np_req.js?t='.time());?>"></script>
-                <script src="<?php echo base_url('/js/mini/front.js?t='.time());?>"></script>
+            <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
+                <script src="/js/mini/np_com.js?v=1"></script>
+                <script src="/js/mini/np_req.js?v=1"></script>
+                <script src="/js/mini/front.js?v=1"></script>
             <?php else : ?>
-                <script src="<?php echo base_url('/js/mini/np_com.js?v=1');?>"></script>
-                <script src="<?php echo base_url('/js/mini/np_req.js?v=1');?>"></script>
-                <script src="<?php echo base_url('/js/mini/front.js?v=1');?>"></script>
+                <script src="/js/mini/np_com.js?t=<?=time()?>"></script>
+                <script src="/js/mini/np_req.js?t=<?=time()?>"></script>
+                <script src="/js/mini/front.js?t=<?=time()?>"></script>
             <?php endif ?>
 
     </div>

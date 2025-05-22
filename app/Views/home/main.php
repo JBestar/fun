@@ -113,7 +113,7 @@
             };
            
             function showAlert(msg, type=1){
-                <?php if($_ENV['app.home'] == 1) :?>
+                <?php if($_ENV['app.home'] > 0) :?>
                     if(!toaster)
                         alert(msg);
                     else if(type == 0)
@@ -150,18 +150,33 @@
             }
             
             .MainMenu-open-wrapper .MainMenu-LogoSlogan {
-                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=2);
+                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']."_".$_ENV['app.home']?>.png?v=2.2);
             }
 
             <?php if(array_key_exists('app.tree', $_ENV) && $_ENV['app.tree'] == 1) :?>
-                .games-page .categories-wrapper, .SeoPage .categories-wrapper {
-                    background-image: linear-gradient(360deg,#2b2b2b, #232323, #262626);
-                    margin-top:16px;
-                }         
-                          
-                .scroll_area{
-                    background-image: linear-gradient(360deg,#3f3f3f, #333333, #2b2b2b);
-                } 
+                <?php if($_ENV['app.home'] == 2) :?>
+                    .SeoPage {
+                        background-color: #283547;
+                    }
+                    .games-page .categories-wrapper, .SeoPage .categories-wrapper {
+                        background-image: linear-gradient(360deg, #041a2c, #041624, #041a2c);
+                        margin-top:16px;
+                        box-shadow:#415c81 10px 80px 60px 60px;
+                    }         
+                    .scroll_area{
+                        background-image: linear-gradient(360deg, #00111c, #03121c, #041a29);
+                        color: #f7ffb1;
+                    }
+                <?php else:?>
+                    .games-page .categories-wrapper, .SeoPage .categories-wrapper {
+                        background-image: linear-gradient(360deg,#2b2b2b, #232323, #262626);
+                        margin-top:16px;
+                    }         
+                            
+                    .scroll_area{
+                        background-image: linear-gradient(360deg,#3f3f3f, #333333, #2b2b2b);
+                    } 
+                <?php endif?>
                 .SeoPage {
                     background-repeat:repeat;
                     background-image: url(/images/main/sample2.main_bg_<?=$_ENV['app.logo']?>.jpg?v=3);
@@ -563,7 +578,7 @@
                 }
             }
 
-            <?php if($_ENV['app.home'] == 1) :?>
+            <?php if($_ENV['app.home'] > 0) :?>
                 <?php if(is_login(true)) :?>
                     .MainMenu-Left {
                         margin: 5px 2px 0 2px;
@@ -575,13 +590,52 @@
                         width: 85%;
                     }
                 <?php endif ?>
+                
+                <?php if($_ENV['app.home'] == 2) :?>
 
-                .MainMenu-open-wrapper.js-sticky{
-                    width:100%;
-                    height: 70px;
-                    background-color: var(--grey-300);
-                    box-shadow: #ffb08e 1px -1px 0.8em;
-                }
+                    .MainMenu-open-wrapper.js-sticky{
+                        width:100%;
+                        height: 70px;
+                        background-color: rgb(0 25 40);
+                        box-shadow: #8db0df 1px 10px 10em;
+                    }
+                    .PaymentIconsContainer {
+                        background-image: linear-gradient(90deg, #696f76, #555b60, #696f76);
+                    }
+                    .MainMenu-ActionsContainer button{
+                        color:  #00fffc;
+                    }
+                    .Footer {
+                        background-color: #484848;
+                        opacity: 1;
+                        color: #adadad;
+                    }
+                    .pop_layer .pop_container .pop_top{
+                        background: #486f67;
+                    }
+                    .btn {
+                        background:#6e807c;
+                    }
+                <?php else  :?>
+                    .MainMenu-open-wrapper.js-sticky{
+                        width:100%;
+                        height: 70px;
+                        background-color: var(--grey-300);
+                        box-shadow: #ffb08e 1px -1px 0.8em;
+                    }
+                    .PaymentIconsContainer {
+                    background-image: linear-gradient(90deg,#2f3031, #2f3031, #2f3031);
+                    }
+                    .MainMenu-ActionsContainer button{
+                        color: #ffb08e;
+                    }
+                    .pop_layer .pop_container .pop_top{
+                        background: #112035;
+                    }
+                    .btn {
+                        background: #1b1f25;
+                    }
+                <?php endif ?>
                 form.ui.form{
                     border:1px solid #ffb08e;
                 }
@@ -600,12 +654,6 @@
                 .SeoPage .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop .bg-img {
                     background-size: cover;
                     background-position: 0% 50%
-                }
-                .PaymentIconsContainer {
-                    background-image: linear-gradient(90deg,#2f3031, #2f3031, #2f3031);
-                }
-                .MainMenu-ActionsContainer button{
-                    color: #ffb08e;
                 }
 
                 #MainMenu {
@@ -708,12 +756,7 @@
                     }
                 }
 
-                .pop_layer .pop_container .pop_top{
-                    background: #112035;
-                }
-                .btn {
-                    background: #1b1f25;
-                }
+                
                 .btn:hover {
                     background: #5f5f5f;
                     color: #eee;
@@ -779,8 +822,8 @@
             </label>
 
             <div class="MainMenu-top-wrapper">
-                <div class="MainMenu-open-wrapper <?= $_ENV['app.home'] == 1 ? "js-sticky":"" ?>"  >
-                    <?php if(($_ENV['app.home'] != 1)) :?>
+                <div class="MainMenu-open-wrapper <?= $_ENV['app.home'] > 0 ? "js-sticky":"" ?>"  >
+                    <?php if(($_ENV['app.home'] == 0)) :?>
                         <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
                         <a href="/" class="MainMenu-LogoSlogan">
                             <div class="star-logo">
@@ -795,9 +838,9 @@
                         
                         <div class="MainMenu-Left">
 
-                            <?php if($_ENV['app.home'] == 1) :?>
+                            <?php if($_ENV['app.home'] > 0) :?>
                                 <a href="/" class="js-register-open btn-register btn-tiny btn-logo" style=" <?=!is_login(true)?"float:left;":""?>">
-                                    <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']?>.png?v=2" class="logo_icon" /> </span>
+                                    <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']."_".$_ENV['app.home']?>.png?v=2.2" class="logo_icon" /> </span>
                                 </a>
                                 <?php if(!is_login(true)) :?>
                                     <button class="js-login-open btn-login btn-register btn-box" style="" onclick="showAgentCheckModal();">
@@ -838,7 +881,7 @@
                                 <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span><?=lang('common.partener')?></span></button>
                                 <?php endif?>
                                 
-                                <?php if($_ENV['app.home'] == 1) :?>
+                                <?php if($_ENV['app.home'] > 0) :?>
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="">
                                         <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
                                         <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
@@ -859,7 +902,7 @@
                             <?php endif ?>
 
                         </div>
-                        <?php if($_ENV['app.home'] != 1) :?>
+                        <?php if($_ENV['app.home'] == 0) :?>
                             <div class="MainMenu-Right">
                                 <?php if(is_login(true)) :?>
                                 
@@ -887,7 +930,7 @@
                             <?php endif ?>
                             </button>
                         <?php endif ?>
-                        <?php if($_ENV['app.home'] != 1) :?>
+                        <?php if($_ENV['app.home'] == 0) :?>
                             <?php if(!is_login(true)) :?>
                                 <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="z-index:1;" onclick="showAgentCheckModal();">
                                     <span><?=lang('common.signup')?></span>
@@ -1071,7 +1114,7 @@
                                     images: ["/images/main/banner41.png?v=2", "/images/main/banner42.png?v=2", "/images/main/banner43.png?v=2"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_DOLPHIN) :?>
-                                    images: ["/images/main/banner51.png?v=1.2", "/images/main/banner52.png?v=1.2", "/images/main/banner53.png?v=1.2"],
+                                    images: ["/images/main/banner51_<?=$_ENV['app.home']?>.png?v=1.3", "/images/main/banner52_<?=$_ENV['app.home']?>.png?v=1.3", "/images/main/banner53_<?=$_ENV['app.home']?>.png?v=1.3"],
                                     effect: "clip",
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
@@ -1684,7 +1727,7 @@
                                         </div>
                                     <?php endif ?>
                                     
-                                    <?php if($_ENV['app.home'] == 1) :?>
+                                    <?php if($_ENV['app.home'] > 0) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
@@ -1953,7 +1996,7 @@
             </section>
         </div>
 
-        <?php if($_ENV['app.home'] != 1) :?>
+        <?php if($_ENV['app.home'] == 0) :?>
 
         <!--MODAL-->
         <div id="loginModal" uk-modal class="uk-modal">
@@ -2739,7 +2782,7 @@
                     <?php if($_ENV['app.name'] == APP_HERMES) :?>
                         $(".MainMenu-open-wrapper").addClass("js-sticky");
                         $(".MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile").show();
-                    <?php elseif($_ENV['app.home'] == 1) :?>
+                    <?php elseif($_ENV['app.home'] > 0) :?>
                         $(".MainMenu-open-wrapper").addClass("js-sticky");
                     <?php else :?>
                         $(".MainMenu-open-wrapper").removeClass("js-sticky");
@@ -3095,7 +3138,7 @@
 
             function changePoint() {
 
-                <?php if($_ENV['app.home'] == 1) :?>
+                <?php if($_ENV['app.home'] > 0) :?>
                     SLB_POPUP('/mypage', 'my_point');
                 <?php else: ?>
                     if($("#_btn_user_point ._has_point").text().length < 2){

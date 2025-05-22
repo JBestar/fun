@@ -401,10 +401,10 @@
         <!-- login_wrap -->
 
     </div>
-    <?php if(array_key_exists("app.produce", $_ENV)) :?>
-        <script src="<?php echo base_url('/js/login.js?t='.time());?>"></script>
+    <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
+        <script src="/js/login.js?v=2"></script>
     <?php else : ?>
-        <script src="<?php echo base_url('/js/login.js?v=2');?>"></script>
+        <script src="/js/login.js?t=<?=time()?>"></script>
     <?php endif ?>
     <script>
         setLogCookie('lang', '<?=$lang?>', 30);

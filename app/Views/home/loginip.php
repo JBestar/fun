@@ -70,10 +70,10 @@
         </form>
       </div>
 
-    <?php if(array_key_exists("app.produce", $_ENV)) :?>
-        <script src="<?php echo base_url('/js/loginip.js?t='.time());?>"></script>
+    <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
+        <script src="/js/loginip.js?v=2"></script>
     <?php else : ?>
-        <script src="<?php echo base_url('/js/loginip.js?v=2');?>"></script>
+        <script src="/js/loginip.js?t=<?=time()?>"></script>
     <?php endif ?>
 </body>
 
