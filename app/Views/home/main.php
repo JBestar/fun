@@ -62,7 +62,7 @@
 
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=7" />
-        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=4" />
+        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=6" />
         <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=4" />
     <?php else : ?>
         <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=<?=time()?>" />
@@ -156,13 +156,13 @@
             <?php if(array_key_exists('app.tree', $_ENV) && $_ENV['app.tree'] == 1) :?>
                 <?php if($_ENV['app.home'] == 2) :?>
                     .SeoPage {
-                        background-color: #283547;
+                        background-color: #35465d;
                     }
                     .games-page .categories-wrapper, .SeoPage .categories-wrapper {
                         background-image: linear-gradient(360deg, #041a2c, #041624, #041a2c);
                         margin-top:16px;
                         <?php if(is_login(true)) :?>
-                            box-shadow:#415c81 10px 80px 60px 60px;
+                            box-shadow:#465f80 10px 80px 80px 60px;
                         <?php endif?>
                     }         
                     .scroll_area{
@@ -179,10 +179,12 @@
                         background-image: linear-gradient(360deg,#3f3f3f, #333333, #2b2b2b);
                     } 
                 <?php endif?>
+                <?php if(!is_login(true)) :?>
                 .SeoPage {
                     background-repeat:repeat;
                     background-image: url(/images/main/sample2.main_bg.jpg?v=3);
                 }
+                <?php endif?>
                 .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
                     top: 8px;
                     width: 150px;
@@ -750,9 +752,11 @@
                         font-size:16px;
                         margin-top:5px;
                     }
+                    <?php if(!is_login(true)) :?>
                     .SeoPage {
                         background-image: url(/images/main/sample2.main_bg.jpg?v=1);
                     }
+                    <?php endif?>
                     .BannerSlider-list{
                         width:0px;
                     }
@@ -1116,7 +1120,7 @@
                                     images: ["/images/main/banner41.png?v=2", "/images/main/banner42.png?v=2", "/images/main/banner43.png?v=2"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_DOLPHIN) :?>
-                                    images: ["/images/main/banner51_<?=$_ENV['app.home']?>.png?v=1.4", "/images/main/banner52_<?=$_ENV['app.home']?>.png?v=1.5", "/images/main/banner53_<?=$_ENV['app.home']?>.png?v=1.4"],
+                                    images: ["/images/main/banner51_<?=$_ENV['app.home']?>.png?v=1.4", "/images/main/banner52_<?=$_ENV['app.home']?>.png?v=1.6", "/images/main/banner53_<?=$_ENV['app.home']?>.png?v=1.4"],
                                     effect: "clip",
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],

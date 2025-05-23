@@ -65,10 +65,10 @@
 }
 
 /*배경색상*/
-.SeoPage {
+/* .SeoPage {
     background-repeat:repeat;
-    background-image: url(/images/main/sample2.main_bg.jpg?v=2);
-}
+    background-image: url(/images/main/sample2.main_bg.jpg?v=4);
+} */
 .PaymentIconsContainer {
     /* background-color:#32476c; */
     background-image: linear-gradient(90deg,#263346, #3b527a, #1d304d);
