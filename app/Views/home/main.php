@@ -1116,7 +1116,7 @@
                                     images: ["/images/main/banner41.png?v=2", "/images/main/banner42.png?v=2", "/images/main/banner43.png?v=2"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_DOLPHIN) :?>
-                                    images: ["/images/main/banner51_<?=$_ENV['app.home']?>.png?v=1.3", "/images/main/banner52_<?=$_ENV['app.home']?>.png?v=1.3", "/images/main/banner53_<?=$_ENV['app.home']?>.png?v=1.3"],
+                                    images: ["/images/main/banner51_<?=$_ENV['app.home']?>.png?v=1.4", "/images/main/banner52_<?=$_ENV['app.home']?>.png?v=1.5", "/images/main/banner53_<?=$_ENV['app.home']?>.png?v=1.4"],
                                     effect: "clip",
                                 <?php else: ?>
                                     images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
