@@ -368,6 +368,102 @@ class CasinoBet_Model {
 		return 0;
     } 
 
+
+	public function insertR($objMember, $bet){
+    	
+		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		$strSql.= " bet_money, bet_agent_id, bet_player_id, bet_game_id, bet_game_type, bet_table_code, ";
+		$strSql.= " bet_result ) VALUES "; 
+		
+		//bet_idx
+		$strSql.= " ( '".$bet['id']."',";
+		//bet_emp_fid
+		$strSql.= " '".$objMember->mb_emp_fid."', ";
+		//bet_mb_uid
+		$strSql.= " '".$objMember->mb_uid."', ";
+		//bet_round_no
+		$strSql.= " '".$bet['game']['title']."', ";	//roundKey"Speed Baccarat 1"
+		//bet_time		
+		$strSql.= " '".$bet['betAt']."', ";		// "createdAt": "2022-05-15 01:11:49",
+		//bet_money
+		$strSql.= " '".$bet['amount']."', ";
+		// //bet_win_money
+		// $strSql.= " '".$bet['win']."', ";
+		//bet_agent_id
+		$strSql.= " '".$bet['agent_id']."', "; 
+		//bet_player_id
+		$strSql.= " '".$bet['user']['id']."', ";
+		//bet_game_id
+		$strSql.= " '".$bet['prd_id']."', ";	//pragmatic
+		//bet_game_type
+		$strSql.= " '".$bet['game']['type']."', ";	//"baccarat"
+		//bet_table_code
+		$strSql.= " '".$bet['game']['code']."', ";	//386-"Speed Baccarat 1"
+		//bet_result
+		$strSql.= " '' ";
+		$strSql.= " )";
+
+		
+		if ($this->mDbConn->query($strSql) === TRUE) {
+			return $this->mDbConn->insert_id;
+		}
+		return 0;
+    } 
+
+	public function updateR($fid, $bet, $fLog=null){
+
+		$betSpec = "";
+		if(array_key_exists('detail', $bet)) {
+
+			$betDetail = null;
+			try{
+				$betDetail = json_decode($bet['detail'], true);
+				if(array_key_exists('detail', $betDetail) && array_key_exists('data', $betDetail['detail'])){
+					$betDetail = $betDetail['detail']['data'];
+					writeLog($fLog, "detail-1");
+				} else $betDetail = null;
+
+
+			} catch (Exception $e) {
+				$betDetail = null;
+			}
+
+			if($betDetail == null){
+				$betSpec = "";
+			} else if(array_key_exists('participants', $betDetail)) {
+				writeLog($fLog, "detail-2");
+				if(is_array($betDetail['participants']) && count($betDetail['participants']) > 0 && array_key_exists('bets', $betDetail['participants'][0]) ){
+					foreach($betDetail['participants'][0]['bets'] as $detail){
+						$betSpec.= $detail['code'].",".$detail['stake'].",";
+						$betSpec.= $detail['payout']."#";
+					}
+				} 
+			} 
+			if(strlen($betSpec) < 1 && !is_null($fLog)){
+				writeLog($fLog, "detail Error=".$bet['detail']);
+			}
+		} 
+
+		$strSql = "UPDATE ".$this->mTableName." SET ";	
+	
+		//bet_round_no
+		$strSql.= " bet_round_no ='".$bet['game']['title']."', ";	//"Speed Baccarat 1"
+		if($bet['amount'] > 0){ 
+			$strSql.= "  bet_win_money = '".$bet['amount']."', ";
+		}
+		//bet_result
+		$strSql.= " bet_result = '".$bet['id']."' ";
+		if(strlen($betSpec) > 0){
+			// bet_spec
+			$strSql.= ", bet_spec = '".$betSpec."'";
+		}
+
+		$strSql.= " WHERE bet_fid = '".$fid."' ";
+
+		return $this->mDbConn->query($strSql);
+		
+	}
+
 }
 
 ?>

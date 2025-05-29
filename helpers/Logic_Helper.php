@@ -34,14 +34,14 @@
 	
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $url);
-		if(substr($url, 0, 5) == 'https'){
-			curl_setopt($curl, CURLOPT_CAINFO, dirname(__FILE__) . '/cacert.pem');
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-		}
-		else
-		{
+		// if(substr($url, 0, 5) == 'https'){
+		// 	curl_setopt($curl, CURLOPT_CAINFO, dirname(__FILE__) . '/cacert.pem');
+		// 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+		// }
+		// else
+		// {
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-		}
+		// }
 		if (!is_null($post)) {
 			curl_setopt($curl, CURLOPT_POST, 1);
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
@@ -69,12 +69,43 @@
 		if ($state = curl_multi_info_read($hMul)) {
 			
 			$result = curl_multi_getcontent($state['handle']);
-			// writeLog($fLog, $logHead.json_encode($result));
+			writeLog($fLog, $logHead.json_encode($result));
 			
 			$headerSize = curl_getinfo($state['handle'], CURLINFO_HEADER_SIZE);
 			// writeLog($fLog, $logHead.$headerSize);
 			// $result['header'] = substr($response, 0, $header_size);
 			$result = substr( $result, $headerSize );
+			
+			curl_multi_remove_handle($hMul, $state['handle']);
+			curl_multi_close($hMul);
+			$hMul = null;
+		}
+
+		writeLog($fLog, $logHead.$hMul."=".$running);
+		return $result;
+	}
+
+	function curlProc2(&$hMul, $fLog){
+		
+		$result = null;
+		$logHead = "<MultiCurl>";
+
+		curl_multi_exec($hMul, $running);
+		curl_multi_select($hMul);
+
+		if ($state = curl_multi_info_read($hMul)) {
+			
+			$content = curl_multi_getcontent($state['handle']);
+			// writeLog($fLog, $logHead.json_encode($content));
+			
+			$result['code'] = curl_getinfo($state['handle'], CURLINFO_HTTP_CODE);
+			if (curl_errno($state['handle'])) {        
+				$result['error'] = curl_error($state['handle']);
+			}
+			$headerSize = curl_getinfo($state['handle'], CURLINFO_HEADER_SIZE);
+			// writeLog($fLog, $logHead.$headerSize);
+			// $result['header'] = substr($response, 0, $header_size);
+			$result['body'] = substr( $content, $headerSize );
 			
 			curl_multi_remove_handle($hMul, $state['handle']);
 			curl_multi_close($hMul);

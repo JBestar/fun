@@ -30,6 +30,11 @@
             $findMember = $objMember;
             break;
           }
+        } else if($gameId == GAME_CASINO_RAVE || $gameId == GAME_SLOT_RAVE ){
+          if($objMember->mb_rave_id == $liveId){
+            $findMember = $objMember;
+            break;
+          }
         }
         
       }
@@ -48,6 +53,7 @@
           case GAME_CASINO_KGON: 
           case GAME_CASINO_STAR: 
           case GAME_CASINO_EVOL: 
+          case GAME_CASINO_RAVE: 
                 $fRatio = $objMember->mb_game_cs_ratio;
                 break;
           case GAME_BOGLE_BALL: 
@@ -61,6 +67,7 @@
           case GAME_SLOT_GOLD: 
           case GAME_SLOT_KGON: 
           case GAME_SLOT_STAR: 
+          case GAME_SLOT_RAVE: 
                 $fRatio = $objMember->mb_game_sl_ratio;
                 break;
           default: break;

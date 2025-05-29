@@ -59,6 +59,7 @@
 	$bStar = false;
 	$bGsplay = false;
 	$bGold = false;
+	$bRave = false;
 
 	if(!$bSlDeny){
 		if($appType == APP_TYPE_1 || $appType == APP_TYPE_3){
@@ -68,6 +69,8 @@
 				$bKgon = true;
 			else if($appSlot == APP_SLOT_STAR)
 				$bStar = true;
+			else if($appSlot == APP_SLOT_RAVE)
+				$bRave = true;
 		}
 		if($appType == APP_TYPE_1 || $appType == APP_TYPE_2){
 			if($appFslot == APP_FSLOT_GSPLAY)
@@ -81,6 +84,8 @@
 			$bKgon = true;
 		else if($appCasino == APP_CASINO_STAR)
 			$bStar = true;
+		else if($appCasino == APP_CASINO_RAVE)
+			$bRave = true;
 	}
 	
 
@@ -89,12 +94,14 @@
 	$hPlus = null;
 	$hGsplay = null;
 	$hStar = null;
+	$hRave = null;
 
 	$bGoldReg = false;
 	$bKgonReg = false;
 	$bPlusReg = false;
 	$bGsplayReg = false;
 	$bStarReg = false;
+	$bRaveReg = false;
 
 	$ordGsplay = 0;
 	$logHead = "<Oive>";
@@ -104,7 +111,7 @@
 	
 	writeLog($fLog, $logHead."==============START==============");
 
-	writeLog($fLog, $logHead."ThePlus=".$bPlus." KGON=".$bKgon." GSPlay=".$bGsplay." STAR=".$bStar." GOLD=".$bGold );
+	writeLog($fLog, $logHead."ThePlus=".$bPlus." KGON=".$bKgon." GSPlay=".$bGsplay." STAR=".$bStar." GOLD=".$bGold." RAVE=".$bRave );
 
 	while(true){
 
@@ -161,7 +168,7 @@
 		if($bKgon && !$bKgonReg){
 			if($hKgon == null){
 				$hKgon = curl_multi_init();
-				$curl = $objServLogic->curlKgontBets();
+				$curl = $objServLogic->curlKgonBets();
 				if($curl)
 					curl_multi_add_handle($hKgon, $curl);
 				else {
@@ -249,12 +256,35 @@
 			}
 		} 
 
-		if($hGold == null && $hKgon == null && $hPlus == null && $hGsplay == null && $hStar == null){
+		//RAVE
+		if($bRave && !$bRaveReg){
+			if($hRave == null){
+				$hRave = curl_multi_init();
+				$curl = $objServLogic->curlRaveBets();
+				if($curl)
+					curl_multi_add_handle($hRave, $curl);
+				else {
+					$hRave = null;
+					$bRaveReg = true;
+				}
+				writeLog($fLog, $logHead."RAVE-REQ-".$hRave);
+			}
+			if($hRave){
+				$result = curlProc2($hRave, $fLog );
+				if($result != null){
+					$bRaveReg = true;
+					$bInsert = $objServLogic->registerRaveBets($result);
+				}
+			}
+		}
+
+		if($hGold == null && $hKgon == null && $hPlus == null && $hGsplay == null && $hStar == null && $hRave == null){
 			$bGoldReg = false;
 			$bKgonReg = false;
 			$bPlusReg = false;
 			$bGsplayReg = false;
 			$bStarReg = false;
+			$bRaveReg = false;
 
 			if(!$bInsert)
 				sleep($secSleep);
