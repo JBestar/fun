@@ -156,13 +156,14 @@
             <?php if(array_key_exists('app.tree', $_ENV) && $_ENV['app.tree'] == 1) :?>
                 <?php if($_ENV['app.home'] == 2) :?>
                     .SeoPage {
-                        background-color: #35465d;
+                        background-color: #0d1b2f;/*#35465d;*/
                     }
                     .games-page .categories-wrapper, .SeoPage .categories-wrapper {
                         background-image: linear-gradient(360deg, #041a2c, #041624, #041a2c);
                         margin-top:16px;
                         <?php if(is_login(true)) :?>
-                            box-shadow:#465f80 10px 80px 80px 60px;
+                            /* box-shadow:#465f80 10px 80px 80px 60px; */
+                            box-shadow:  #3b4756 10px 80px 80px 60px;
                         <?php endif?>
                     }         
                     .scroll_area{
@@ -206,12 +207,6 @@
                     }
                 }
             <?php endif ?>
-            <?php if($_ENV['app.name'] == APP_HERMES) :?>
-                .MainMenu-open-wrapper.js-is-game-open .MainMenu-LogoSlogan, .MainMenu-open-wrapper.js-sticky .MainMenu-LogoSlogan {
-                top: 2px;
-            }
-            <?php endif ?>
-
 
             @media only screen and (max-width: 850px) {
                 .MainMenu-open-wrapper .MainMenu-LogoSlogan-mobile:before{
@@ -620,6 +615,11 @@
                     .btn {
                         background:#6e807c;
                     }
+                    .uk-card-media-top{
+                        border-radius:20px;
+                        box-shadow: 0px 0px 3px 3px #fefeff59, inset 0 0 6px 1px #ffffffbf;
+                    }
+
                 <?php else  :?>
                     .MainMenu-open-wrapper.js-sticky{
                         width:100%;
@@ -1107,13 +1107,7 @@
                         
                         <script type="text/javascript">
                            $(".BannerSlider-bgDesktop .field_decoupled_block_bg_image_category_video_slots").bgswitcher({
-                                <?php if($_ENV['app.name'] == APP_PHANTOM) :?>
-                                    images: ["/images/main/banner11.png"],
-                                    effect: "hide",
-                                <?php elseif($_ENV['app.name'] == APP_BOLTON) :?>
-                                    images: ["/images/main/banner21.png?v=1", "/images/main/banner22.png?v=2"],
-                                    effect: "clip",
-                                <?php elseif($_ENV['app.name'] == APP_HERMES) :?>
+                                <?php if($_ENV['app.name'] == APP_HERMES) :?>
                                     images: ["/images/main/banner31.png?v=1", "/images/main/banner32.png?v=1"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
@@ -1371,21 +1365,23 @@
                                     <?php foreach ($slot_plus as $item):?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
-                                                        <img src="/images/slot/<?=$item->img?>_<?=$_ENV['game.img_suf']?>.png" />
-                                                    <?php else :?>
-                                                        <img src="/images/slot/<?=$item->img?>.png" />
-                                                    <?php endif ?>
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="<?=$item->name_kr?>" data-cid="<?=$item->code?>" data-cname="<?=$item->name_kr?>"
-                                                                <?php if($item->maintain==1) :?>
-                                                                    data-onoff="off"><?=lang('common.inspection')?>
-                                                                <?php else :?>
-                                                                    data-onoff="on">Play
-                                                                <?php endif ?>
-                                                            </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
+                                                            <img src="/images/slot/<?=$item->img?>_<?=$_ENV['game.img_suf']?>.png" />
+                                                        <?php else :?>
+                                                            <img src="/images/slot/<?=$item->img?>.png" />
+                                                        <?php endif ?>
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="<?=$item->name_kr?>" data-cid="<?=$item->code?>" data-cname="<?=$item->name_kr?>"
+                                                                    <?php if($item->maintain==1) :?>
+                                                                        data-onoff="off"><?=lang('common.inspection')?>
+                                                                    <?php else :?>
+                                                                        data-onoff="on">Play
+                                                                    <?php endif ?>
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2161,7 +2157,11 @@
             .login-image img {
                 position: absolute;
                 bottom: 0;
+            <?php if($_ENV['app.home'] == 2) :?>
+                left: -60px;
+            <?php else :?>
                 left: -120px;
+            <?php endif ?>
                 z-index: -1;
             }
             @media (max-width: 470px) {
@@ -2221,7 +2221,12 @@
                     <i class="fs-icon x-mark spin px-48"></i>
                 </a>
                 <div class="login-image flex-1 web">
-                    <img src="/images/login/login-img.png" alt="" />
+                    <?php if($_ENV['app.home'] == 2) :?>
+                        <img src="/images/login/login-img2.png" style="width:440px; height:550px;" />
+                    <?php else : ?>
+                        <img src="/images/login/login-img.png" alt="" />
+                    <?php endif ?>
+
                 </div>
 
                 <div class="login-form-container flex-1 d-flex flex-column gap-16 justify-content-center align-items-center">
