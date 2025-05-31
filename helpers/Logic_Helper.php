@@ -68,20 +68,20 @@
 
 		if ($state = curl_multi_info_read($hMul)) {
 			
-			$result = curl_multi_getcontent($state['handle']);
-			writeLog($fLog, $logHead.json_encode($result));
+			$content = curl_multi_getcontent($state['handle']);
+			// writeLog($fLog, $logHead.json_encode($content));
 			
 			$headerSize = curl_getinfo($state['handle'], CURLINFO_HEADER_SIZE);
 			// writeLog($fLog, $logHead.$headerSize);
 			// $result['header'] = substr($response, 0, $header_size);
-			$result = substr( $result, $headerSize );
+			$result = substr( $content, $headerSize );
 			
 			curl_multi_remove_handle($hMul, $state['handle']);
 			curl_multi_close($hMul);
 			$hMul = null;
 		}
 
-		writeLog($fLog, $logHead.$hMul."=".$running);
+		// writeLog($fLog, $logHead.$hMul."=".$running);
 		return $result;
 	}
 

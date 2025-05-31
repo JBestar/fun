@@ -462,36 +462,34 @@ class ServiceLogic
 		if(count($arrInfo) < 3)	//0-host, 1-ag_code, 2-ag_token
 			return null;
 
-		$url = $arrInfo[0];
+		$url = $arrInfo[0]."/get_date_log";
 		$arrIdx = getHistoryDate($objConf->conf_idx);
 		
-		$arrPost['method'] = "get_game_log";
         $arrPost['agent_code'] = trim($arrInfo[1]);
         $arrPost['agent_token'] = trim($arrInfo[2]);
-
 
 		$strStart = "";
 		$strEnd = "";
 
 		if(strlen($arrIdx['idx']) > 0){
 			$strStart = $arrIdx['idx'];
-			$startAt = strtotime($strStart);
-			$strEnd = date('Y-m-d H:i:s', strtotime("+1 month", $startAt));
+			$startAt = strtotime($arrIdx['idx']);
 		} else {
-			$tmNow = time();
-			$strStart = date("Y-m-d H:i:s", $tmNow);     
-			$strEnd = date('Y-m-d H:i:s', strtotime("+1 month", $tmNow));
+			$startAt = time();
+			$strStart = date("Y-m-d H:i:s", $startAt);     
 		}
+		$strEnd = date('Y-m-d H:i:s', strtotime("+1 day", $startAt));
 
 		$arrPost['game_type'] = "slot";
 		$arrPost['start'] = $strStart;
 		$arrPost['end'] = $strEnd;
 		$arrPost['page'] = 0;
-		$arrPost['perPage'] = 500;
+		$arrPost['length'] = 1000;
 
         $post = json_encode($arrPost);
 
 		writeLog($this->fLog, $logHead."Request Date=".$strStart."~".$strEnd);
+		$this->modelConfSite->updateLastIdx($objConf->conf_id, $strStart."#".$arrIdx['fid']."#".$arrIdx['fid2']);
 
 		$header =  ['Content-Type: application/json',
 			'Content-Length: ' . strlen($post),
@@ -524,6 +522,7 @@ class ServiceLogic
 		
 		$arrBet = null;
 		$arrResult = json_decode($response, true);
+		// writeLog($this->fLog, $logHead."response=".$response);
 		
 		if(!is_null($arrResult) && array_key_exists("status", $arrResult)) {
 			writeLog($this->fLog, $logHead."status-".$arrResult['status']);
@@ -547,7 +546,17 @@ class ServiceLogic
 		writeLog($this->fLog, $logHead."Bet Count-".count($arrBet));
 
 		$lastIdx = "";
-		
+		if($nBetCnt == 0){
+
+			$tmNow = time();
+			$startAt = strtotime("-1 day", $tmNow);
+
+			if($arrIdx['idx'] < date('Y-m-d H:i:s', $startAt)){
+				$lastIdx = date('Y-m-d H:i:s', strtotime("+1 day", strtotime($arrIdx['idx'])));
+				writeLog($this->fLog, $logHead."lastIdx=".$lastIdx);
+			} 
+		}
+
 		$lastFid = 0;
 		if($arrIdx['fid'] > FID_OFFSET){
 			$lastFid = $arrIdx['fid'] - FID_OFFSET;
@@ -561,6 +570,8 @@ class ServiceLogic
 		
 		$arrLiveUids = [];
 		foreach ($arrBet as $bet) {
+			writeLog($this->fLog, $logHead."type=".$bet['txn_type'].", user=".$bet['user_code'].", bet=".$bet['bet'].", win=".$bet['win'].", txn_id=".$bet['txn_id'].", created_at=".$bet['created_at']);
+
 			if(!in_array($bet['user_code'], $arrLiveUids))
 				array_push($arrLiveUids, $bet['user_code']);
 		}
@@ -579,7 +590,8 @@ class ServiceLogic
 
 		foreach ($arrBet as $bet) {
 
-			$lastIdx = $bet['created_at'];
+			$lastIdx = date('Y-m-d H:i:s', strtotime("+1 second", strtotime($bet['created_at'])));;
+
 			$bet['provider'] = 0;
 			$objMember = findMemberByLiveId($arrMember, $bet['user_code'], $gameId);
 			if(is_null($objMember))
@@ -590,7 +602,7 @@ class ServiceLogic
 
 			if($bet['txn_type'] === "credit")			//청산
 			{	
-				if(!is_null($betting) &&  intval($betting['bet_win_money']) == $bet['win_money'])
+				if(!is_null($betting) &&  intval($betting['bet_win_money']) == $bet['win'])
 					continue;
 				
 				$arrMemBet[$objMember->mb_fid] = strToLocal($bet['created_at']);
@@ -608,17 +620,17 @@ class ServiceLogic
 					writeLog($this->fLog, $logHead."Update ACCId=".$betId."=>Result-".$bResult);
 				}
 			} else {								//베팅
-				if(!is_null($betting) &&  intval($betting['bet_money']) == $bet['bet_money'])
+				if(!is_null($betting) &&  intval($betting['bet_money']) == $bet['bet'])
 					continue;
 				
 				$bBlank = false;
 				$nBlankPt = 0;
 
-				$arrEmpRatio = calcEmpPoint($objMember->ratio, $bet['bet_money'], strToLocal($bet['created_at']));
+				$arrEmpRatio = calcEmpPoint($objMember->ratio, $bet['bet'], strToLocal($bet['created_at']));
 				if($objMember->mb_blank_count > 0 && intval($objMember->mb_blank_current) >= intval($objMember->mb_blank_count)-1 ){
 					$objMember->mb_blank_current = 0;
 					$bBlank = true;
-					$nBlankPt = calcCompPoint($objMember->ratio, $bet['bet_money']);
+					$nBlankPt = calcCompPoint($objMember->ratio, $bet['bet']);
 					$arrMemBlank[$objMember->mb_fid] = $objMember->mb_blank_current;
 					writeLog($this->fLog, $logHead."Blank Cross Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current." Comp=".$nBlankPt);
 				} else {
@@ -661,23 +673,9 @@ class ServiceLogic
 				}
 			}
 
-			// writeLog($this->fLog, $logHead."BET-".$bet['user_code']."=>".$bet['bet_money']);
+			// writeLog($this->fLog, $logHead."BET-".$bet['user_code']."=>".$bet['bet']);
 		}
 
-		if(strlen($lastIdx) == 0){
-			if(strlen($arrIdx['idx']) > 0){
-				$strStart = $arrIdx['idx'];
-				$startAt = strtotime($strStart);
-				$lastIdx = date('Y-m-d H:i:s', strtotime("+1 month", $startAt));
-
-				$tmNow = time();
-				$strStart = date("Y-m-d H:i:s", $tmNow);     
-				$strEnd = date('Y-m-d H:i:s', strtotime("-1 month", $tmNow));
-
-				if($lastIdx > $strEnd)
-					$lastIdx = $strEnd;
-			}
-		}
 		if(strlen($lastIdx) > 0)
 			$this->modelConfSite->updateLastIdx($objConf->conf_id, $lastIdx."#".$arrIdx['fid']);
 
