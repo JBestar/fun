@@ -5,7 +5,7 @@ use App\Models\ConfSite_Model;
 
 class ApiGslot_Lib  {
     
-    private $mHost = "";    //"https://api.goldslot-link.com/api";
+    private $mHost = "";    //"https://api.redfoxapi.com/api/v2";
     private $mAgCode = "";  //'ace1';
     private $mAgToken = ""; //'d0fb0291d09495166092b81157c38d82'; 
 
@@ -34,12 +34,11 @@ class ApiGslot_Lib  {
     public function createUser($id)
     {
         if(strlen($this->mHost) < 1){
-            return array('status' => 0, 'msg'=>CONNECT_ERROR);
+            return array('status' => 0, 'msg'=>INTERNAL_ERROR);
         }
 
-        $url = $this->mHost;
+        $url = $this->mHost."/user_create";
         
-        $arrPost['method'] = "user_create";
         $arrPost['agent_code'] = $this->mAgCode;
         $arrPost['agent_token'] = $this->mAgToken;
         $arrPost['user_code'] = $id;
@@ -74,17 +73,17 @@ class ApiGslot_Lib  {
     public function getUserInfo($id="")
     {
         if(strlen($this->mHost) < 1){
-            return array('status' => 0, 'msg'=>CONNECT_ERROR);
+            return array('status' => 0, 'msg'=>INTERNAL_ERROR);
         }
 
-        $url = $this->mHost;
+        $url = $this->mHost."/info";
         
-        $arrPost['method'] = "money_info";
         $arrPost['agent_code'] = $this->mAgCode;
         $arrPost['agent_token'] = $this->mAgToken;
         if(strlen($id) > 0)
             $arrPost['user_code'] = $id;
         $post = json_encode($arrPost);
+        // writeLog("<Gslot> getUserInfo post=".$post);
 
         $header =  $this->getHeader($post);
 
@@ -96,18 +95,38 @@ class ApiGslot_Lib  {
 			if($arrResult['status'] == 1){
                 // "status": 1,
                 // "msg": "SUCCESS",
-                // "agent": {
-                //     "agent_code": "ace1",
-                //     "balance": 0,
-                // },
-                // "user": {
-                //     "user_code": "Lu_1",
-                //     "balance": 0,
-                // }
-                if(strlen($id) > 0)
-                    $arrResult['balance'] = $arrResult['user']['balance'];
+                // "agent_code": "blackzone",
+                // "agent_balance": 4990000,
+                // "lower_balance": 8980,
+                // "percent": 3,
+                // "agent_type": "Transfer",
+                // "agent_total_debit": 1200,
+                // "agent_total_credit": 180,
+                // "agent_target_rtp": 80,
+                // "agent_real_rtp": 15,
+                // "agent_created_at": "2025-05-29T06:22:19.000Z",
+                // "currency": "KRW",
+                // "user_list": [
+                //     {
+                //     "user_code": "TAT_1",
+                //     "user_balance": 8980,
+                //     "user_total_debit": 1200,
+                //     "user_total_credit": 180,
+                //     "user_target_rtp": 80,
+                //     "user_real_rtp": 15,
+                //     "user_created_at": "2025-05-29T09:20:08.000Z"
+                //     }
+                // ]
+                if(strlen($id) > 0){
+                    if(count($arrResult['user_list']) > 0)
+                        $arrResult['balance'] = $arrResult['user_list'][0]['user_balance'];
+                    else {
+                        $arrResult['status'] = 0;
+                        $arrResult['msg'] = "NONE_USER";
+                    }
+                }
                 else 
-                    $arrResult['balance'] = $arrResult['agent']['balance'];
+                    $arrResult['balance'] = $arrResult['agent_balance'];
                     
             } else { //
                 // "status": 0,
@@ -124,12 +143,11 @@ class ApiGslot_Lib  {
     public function auth($id, $provider, $gameCode)
     {
         if(strlen($this->mHost) < 1){
-            return array('status' => 0, 'msg'=>CONNECT_ERROR);
+            return array('status' => 0, 'msg'=>INTERNAL_ERROR);
         }
 
-        $url = $this->mHost;
+        $url = $this->mHost."/game_launch";
 
-        $arrPost['method'] = "game_launch";
         $arrPost['agent_code'] = $this->mAgCode;
         $arrPost['agent_token'] = $this->mAgToken;
         $arrPost['user_code'] = $id;
@@ -168,17 +186,15 @@ class ApiGslot_Lib  {
     public function addBalance($id, $balance)
     {
         if(strlen($this->mHost) < 1){
-            return array('status' => 0, 'msg'=>CONNECT_ERROR);
+            return array('status' => 0, 'msg'=>INTERNAL_ERROR);
         }
         
-        $url = $this->mHost;
+        $url = $this->mHost."/user_deposit";
         
-        $arrPost['method'] = "user_deposit";
         $arrPost['agent_code'] = $this->mAgCode;
         $arrPost['agent_token'] = $this->mAgToken;
         $arrPost['user_code'] = $id;
         $arrPost['amount'] = intval($balance);
-        // $arrPost['game_type'] = "slot";
         $post = json_encode($arrPost);
 
         $header =  $this->getHeader($post);
@@ -212,17 +228,15 @@ class ApiGslot_Lib  {
     public function subBalance($id, $balance)
     {
         if(strlen($this->mHost) < 1){
-            return array('status' => 0, 'msg'=>CONNECT_ERROR);
+            return array('status' => 0, 'msg'=>INTERNAL_ERROR);
         }
 
-        $url = $this->mHost;
+        $url = $this->mHost."/user_withdraw";
         
-        $arrPost['method'] = "user_withdraw";
         $arrPost['agent_code'] = $this->mAgCode;
         $arrPost['agent_token'] = $this->mAgToken;
         $arrPost['user_code'] = $id;
         $arrPost['amount'] = floatval($balance);
-        // $arrPost['game_type'] = "slot";
         $post = json_encode($arrPost);
 
         $header =  $this->getHeader($post);

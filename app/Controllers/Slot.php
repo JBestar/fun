@@ -427,19 +427,19 @@ class Slot extends BaseController
 				$arrResult = $this->libApiGslot->createUser($createId);
 				if($arrResult['status'] == 1){
 					$objMember->mb_gslot_uid = $createId;
-					$objMember->mb_gslot_money = $arrResult['user_slot_balance'];
+					$objMember->mb_gslot_money = $arrResult['user_balance'];
 					$this->modelMember->updateGslotInfo($objMember);
 					$iCreated = 1;
 
 					writeLog($logHead.$objMember->mb_uid."-CreateUser Sucess !!");
 				} else {
-					if(array_key_exists('msg', $arrResult) && $arrResult['msg'] == "DUPLICATE_USER"){
+					if(array_key_exists('msg', $arrResult) && $arrResult['msg'] == "DUPLICATED_USER"){
 						usleep(500000);
 						$arrResult = $this->libApiGslot->getUserInfo($createId);
 						writeLog($logHead.$objMember->mb_uid."-Double UserInfo Status=".$arrResult['status']);
                         if($arrResult['status'] == 1){
-							$objMember->mb_gslot_uid = $arrResult['user']['user_code'];
-							$objMember->mb_gslot_money = $arrResult['balance'];
+							$objMember->mb_gslot_uid = $arrResult['user_list'][0]['user_code'];
+							$objMember->mb_gslot_money = $arrResult['user_list'][0]['balance'];
 							$this->modelMember->updateGslotInfo($objMember);
 							$iCreated = 1;
 

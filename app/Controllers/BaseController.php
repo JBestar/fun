@@ -507,43 +507,50 @@ class BaseController extends Controller
 		if($iGame == GAME_CASINO_EVOL){
 			if($this->sltoMb($objMember) == 1 && $this->fsltoMb($objMember) == 1 &&
 				$this->kgtoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && 
-				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1){
+				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
+				$this->rvtoMb($objMember) == 1){
 					$iResult = $this->mbtoEv($objMember);
 			}
 		} else if($iGame == GAME_SLOT_THEPLUS){
 			if($this->evtoMb($objMember) == 1 && $this->fsltoMb($objMember) == 1 &&
 				$this->kgtoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && 
-				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1) {
+				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
+				$this->rvtoMb($objMember) == 1) {
 					$iResult = $this->mbtoSl($objMember);
 			}
 		} else if($iGame == GAME_SLOT_GSPLAY){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->kgtoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && 
-				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1) {
+				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
+				$this->rvtoMb($objMember) == 1) {
 					$iResult = $this->mbtoFsl($objMember);
 			}
 		} else if($iGame == GAME_SLOT_GOLD){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->kgtoMb($objMember) == 1 && $this->fsltoMb($objMember) == 1 && 
-				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1) {
+				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
+				$this->rvtoMb($objMember) == 1) {
 					$iResult = $this->mbtoGsl($objMember);
 			}
 		} else if($iGame == GAME_CASINO_KGON || $iGame == GAME_SLOT_KGON){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && 
-				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1) {
+				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
+				$this->rvtoMb($objMember) == 1) {
 					$iResult = $this->mbtoKg($objMember);
 			}
 		} else if($iGame == GAME_CASINO_STAR || $iGame == GAME_SLOT_STAR){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->kgtoMb($objMember) == 1 && 
-				$this->gsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1) {
+				$this->gsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
+				$this->rvtoMb($objMember) == 1) {
 					$iResult = $this->mbtoHsl($objMember);
 			}
 		} else if($iGame == GAME_HOLD_CMS){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->kgtoMb($objMember) == 1 && 
-				$this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1) {
+				$this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 &&
+				$this->rvtoMb($objMember) == 1) {
 					$iResult = $this->mbtoHol($objMember);
 			}
 		} else if($iGame == GAME_CASINO_RAVE || $iGame == GAME_SLOT_RAVE){
