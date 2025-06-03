@@ -2225,7 +2225,7 @@
                     <i class="fs-icon x-mark spin px-48"></i>
                 </a>
                 <div class="login-image flex-1 web">
-                    <?php if($_ENV['app.home'] == 2) :?>
+                    <?php if($_ENV['app.home'] == 2 || $_ENV['app.home'] == 3) :?>
                         <img src="/images/login/login-img2.png" style="width:440px; height:550px;" />
                     <?php else : ?>
                         <img src="/images/login/login-img.png" alt="" />
