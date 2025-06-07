@@ -2161,7 +2161,7 @@
             .login-image img {
                 position: absolute;
                 bottom: 0;
-            <?php if($_ENV['app.home'] == 2) :?>
+            <?php if($_ENV['app.home'] == 2 || $_ENV['app.home'] == 3) :?>
                 left: -60px;
             <?php else :?>
                 left: -120px;
