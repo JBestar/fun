@@ -547,7 +547,7 @@ $("#btnLogin").click(function(e) {
 
     $.ajax({
         type: 'POST',
-        url: '/api/login',
+        url: FURL + '/api/login',
         dataType: 'json',
         data:  data,
         success: function(jResult) {
@@ -621,7 +621,7 @@ $('.step01 .join01_btn').on('click', function(e) {
 
     $.ajax({
         type: 'POST',
-        url: '/api/check_proposer',
+        url: FURL + '/api/check_proposer',
         dataType: 'json',
         data: data ,
         success: function(jResult) {
@@ -668,7 +668,7 @@ $("#input_id").focusout(function() {
 
     $.ajax({
         type: 'POST',
-        url: '/api/check_account',
+        url: FURL + '/api/check_account',
         dataType: 'json',
         data: data ,
         success: function(jResult) {
@@ -704,7 +704,7 @@ $("#input_nickname").focusout(function() {
 
     $.ajax({
         type: 'POST',
-        url: '/api/check_account',
+        url: FURL + '/api/check_account',
         dataType: 'json',
         data:  data,
         success: function(jResult) {
@@ -774,7 +774,7 @@ $('.step02 .next_btn').on('click', function(e) {
 
     $.ajax({
         type: 'POST',
-        url: '/api/check_account',
+        url: FURL + '/api/check_account',
         dataType: 'json',
         data:  data,
         success: function(jResult) {
@@ -884,7 +884,7 @@ $('.step03 .next_btn').on('click', function(e) {
 
     $.ajax({
         type: 'POST',
-        url: '/api/register',
+        url: FURL + '/api/register',
         dataType: 'json',
         data: data,
         success: function(jResult) {
@@ -974,7 +974,7 @@ function setLang(lang) {
 
     $.ajax({
         type: 'POST',
-        url: '/api/change_lang',
+        url: FURL + '/api/change_lang',
         dataType: 'json',
         data:  data,
         success: function(jResult) {

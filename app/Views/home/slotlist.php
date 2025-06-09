@@ -119,6 +119,7 @@
             </div>
         </div>
         <script>
+            const FURL = "<?=$_ENV['app.furl']?>";
             $(document).ready(function () {
                 $(".ui.sticky").sticky({
                     context: "#gamelist",
@@ -184,8 +185,8 @@
                         ];
                     },
                     openGame: function (code) {
-                        // console.log("/slot/xslot?prd=" + this.cid + "&game=" + code);
-                        popWindow = window.open("/slot/xslot?prd=" + this.cid + "&game=" + code, "games", "width=1200, height=800, left=100, top=50");
+                        // console.log(FURL + "/slot/xslot?prd=" + this.cid + "&game=" + code);
+                        popWindow = window.open(FURL + "/slot/xslot?prd=" + this.cid + "&game=" + code, "games", "width=1200, height=800, left=100, top=50");
                     },
                     search: function () {
                         if (this.keyword == "") {

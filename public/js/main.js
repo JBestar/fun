@@ -8,7 +8,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: "/api/logout",
+                url: FURL + "/api/logout",
                 success: function(jResult) {
                     location.reload();
                 },
@@ -98,7 +98,7 @@ function setLang(lang) {
 
     $.ajax({
         type: 'POST',
-        url: '/api/change_lang',
+        url: FURL + '/api/change_lang',
         dataType: 'json',
         data:  data,
         success: function(jResult) {
@@ -182,7 +182,7 @@ function requestEggInfo() {
 
     $.ajax({
         type: "POST",
-        url: "/api/egginfo",
+        url: FURL + "/api/egginfo",
         dataType: "json",
         success: function(jResult) {
             // console.log(jResult);
@@ -198,7 +198,7 @@ function session_check() {
     // console.log("session_check");
     $.ajax({
         type: 'POST',
-        url: '/api/check_session',
+        url: FURL + '/api/check_session',
         dataType: "json",
         success: function(result) {
             // console.log(result);
@@ -222,7 +222,7 @@ function session_check() {
 function checkNotice() {
     $.ajax({
         type: 'POST',
-        url: '/api/check_notice',
+        url: FURL + '/api/check_notice',
         dataType: "json",
         success: function(data) {
             // console.log(data);
@@ -260,7 +260,7 @@ function showUnread(msg, cus) {
         $("#_btn_memo").addClass('flicker');
         if(Date.now() - tmViewForm > 60000){
             tmViewForm = Date.now(); 
-            SLB_POPUP('/mypage', 'my_memo');
+            SLB_POPUP(FURL + '/mypage', 'my_memo');
         }
     } else {
         $("#_btn_memo").removeClass('flicker');
@@ -270,7 +270,7 @@ function showUnread(msg, cus) {
         $("#_btn_qna").addClass('flicker');
         if(Date.now() - tmViewForm > 60000){
             tmViewForm = Date.now(); 
-            SLB_POPUP('/mypage', 'my_qna');
+            SLB_POPUP(FURL + '/mypage', 'my_qna');
         }
     } else {
         $("#_btn_qna").removeClass('flicker');
@@ -281,7 +281,7 @@ function showUnread(msg, cus) {
 function checkUnread(){
     if(mUnreadMsg > 0){
         showAlert(langMessage.message_to_read, 2);
-        SLB_POPUP('/mypage', 'my_memo');
+        SLB_POPUP(FURL + '/mypage', 'my_memo');
         return false;
     } 
     return true;

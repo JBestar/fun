@@ -135,9 +135,5 @@
                         </div>
                         <!--//betting_area -->
 
-                        <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-                            <script src="/js/mini/nps_res.js?v=1"></script>
-                        <?php else : ?>
-                            <script src="/js/mini/nps_res.js?t=<?=time()?>"></script>
-                        <?php endif ?>
+                        <script src="<?php echo site_furl('/js/mini/nps_res.js?v=1'); ?>"></script>
                         

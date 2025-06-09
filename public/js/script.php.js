@@ -28,7 +28,7 @@ function playSoundUnreadQna(cnt) {
                 UIkit.modal.alert('문의하신내용에 답변이 달렸습니다.', {labels: {'ok': '확인'}}).then(function () {
                     clearInterval(iUnreadQna);
                     alarmSound2.play();
-                    SLB_POPUP('/mypage', 'my_qna');
+                    SLB_POPUP(FURL + '/mypage', 'my_qna');
                 })
             }
         });
@@ -44,9 +44,9 @@ function openCasinoGame(cid, gameid) {
         return;
     }
     if(gameid == 4)
-        window.open("/evl", "games", "width=1200, height=800, left=100, top=50");
+        window.open(FURL + "/evl", "games", "width=1200, height=800, left=100, top=50");
     else
-        window.open("/cas?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
+        window.open(FURL + "/cas?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
     
 }
 
@@ -68,7 +68,7 @@ function openSlotGame(cid, cname) {
     if(!check_login()){
         return;
     }
-    SLB('/xslotlist?prd='+cid, {'width': 'fifteen wide column ','height' : $(window).height()*0.9,'caption': '<i class=\'th icon\'></i>' + cname});
+    SLB(FURL+'/xslotlist?prd='+cid, {'width': 'fifteen wide column ','height' : $(window).height()*0.9,'caption': '<i class=\'th icon\'></i>' + cname});
 
 }
 

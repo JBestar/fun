@@ -275,7 +275,7 @@ function confirm_ok() {
 
     $.ajax({
         type: "POST",
-        url: "/api/betting",
+        url: FURL + FURL + "/api/betting",
         dataType: "json",
         data: { json_: jsonData },
         success: function(jResult) {
@@ -321,7 +321,7 @@ function reqFollowBet(betId) {
 
     $.ajax({
         type: "POST",
-        url: "/api/bet_follow",
+        url: FURL + FURL + "/api/bet_follow",
         dataType: "json",
         data: { json_: jsonData },
         success: function(jResult) {
@@ -355,7 +355,7 @@ function reqBetCancel(fid, objBtn) {
         var objData = { "game": game_id, "fid": fid };
         var jsonData = JSON.stringify(objData);
         $.ajax({
-            url: '/api/bet_cancel',
+            url: FURL + '/api/bet_cancel',
             type: 'post',
             data: { json_: jsonData },
             dataType: "json",
@@ -392,7 +392,7 @@ function reqFollowCancel(objData) {
 
     var jsonData = JSON.stringify(objData);
     $.ajax({
-        url: '/api/follow_cancel',
+        url: FURL + '/api/follow_cancel',
         type: 'post',
         data: { json_: jsonData },
         dataType: "json",
@@ -412,7 +412,7 @@ function reqCurrentRound() {
     var objData = { "game": game_id };
     var jsonData = JSON.stringify(objData);
     $.ajax({
-        url: '/api/round_current',
+        url: FURL + '/api/round_current',
         type: 'post',
         data: { json_: jsonData },
         dataType: "json",
@@ -443,7 +443,7 @@ function reqRoundResult() {
     var objData = { "game": game_id, "page": 1, "count": 10 };
     var jsonData = JSON.stringify(objData);
     $.ajax({
-        url: '/api/page_round',
+        url: FURL + '/api/page_round',
         type: 'post',
         data: { json_: jsonData },
         dataType: "json",
@@ -471,7 +471,7 @@ function reqFollowInfo() {
     var objData = { "game": game_id };
     var jsonData = JSON.stringify(objData);
     $.ajax({
-        url: '/api/get_follow',
+        url: FURL + '/api/get_follow',
         type: 'post',
         data: { json_: jsonData },
         dataType: "json",
@@ -505,7 +505,7 @@ function saveFollow() {
     var jsonData = JSON.stringify(objData);
 
     $.ajax({
-        url: '/api/save_follow',
+        url: FURL + '/api/save_follow',
         type: 'post',
         data: { json_: jsonData },
         dataType: "json",
@@ -536,7 +536,7 @@ function reqBetResult() {
     var objData = { "game": game_id, "page": 1, "count": 20 };
     var jsonData = JSON.stringify(objData);
     $.ajax({
-        url: '/api/page_bet',
+        url: FURL + '/api/page_bet',
         type: 'post',
         data: { json_: jsonData },
         dataType: "json",

@@ -3,37 +3,37 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no" />
-        <script src="/js/vue.js"></script>
-        <script src="/js/vuejs-paginate.js"></script>
+        <script src="<?php echo site_furl('/js/vue.js'); ?>"></script>
+        <script src="<?php echo site_furl('/js/vuejs-paginate.js'); ?>"></script>
 
-        <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/js/semantic-ui/semantic.css'); ?>" />
 
-        <link rel="stylesheet" href="/css/jquery-ui.css?ver=1" />
-        <link rel="stylesheet" href="/css/devel.css?v=1" />
+        <link rel="stylesheet" href="<?php echo site_furl('/css/jquery-ui.css?ver=1'); ?>" />
+        <link rel="stylesheet" href="<?php echo site_furl('/css/devel.css?v=1'); ?>" />
 
         <!-- JS FILES -->
-        <script type="text/javascript" src="/js/jquery-1.12.4.min.js"></script>
-        <script type="text/javascript" src="/js/jquery-ui.js?v=1"></script>
-        <script type="text/javascript" src="/js/jquery-form/jquery.form.js"></script>
-        <script type="text/javascript" src="/js/jquery-form/jquery.validate.js"></script>
-        <script type="text/javascript" src="/js/common.js?v=3"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/jquery-1.12.4.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/jquery-ui.js?v=1'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/jquery-form/jquery.form.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/jquery-form/jquery.validate.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/common.js?v=3'); ?>"></script>
 
-        <link rel="stylesheet" type="text/css" href="/js/uikit/uikit.min.css" />
-        <script src="/js/uikit/uikit.min.js"></script>
-        <script src="/js/uikit/uikit-icons.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/js/uikit/uikit.min.css'); ?>" />
+        <script src="<?php echo site_furl('/js/uikit/uikit.min.js'); ?>"></script>
+        <script src="<?php echo site_furl('/js/uikit/uikit-icons.min.js'); ?>"></script>
 
-        <link rel="stylesheet" href="/js/sweet/sweetalert2.min.css" />
-        <script type="text/javascript" src="/js/sweet/sweetalert2.min.js"></script>
+        <link rel="stylesheet" href="<?php echo site_furl('/js/sweet/sweetalert2.min.css'); ?>" />
+        <script type="text/javascript" src="<?php echo site_furl('/js/sweet/sweetalert2.min.js'); ?>"></script>
 
-        <script type="text/javascript" src="/js/jquery-form/jquery.form.js"></script>
-        <script type="text/javascript" src="/js/jquery-form/jquery.validate.js"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/jquery-form/jquery.form.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/jquery-form/jquery.validate.js'); ?>"></script>
         <!--semantic ui-->
         <!--ui.table-->
-        <script src="/js/semantic-ui/semantic.js"></script>
-        <script type="text/javascript" src="/js/toaster.js?v=1"></script>
+        <script src="<?php echo site_furl('/js/semantic-ui/semantic.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/toaster.js?v=1'); ?>"></script>
         <script>
             Vue.component("paginate", VuejsPaginate);
-
+            const FURL = "<?=$_ENV['app.furl']?>";
             var langMessage = {
                 ask_content_input : '<?=lang('common.ask_content_input')?>',
                 ask_quick : '<?=lang('common.ask_quick')?>',
@@ -102,12 +102,8 @@
                 else toaster.success(msg);
             }
         </script>  
-        <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <link rel="stylesheet" href="/css/darkmode.css?v=3" />
-        <?php else : ?>
-            <link rel="stylesheet" href="/css/darkmode.css?ver=<?=time()?>" />
-        <?php endif ?>
-        <script src="/js/darkmode.js"></script>
+        <link rel="stylesheet" href="<?php echo site_furl('/css/darkmode.css?v=3'); ?>" />
+        <script src="<?php echo site_furl('/js/darkmode.js'); ?>"></script>
         <style>
                         
             @media screen and (min-width:680px) { 
@@ -1675,7 +1671,7 @@
                     },
                     getMyInfo: function () {
                         $.get(
-                            "/api/myinfo",
+                            FURL + "/api/myinfo",
                             function (response) {
                                 $("#dashboard").removeClass('loading');
                                 if (response.status == "success") {

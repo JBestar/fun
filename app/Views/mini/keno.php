@@ -34,7 +34,7 @@
                                     <div class="tit"><span class="betting_board_date" id="board_date"></span><span class="betting_board_round color_special" id="board_round"></span></div>
                                     <div class="tit_right">
                                         <div class="time betting_board_time" id="board_time"></div>
-                                        <img class="betting_board_refresh_btn lazy" src="/images/common/refresh_m_btn.png" style="" />
+                                        <img class="betting_board_refresh_btn lazy" src="<?php echo site_furl('/images/common/refresh_m_btn.png'); ?>" style="" />
                                         <button class="btn btn_hide_video"><?=lang('common.hide_screen')?></button>
                                     </div>
                                 </div>
@@ -301,11 +301,11 @@
                         </div>
                         <!--//betting_area -->
 
-                        <script src="/js/mini/worker_sec.js"></script>
+                        <script src="<?php echo site_furl('/js/mini/worker_sec.js'); ?>"></script>
                         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-                            <script src="/js/mini/nke_res.js?v=1"></script>
+                            <script src="<?php echo site_furl('/js/mini/nke_res.js?v=1'); ?>"></script>
                         <?php else : ?>
-                            <script src="/js/mini/nke_res.js?t=<?=time()?>"></script>
+                            <script src="<?php echo site_furl('/js/mini/nke_res.js?t='.time()); ?>"></script>
                         <?php endif ?>
 
                         

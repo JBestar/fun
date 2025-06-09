@@ -523,7 +523,7 @@ function changePoint() {
     $(".loading").show();
     $.ajax({
         type: 'POST',
-        url: '/api/change_point',
+        url: FURL + '/api/change_point',
         dataType: "json",
         success: function(data) {
             $(".loading").hide();
@@ -557,7 +557,7 @@ function session_check() {
     // console.log("session_check");
     $.ajax({
         type: 'POST',
-        url: '/api/check_session',
+        url: FURL + '/api/check_session',
         dataType: "json",
         success: function(result) {
             // console.log(result);
@@ -650,7 +650,7 @@ function showUnread(msg, cus) {
 // function checkNotice() {
 //     $.ajax({
 //         type: 'POST',
-//         url: '/api/check_notice',
+//         url: FURL + '/api/check_notice',
 //         dataType: "json",
 //         success: function(data) {
 //             // console.log(data);
@@ -672,7 +672,7 @@ function requestEggInfo() {
 
     $.ajax({
         type: "POST",
-        url: "/api/egginfo",
+        url: FURL + "/api/egginfo",
         dataType: "json",
         success: function(jResult) {
             // console.log(jResult);

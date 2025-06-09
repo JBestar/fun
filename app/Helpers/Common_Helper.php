@@ -21,6 +21,12 @@
       return false;
     }
 
+    function site_furl($url){
+      if(substr($url, 0, 1) == "/")
+        return $_ENV['app.furl'].$url;
+      else return $_ENV['app.furl']."/".$url;
+    }
+    
     function num_format($numVal,$afterPoint=2,$minAfterPoint=0,$thousandSep=",",$decPoint="."){
       // Same as number_format() but without unnecessary zeros.
       $ret = number_format($numVal,$afterPoint,$decPoint,$thousandSep);

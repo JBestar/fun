@@ -34,7 +34,7 @@ function requestPageInfo() {
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: "/api/page_round",
+        url: FURL + "/api/page_round",
         data: { json_: jsonData },
         success: function(jResult) {
             // console.log(jResult);
@@ -56,7 +56,7 @@ function requestTotalPage() {
     jsonData = JSON.stringify(jsonData);
 
     $.ajax({
-        url: '/api/count_round',
+        url: FURL + '/api/count_round',
         data: { json_: jsonData },
         dataType: 'json',
         type: 'post',

@@ -162,7 +162,7 @@ $("#btnLogin").click(function(e) {
 
     $.ajax({
         type: 'POST',
-        url: '/api/login',
+        url: FURL + '/api/login',
         dataType: 'json',
         data:  data,
         success: function(jResult) {

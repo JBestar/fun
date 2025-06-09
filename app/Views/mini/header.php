@@ -4,23 +4,24 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <title><?=$site_name?></title>
-        <link rel="shortcut icon" href="/favicon_<?=$_ENV['app.logo']?>.ico?v=1">
+        <link rel="shortcut icon" href="<?php echo site_furl('/favicon_'.$_ENV['app.logo'].'.ico?v=1'); ?>">
 
-        <link rel="stylesheet" href="/css/jquery-ui.css?ver=1" />
+        <link rel="stylesheet" href="<?php echo site_furl('/css/jquery-ui.css?ver=1'); ?>" />
 
-        <link rel="stylesheet" href="/css/mini/reset.css?v=<?php echo time();?>">
-        <link rel="stylesheet" href="/css/mini/common.css?v=<?php echo time();?>">
-        <link rel="stylesheet" href="/css/mini/content.css?v=<?php echo time();?>">
-        <link rel="stylesheet" href="/css/mini/style.css?v=<?=time();?>">
-        <link rel="stylesheet" href="/css/mini/game.css?v=<?php echo time();?>">
+        <link rel="stylesheet" href="<?php echo site_furl('/css/mini/reset.css?v=1'); ?>">
+        <link rel="stylesheet" href="<?php echo site_furl('/css/mini/common.css?v=1'); ?>">
+        <link rel="stylesheet" href="<?php echo site_furl('/css/mini/content.css?v=1'); ?>">
+        <link rel="stylesheet" href="<?php echo site_furl('/css/mini/style.css?v=1'); ?>">
+        <link rel="stylesheet" href="<?php echo site_furl('/css/mini/game.css?v=1'); ?>">
 
-        <script type="text/javascript" src="/js/jquery-1.12.4.min.js"></script>
-        <script type="text/javascript" src="/js/jquery-ui.js?v=1"></script>
-        <script type="text/javascript" src="/js/jquery-form/jquery.form.js"></script>
-        <script type="text/javascript" src="/js/jquery-form/jquery.validate.js"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/jquery-1.12.4.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/jquery-ui.js?v=1'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/jquery-form/jquery.form.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('/js/jquery-form/jquery.validate.js'); ?>"></script>
 
-        <script src="/js/worker.js?v=1"></script>
+        <script src="<?php echo site_furl('/js/worker.js?v=1'); ?>"></script>
         <script>
+        const FURL = "<?=$_ENV['app.furl']?>";
         var langMessage = {
             amount : '<?=lang('common.amount')?>',
             ball_even : '<?=lang('common.ball_even')?>',

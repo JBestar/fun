@@ -255,14 +255,15 @@ class Home extends BaseController
 	public function pt_login(){
 		
 		if(array_key_exists('app.furl', $_ENV) && $_ENV['app.furl'] != ""){
-			$this->response->redirect($_ENV['app.furl']);
-		} else {
-			$port = intval($_SERVER['SERVER_PORT']);
-			if($port > 0)
-				$port += 1;
-			else $port = '81';
-			$this->response->redirect('http://'.$_SERVER['SERVER_NAME'].':'.$port);
-		}
+			$this->response->redirect($_ENV['app.furl']."/pt");
+		} 
+        // else {
+		// 	$port = intval($_SERVER['SERVER_PORT']);
+		// 	if($port > 0)
+		// 		$port += 1;
+		// 	else $port = '81';
+		// 	$this->response->redirect('http://'.$_SERVER['SERVER_NAME'].':'.$port);
+		// }
 		
 	}
 }

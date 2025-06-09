@@ -4,74 +4,74 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <title><?=$site_name?></title>
-        <link rel="shortcut icon" href="/favicon_<?=$_ENV['app.logo']?>.ico?v=1">
+        <link rel="shortcut icon" href="<?php echo site_furl('favicon_'.$_ENV['app.logo'].'.ico?v=1'); ?>">
 
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <link rel="stylesheet" href="/css/a.min.css?v=7" />
+            <link rel="stylesheet" href="<?php echo site_furl('css/a.min.css?v=7'); ?>" />
         <?php else : ?>
-            <link rel="stylesheet" href="/css/a.min.css?v=<?=time()?>" />
+            <link rel="stylesheet" href="<?php echo site_furl('css/a.min.css?v=<?=time'); ?>()?>" />
         <?php endif ?>
         
-        <link rel="stylesheet" href="/css/jquery-ui.css?ver=1" />
+        <link rel="stylesheet" href="<?php echo site_furl('css/jquery-ui.css?ver=1'); ?>" />
 
-        <script type="text/javascript" src="/js/jquery-1.12.4.min.js"></script>
-        <script type="text/javascript" src="/js/jquery-ui.js?v=1"></script>
-        <script type="text/javascript" src="/js/jquery-form/jquery.form.js"></script>
-        <script type="text/javascript" src="/js/jquery-form/jquery.validate.js"></script>
+        <script type="text/javascript" src="<?php echo site_furl('js/jquery-1.12.4.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('js/jquery-ui.js?v=1'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('js/jquery-form/jquery.form.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('js/jquery-form/jquery.validate.js'); ?>"></script>
 
-        <link rel="stylesheet" href="/js/sweet/sweetalert2.min.css" />
-        <script type="text/javascript" src="/js/sweet/sweetalert2.min.js"></script>
+        <link rel="stylesheet" href="<?php echo site_furl('js/sweet/sweetalert2.min.css'); ?>" />
+        <script type="text/javascript" src="<?php echo site_furl('js/sweet/sweetalert2.min.js'); ?>"></script>
 
-        <link rel="stylesheet" type="text/css" href="/js/semantic-ui/semantic.css" />
-        <link rel="stylesheet" href="/css/bootstrap.min.css?ver=1" />
-        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/js/semantic-ui/semantic.js?v=2"></script>
-        <script src="/js/worker.js?v=1"></script>
-        <script src="/js/odometer/odometer.js?v=1"></script>
-        <link rel="stylesheet" href="/js/odometer/odometer.css?v=1" />
-        <link rel="stylesheet" href="/css/real-time-table.css?v=3" />
-        <script src="/js/real-time-table.js?v=1"></script>
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('js/semantic-ui/semantic.css'); ?>" />
+        <link rel="stylesheet" href="<?php echo site_furl('css/bootstrap.min.css?ver=1'); ?>" />
+        <script type="text/javascript" src="<?php echo site_furl('js/bootstrap.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('js/semantic-ui/semantic.js?v=2'); ?>"></script>
+        <script src="<?php echo site_furl('js/worker.js?v=1'); ?>"></script>
+        <script src="<?php echo site_furl('js/odometer/odometer.js?v=1'); ?>"></script>
+        <link rel="stylesheet" href="<?php echo site_furl('js/odometer/odometer.css?v=1'); ?>" />
+        <link rel="stylesheet" href="<?php echo site_furl('css/real-time-table.css?v=3'); ?>" />
+        <script src="<?php echo site_furl('js/real-time-table.js?v=1'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('js/vue.js'); ?>"></script>
         <!--순서중요-->
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <script type="text/javascript" src="/js/vue.js"></script>
-            <script type="text/javascript" src="/js/script.php.js?ver=1"></script>
-            <script type="text/javascript" src="/js/lib.js?ver=1"></script>
-            <script type="text/javascript" src="/js/common.js?ver=2"></script>
-            <script type="text/javascript" src="/js/SLB.js?ver=4"></script>
-            <script type="text/javascript" src="/js/main.js?ver=7"></script>
-            <link rel="stylesheet" type="text/css" href="/css/devel.css?v=3" />
-            <script type="text/javascript" src="/js/toaster.js?v=1"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/script.php.js?ver=1'); ?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/lib.js?ver=1'); ?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/common.js?ver=2'); ?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/SLB.js?ver=4'); ?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/main.js?ver=7'); ?>"></script>
+            <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/devel.css?v=3'); ?>" />
+            <script type="text/javascript" src="<?php echo site_furl('js/toaster.js?v=1'); ?>"></script>
         <?php else : ?>
-            <script type="text/javascript" src="/js/vue.js"></script>
-            <script type="text/javascript" src="/js/script.php.js?ver=<?=time()?>"></script>
-            <script type="text/javascript" src="/js/lib.js?ver=1"></script>
-            <script type="text/javascript" src="/js/common.js?ver=<?=time()?>"></script>
-            <script type="text/javascript" src="/js/SLB.js?ver=<?=time()?>"></script>
-            <script type="text/javascript" src="/js/main.js?ver=<?=time()?>"></script>
-            <link rel="stylesheet" type="text/css" href="/css/devel.css?v=<?=time()?>" />
-            <script type="text/javascript" src="/js/toaster.js?v=<?=time()?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/script.php.js?ver='.time() ); ?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/lib.js?ver=1'); ?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/common.js?ver='.time() ); ?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/SLB.js?ver='.time() ); ?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/main.js?ver='.time() ); ?>"></script>
+            <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/devel.css?v='.time() ); ?>" />
+            <script type="text/javascript" src="<?php echo site_furl('js/toaster.js?v='.time() ); ?>"></script>
         <?php endif ?>
 
         <!-- JS FILES -->
-        <link rel="stylesheet" type="text/css" href="/js/uikit/uikit.min.css" />
-        <script src="/js/uikit/uikit.min.js"></script>
-        <script src="/js/uikit/uikit-icons.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/js/uikit/uikit.min.css'); ?>" />
+        <script src="<?php echo site_furl('js/uikit/uikit.min.js'); ?>"></script>
+        <script src="<?php echo site_furl('js/uikit/uikit-icons.min.js'); ?>"></script>
 
-        <script src="/js/jquery.bgswitcher.js"></script>
-        <script type="text/javascript" src="/js/jquery-ui/marquee.js"></script>
+        <script src="<?php echo site_furl('js/jquery.bgswitcher.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo site_furl('js/jquery-ui/marquee.js'); ?>"></script>
 
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-        <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=7" />
-        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=6" />
-        <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=4" />
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/a.custom.css?ver=7'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/c.custom.css?ver=6'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/darkmode.css?ver=4'); ?>" />
     <?php else : ?>
-        <link rel="stylesheet" type="text/css" href="/css/a.custom.css?ver=<?=time()?>" />
-        <link rel="stylesheet" type="text/css" href="/css/c.custom.css?ver=<?=time()?>" />
-        <link rel="stylesheet" type="text/css" href="/css/darkmode.css?ver=<?=time()?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/a.custom.css?ver='.time()); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/c.custom.css?ver='.time()); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/darkmode.css?ver='.time()); ?>" />
     <?php endif ?>
 
     
         <script>
+            const FURL = "<?=$_ENV['app.furl']?>";
             var langMessage = {
                 administrator_ask : '<?=lang('common.administrator_ask')?>', 
                 ask_quick : '<?=lang('common.ask_quick')?>',
@@ -807,10 +807,10 @@
     <body>
         <div class="main-navbar-dropdown-container" id="main-navbar-dropdown-container-id" style="display: none;">
             <div class="main-navbar-dropdown-div"> 
-                <button id="main-navbar-dropdown-ko-id"><image src="/images/common/ko.png?v=1" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
+                <button id="main-navbar-dropdown-ko-id"><image src="<?php echo site_furl('/images/common/ko.png?v=1'); ?>" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
             </div>
             <div class="main-navbar-dropdown-div"> 
-                <button id="main-navbar-dropdown-cn-id"><image src="/images/common/cn.png?v=1" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-cn"><?=lang('common.lang_chinese')?></span></button>
+                <button id="main-navbar-dropdown-cn-id"><image src="<?php echo site_furl('/images/common/cn.png?v=1'); ?>" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-cn"><?=lang('common.lang_chinese')?></span></button>
             </div>
         </div>
         <div
@@ -837,8 +837,8 @@
                         <a href="/" class="MainMenu-LogoSlogan-mobile" style="display: none;"></a>
                         <a href="/" class="MainMenu-LogoSlogan">
                             <div class="star-logo">
-                                <img src="./images/common/star1.png">
-                                <img src="./images/common/star4.png">
+                                <img src="<?php echo site_furl('/images/common/star1.png');?>">
+                                <img src="<?php echo site_furl('/images/common/star4.png');?>">
                             </div>
                             <div class="MainMenu-LogoSlogan-wrapper"></div>
                         </a>
@@ -850,7 +850,7 @@
 
                             <?php if($_ENV['app.home'] > 0) :?>
                                 <a href="/" class="js-register-open btn-register btn-tiny btn-logo" style=" <?=!is_login(true)?"float:left;":""?>">
-                                    <span style="padding:0px;"> <img src="/images/main/sample2.logo_<?=$_ENV['app.logo']."_".$_ENV['app.home']?>.png?v=2.2" class="logo_icon" /> </span>
+                                    <span style="padding:0px;"> <img src="<?php echo site_furl('/images/main/sample2.logo_'.$_ENV['app.logo'].'_'.$_ENV['app.home'].'.png?v=2.2'); ?>" class="logo_icon" /> </span>
                                 </a>
                                 <?php if(!is_login(true)) :?>
                                     <button class="js-login-open btn-login btn-register btn-box" style="" onclick="showAgentCheckModal();">
@@ -869,7 +869,7 @@
                             <?php if(is_login(true)) :?>
                                 <?php if ($apps_enable && (!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) ):?>
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_app"  onclick="$('html, body').animate({scrollTop : 450}, 300); showTabMenu('auto');">
-                                        <span style="padding:0px;"> <img src="/images/common/logo_app.gif" class="app_icon" /> </span>
+                                        <span style="padding:0px;"> <img src="<?php echo site_furl('/images/common/logo_app.gif');?>" class="app_icon" /> </span>
                                     </button>
                                 <?php endif?>
                                 <?php if(!$user_off) :?>
@@ -878,29 +878,29 @@
                                 <?php endif?>
                             
                                 <!-- <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestAccount()"><i class="ui question circle icon"></i><span><?=lang('common.ask_account')?></span></button> -->
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_memo" onclick="SLB_POPUP('/mypage', 'my_memo')">
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_memo" onclick="SLB_POPUP(FURL + '/mypage', 'my_memo')">
                                     <i class="ui comment outline icon"></i><span><?=lang('common.message')?><span id="memo_count"></span></span>
                                 </button>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_notice" onclick="SLB_POPUP('/mypage', 'notice')"><i class="ui bullhorn icon"></i><span><?=lang('common.notice')?></span></button>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_info" onclick="SLB_POPUP('/mypage', '')"><i class="ui user icon"></i><span><?=lang('common.myinfo')?></span></button>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_qna" onclick="SLB_POPUP('/mypage', 'my_qna')">
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_notice" onclick="SLB_POPUP(FURL + '/mypage', 'notice')"><i class="ui bullhorn icon"></i><span><?=lang('common.notice')?></span></button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_info" onclick="SLB_POPUP(FURL + '/mypage', '')"><i class="ui user icon"></i><span><?=lang('common.myinfo')?></span></button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_qna" onclick="SLB_POPUP(FURL + '/mypage', 'my_qna')">
                                     <i class="ui comment alternate icon"></i><span><?=lang('common.customer')?><span id="answered_count"></span></span>
                                 </button>
 
                                 <?php if($part_en) :?>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href='/home/pt_login'"><i class="ui users icon"></i><span><?=lang('common.partener')?></span></button>
+                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href=FURL+'/home/pt_login'"><i class="ui users icon"></i><span><?=lang('common.partener')?></span></button>
                                 <?php endif?>
                                 
                                 <?php if($_ENV['app.home'] > 0) :?>
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="">
                                         <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
-                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
+                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="<?php echo site_furl('/images/common/won.png?v=1'); ?>"></span>
                                         <span class="_has_cash" style="padding:12px 3px;"><?=number_format($user_money)?></span>
                                     </button>
                                 
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-left:10px">
                                         <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.point')?></span> 
-                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/point.png?v=1"></span>
+                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="<?php echo site_furl('/images/common/point.png?v=1'); ?>"></span>
                                         <span class="_has_point" style="padding:12px 3px;"  ><?=number_format($user_point)?></span>
                                     </button>
 
@@ -918,13 +918,13 @@
                                 
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="margin-right:0px">
                                         <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
-                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/won.png?v=1"></span>
+                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="<?php echo site_furl('/images/common/won.png?v=1'); ?>"></span>
                                         <span class="_has_cash" style="padding:12px 3px;"><?=number_format($user_money)?></span>
                                     </button>
                                 
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-left:10px">
                                         <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.point')?></span> 
-                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="./images/common/point.png?v=1"></span>
+                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="<?php echo site_furl('/images/common/point.png?v=1'); ?>"></span>
                                         <span class="_has_point" style="padding:12px 3px;"  ><?=number_format($user_point)?></span>
                                     </button>
                                 <?php endif ?>
@@ -934,9 +934,9 @@
                         <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
                             <button name="lang" id="lang-button" is="ms-dropdown" >
                             <?php if($lang == "cn") :?>
-                                <image id="lang-img" src="/images/common/cn.png?v=1" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-code" ><?=lang('common.lang_chinese')?></span>
+                                <image id="lang-img" src="<?php echo site_furl('/images/common/cn.png?v=1'); ?>" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-code" ><?=lang('common.lang_chinese')?></span>
                             <?php else :?>
-                                <image id="lang-img" src="/images/common/ko.png?v=1" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-code" ><?=lang('common.lang_korean')?></span>
+                                <image id="lang-img" src="<?php echo site_furl('/images/common/ko.png?v=1'); ?>" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-code" ><?=lang('common.lang_korean')?></span>
                             <?php endif ?>
                             </button>
                         <?php endif ?>
@@ -974,7 +974,7 @@
                                 <a href="#" class="js-register-open btn-primary btn-normal"><span><?=lang('common.signup')?></span></a>
                             </div>
                         <?php else :?>
-                            <div class="MainMenu-play" onclick="SLB_POPUP('/mypage')">
+                            <div class="MainMenu-play" onclick="SLB_POPUP(FURL + '/mypage')">
                                 <a href="#" class="js-register-open btn-primary btn-normal">
                                     [<?=$user_name?>] <?=lang('common.welcome')?> <br />
                                     <?=lang('common.money')?> : <span class="_has_cash"><?=$user_money?></span><br />
@@ -1031,16 +1031,16 @@
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="requestAccount()">
                             <a><i class="ui question circle icon"></i> <?=lang('common.ask_account')?></a>
                         </li>
-                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', 'my_memo')">
+                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP(FURL + '/mypage', 'my_memo')">
                             <a><i class="ui comment outline icon"></i> <?=lang('common.message')?></a>
                         </li>
-                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', 'notice')">
+                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP(FURL + '/mypage', 'notice')">
                             <a><i class="ui bullhorn icon"></i> <?=lang('common.notice')?></a>
                         </li>
-                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', '')">
+                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP(FURL + '/mypage', '')">
                             <a><i class="ui user icon"></i> <?=lang('common.myinfo')?></a>
                         </li>
-                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP('/mypage', 'my_qna')">
+                        <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="SLB_POPUP(FURL + '/mypage', 'my_qna')">
                             <a><i class="ui comment alternate icon"></i> <?=lang('common.customer')?><span id="answered_count"></span></a>
                         </li>
                         <?php if(is_login(true)) :?>
@@ -1074,10 +1074,10 @@
                                                             <div class="bg-img field_decoupled_block_bg_image_category_video_slots" style=""></div>
                                                         </div>
                                                         <div class="star-container">
-                                                            <img src="./images/common/star1.png">
-                                                            <img src="./images/common/star2.png">
-                                                            <img src="./images/common/star3.png">
-                                                            <img src="./images/common/star4.png">
+                                                            <img src="<?php echo site_furl('/images/common/star1.png'); ?>">
+                                                            <img src="<?php echo site_furl('/images/common/star2.png'); ?>">
+                                                            <img src="<?php echo site_furl('/images/common/star3.png'); ?>">
+                                                            <img src="<?php echo site_furl('/images/common/star4.png'); ?>">
                                                         </div>
                                                         <div class="BannerItem-container">
                                                             <div class="BannerItem-content">
@@ -1112,16 +1112,16 @@
                         <script type="text/javascript">
                            $(".BannerSlider-bgDesktop .field_decoupled_block_bg_image_category_video_slots").bgswitcher({
                                 <?php if($_ENV['app.name'] == APP_HERMES) :?>
-                                    images: ["/images/main/banner31.png?v=1", "/images/main/banner32.png?v=1"],
+                                    images: ["<?php echo site_furl('/images/main/banner31.png?v=1'); ?>", "<?php echo site_furl('/images/main/banner32.png?v=1'); ?>"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
-                                    images: ["/images/main/banner41.png?v=2", "/images/main/banner42.png?v=2", "/images/main/banner43.png?v=2"],
+                                    images: ["<?php echo site_furl('/images/main/banner41.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner42.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner43.png?v=2'); ?>"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_DOLPHIN) :?>
-                                    images: ["/images/main/banner51_<?=$_ENV['app.home']?>.png?v=1.5", "/images/main/banner52_<?=$_ENV['app.home']?>.png?v=1.5", "/images/main/banner53_<?=$_ENV['app.home']?>.png?v=1.5"],
+                                    images: ["<?php echo site_furl('/images/main/banner51_'.$_ENV['app.home'].'.png?v=1.5'); ?>", "<?php echo site_furl('/images/main/banner52_'.$_ENV['app.home'].'.png?v=1.5'); ?>", "<?php echo site_furl('/images/main/banner53_'.$_ENV['app.home'].'.png?v=1.5'); ?>"],
                                     effect: "clip",
                                 <?php else: ?>
-                                    images: ["/images/main/banner1.png", "/images/main/banner2.png", "/images/main/banner3.png", "/images/main/banner4.png"],
+                                    images: ["<?php echo site_furl('/images/main/banner1.png'); ?>", "<?php echo site_furl('/images/main/banner2.png'); ?>", "<?php echo site_furl('/images/main/banner3.png'); ?>", "<?php echo site_furl('/images/main/banner4.png'); ?>"],
                                     effect: "clip",
                                 <?php endif ?>
                                 
@@ -1142,40 +1142,40 @@
                                 $("#holdem").hide();
 
                                 if($("#holdem").length > 0)
-                                    $("#img_casino").attr("src", "/images/common/tab_casino_mid.png?v=1");
+                                    $("#img_casino").attr("src", "<?php echo site_furl('/images/common/tab_casino_mid.png?v=1'); ?>");
                                 else
-                                    $("#img_casino").attr("src", "/images/common/tab_casino.png?v=1");
+                                    $("#img_casino").attr("src", "<?php echo site_furl('/images/common/tab_casino.png?v=1'); ?>");
 
                                 if($("#auto").length > 0)
-                                    $("#img_mini").attr("src", "/images/common/tab_mini.png?v=1");
+                                    $("#img_mini").attr("src", "<?php echo site_furl('/images/common/tab_mini.png?v=1'); ?>");
                                 else 
-                                    $("#img_mini").attr("src", "/images/common/tab_mini_rit.png?v=1");
+                                    $("#img_mini").attr("src", "<?php echo site_furl('/images/common/tab_mini_rit.png?v=1'); ?>");
                                 
-                                $("#img_slots").attr("src", "/images/common/tab_slot.png?v=1");
-                                $("#img_auto").attr("src", "/images/common/tab_auto.png?v=1");
-                                $("#img_holdem").attr("src", "/images/common/tab_holdem.png?v=1");
+                                $("#img_slots").attr("src", "<?php echo site_furl('/images/common/tab_slot.png?v=1'); ?>");
+                                $("#img_auto").attr("src", "<?php echo site_furl('/images/common/tab_auto.png?v=1'); ?>");
+                                $("#img_holdem").attr("src", "<?php echo site_furl('/images/common/tab_holdem.png?v=1'); ?>");
 
                                 if (menu == "slots") {
                                     $("#slots").fadeIn("slow");
-                                    $("#img_slots").attr("src", "/images/common/tab_slot_select.png?v=1");
+                                    $("#img_slots").attr("src", "<?php echo site_furl('/images/common/tab_slot_select.png?v=1'); ?>");
                                 } else if (menu == "mini") {
                                     $("#mini").fadeIn("slow");
                                     if($("#auto").length > 0)
-                                        $("#img_mini").attr("src", "/images/common/tab_mini_select.png?v=1");
+                                        $("#img_mini").attr("src", "<?php echo site_furl('/images/common/tab_mini_select.png?v=1'); ?>");
                                     else 
-                                        $("#img_mini").attr("src", "/images/common/tab_mini_select_rit.png?v=1");
+                                        $("#img_mini").attr("src", "<?php echo site_furl('/images/common/tab_mini_select_rit.png?v=1'); ?>");
                                 } else if (menu == "auto") {
                                     $("#auto").fadeIn("slow");
-                                    $("#img_auto").attr("src", "/images/common/tab_auto_select.png?v=1");
+                                    $("#img_auto").attr("src", "<?php echo site_furl('/images/common/tab_auto_select.png?v=1'); ?>");
                                 } else if (menu == "holdem") {
                                     $("#holdem").fadeIn("slow");
-                                    $("#img_holdem").attr("src", "/images/common/tab_holdem_select.png?v=1");
+                                    $("#img_holdem").attr("src", "<?php echo site_furl('/images/common/tab_holdem_select.png?v=1'); ?>");
                                 } else {
                                     $("#live-casino").fadeIn("slow");
                                     if($("#holdem").length > 0)
-                                        $("#img_casino").attr("src", "/images/common/tab_casino_select_mid.png?v=1");
+                                        $("#img_casino").attr("src", "<?php echo site_furl('/images/common/tab_casino_select_mid.png?v=1'); ?>");
                                     else
-                                        $("#img_casino").attr("src", "/images/common/tab_casino_select.png?v=1");
+                                        $("#img_casino").attr("src", "<?php echo site_furl('/images/common/tab_casino_select.png?v=1'); ?>");
                                 }
                             }
 
@@ -1189,23 +1189,23 @@
                                     <div class="five column centered row">
                                         <?php if (!$hold_deny):?>
                                             <div class="column first">
-                                                <img src="/images/common/tab_holdem_select.png?v=1" onclick="javascript:showTabMenu('holdem');" id="img_holdem" style="cursor: pointer;" />
+                                                <img src="<?php echo site_furl('/images/common/tab_holdem_select.png?v=1');?>" onclick="javascript:showTabMenu('holdem');" id="img_holdem" style="cursor: pointer;" />
                                             </div>
                                         <?php endif ?>
                                         <?php if (!$evol_deny || !$cas_deny):?>
                                             <div class="column first">
                                                 <img 
                                                     <?php if (!$hold_deny):?>
-                                                        src="/images/common/tab_casino_mid.png?v=1" 
+                                                        src="<?php echo site_furl('/images/common/tab_casino_mid.png?v=1');?>" 
                                                     <?php else :?>
-                                                        src="/images/common/tab_casino_select.png?v=1" 
+                                                        src="<?php echo site_furl('/images/common/tab_casino_select.png?v=1');?>" 
                                                     <?php endif ?>
                                                     onclick="javascript:showTabMenu('live-casino');" id="img_casino" style="cursor: pointer;" />
                                             </div>
                                         <?php endif ?>
                                         <?php if (!$slot_deny):?>
                                             <div class="column first">
-                                                <img src="/images/common/tab_slot.png?v=1" onclick="javascript:showTabMenu('slots');" id="img_slots" style="cursor: pointer;" />
+                                                <img src="<?php echo site_furl('/images/common/tab_slot.png?v=1');?>" onclick="javascript:showTabMenu('slots');" id="img_slots" style="cursor: pointer;" />
                                             </div>
                                         <?php endif ?>
                                         
@@ -1213,16 +1213,16 @@
                                         <div class="column first">
                                             <img     
                                             <?php if ($apps_enable):?>
-                                                src="/images/common/tab_mini.png?v=1" 
+                                                src="<?php echo site_furl('/images/common/tab_mini.png?v=1');?>" 
                                             <?php else:?>
-                                                src="/images/common/tab_mini_rit.png?v=1" 
+                                                src="<?php echo site_furl('/images/common/tab_mini_rit.png?v=1');?>" 
                                             <?php endif ?>
                                             onclick="javascript:showTabMenu('mini');" id="img_mini" style="cursor: pointer;" />
                                         </div>
                                         <?php endif ?>
                                         <?php if ($apps_enable):?>
                                             <div class="column first">
-                                                <img src="/images/common/tab_auto.png?v=1" onclick="javascript:showTabMenu('auto');" id="img_auto" style="cursor: pointer;" />
+                                                <img src="<?php echo site_furl('/images/common/tab_auto.png?v=1');?>" onclick="javascript:showTabMenu('auto');" id="img_auto" style="cursor: pointer;" />
                                             </div>
                                         <?php endif ?>
                                     </div>
@@ -1232,9 +1232,9 @@
 
                     <?php if( array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1 && !is_login(true)) :?>
                         <div class="jackpot-container justify-content-end">
-                            <img class="golden-bull" src="/images/jackpot/jackpot.png" alt="">
+                            <img class="golden-bull" src="<?php echo site_furl('/images/jackpot/jackpot.png'); ?>" alt="">
                             <div class="jackpot-amount">
-                                <img src="/images/jackpot/won-sign.png" alt="" style="display:inline-block;">
+                                <img src="<?php echo site_furl('/images/jackpot/won-sign.png'); ?>" alt="" style="display:inline-block;">
                                 <div id="jackpot" class=""></div>
                             </div>
                         </div>
@@ -1357,11 +1357,11 @@
                             <div class="uk-container">
                                 <h2 style="margin-bottom: 20px; text-align: center;">SLOT GAMES
                                     <div class="star-title">
-                                        <img src="./images/common/star1.png">
-                                        <img src="./images/common/star2.png">
-                                        <img src="./images/common/star3.png">
-                                        <img src="./images/common/star4.png">
-                                        <img src="./images/common/star1.png">
+                                        <img src="<?php echo site_furl('/images/common/star1.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star2.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star3.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star4.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star1.png'); ?>">
                                     </div>
                                 </h2>
                                 <div class="uk-grid uk-grid-small uk-child-width-1-3 uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-grid-match" data-uk-lightbox="toggle:a.uk-position-cover" data-uk-grid="">
@@ -1372,9 +1372,9 @@
                                                 <div class="uk-card-media-top">
                                                     <div class="uk-inline-clip uk-transition-toggle uk-light">
                                                         <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
-                                                            <img src="/images/slot/<?=$item->img?>_<?=$_ENV['game.img_suf']?>.png" />
+                                                            <img src="<?php echo site_furl('/images/slot/'.$item->img.'_'.$_ENV['game.img_suf'].'.png'); ?>" />
                                                         <?php else :?>
-                                                            <img src="/images/slot/<?=$item->img?>.png" />
+                                                            <img src="<?php echo site_furl('/images/slot/'.$item->img.'.png'); ?>" />
                                                         <?php endif ?>
                                                         <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
@@ -1421,11 +1421,11 @@
                                 <h2 style="margin-bottom: 20px; text-align: center;">
                                     LIVE CASINO
                                     <div class="star-title">
-                                        <img src="./images/common/star1.png">
-                                        <img src="./images/common/star2.png">
-                                        <img src="./images/common/star3.png">
-                                        <img src="./images/common/star4.png">
-                                        <img src="./images/common/star1.png">
+                                        <img src="<?php echo site_furl('/images/common/star1.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star2.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star3.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star4.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star1.png'); ?>">
                                     </div>
                                 </h2>
                                 <div class="uk-grid uk-grid-small uk-child-width-1-3 uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-grid-match uk-grid-stack" data-uk-lightbox="toggle:a.uk-position-cover" data-uk-grid="">
@@ -1436,9 +1436,9 @@
                                                 <div class="uk-card-media-top">
                                                     <div class="uk-inline-clip uk-transition-toggle uk-light">
                                                         <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
-                                                            <img src="/images/casino/<?=$item->img?>_<?=$_ENV['game.img_suf']?>.png" />
+                                                            <img src="<?php echo site_furl('/images/casino/'.$item->img.'_'.$_ENV['game.img_suf'].'.png'); ?>" />
                                                         <?php else :?>
-                                                            <img src="/images/casino/<?=$item->img?>.png" />
+                                                            <img src="<?php echo site_furl('/images/casino/'.$item->img.'.png'); ?>" />
                                                         <?php endif ?>
                                                         <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
@@ -1476,9 +1476,9 @@
                                                 <div class="uk-card-media-top">
                                                     <div class="uk-inline-clip uk-transition-toggle uk-light">
                                                         <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
-                                                            <img src="/images/casino/<?=$item->img?>_<?=$_ENV['game.img_suf']?>.png" />
+                                                            <img src="<?php echo site_furl('/images/casino/'.$item->img.'_'.$_ENV['game.img_suf'].'.png'); ?>" />
                                                         <?php else :?>
-                                                            <img src="/images/casino/<?=$item->img?>.png?v=2" />
+                                                            <img src="<?php echo site_furl('/images/casino/'.$item->img.'.png?v=2'); ?>" />
                                                         <?php endif ?>
                                                         <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
@@ -1519,11 +1519,11 @@
                             <div class="uk-container">
                                 <h2 style="margin-bottom: 20px; text-align: center;">MINI GAMES
                                     <div class="star-title">
-                                        <img src="./images/common/star1.png">
-                                        <img src="./images/common/star2.png">
-                                        <img src="./images/common/star3.png">
-                                        <img src="./images/common/star4.png">
-                                        <img src="./images/common/star1.png">
+                                        <img src="<?php echo site_furl('/images/common/star1.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star2.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star3.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star4.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star1.png'); ?>">
                                     </div>
                                 </h2>
                                 <div class="uk-grid uk-grid-small uk-child-width-1-3 uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-grid-match" data-uk-lightbox="toggle:a.uk-position-cover" data-uk-grid="">
@@ -1532,7 +1532,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_pbg.png?v=1" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_pbg.png?v=1'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="PBG파워볼" data-onoff="on" data-cid="PBG">Play </button>
@@ -1554,7 +1554,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_evp.png?v=2" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_evp.png?v=2'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="에볼루션파워볼" data-onoff="on" data-cid="EVP">Play </button>
@@ -1576,7 +1576,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_spk.png?v=2" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_spk.png?v=2'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="스피드키노" data-onoff="on" data-cid="SPKN">Play </button>
@@ -1599,9 +1599,9 @@
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
                                                     <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
-                                                        <img src="/images/mini/btn_bgb_<?=$_ENV['game.img_suf']?>.png" />
+                                                        <img src="<?php echo site_furl('/images/mini/btn_bgb_'.$_ENV['game.img_suf'].'.png'); ?>" />
                                                     <?php else :?>
-                                                        <img src="/images/mini/btn_bgb.png?v=2" />
+                                                        <img src="<?php echo site_furl('/images/mini/btn_bgb.png?v=2'); ?>" />
                                                     <?php endif ?>
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
@@ -1623,9 +1623,9 @@
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
                                                     <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
-                                                        <img src="/images/mini/btn_bgl_<?=$_ENV['game.img_suf']?>.png" />
+                                                        <img src="<?php echo site_furl('/images/mini/btn_bgl_'.$_ENV['game.img_suf'].'.png'); ?>" />
                                                     <?php else :?>
-                                                        <img src="/images/mini/btn_bgl.png?v=2" />
+                                                        <img src="<?php echo site_furl('/images/mini/btn_bgl.png?v=2'); ?>" />
                                                     <?php endif ?>
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
@@ -1648,7 +1648,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_eos5.png?v=2" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_eos5.png?v=2'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="EOS5분파워볼" data-onoff="on"  data-cid="EOS5">Play </button>
@@ -1670,7 +1670,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_eos3.png?v=2" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_eos3.png?v=2'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="EOS3분파워볼" data-onoff="on" data-cid="EOS3">Play </button>
@@ -1692,7 +1692,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_rand5.png?v=2" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_rand5.png?v=2'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="랜덤5분파워볼" data-onoff="on" data-cid="RAND5">Play </button>
@@ -1714,7 +1714,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_rand3.png?v=2" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_rand3.png?v=2'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="랜덤3분파워볼" data-onoff="on" data-cid="RAND3">Play </button>
@@ -1737,7 +1737,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_pb.png" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_pb.png'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="파워볼" data-onoff="off"  data-cid="PBG">Play </button>
@@ -1756,7 +1756,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_ang.png" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_ang.png'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="ANGELS" data-onoff="off"  data-cid="ANG">Play </button>
@@ -1785,11 +1785,11 @@
                             <div class="uk-container">
                                 <h2 style="margin-bottom: 20px; text-align: center;">HOLDEM GAME
                                     <div class="star-title">
-                                        <img src="./images/common/star1.png">
-                                        <img src="./images/common/star2.png">
-                                        <img src="./images/common/star3.png">
-                                        <img src="./images/common/star4.png">
-                                        <img src="./images/common/star1.png">
+                                        <img src="<?php echo site_furl('/images/common/star1.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star2.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star3.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star4.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star1.png'); ?>">
                                     </div>
                                 </h2>
                                 <div class="uk-grid uk-grid-small uk-child-width-1-3 uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-grid-match uk-flex-center" data-uk-lightbox="toggle:a.uk-position-cover" data-uk-grid="">
@@ -1797,7 +1797,7 @@
                                     <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="/images/mini/btn_hold.png?v=1" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_hold.png?v=1'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="<?=lang('common.holdem')?>" data-onoff="on" data-cid="Holdem">Play </button>
@@ -1826,11 +1826,11 @@
                                 <h2 style="margin-bottom: 20px; text-align: center;">
                                     AUTO APPS
                                     <div class="star-title">
-                                        <img src="./images/common/star1.png">
-                                        <img src="./images/common/star2.png">
-                                        <img src="./images/common/star3.png">
-                                        <img src="./images/common/star4.png">
-                                        <img src="./images/common/star1.png">
+                                        <img src="<?php echo site_furl('/images/common/star1.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star2.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star3.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star4.png'); ?>">
+                                        <img src="<?php echo site_furl('/images/common/star1.png'); ?>">
                                     </div>
                                 </h2>
                                 <div class="uk-grid uk-grid-small uk-child-width-1-3 uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-grid-match uk-grid-stack" data-uk-lightbox="toggle:a.uk-position-cover" data-uk-grid="">
@@ -1841,7 +1841,7 @@
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-card-media-top">
                                                     <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                        <img src="/images/app/<?=$item->ename?>.png?v=2" />
+                                                        <img src="<?php echo site_furl('/images/app/'.$item->ename.'.png?v=2'); ?>" />
                                                         <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                                 <button class="uk-button uk-button-primary playBtn" id="playBtn" data-name="<?=$item->name?>" data-path="<?=$item->path?>" data-act="<?=$item->act?>">Download</button>
@@ -2226,9 +2226,9 @@
                 </a>
                 <div class="login-image flex-1 web">
                     <?php if($_ENV['app.home'] == 2 || $_ENV['app.home'] == 3) :?>
-                        <img src="/images/login/login-img2.png" style="width:440px; height:550px;" />
+                        <img src="<?php echo site_furl('/images/login/login-img2.png');?>" style="width:440px; height:550px;" />
                     <?php else : ?>
-                        <img src="/images/login/login-img.png" alt="" />
+                        <img src="<?php echo site_furl('/images/login/login-img.png'); ?>" alt="" />
                     <?php endif ?>
 
                 </div>
@@ -2257,7 +2257,7 @@
                             </div>
                             <?php if(strlen($captcha) > 0) :?>
                             <div class="input-group mb-4">
-                                <img id="image_id" name="<?=$captcha?>" src="/download/captcha/<?=$captcha?>.jpg" style="width: 100%; height: 30px; margin-bottom: 10px; border-radius: 0.25rem; background-color: beige;" >
+                                <img id="image_id" name="<?=$captcha?>" src="<?php echo site_furl('/download/captcha/'.$captcha.'.jpg'); ?>" style="width: 100%; height: 30px; margin-bottom: 10px; border-radius: 0.25rem; background-color: beige;" >
                                 <div class="field required">
                                     <input name="captchacode" placeholder="<?=lang('common.security_character')?>" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
                                 </div>
@@ -2589,7 +2589,7 @@
 
             $("#formLogin").ajaxForm({
                 dataType: "json",
-                url: "/api/login",
+                url: FURL + "/api/login",
                 type: "POST",
                 data: $(this).serialize(),
                 beforeSubmit: function () {
@@ -2742,7 +2742,7 @@
             $("#fregisterform").ajaxForm({
                 dataType: "json",
                 type: "POST",
-                url: "/api/register",
+                url: FURL + "/api/register",
                 data: $(this).serialize(),
                 beforeSubmit: function () {
                     return $('#fregisterform').valid();
@@ -2770,7 +2770,7 @@
             $("#agentCheckForm").ajaxForm({
                 dataType: "json",
                 type: "POST",
-                url: "/api/check_proposer",
+                url: FURL + "/api/check_proposer",
                 data: $(this).serialize(),
                 beforeSubmit: function () {},
                 success: function (response) {
@@ -2821,22 +2821,22 @@
                     action: "select",
                 });
 
-                $.getJSON("https://jsonip.com/",
+                $.getJSON("https://ipv4.seeip.org/jsonip",
                     function(json) {
                         // console.log("ip2="+json.ip);
                         if(json.ip !== undefined && json.ip.length > 0){
                             $(".ip_addr").val(json.ip);
-                            console.log("jsonip="+json.ip);
+                            console.log("seeip="+json.ip);
                         }
                     }
                 );
 
-                $.getJSON("https://api.ipify.org?format=jsonp&callback=?",
-                    function(json) {
+                $.get("https://v4.ident.me/",
+                    function(data) {
                         // console.log("ip1="+json.ip);
-                        if(json.ip !== undefined && json.ip.length > 0){
-                            $(".ip_addr").val(json.ip)
-                            console.log("ipify="+json.ip);
+                        if(data.length > 0){
+                            $(".ip_addr").val(data.trim());
+                            console.log("ident="+data);
                         }
                     }
                 );
@@ -2872,7 +2872,7 @@
                         return;
                     let onoff = $(this).data("onoff");
                     if (onoff == "on") {
-                        window.open("/holdem", "games", "width=1200, height=800, left=100, top=50");
+                        window.open(FURL + "/holdem", "games", "width=1200, height=800, left=100, top=50");
                     } else {
                         showAlert(langMessage.inspection, 2);
                     }
@@ -2903,7 +2903,7 @@
                         return;
                     let onoff = $(this).data("onoff");
                     if (onoff == "on") {
-                        window.open("/mini?gm="+$(this).data("cid"), "games", "width=1200, height=800, left=100, top=50");
+                        window.open(FURL + "/mini?gm="+$(this).data("cid"), "games", "width=1200, height=800, left=100, top=50");
                     } else {
                         showAlert(langMessage.updating, 2);
                     }
@@ -2991,7 +2991,7 @@
                 $("#chargeForm").ajaxForm({
                     dataType: "json",
                     type: "POST",
-                    url: "/api/register_charge",
+                    url: FURL + "/api/register_charge",
                     data: $(this).serialize(),
                     beforeSubmit: function () {
                         return $("#chargeForm").valid();
@@ -3024,7 +3024,7 @@
                 $("#exchangeForm").ajaxForm({
                     dataType: "json",
                     type: "POST",
-                    url: "/api/register_exchange",
+                    url: FURL + "/api/register_exchange",
                     data: $(this).serialize(),
                     beforeSubmit: function () {
                         return $("#exchangeForm").valid();
@@ -3058,7 +3058,7 @@
                 $("#chgpwdForm").ajaxForm({
                     dataType: "json",
                     type: "POST",
-                    url: "/api/change_pass",
+                    url: FURL + "/api/change_pass",
                     data: $(this).serialize(),
                     beforeSubmit: function () {
                         return $("#chgpwdForm").valid();
@@ -3154,7 +3154,7 @@
             function changePoint() {
 
                 <?php if($_ENV['app.home'] > 0) :?>
-                    SLB_POPUP('/mypage', 'my_point');
+                    SLB_POPUP(FURL + '/mypage', 'my_point');
                 <?php else: ?>
                     if($("#_btn_user_point ._has_point").text().length < 2){
                         return;
@@ -3165,7 +3165,7 @@
                             $.ajax({
                                 dataType: "json",
                                 type: "POST",
-                                url: "/api/change_point",
+                                url: FURL + "/api/change_point",
                                 success: function (response) {
                                     if (response.status == "success") {
                                         showAlert(langMessage.change_point_result);
@@ -3192,7 +3192,7 @@
                 methods: {
                     getMyInfo: function () {
                         $.get(
-                            "/api/myinfo",
+                            FURL + "/api/myinfo",
                             function (response) {
                                 // console.log(response);
                                 if (response.status == "success") {

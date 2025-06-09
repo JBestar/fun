@@ -20,6 +20,7 @@
 
     <title><?=$site_name?></title>
     <script>
+        const FURL = "<?=$_ENV['app.furl']?>";
         var langMessage = {
             account_number_input : '<?=lang('common.account_number_input')?>',
             administrator_ask : '<?=lang('common.administrator_ask')?>',
