@@ -2890,7 +2890,7 @@
                     }
                     else if(name.length > 0 && path.length > 0){
                         if(confirm("'" + name + "'을 다운하시겠습니까?")){
-                            window.open(path);
+                            window.open(FURL + "/" + path);
                         }
                     }
                 });

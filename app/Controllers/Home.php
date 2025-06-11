@@ -254,9 +254,7 @@ class Home extends BaseController
 
 	public function pt_login(){
 		
-		if(array_key_exists('app.furl', $_ENV) && $_ENV['app.furl'] != ""){
-			$this->response->redirect($_ENV['app.furl']."/pt");
-		} 
+        $this->response->redirect($_ENV['app.furl']."/pt");
         // else {
 		// 	$port = intval($_SERVER['SERVER_PORT']);
 		// 	if($port > 0)
