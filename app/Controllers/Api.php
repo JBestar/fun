@@ -35,7 +35,7 @@ class Api extends BaseController
 	// }
 
 	public function index(){
-		$this->response->redirect('/');	
+		$this->response->redirect(site_furl('/'));	
 	}
 		
 	//User Login
@@ -2393,7 +2393,7 @@ class Api extends BaseController
 	public function myinfo(){
 
 		$result = new \StdClass;
-		if(!is_login())
+		if(!is_login(true))
 		{
 			$result->status = STATUS_LOGOUT;
 		}
@@ -2423,6 +2423,9 @@ class Api extends BaseController
 
 		$result->status = STATUS_LOGOUT;
 		$arrMember = $this->modelMember->getMemberByLevel(LEVEL_ADMIN, true);
+		if(count($arrMember) < 20){
+			$arrMember = generateMembers($arrMember, 20);
+		}
 		$result->charges = getExchangeList($arrMember, 8);
 		$result->dischars = getExchangeList($arrMember, 8);
 

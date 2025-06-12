@@ -1058,4 +1058,33 @@
       }
     
     }
+
+    function generateMembers($arrMember, $count){
+        $seed = microtime(true);
+        for($i=0; $i<$count; $i++){
+          $member = new \stdClass();
+          $member->mb_uid = generateString(10, $seed+=11111);
+          array_push($arrMember, $member);
+        }
+        return $arrMember;
+    }
+    
+    function generateString($length, $seed)  
+    {  
+        // $characters  = "0123456789";  
+        $characters = "abcdefghijklmnopqrstuvwxyz";  
+        // $characters .= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";  
+        
+        $randStr = "";  
+        $nmr_loops = $length;  
+        
+        while ($nmr_loops--)  
+        {  
+            mt_srand($seed++);
+            $randStr .= $characters[mt_rand(0, strlen($characters) - 1)];  
+        }  
+        
+        return $randStr;  
+    }  
+
 ?>

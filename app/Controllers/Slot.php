@@ -8,7 +8,7 @@ class Slot extends BaseController
 
     public function index()
     {
-        $this->response->redirect('/');	
+        $this->response->redirect(site_furl('/'));	
     }
 
 	public function xslotlist()
@@ -21,7 +21,7 @@ class Slot extends BaseController
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else if($_ENV['app.type'] == APP_TYPE_2){
-			$this->response->redirect('/fslotlist?prd='.$prdCode);	
+			$this->response->redirect(site_furl('/fslotlist?prd='.$prdCode));	
 		}  else {
 			$this->sess_action();                
 			$gameId = GAME_SLOT_THEPLUS;
@@ -87,7 +87,7 @@ class Slot extends BaseController
 		{
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
         } else if($_ENV['app.type'] == APP_TYPE_2){
-			$this->response->redirect('/slot/xslotf?prd='.$prdCode.'&game='.$slotId);	
+			$this->response->redirect(site_furl('/slot/xslotf?prd='.$prdCode.'&game='.$slotId));	
 		} else {
 			$this->sess_action();                
 
@@ -198,18 +198,18 @@ class Slot extends BaseController
 				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
 			} else if($iCreated == 100){
 				if($_ENV['app.fslot'] == APP_FSLOT_GOLD)
-					$this->response->redirect('/xslotg?prd='.$objFslot->prd_code.'&game='.$objFslot->uuid);	
+					$this->response->redirect(site_furl('/xslotg?prd='.$objFslot->prd_code.'&game='.$objFslot->uuid));	
 				else 
-					$this->response->redirect('/xslotf?prd='.$objFslot->prd_code.'&game='.$objFslot->uuid);	
+					$this->response->redirect(site_furl('/xslotf?prd='.$objFslot->prd_code.'&game='.$objFslot->uuid));	
 			} else if($iCreated == 101){
 				writeLog("<XSLOT>".$objMember->mb_uid." PRD=".$objSlot->prd_code." NAME=".$objSlot->name_ko);
 
 				if($_ENV['app.slot'] == APP_SLOT_KGON)
-					$this->response->redirect('/xslotk?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid);	
+					$this->response->redirect(site_furl('/xslotk?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid));	
 				else if($_ENV['app.slot'] == APP_SLOT_STAR)
-					$this->response->redirect('/xsloth?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid);	
+					$this->response->redirect(site_furl('/xsloth?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid));	
 				else if($_ENV['app.slot'] == APP_SLOT_RAVE)
-					$this->response->redirect('/xslotr?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid);	
+					$this->response->redirect(site_furl('/xslotr?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid));	
 			} else if($iCreated == 1){
 				writeLog($logHead.$objMember->mb_uid."-Slot Game=>".$objSlot->name ); 
 				$iResult = $this->alltoGame($objMember, $gameId);
@@ -260,7 +260,7 @@ class Slot extends BaseController
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else if($_ENV['app.fslot'] == APP_FSLOT_GOLD){
-			$this->response->redirect('/slot/xslotg?prd='.$prdCode.'&game='.$slotId);	
+			$this->response->redirect(site_furl('/slot/xslotg?prd='.$prdCode.'&game='.$slotId));	
 		} else {
 			$this->sess_action();                
 			$modelSlotgame = new SlotGame_Model();
@@ -846,7 +846,7 @@ class Slot extends BaseController
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else if($_ENV['app.type'] == APP_TYPE_1){
-			$this->response->redirect('/xslot_list?prd='.$prdCode);	
+			$this->response->redirect(site_furl('/xslot_list?prd='.$prdCode));	
 		}  else {
 			$this->sess_action();                
 			$gameId = GAME_SLOT_GSPLAY;

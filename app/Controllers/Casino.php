@@ -4,7 +4,7 @@ class Casino extends BaseController
 {
     public function index()
     {
-        $this->response->redirect('/');	
+        $this->response->redirect(site_furl('/'));	
     }
 
     public function evl()
@@ -138,9 +138,9 @@ class Casino extends BaseController
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else if($_ENV['app.casino'] == APP_CASINO_STAR){
-			$this->response->redirect('/cas_h?prd='.$prdId);	
+			$this->response->redirect(site_furl('/cas_h?prd='.$prdId));	
 		} else if($_ENV['app.casino'] == APP_CASINO_RAVE){
-			$this->response->redirect('/cas_r?prd='.$prdId);	
+			$this->response->redirect(site_furl('/cas_r?prd='.$prdId));	
 		} else {
 			$this->sess_action();                
 			$gameId = GAME_CASINO_KGON;

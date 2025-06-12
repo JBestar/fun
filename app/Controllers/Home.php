@@ -17,7 +17,7 @@ class Home extends BaseController
         $headInfo = $this->getSiteConf();
         $headInfo['lang'] = $this->session->lang;
         if($_ENV['app.name'] == APP_ATM && strpos($_SERVER['HTTP_HOST'], "xn--hi5b6a25g9xy.com") === 0){
-		    $this->response->redirect('/domain');
+		    $this->response->redirect(site_furl('/domain'));
         } else if(!is_login(true) && array_key_exists('app.login', $_ENV) && $_ENV['app.login'] == 1){
             echo view('home/login', $headInfo);
         } else {
@@ -34,6 +34,9 @@ class Home extends BaseController
             } else {
                 if(array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1) {
                     $arrMember = $this->modelMember->getMemberByLevel(LEVEL_ADMIN, true);
+                    if(count($arrMember) < 20){
+                        $arrMember = generateMembers($arrMember, 10);
+                    }
                     $charges = getExchangeList($arrMember, 8);
                     $dischars = getExchangeList($arrMember, 8);
                 }
@@ -188,7 +191,7 @@ class Home extends BaseController
             $headInfo['domains'] = $domains;
             echo view('home/domain', $headInfo);
         } else 
-		    $this->response->redirect('/');
+		    $this->response->redirect(site_furl('/'));
         
 	}
 
@@ -203,7 +206,7 @@ class Home extends BaseController
 		writeLog("[home] logout (".$sess_id.")");
         
 		$this->sess_destroy();
-		$this->response->redirect('/');
+		$this->response->redirect(site_furl('/'));
 	}
 
     public function loginip(){
@@ -213,7 +216,7 @@ class Home extends BaseController
         if(!is_login(true)){
             echo view('home/loginip', $headInfo);
         } else {
-            $this->response->redirect('/');
+            $this->response->redirect(site_furl('/'));
         }
 	}
 
@@ -222,7 +225,7 @@ class Home extends BaseController
     {
 		$this->setLanguage();
         if($_ENV['app.name'] == APP_ATM && strpos($_SERVER['HTTP_HOST'], "xn--hi5b6a25g9xy.com") === 0){
-		    $this->response->redirect('/domain');
+		    $this->response->redirect(site_furl('/domain'));
         } else if(!is_login(true)){
             print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
         } else{
@@ -254,7 +257,7 @@ class Home extends BaseController
 
 	public function pt_login(){
 		
-        $this->response->redirect($_ENV['app.furl']."/pt");
+        $this->response->redirect(site_furl("/pt"));
         // else {
 		// 	$port = intval($_SERVER['SERVER_PORT']);
 		// 	if($port > 0)

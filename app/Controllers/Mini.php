@@ -6,7 +6,7 @@ class Mini extends BaseController
     {
         if(!is_login(true))
 		{
-			$this->response->redirect('/');	
+			$this->response->redirect(site_furl('/'));	
 
         } else {
             $this->setLanguage();
@@ -93,7 +93,7 @@ class Mini extends BaseController
                 else echo view('mini/pball');	
                 echo view('mini/pfooter');	
             } else {
-                // $this->response->redirect('/logout');	
+                // $this->response->redirect(site_furl('/logout'));	
             }
 
         }
@@ -103,7 +103,7 @@ class Mini extends BaseController
     {
         if(!is_login(true))
 		{
-			$this->response->redirect('/');	
+			$this->response->redirect(site_furl('/'));	
 
         } else {
             $this->setLanguage();
@@ -151,7 +151,7 @@ class Mini extends BaseController
                 echo view('mini/navbar', $navInfo);	
                 echo view('mini/betlist', array('dates'=>$dates));	
             } else {
-                // $this->response->redirect('/logout');	
+                // $this->response->redirect(site_furl('/logout'));	
             }
         }
     }
@@ -160,7 +160,7 @@ class Mini extends BaseController
     {
         if(!is_login(true))
 		{
-			$this->response->redirect('/');	
+			$this->response->redirect(site_furl('/'));	
 
         } else {
             $this->setLanguage();
@@ -208,7 +208,7 @@ class Mini extends BaseController
                 echo view('mini/navbar', $navInfo);	
                 echo view('mini/rndlist', array('dates'=>$dates));	
             } else {
-                // $this->response->redirect('/logout');	
+                // $this->response->redirect(site_furl('/logout'));	
             }
         }
     }
