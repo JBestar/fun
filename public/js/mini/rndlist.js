@@ -143,7 +143,7 @@ function showPage(game, data) {
                             html += '<p class="rst_c"><span class="rst_ico red">'+langMessage.ball_even+'</span></p>';
 
                         html += '<p class="rst_c"><span class="rst_ico gray">' + round.round_power + '</span></p>';
-                        if (round.round_result_3 == "P")
+                        if (round.round_result_1 == "P")
                             html += '<p class="rst_c"><span class="rst_ico blue">'+langMessage.ball_odd+'</span></p>';
                         else
                             html += '<p class="rst_c"><span class="rst_ico red">'+langMessage.ball_even+'</span></p>';

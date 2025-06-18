@@ -380,8 +380,8 @@
           case GAME_HOLD_CMS: return $objMember->mb_game_hl;
           case GAME_EOS5_BALL: 
           case GAME_EOS3_BALL:  return $objMember->mb_game_eo;
-          case GAME_RAND5_BALL: 
-          case GAME_RAND3_BALL:  return $objMember->mb_game_co;
+          case GAME_COIN5_BALL: 
+          case GAME_COIN3_BALL:  return $objMember->mb_game_co;
           default: break;
       } 
       return 0;
@@ -449,7 +449,7 @@
 
       $iType = 0; 
       if($arrBetData['game'] == GAME_PBG_BALL || $arrBetData['game'] == GAME_BOGLE_BALL
-        || ( $arrBetData['game'] >= GAME_EOS5_BALL && $arrBetData['game'] <= GAME_RAND3_BALL) 
+        || ( $arrBetData['game'] >= GAME_EOS5_BALL && $arrBetData['game'] <= GAME_COIN3_BALL) 
         || $arrBetData['game'] == GAME_SPKN_BALL || $arrBetData['game'] == GAME_EVOL_BALL) {
 
          switch ($nMode) {
@@ -565,7 +565,7 @@
       
       $iType = 0; 
       if($arrBetData['game'] == GAME_PBG_BALL || $arrBetData['game'] == GAME_BOGLE_BALL
-      || ( $arrBetData['game'] >= GAME_EOS5_BALL && $arrBetData['game'] <= GAME_RAND3_BALL) 
+      || ( $arrBetData['game'] >= GAME_EOS5_BALL && $arrBetData['game'] <= GAME_COIN3_BALL) 
       || $arrBetData['game'] >= GAME_SPKN_BALL) {
 
          switch ($nMode) {
@@ -703,8 +703,8 @@
           case GAME_BOGLE_BALL: 
           case GAME_EOS5_BALL:
           case GAME_EOS3_BALL: 
-          case GAME_RAND5_BALL:
-          case GAME_RAND3_BALL: 
+          case GAME_COIN5_BALL:
+          case GAME_COIN3_BALL: 
                 $fRatio = $iMode<5 ? $objMember->mb_game_pb_ratio : $objMember->mb_game_pb2_ratio;
                 break;
           case GAME_BOGLE_LADDER: 
@@ -780,10 +780,10 @@
             case GAME_EOS3_BALL: 
               $rate = $follow->fl_e3_rate;
               break;
-            case GAME_RAND5_BALL: 
+            case GAME_COIN5_BALL: 
               $rate = $follow->fl_c5_rate;
               break;
-            case GAME_RAND3_BALL: 
+            case GAME_COIN3_BALL: 
               $rate = $follow->fl_c3_rate;
               break;
             default: break;

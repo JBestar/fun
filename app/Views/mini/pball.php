@@ -15,7 +15,7 @@
                                         loading="lazy"
                                         class="lazy"
                                         data-loader="frame"
-                                        src="https://rdombox.com/games/boglepowerball"
+                                        src="https://bepick.net/live/bubblepower/scrap"
                                         style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
                                     ></iframe>
                                     <!-- https://bepick.net/live/bubblepower/scrap -->
@@ -31,7 +31,7 @@
                                         loading="lazy"
                                         class="lazy"
                                         data-loader="frame"
-                                        src="https://rdombox.com/games/eospowerball?min=5"
+                                        src="https://bepick.net/live/eosball5m"
                                         style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
                                     ></iframe>
                                     <!-- https://bepick.net/live/eosball5m -->
@@ -47,12 +47,12 @@
                                         loading="lazy"
                                         class="lazy"
                                         data-loader="frame"
-                                        src="https://rdombox.com/games/eospowerball?min=3"
+                                        src="https://bepick.net/live/eosball3m"
                                         style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
                                     ></iframe>
                                     <!-- https://bepick.net/live/eosball3m -->
                                 </div>
-                                <?php elseif($rate->game_index == GAME_RAND5_BALL) : ?>
+                                <?php elseif($rate->game_index == GAME_COIN5_BALL) : ?>
                                 <div class="game_area npl_game" style="height: 550px;">
                                     <iframe
                                         marginwidth="0"
@@ -65,12 +65,12 @@
                                         data-loader="frame"
                                         data-width="840"
                                         data-height="650"
-                                        src="https://rdombox.com/games/rdomboxpowerball?min=5"
+                                        src="https://updownscore.com/game/share/coinpowerball5"
                                         style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
                                     ></iframe>
-                                    <!-- https://updown2.com/game/share/coinpowerball5 -->
+                                    <!-- https://updownscore.com/game/share/coinpowerball5 -->
                                 </div>
-                                <?php elseif($rate->game_index == GAME_RAND3_BALL) : ?>
+                                <?php elseif($rate->game_index == GAME_COIN3_BALL) : ?>
                                 <div class="game_area npl_game" style="height: 550px;">
                                     <iframe
                                         marginwidth="0"
@@ -83,10 +83,10 @@
                                         data-loader="frame"
                                         data-width="840"
                                         data-height="650"
-                                        src="https://rdombox.com/games/rdomboxpowerball?min=3"
+                                        src="https://updownscore.com/game/share/coinpowerball3"
                                         style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
                                     ></iframe>
-                                    <!-- https://updown2.com/game/share/coinpowerball3 -->
+                                    <!-- https://updownscore.com/game/share/coinpowerball3 -->
                                 </div>
                                 <?php elseif($rate->game_index == GAME_SPKN_BALL) : ?>
                                 <div class="game_area npl_game" style="height: 550px;">
@@ -135,7 +135,7 @@
                                         loading="lazy"
                                         class="lazy"
                                         data-loader="frame"
-                                        src="https://rdombox.com/games/powerball"
+                                        src="https://bepick.net/live/pbgpowerball/scrap"
                                         style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
                                     ></iframe>
                                 </div>

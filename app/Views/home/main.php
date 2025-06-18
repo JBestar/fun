@@ -1009,7 +1009,7 @@
                         </li>
                         <?php endif ?>
 
-                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$rand5_deny || !$rand3_deny || !$pbg_deny) :?>
+                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$pbg_deny) :?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('mini');">
                             <a><i class="ui bowling ball icon"></i> <?=lang('common.mini_games')?></a>
                         </li>
@@ -1209,7 +1209,7 @@
                                             </div>
                                         <?php endif ?>
                                         
-                                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$rand5_deny || !$rand3_deny || !$pbg_deny) :?>
+                                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$pbg_deny) :?>
                                         <div class="column first">
                                             <img     
                                             <?php if ($apps_enable):?>
@@ -1514,7 +1514,7 @@
                         </section>
                         <?php endif ?>
 
-                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$rand5_deny || !$rand3_deny || !$pbg_deny) :?>
+                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$pbg_deny) :?>
                         <section class="uk-section" id="mini" style="display: none;">
                             <div class="uk-container">
                                 <h2 style="margin-bottom: 20px; text-align: center;">MINI GAMES
@@ -1688,14 +1688,14 @@
                                             </div>
                                         </div>
                                     <?php endif ?>
-                                    <?php if(!$rand5_deny) :?>
+                                    <?php if(!$coin5_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_rand5.png?v=2'); ?>" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_coin5.png?v=2'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="랜덤5분파워볼" data-onoff="on" data-cid="RAND5">Play </button>
+                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="코인5분파워볼" data-onoff="on" data-cid="COIN5">Play </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1703,21 +1703,21 @@
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
                                                                 <span class="game_title blue">&nbsp;&nbsp;</span>
-                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_rand5')?></span> -->
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_coin5')?></span> -->
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     <?php endif ?>
-                                    <?php if(!$rand3_deny) :?>
+                                    <?php if(!$coin3_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_rand3.png?v=2'); ?>" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_coin3.png?v=2'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="랜덤3분파워볼" data-onoff="on" data-cid="RAND3">Play </button>
+                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="코인3분파워볼" data-onoff="on" data-cid="COIN3">Play </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1725,7 +1725,7 @@
                                                     <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
                                                         <div class="uk-width-expand uk-first-column">
                                                                 <span class="game_title blue">&nbsp;&nbsp;</span>
-                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_rand3')?></span> -->
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_coin3')?></span> -->
                                                         </div>
                                                     </div>
                                                 </div>

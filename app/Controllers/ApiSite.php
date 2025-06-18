@@ -67,9 +67,9 @@ class ApiSite extends BaseController
             else if($arrData['game'] == 6)
                 $objConfig = $this->modelConfgame->find(GAME_EOS3_BALL);
             else if($arrData['game'] == 7)
-                $objConfig = $this->modelConfgame->find(GAME_RAND5_BALL);
+                $objConfig = $this->modelConfgame->find(GAME_COIN5_BALL);
             else if($arrData['game'] == 8)
-                $objConfig = $this->modelConfgame->find(GAME_RAND3_BALL);
+                $objConfig = $this->modelConfgame->find(GAME_COIN3_BALL);
         
             
             $arrBalance = checkApiBalance($arrData['balance']);
@@ -120,18 +120,18 @@ class ApiSite extends BaseController
                     $arrRoundInfo = $modelRound->gets(1);
                     $arrRoundData = getBsRoundTimes($objConfig);
                     $iMoneyType = MONEYCHANGE_BET_EO3;
-                } else if($arrData['game'] == 7){           //Rand5M
-                    $arrBetData['game'] = GAME_RAND5_BALL;
+                } else if($arrData['game'] == 7){           //Coin5M
+                    $arrBetData['game'] = GAME_COIN5_BALL;
 				
                     $arrRoundInfo = $modelRound->gets(1);
                     $arrRoundData = getPbRoundTimes($objConfig);
-                    $iMoneyType = MONEYCHANGE_BET_RD5;
-                } else if($arrData['game'] == 8){           //Rand3M
-                    $arrBetData['game'] = GAME_RAND3_BALL;
+                    $iMoneyType = MONEYCHANGE_BET_CO5;
+                } else if($arrData['game'] == 8){           //Coin3M
+                    $arrBetData['game'] = GAME_COIN3_BALL;
 
                     $arrRoundInfo = $modelRound->gets(1);
                     $arrRoundData = getBsRoundTimes($objConfig);
-                    $iMoneyType = MONEYCHANGE_BET_RD3;
+                    $iMoneyType = MONEYCHANGE_BET_CO3;
                 } 
                 
                 $arrBetData['roundno'] = $arrRoundData['round_no'];

@@ -52,10 +52,10 @@
                         <h2> <?=lang('common.powerball_eos5')?> </h2>
                     <?php elseif($game_id == GAME_EOS3_BALL) : ?>
                         <h2> <?=lang('common.powerball_eos3')?> </h2>
-                    <?php elseif($game_id == GAME_RAND5_BALL) : ?>
-                        <h2> <?=lang('common.powerball_rand5')?> </h2>
-                    <?php elseif($game_id == GAME_RAND3_BALL) : ?>
-                        <h2> <?=lang('common.powerball_rand3')?> </h2>
+                    <?php elseif($game_id == GAME_COIN5_BALL) : ?>
+                        <h2> <?=lang('common.powerball_coin5')?> </h2>
+                    <?php elseif($game_id == GAME_COIN3_BALL) : ?>
+                        <h2> <?=lang('common.powerball_coin3')?> </h2>
                     <?php elseif($game_id == GAME_SPKN_BALL) : ?>
                         <h2> <?=lang('common.powerball_spkn')?> </h2>
                     <?php else :?>
@@ -106,15 +106,15 @@
                     </li>
                     <?php endif ?>
 
-                    <?php if(!$rand5_deny || !$rand3_deny) :?>
+                    <?php if(!$coin5_deny || !$coin3_deny) :?>
                     <li class="dropdown">
-                        <button class="dropbtn <?=$gm_ro?>"><?=lang('common.game_rand')?></button>
+                        <button class="dropbtn <?=$gm_ro?>"><?=lang('common.game_coin')?></button>
                         <div class="dropdown-content">
-                        <?php if(!$rand3_deny) :?>
-                            <a class="<?=$gm_r3?>" href="/mini?gm=RAND3"><?=lang('common.powerball_rand3')?></a>
+                        <?php if(!$coin3_deny) :?>
+                            <a class="<?=$gm_r3?>" href="/mini?gm=COIN3"><?=lang('common.powerball_coin3')?></a>
                         <?php endif ?>
-                        <?php if(!$rand5_deny) :?>
-                            <a class="<?=$gm_r5?>" href="/mini?gm=RAND5"><?=lang('common.powerball_rand5')?></a>
+                        <?php if(!$coin5_deny) :?>
+                            <a class="<?=$gm_r5?>" href="/mini?gm=COIN5"><?=lang('common.powerball_coin5')?></a>
                         <?php endif ?>
                         </div>
                     </li>

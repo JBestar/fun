@@ -175,7 +175,7 @@
             </div>
 
 
-            <script src="<?php echo site_furl('/js/mini/np_com.js?v=1'); ?>"></script>
+            <script src="<?php echo site_furl('/js/mini/np_com.js?v=2'); ?>"></script>
             <script src="<?php echo site_furl('/js/mini/np_req.js?v=1'); ?>"></script>
             <script src="<?php echo site_furl('/js/mini/front.js?v=1'); ?>"></script>
 

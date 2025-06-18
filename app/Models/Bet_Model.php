@@ -145,8 +145,8 @@ class Bet_Model extends Model {
             case GAME_BOGLE_BALL:  
             case GAME_EOS5_BALL:    
             case GAME_EOS3_BALL:   
-            case GAME_RAND5_BALL:   
-            case GAME_RAND3_BALL:  $cntMode = 4; break;
+            case GAME_COIN5_BALL:   
+            case GAME_COIN3_BALL:  $cntMode = 4; break;
             case GAME_BOGLE_LADDER:$cntMode = 3; break;
             default: break;
         } 

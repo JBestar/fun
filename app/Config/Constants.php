@@ -151,8 +151,8 @@ defined('CONF_KGON_DENY')       || define('CONF_KGON_DENY', 31);
 defined('CONF_EOS5_DENY')       || define('CONF_EOS5_DENY', 32);
 defined('CONF_EOS3_DENY')       || define('CONF_EOS3_DENY', 33);
 defined('CONF_PBG_DENY')        || define('CONF_PBG_DENY', 34);
-defined('CONF_RAND5_DENY')      || define('CONF_RAND5_DENY', 45);
-defined('CONF_RAND3_DENY')      || define('CONF_RAND3_DENY', 46);
+defined('CONF_COIN5_DENY')      || define('CONF_COIN5_DENY', 45);
+defined('CONF_COIN3_DENY')      || define('CONF_COIN3_DENY', 46);
 defined('CONF_HOLD_DENY')       || define('CONF_HOLD_DENY', 69);
 defined('CONF_EVP_DENY')       || define('CONF_EVP_DENY', 74); //Evo Powerball
 defined('CONF_SPK_DENY')       || define('CONF_SPK_DENY', 75); //Speed Keno
@@ -242,8 +242,8 @@ defined('GAME_SLOT_THEPLUS')     || define('GAME_SLOT_THEPLUS', 7);
 defined('GAME_SLOT_GSPLAY')      || define('GAME_SLOT_GSPLAY', 8);
 defined('GAME_EOS5_BALL')        || define('GAME_EOS5_BALL', 9);
 defined('GAME_EOS3_BALL')        || define('GAME_EOS3_BALL', 10);
-defined('GAME_RAND5_BALL')       || define('GAME_RAND5_BALL', 11);
-defined('GAME_RAND3_BALL')       || define('GAME_RAND3_BALL', 12);
+defined('GAME_COIN5_BALL')       || define('GAME_COIN5_BALL', 11);
+defined('GAME_COIN3_BALL')       || define('GAME_COIN3_BALL', 12);
 defined('GAME_SLOT_GOLD')        || define('GAME_SLOT_GOLD', 13);  //Gold slot
 defined('GAME_SPKN_BALL')        || define('GAME_SPKN_BALL', 14); //Speed Kino
 defined('GAME_SLOT_KGON')        || define('GAME_SLOT_KGON', 15);  //KGON slot
@@ -299,12 +299,12 @@ defined('MONEYCHANGE_WIN_EO5')    || define('MONEYCHANGE_WIN_EO5', 33);
 defined('MONEYCHANGE_BET_EO3')    || define('MONEYCHANGE_BET_EO3', 34); //Eos3
 defined('MONEYCHANGE_DENY_EO3')   || define('MONEYCHANGE_DENY_EO3', 35);
 defined('MONEYCHANGE_WIN_EO3')    || define('MONEYCHANGE_WIN_EO3', 36);
-defined('MONEYCHANGE_BET_RD5')    || define('MONEYCHANGE_BET_RD5', 37); //Random5
-defined('MONEYCHANGE_DENY_RD5')   || define('MONEYCHANGE_DENY_RD5', 38);
-defined('MONEYCHANGE_WIN_RD5')    || define('MONEYCHANGE_WIN_RD5', 39);
-defined('MONEYCHANGE_BET_RD3')    || define('MONEYCHANGE_BET_RD3', 40); //Random3
-defined('MONEYCHANGE_DENY_RD3')   || define('MONEYCHANGE_DENY_RD3', 41);
-defined('MONEYCHANGE_WIN_RD3')    || define('MONEYCHANGE_WIN_RD3', 42);
+defined('MONEYCHANGE_BET_CO5')    || define('MONEYCHANGE_BET_CO5', 37); //Coin5
+defined('MONEYCHANGE_DENY_CO5')   || define('MONEYCHANGE_DENY_CO5', 38);
+defined('MONEYCHANGE_WIN_CO5')    || define('MONEYCHANGE_WIN_CO5', 39);
+defined('MONEYCHANGE_BET_CO3')    || define('MONEYCHANGE_BET_CO3', 40); //Coin3
+defined('MONEYCHANGE_DENY_CO3')   || define('MONEYCHANGE_DENY_CO3', 41);
+defined('MONEYCHANGE_WIN_CO3')    || define('MONEYCHANGE_WIN_CO3', 42);
 defined('MONEYCHANGE_BET_EBAL')   || define('MONEYCHANGE_BET_EBAL', 43); //Evol
 defined('MONEYCHANGE_DENY_EBAL')  || define('MONEYCHANGE_DENY_EBAL', 44);
 defined('MONEYCHANGE_WIN_EBAL')   || define('MONEYCHANGE_WIN_EBAL', 45);

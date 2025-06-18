@@ -44,7 +44,7 @@
 
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
         <script src="<?php echo site_furl('/js/mini/page.js?v=1'); ?>"></script>
-        <script src="<?php echo site_furl('/js/mini/np_com.js?v=1'); ?>"></script>
+        <script src="<?php echo site_furl('/js/mini/np_com.js?v=2'); ?>"></script>
         <script src="<?php echo site_furl('/js/mini/betlist.js?v=1'); ?>"></script>
     <?php else : ?>
         <script src="<?php echo site_furl('/js/mini/page.js?t='.time()); ?>"></script>

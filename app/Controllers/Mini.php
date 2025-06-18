@@ -45,15 +45,15 @@ class Mini extends BaseController
     				$bPermit = false;
                 $navInfo['gm_e3'] = 'active';
                 $navInfo['gm_eos'] = 'active';
-            } else if($game === "RAND5"){
-                $gameId = GAME_RAND5_BALL;
-                if($headInfo['rand5_deny'])
+            } else if($game === "COIN5"){
+                $gameId = GAME_COIN5_BALL;
+                if($headInfo['coin5_deny'])
     				$bPermit = false;
                 $navInfo['gm_r5'] = 'active';
                 $navInfo['gm_ro'] = 'active';
-            } else if($game === "RAND3"){
-                $gameId = GAME_RAND3_BALL;
-                if($headInfo['rand3_deny'])
+            } else if($game === "COIN3"){
+                $gameId = GAME_COIN3_BALL;
+                if($headInfo['coin3_deny'])
     				$bPermit = false;
                 $navInfo['gm_r3'] = 'active';
                 $navInfo['gm_ro'] = 'active';
@@ -124,10 +124,10 @@ class Mini extends BaseController
                 $gameId = GAME_EOS5_BALL;
             } else if($game === "EOS3"){
                 $gameId = GAME_EOS3_BALL;
-            } else if($game === "RAND5"){
-                $gameId = GAME_RAND5_BALL;
-            } else if($game === "RAND3"){
-                $gameId = GAME_RAND3_BALL;
+            } else if($game === "COIN5"){
+                $gameId = GAME_COIN5_BALL;
+            } else if($game === "COIN3"){
+                $gameId = GAME_COIN3_BALL;
             } else if($game === "PBG"){
                 $gameId = GAME_PBG_BALL;
             } else if($game === "SPKN"){
@@ -181,10 +181,10 @@ class Mini extends BaseController
                 $gameId = GAME_EOS5_BALL;
             } else if($game === "EOS3"){
                 $gameId = GAME_EOS3_BALL;
-            } else if($game === "RAND5"){
-                $gameId = GAME_RAND5_BALL;
-            } else if($game === "RAND3"){
-                $gameId = GAME_RAND3_BALL;
+            } else if($game === "COIN5"){
+                $gameId = GAME_COIN5_BALL;
+            } else if($game === "COIN3"){
+                $gameId = GAME_COIN3_BALL;
             } else if($game === "PBG"){
                 $gameId = GAME_PBG_BALL;
             } else if($game === "SPKN"){

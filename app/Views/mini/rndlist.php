@@ -43,7 +43,7 @@
         <!--//section -->
 
         <script src="<?php echo site_furl('/js/mini/page.js?v=1'); ?>"></script>
-        <script src="<?php echo site_furl('/js/mini/rndlist.js?v=1'); ?>"></script>
+        <script src="<?php echo site_furl('/js/mini/rndlist.js?v=2'); ?>"></script>
     
     </div>
     <!--//wrap --> 

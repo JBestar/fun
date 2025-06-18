@@ -21,10 +21,10 @@ function getGameName(game) {
             sGame = langMessage.powerball_eos3;
             break;
         case 11:
-            sGame = langMessage.powerball_rand5;
+            sGame = langMessage.powerball_coin5;
             break; 
         case 12:
-            sGame = langMessage.powerball_rand3;
+            sGame = langMessage.powerball_coin3;
             break;
         case 14:
             sGame = langMessage.powerball_spkn;

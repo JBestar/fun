@@ -62,9 +62,9 @@ class ApiRave_Lib  {
                 // "timestamp": "Server response time"
                 // 
                 writeLog($logHead."Error result=".json_encode($curlResult));
-                if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
-                    $arrResult = json_decode($curlResult['body'], true);
-                }
+                // if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
+                //     $arrResult = json_decode($curlResult['body'], true);
+                // }
                 $arrResult['status'] = 0;
             }
 		} else {
@@ -116,9 +116,9 @@ class ApiRave_Lib  {
                 // "timestamp": "Server response time"
                 // 
                 writeLog($logHead."Error result=".json_encode($curlResult));
-                if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
-                    $arrResult = json_decode($curlResult['body'], true);
-                }
+                // if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
+                //     $arrResult = json_decode($curlResult['body'], true);
+                // }
                 $arrResult['status'] = 0;
             }
 		} else {
@@ -161,9 +161,9 @@ class ApiRave_Lib  {
                 // "timestamp": "Server response time"
                 // 
                 writeLog($logHead."Error result=".json_encode($curlResult));
-                if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
-                    $arrResult = json_decode($curlResult['body'], true);
-                }
+                // if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
+                //     $arrResult = json_decode($curlResult['body'], true);
+                // }
                 $arrResult['status'] = 0;
             }
 		} else {
@@ -209,9 +209,9 @@ class ApiRave_Lib  {
                 // "timestamp": "Server response time"
                 // 
                 writeLog($logHead."Error result=".json_encode($curlResult));
-                if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
-                    $arrResult = json_decode($curlResult['body'], true);
-                }
+                // if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
+                //     $arrResult = json_decode($curlResult['body'], true);
+                // }
                 $arrResult['status'] = 0;
             }
 		} else {
@@ -258,9 +258,9 @@ class ApiRave_Lib  {
                 // "timestamp": "Server response time"
                 // 
                 writeLog($logHead."Error result=".json_encode($curlResult));
-                if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
-                    $arrResult = json_decode($curlResult['body'], true);
-                }
+                // if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
+                //     $arrResult = json_decode($curlResult['body'], true);
+                // }
                 $arrResult['status'] = 0;
             }
 		} else {
@@ -313,9 +313,9 @@ class ApiRave_Lib  {
                 // "timestamp": "Server response time"
                 // 
                 writeLog($logHead."Error result=".json_encode($curlResult));
-                if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
-                    $arrResult = json_decode($curlResult['body'], true);
-                }
+                // if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
+                //     $arrResult = json_decode($curlResult['body'], true);
+                // }
                 $arrResult['status'] = 0;
             }
 		} else {
@@ -371,9 +371,9 @@ class ApiRave_Lib  {
                 // "timestamp": "Server response time"
                 // 
                 writeLog($logHead."Error result=".json_encode($curlResult));
-                if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
-                    $arrResult = json_decode($curlResult['body'], true);
-                }
+                // if(array_key_exists('body', $curlResult) && strlen($curlResult['body']) > 0){
+                //     $arrResult = json_decode($curlResult['body'], true);
+                // }
                 $arrResult['status'] = 0;
             }
 		} else {

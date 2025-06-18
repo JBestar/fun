@@ -41,10 +41,10 @@ class Follow_Model extends Model {
         } else if($game == GAME_EOS3_BALL){
             $where = "fl_e3_uid = '".$uid."' ";
             $where.= " AND fl_e3_stop = '".STATE_DISABLE."' ";
-        } else if($game == GAME_RAND5_BALL){
+        } else if($game == GAME_COIN5_BALL){
             $where = "fl_c5_uid = '".$uid."' ";
             $where.= " AND fl_c5_stop = '".STATE_DISABLE."' ";
-        } else if($game == GAME_RAND3_BALL){
+        } else if($game == GAME_COIN3_BALL){
             $where = "fl_c3_uid = '".$uid."' ";
             $where.= " AND fl_c3_stop = '".STATE_DISABLE."' ";
         } else if($game == GAME_SPKN_BALL){
