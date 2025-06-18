@@ -9,9 +9,9 @@ class Sess_Model extends Model {
     protected $primaryKey = 'sess_fid';
     protected $returnType = 'object'; 
 
-    protected $allowedFields = ['sess_id', 'sess_mb_fid', 'sess_mb_uid', 'sess_ip', 'sess_join', 'sess_update', 'sess_action']; 
+    protected $allowedFields = ['sess_id', 'sess_mb_fid', 'sess_mb_uid', 'sess_ip', 'sess_join', 'sess_update', 'sess_action', 'sess_type', 'sess_spec']; 
 
-    public function add($member, $sessId){
+    public function add($member, $sessId, $type=0){
         $this->deleteBySess($sessId);
         
         $dtNow = date("Y-m-d H:i:s");
@@ -23,6 +23,8 @@ class Sess_Model extends Model {
             'sess_join' => $dtNow,
             'sess_update' => $dtNow,
             'sess_action' => $dtNow,
+            'sess_type' => SESS_TYPE_SITE,
+            'sess_spec' => $type,
         ];
         
         return $this->insert($data);

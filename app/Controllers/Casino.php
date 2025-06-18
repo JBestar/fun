@@ -25,11 +25,10 @@ class Casino extends BaseController
 			$headInfo = $this->getSiteConf();
 			$objCas = $this->modelCasprd->getById($gameId, 0);
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
-			$sess = null;
+			$sessAuto = null;
 			if(array_key_exists('app.transEg', $_ENV) && $_ENV['app.transEg'] == 1){
-				$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
+				$sessAuto = $this->modelSess->getByUid($objMember->mb_uid, false);
 			}
-
 			writeLog($logHead.$objMember->mb_uid." Call Play");
             $iCreated = 0;
 			if(is_null($objMember) || is_null($objConfig))
@@ -46,7 +45,7 @@ class Casino extends BaseController
 				$iCreated = 3;									
 			else if($diffDt < DELAY_GAME)
 				$iCreated = 8;	
-			else if(!is_null($sess))
+			else if(!is_null($sessAuto))
 				$iCreated = 9;	
 			else if($objMember->mb_live_id == 0){
 				//Creation of Player
@@ -152,17 +151,18 @@ class Casino extends BaseController
 			$headInfo = $this->getSiteConf();
 			$objCas = $this->modelCasprd->getById($gameId, $prdId);
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
-            $sess = null;
+            $sessAuto = null;
 			if(array_key_exists('app.transEg', $_ENV) && $_ENV['app.transEg'] == 1){
-				$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
+				$sessAuto = $this->modelSess->getByUid($objMember->mb_uid, false);
 			}
+			$sess = $this->modelSess->getBySess($this->session->session_id);
 
             $iCreated = 0;
-			if(is_null($objMember) || is_null($objConfig))
+			if(is_null($objMember) || is_null($objConfig) || is_null($sess))
 				$iCreated = 0;
             else if(is_null($objCas))
 				$iCreated = 6;									//Error of game
-            else if($objCas->maintain == STATE_ACTIVE || $objCas->hidden == STATE_ACTIVE)
+            else if(intval($sess->sess_spec) != 2 && ($objCas->maintain == STATE_ACTIVE || $objCas->hidden == STATE_ACTIVE))
 				$iCreated = 7;
 			else if($objConfig->game_bet_permit != PERMIT_OK)
 				$iCreated = 4;									//Preparing
@@ -172,7 +172,7 @@ class Casino extends BaseController
 				$iCreated = 3;									//Stop
 			else if($diffDt < DELAY_GAME)
 				$iCreated = 8;	
-			else if(!is_null($sess))
+			else if(!is_null($sessAuto))
 				$iCreated = 9;	
 			else if($objMember->mb_kgon_id == 0){
 				//플레이어 창조
@@ -267,9 +267,9 @@ class Casino extends BaseController
 			$headInfo = $this->getSiteConf();
 			$objCas = $this->modelCasprd->getById($gameId, $prdId);
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
-            $sess = null;
+            $sessAuto = null;
 			if(array_key_exists('app.transEg', $_ENV) && $_ENV['app.transEg'] == 1){
-				$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
+				$sessAuto = $this->modelSess->getByUid($objMember->mb_uid, false);
 			}
 
             $iCreated = 0;
@@ -287,7 +287,7 @@ class Casino extends BaseController
 				$iCreated = 3;									//Stop
 			else if($diffDt < DELAY_GAME)
 				$iCreated = 8;	
-			else if(!is_null($sess))
+			else if(!is_null($sessAuto))
 				$iCreated = 9;	
 			else if($objMember->mb_kgon_id == 0){
 				//플레이어 창조
@@ -399,14 +399,15 @@ class Casino extends BaseController
 				$objCas = $this->modelCasprd->getById($gameId, 100);
 
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
-			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
+			$sessAuto = $this->modelSess->getByUid($objMember->mb_uid, false);
+			$sess = $this->modelSess->getBySess($this->session->session_id);
             
             $iCreated = 0;
-			if(is_null($objMember) || is_null($objConfig))
+			if(is_null($objMember) || is_null($objConfig) || is_null($sess))
 				$iCreated = 0;
             else if(is_null($objCas))
 				$iCreated = 6;									//Error of game
-            else if($objCas->maintain == STATE_ACTIVE || $objCas->hidden == STATE_ACTIVE)
+            else if(intval($sess->sess_spec) != 2 && ($objCas->maintain == STATE_ACTIVE || $objCas->hidden == STATE_ACTIVE))
 				$iCreated = 7;
 			else if($objConfig->game_bet_permit != PERMIT_OK)
 				$iCreated = 4;									//Preparing
@@ -416,7 +417,7 @@ class Casino extends BaseController
 				$iCreated = 3;									//Stop
 			else if($diffDt < DELAY_GAME)
 				$iCreated = 8;	
-			else if(!is_null($sess))
+			else if(!is_null($sessAuto))
 				$iCreated = 9;	
 			else if($objMember->mb_hslot_token == ""){
 				//플레이어 창조
@@ -506,14 +507,15 @@ class Casino extends BaseController
 			$prdId = trim($this->request->getVar('prd'));
 			$objCas = $this->modelCasprd->getById($gameId, $prdId);
 			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
-			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
+			$sessAuto = $this->modelSess->getByUid($objMember->mb_uid, false);
+			$sess = $this->modelSess->getBySess($this->session->session_id);
             
             $iCreated = 0;
-			if(is_null($objMember) || is_null($objConfig))
+			if(is_null($objMember) || is_null($objConfig) || is_null($sess))
 				$iCreated = 0;
             else if(is_null($objCas))
 				$iCreated = 6;									//Error of game
-            else if($objCas->maintain == STATE_ACTIVE || $objCas->hidden == STATE_ACTIVE)
+            else if(intval($sess->sess_spec) != 2 && ($objCas->maintain == STATE_ACTIVE || $objCas->hidden == STATE_ACTIVE))
 				$iCreated = 7;
 			else if($objConfig->game_bet_permit != PERMIT_OK)
 				$iCreated = 4;									//Preparing
@@ -523,7 +525,7 @@ class Casino extends BaseController
 				$iCreated = 3;									//Stop
 			else if($diffDt < DELAY_GAME)
 				$iCreated = 8;	
-			else if(!is_null($sess))
+			else if(!is_null($sessAuto))
 				$iCreated = 9;	
 			else if($objMember->mb_rave_id == 0){
 				//플레이어 창조

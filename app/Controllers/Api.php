@@ -50,7 +50,7 @@ class Api extends BaseController
 		if($type==0 && array_key_exists('login.captcha', $_ENV) && $_ENV['login.captcha'] == 1){
 			$captchaCode = $this->request->getPost('captchacode');
 			// writeLog("captchaCod=".$captchaCode);
-			if(strlen($captchaCode) > 0){
+			// if(strlen($captchaCode) > 0){
 				$captchaImg = $this->request->getPost('captchasrc');
 				$captchaModel = new Captcha_Model();
 				$captchaOK = $captchaModel->verify($captchaImg, $captchaCode);
@@ -61,8 +61,7 @@ class Api extends BaseController
 					echo json_encode($arrResult);
 					return;
 				}
-			}
-			
+			// }
 		}
 
 		writeLog("[login] param:".$user_id.", ".$user_pw.", ".$user_ip.", ".$type);
@@ -107,7 +106,7 @@ class Api extends BaseController
 			$arrResult['code'] = RESULT_FAIL;	
 			$arrResult['msg'] = lang("common.login_ip_block");
 			$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IPBLOCK);
-		} else if((is_null($objMember) || $objMember->mb_level < LEVEL_ADMIN) && $this->modelConfsite->IsMaintain()){
+		} else if($type==0 && (is_null($objMember) || $objMember->mb_level < LEVEL_ADMIN) && $this->modelConfsite->IsMaintain()){
 			$arrResult['status'] = STATUS_FAIL;
 			$arrResult['code'] = RESULT_MAINTAIN;	//Maintain
 			$msg = $this->modelConfsite->msgMaintain();
@@ -201,17 +200,18 @@ class Api extends BaseController
 			} else if($this->modelMember->isPermitMember($objMember)){
 				//Save Session
 				$sessData = array('user_id' => $objMember->mb_uid, 'logged_in'=>TRUE );
-				writeLog("[login] ".$user_id." (".$sessId.")");
 
 				$this->session->set($sessData);
 				$objMember->mb_ip_last = $user_ip;
 				$this->modelMember->updateLogin($objMember);
 
-				$this->modelSess->add($objMember, $sessId);
+				$this->modelSess->add($objMember, $sessId, $type);
 				$modelSessLog = new SessLog_Model();
 				$modelSessLog->add($objMember);
 				//Add Try 
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_SUCCESS);
+
+				writeLog("[login] success ".$user_id." (".$sessId.") ");
 
 				$arrResult['status'] = STATUS_SUCCESS;
 				$arrResult['code'] = RESULT_OK;//1-Success 2-Mistake 3-Stop
