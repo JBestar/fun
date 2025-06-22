@@ -42,10 +42,11 @@ class Api extends BaseController
 	public function login(){ 
 		
 		$this->setLanguage();
-		$user_id = $this->request->getPost('userid');
-		$user_pw = $this->request->getPost('passwd');
-		$user_ip = $this->request->getPost('ip');
-		$type = intval($this->request->getPost('type'));
+		$user_id = $this->request->getVar('userid');
+		$user_pw = $this->request->getVar('passwd');
+		$user_ip = $this->request->getVar('ip');
+		$type = intval($this->request->getVar('type'));
+		writeLog("[login] param:".$user_id.", ".$user_pw.", ".$user_ip.", ".$type);
 
 		if($type==0 && array_key_exists('login.captcha', $_ENV) && $_ENV['login.captcha'] == 1){
 			$captchaCode = $this->request->getPost('captchacode');
@@ -64,7 +65,6 @@ class Api extends BaseController
 			// }
 		}
 
-		writeLog("[login] param:".$user_id.", ".$user_pw.", ".$user_ip.", ".$type);
 		if(strlen($user_ip) < 1 && $type != 1)
 			$user_ip = $this->request->getIPAddress();
 
@@ -185,7 +185,7 @@ class Api extends BaseController
 				$arrResult['code'] = RESULT_FAIL;	
 				$arrResult['msg'] = lang("common.login_ip_permit");
 				$modelSessTry->add($user_id, $user_pw, $user_ip, TRYLOG_IPDENIED);
-			} else if($objMember->mb_level < LEVEL_ADMIN && !$enMultiLogin && 
+			} else if($type != 2 && $objMember->mb_level < LEVEL_ADMIN && !$enMultiLogin && 
 					!is_null($sess) && $sess->sess_id != $sessId ){
 				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['code'] = RESULT_FAIL;	
