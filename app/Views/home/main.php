@@ -1475,11 +1475,20 @@
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-card-media-top">
                                                     <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                        <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
-                                                            <img src="<?php echo site_furl('/images/casino/'.$item->img.'_'.$_ENV['game.img_suf'].'.png'); ?>" />
-                                                        <?php else :?>
-                                                            <img src="<?php echo site_furl('/images/casino/'.$item->img.'.png?v=2'); ?>" />
+                                                        
+                                                        <?php if( $item->name!="") :?>
+                                                            <video poster="<?php echo site_furl('/images/casino/'.$item->img.'.png?v=1'); ?>" class="" width="100%" height="" autoplay="" loop="" muted="" playsinline="" webkit-playsinline="">
+                                                                <source src="<?php echo site_furl('/images/casino/'.$item->img.'.png?v=1'); ?>" type="video/png">
+                                                                <source src="<?php echo site_furl('/images/casino/'.$item->img.'.mp4?v=2'); ?>" type="video/mp4">
+                                                            </video>
+                                                        <?php else : ?>
+                                                            <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
+                                                                <img src="<?php echo site_furl('/images/casino/'.$item->img.'_'.$_ENV['game.img_suf'].'.png'); ?>" />
+                                                            <?php else :?>
+                                                                <img src="<?php echo site_furl('/images/casino/'.$item->img.'.png?v=2'); ?>" />
+                                                            <?php endif ?>
                                                         <?php endif ?>
+
                                                         <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                             <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                                 <button class="uk-button uk-button-primary playBtn" id="playBtn" data-cid="<?=$item->cas_id?>" data-gameid="<?=$item->cat?>"
