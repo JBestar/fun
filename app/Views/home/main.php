@@ -1479,7 +1479,7 @@
                                                         <?php if( $item->name!="") :?>
                                                             <video poster="<?php echo site_furl('/images/casino/'.$item->img.'.png?v=1'); ?>" class="" width="100%" height="" autoplay="" loop="" muted="" playsinline="" webkit-playsinline="">
                                                                 <source src="<?php echo site_furl('/images/casino/'.$item->img.'.png?v=1'); ?>" type="video/png">
-                                                                <source src="<?php echo site_furl('/images/casino/'.$item->img.'.mp4?v=2'); ?>" type="video/mp4">
+                                                                <source src="<?php echo site_furl('/images/casino/'.$item->img.'.mp4?v=3'); ?>" type="video/mp4">
                                                             </video>
                                                         <?php else : ?>
                                                             <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
