@@ -59,7 +59,7 @@
                     <?php elseif($game_id == GAME_SPKN_BALL) : ?>
                         <h2> <?=lang('common.powerball_spkn')?> </h2>
                     <?php else :?>
-                        <h2> <?=lang('common.powerball_evol')?> </h2>
+                        <h2> <?=lang('common.powerball_dhp')?> </h2>
                     <?php endif ?>
                     <div class="user-info-part"><?=lang('common.money')?>:<span id="h_money"><?=$user_money?></span> 
                         <?=lang('common.point')?>:<span id="h_point"><?=$user_point?></span>
@@ -72,9 +72,9 @@
                         <button class="dropbtn <?=$gm_pbg?>" onclick="location.href=FURL+'/mini?gm=PBG'"><?=lang('common.game_pbg')?></button>
                     </li>
                     <?php endif ?>
-                    <?php if(!$evp_deny) :?>
+                    <?php if(!$dhp_deny) :?>
                     <li class="dropdown">
-                        <button class="dropbtn <?=$gm_evp?>" onclick="location.href=FURL+'/mini?gm=EVP'"><?=lang('common.game_evol')?></button>
+                        <button class="dropbtn <?=$gm_dhp?>" onclick="location.href=FURL+'/mini?gm=DHP'"><?=lang('common.game_dhp')?></button>
                     </li>
                     <?php endif ?>
                     <?php if(!$spk_deny) :?>

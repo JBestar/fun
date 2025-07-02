@@ -83,6 +83,7 @@
             powerball_boggle : '<?=lang('common.powerball_boggle')?>',
             powerball_coin3 : '<?=lang('common.powerball_coin3')?>',
             powerball_coin5 : '<?=lang('common.powerball_coin5')?>',
+            powerball_dhp : '<?=lang('common.powerball_dhp')?>',
             powerball_digit : '<?=lang('common.powerball_digit')?>',
             powerball_eos3 : '<?=lang('common.powerball_eos3')?>',
             powerball_eos5 : '<?=lang('common.powerball_eos5')?>',

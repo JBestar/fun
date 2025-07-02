@@ -154,7 +154,7 @@ defined('CONF_PBG_DENY')        || define('CONF_PBG_DENY', 34);
 defined('CONF_COIN5_DENY')      || define('CONF_COIN5_DENY', 45);
 defined('CONF_COIN3_DENY')      || define('CONF_COIN3_DENY', 46);
 defined('CONF_HOLD_DENY')       || define('CONF_HOLD_DENY', 69);
-defined('CONF_EVP_DENY')       || define('CONF_EVP_DENY', 74); //Evo Powerball
+defined('CONF_DHP_DENY')       || define('CONF_DHP_DENY', 74); //DH Powerball
 defined('CONF_SPK_DENY')       || define('CONF_SPK_DENY', 75); //Speed Keno
 
 
@@ -222,7 +222,7 @@ defined('STATUS_LOGOUT')       || define('STATUS_LOGOUT', 'logout');
 
 
 //game delay seconds
-defined('ADVANCE_SEC')    	   || define('ADVANCE_SEC', 0);
+defined('ADVANCE_SEC')    	   || define('ADVANCE_SEC', 20);
 
 defined('SESS_TYPE_SITE')       || define('SESS_TYPE_SITE', 0);
 defined('SESS_TYPE_EVOL')       || define('SESS_TYPE_EVOL', 1);
@@ -233,7 +233,7 @@ defined('CURL_TIMEOUT_MAX')       || define('CURL_TIMEOUT_MAX', 100);
 
 //game type
 defined('GAME_PBG_BALL')         || define('GAME_PBG_BALL', 1);
-defined('GAME_EVOL_BALL')        || define('GAME_EVOL_BALL', 2);
+defined('GAME_DHP_BALL')         || define('GAME_DHP_BALL', 2);
 defined('GAME_CASINO_KGON')      || define('GAME_CASINO_KGON', 3);
 defined('GAME_CASINO_EVOL')      || define('GAME_CASINO_EVOL', 4);
 defined('GAME_BOGLE_BALL')       || define('GAME_BOGLE_BALL', 5);
@@ -252,6 +252,7 @@ defined('GAME_CASINO_STAR')      || define('GAME_CASINO_STAR', 17);  //STAR casi
 defined('GAME_HOLD_CMS')         || define('GAME_HOLD_CMS', 18);  //HOLDEM
 defined('GAME_SLOT_RAVE')        || define('GAME_SLOT_RAVE', 19);  //RAVE slot
 defined('GAME_CASINO_RAVE')      || define('GAME_CASINO_RAVE', 20);  //RAVE casino
+defined('GAME_EVOL_BALL')        || define('GAME_EVOL_BALL', 22);
 
 defined('N2P_MAX_HOLE')          || define('N2P_MAX_HOLE', 4);
 
@@ -267,9 +268,9 @@ defined('POINTCHANGE_EXCHANGE')  || define('POINTCHANGE_EXCHANGE', 3);
 defined('MONEYCHANGE_BET_PB')    || define('MONEYCHANGE_BET_PB', 4); //PBG
 defined('MONEYCHANGE_DENY_PB')   || define('MONEYCHANGE_DENY_PB', 5);
 defined('MONEYCHANGE_WIN_PB')    || define('MONEYCHANGE_WIN_PB', 6);
-defined('MONEYCHANGE_BET_EB')    || define('MONEYCHANGE_BET_EB', 7); //EVO 
-defined('MONEYCHANGE_DENY_EB')    || define('MONEYCHANGE_DENY_EB', 8);
-defined('MONEYCHANGE_WIN_EB')    || define('MONEYCHANGE_WIN_EB', 9);
+defined('MONEYCHANGE_BET_DH')    || define('MONEYCHANGE_BET_DH', 7); //DHP 
+defined('MONEYCHANGE_DENY_DH')    || define('MONEYCHANGE_DENY_DH', 8);
+defined('MONEYCHANGE_WIN_DH')    || define('MONEYCHANGE_WIN_DH', 9);
 defined('MONEYCHANGE_BET_SK')    || define('MONEYCHANGE_BET_SK', 10); //Speed Keno
 defined('MONEYCHANGE_DENY_SK')    || define('MONEYCHANGE_DENY_SK', 11);
 defined('MONEYCHANGE_WIN_SK')    || define('MONEYCHANGE_WIN_SK', 12);

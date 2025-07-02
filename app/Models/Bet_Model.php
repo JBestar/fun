@@ -141,7 +141,7 @@ class Bet_Model extends Model {
         switch($gameId){
             case GAME_PBG_BALL:   
             case GAME_SPKN_BALL:  
-            case GAME_EVOL_BALL: 
+            case GAME_DHP_BALL: 
             case GAME_BOGLE_BALL:  
             case GAME_EOS5_BALL:    
             case GAME_EOS3_BALL:   

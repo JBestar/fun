@@ -50,7 +50,7 @@ class Follow_Model extends Model {
         } else if($game == GAME_SPKN_BALL){
             $where = "fl_sk_uid = '".$uid."' ";
             $where.= " AND fl_sk_stop = '".STATE_DISABLE."' ";
-        } else if($game == GAME_EVOL_BALL){
+        } else if($game == GAME_DHP_BALL){
             $where = "fl_ev_uid = '".$uid."' ";
             $where.= " AND fl_ev_stop = '".STATE_DISABLE."' ";
         } else return [];

@@ -57,7 +57,7 @@ class ApiSite extends BaseController
             if($arrData['game'] == 1)
 			    $objConfig = $this->modelConfgame->find(GAME_PBG_BALL);
             else if($arrData['game'] == 2)
-                $objConfig = $this->modelConfgame->find(GAME_EVOL_BALL);
+                $objConfig = $this->modelConfgame->find(GAME_DHP_BALL);
             else if($arrData['game'] == 3)
                 $objConfig = $this->modelConfgame->find(GAME_BOGLE_BALL);
             else if($arrData['game'] == 4)
@@ -95,12 +95,12 @@ class ApiSite extends BaseController
                     $arrRoundInfo = $modelRound->gets(1);
                     $arrRoundData = getPbRoundTimes($objConfig);
                     $iMoneyType = MONEYCHANGE_BET_PB;
-                } else if($arrData['game'] == 2){                      //Evo
-                    $arrBetData['game'] = GAME_EVOL_BALL;
+                } else if($arrData['game'] == 2){                      //Dhp
+                    $arrBetData['game'] = GAME_DHP_BALL;
 
                     $arrRoundInfo = $modelRound->gets(1);
                     $arrRoundData = getPbRoundTimes($objConfig);
-                    $iMoneyType = MONEYCHANGE_BET_EB;
+                    $iMoneyType = MONEYCHANGE_BET_DH;
                     
                 } else if($arrData['game'] == 3){           //Bogle
                     $arrBetData['game'] = GAME_BOGLE_BALL;

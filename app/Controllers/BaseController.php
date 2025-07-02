@@ -140,7 +140,7 @@ class BaseController extends Controller
 	protected function getSiteConf(){
 		
 		$confs = ['site_name'=>"", "bpg_deny"=>false, "evol_deny"=>false, "slot_deny"=>false, "cas_deny"=>false, 
-			"eos5_deny"=>false, "eos3_deny"=>false, "evp_deny"=>false, "spk_deny"=>false,  
+			"eos5_deny"=>false, "eos3_deny"=>false, "evp_deny"=>true, "dhp_deny"=>false, "spk_deny"=>false,  
 			"coin5_deny"=>false, "coin3_deny"=>false, "pbg_deny"=>false, "apps_enable"=>false, "hold_deny"=>false];
 		$arrConf = $this->modelConfsite->getSiteConf();  
 		
@@ -166,7 +166,7 @@ class BaseController extends Controller
 					break;
 				case CONF_PBG_DENY:	$confs['pbg_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_EVP_DENY:	$confs['evp_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_DHP_DENY:	$confs['dhp_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
 				case CONF_SPK_DENY:	$confs['spk_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;

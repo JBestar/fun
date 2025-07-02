@@ -122,6 +122,7 @@
           'gm_eos' => '',
           'gm_ro' => '',
           'gm_pbg' => '',
+          'gm_dhp' => '',
           'gm_evp' => '',
           'gm_spk' => '',
           'ls_rnd' => '',
@@ -149,6 +150,7 @@
       $tmNow = time()+ ($bAdvance ? ADVANCE_SEC:0);
       if($objConfPb->game_index == GAME_SPKN_BALL)
         $tmNow += 3*60; 
+      
       $nYear = date("Y",$tmNow);
       $nMonth = date("m",$tmNow);
       $nDay = date("d",$tmNow);
@@ -363,7 +365,7 @@
 
       switch($iGame){
           case GAME_PBG_BALL: return $objMember->mb_game_pb;
-          case GAME_EVOL_BALL: return $objMember->mb_game_ps;
+          case GAME_DHP_BALL: return $objMember->mb_game_ps;
           case GAME_SPKN_BALL: return $objMember->mb_game_ks;
           case GAME_CASINO_EVOL:
           case GAME_CASINO_KGON:
@@ -450,7 +452,7 @@
       $iType = 0; 
       if($arrBetData['game'] == GAME_PBG_BALL || $arrBetData['game'] == GAME_BOGLE_BALL
         || ( $arrBetData['game'] >= GAME_EOS5_BALL && $arrBetData['game'] <= GAME_COIN3_BALL) 
-        || $arrBetData['game'] == GAME_SPKN_BALL || $arrBetData['game'] == GAME_EVOL_BALL) {
+        || $arrBetData['game'] == GAME_SPKN_BALL || $arrBetData['game'] == GAME_DHP_BALL) {
 
          switch ($nMode) {
            case 1: $ratioBet = $objConf->game_ratio_1; $iType = 1; break;
@@ -699,7 +701,7 @@
       switch($iGame){
           case GAME_PBG_BALL: 
           case GAME_SPKN_BALL: 
-          case GAME_EVOL_BALL: 
+          case GAME_DHP_BALL: 
           case GAME_BOGLE_BALL: 
           case GAME_EOS5_BALL:
           case GAME_EOS3_BALL: 
@@ -765,7 +767,7 @@
             case GAME_SPKN_BALL: 
               $rate = $follow->fl_sk_rate;
               break;
-            case GAME_EVOL_BALL: 
+            case GAME_DHP_BALL: 
               $rate = $follow->fl_ev_rate;
               break;
             case GAME_BOGLE_BALL: 

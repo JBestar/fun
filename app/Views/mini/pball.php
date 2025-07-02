@@ -121,8 +121,21 @@
                                         src="https://gopick.com/games/powerball_evo_05/live"
                                         style="transform: scale(0.859375); position: inherit; width: 900px; height: 760px;"
                                     ></iframe>
-                                        <!-- src="https://rdombox.com/games/evopowerball" -->
-
+                                </div>
+                                <?php elseif($rate->game_index == GAME_DHP_BALL) : ?>
+                                <div class="game_area npl_game" style="height: 550px;">
+                                    <iframe
+                                        marginwidth="0"
+                                        marginheight="0"
+                                        frameborder="0"
+                                        scrolling="no"
+                                        id="game"
+                                        loading="lazy"
+                                        class="lazy"
+                                        data-loader="frame"
+                                        src="https://bepick.net/live/dhpowerball/scrap"
+                                        style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
+                                    ></iframe>
                                 </div>
                                 <?php else :?>
                                 <div class="game_area npl_game" style="height: 550px;">

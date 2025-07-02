@@ -72,6 +72,11 @@ class Mini extends BaseController
                 if($headInfo['evp_deny'])
     				$bPermit = false;
                 $navInfo['gm_evp'] = 'active';
+            } else if($game === "DHP"){
+                $gameId = GAME_DHP_BALL;
+                if($headInfo['dhp_deny'])
+    				$bPermit = false;
+                $navInfo['gm_dhp'] = 'active';
             } else 
                 $bPermit = false;
 
@@ -132,8 +137,8 @@ class Mini extends BaseController
                 $gameId = GAME_PBG_BALL;
             } else if($game === "SPKN"){
                 $gameId = GAME_SPKN_BALL;
-            } else if($game === "EVP"){
-                $gameId = GAME_EVOL_BALL;
+            } else if($game === "DHP"){
+                $gameId = GAME_DHP_BALL;
             } else 
                 $bPermit = false;
 
@@ -189,8 +194,8 @@ class Mini extends BaseController
                 $gameId = GAME_PBG_BALL;
             } else if($game === "SPKN"){
                 $gameId = GAME_SPKN_BALL;
-            } else if($game === "EVP"){
-                $gameId = GAME_EVOL_BALL;
+            } else if($game === "DHP"){
+                $gameId = GAME_DHP_BALL;
             } else 
                 $bPermit = false;
 

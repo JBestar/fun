@@ -1009,7 +1009,7 @@
                         </li>
                         <?php endif ?>
 
-                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$pbg_deny) :?>
+                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$pbg_deny || !$dhp_deny) :?>
                         <li class="MainMenu-item MainMenu-item--casino MainMenu-item--active-trail element" onclick="showTabMenu('mini');">
                             <a><i class="ui bowling ball icon"></i> <?=lang('common.mini_games')?></a>
                         </li>
@@ -1209,7 +1209,7 @@
                                             </div>
                                         <?php endif ?>
                                         
-                                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$pbg_deny) :?>
+                                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$pbg_deny || !$dhp_deny) :?>
                                         <div class="column first">
                                             <img     
                                             <?php if ($apps_enable):?>
@@ -1523,7 +1523,7 @@
                         </section>
                         <?php endif ?>
 
-                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$pbg_deny) :?>
+                        <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$pbg_deny || !$dhp_deny) :?>
                         <section class="uk-section" id="mini" style="display: none;">
                             <div class="uk-container">
                                 <h2 style="margin-bottom: 20px; text-align: center;">MINI GAMES
@@ -1537,6 +1537,28 @@
                                 </h2>
                                 <div class="uk-grid uk-grid-small uk-child-width-1-3 uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-grid-match" data-uk-lightbox="toggle:a.uk-position-cover" data-uk-grid="">
                                     <!-- item -->
+                                     <?php if(!$dhp_deny) :?>
+                                        <div>
+                                            <div class="uk-card uk-card-default uk-card-small">
+                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                    <img src="<?php echo site_furl('/images/mini/btn_dhp.png?v=1'); ?>" />
+                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="동행파워볼" data-onoff="on" data-cid="DHP">Play </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-card-header">
+                                                    <div class="uk-grid-small uk-flex uk-flex-middle uk-grid uk-grid-stack" data-uk-grid="">
+                                                        <div class="uk-width-expand uk-first-column">
+                                                                <span class="game_title blue">&nbsp;&nbsp;</span>
+                                                                <!-- <span class="game_title blue"><?=lang('common.powerball_dhp')?></span> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endif ?>
                                     <?php if(!$pbg_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
@@ -1743,7 +1765,8 @@
                                     <?php endif ?>
                                     
                                     <?php if($_ENV['app.home'] > 0) :?>
-                                        <div>
+                                        
+                                        <!-- <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
                                                     <img src="<?php echo site_furl('/images/mini/btn_pb.png'); ?>" />
@@ -1780,7 +1803,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     <?php endif ?>
 
                                     <!-- item -->
