@@ -1541,7 +1541,7 @@
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_dhp.png?v=1'); ?>" />
+                                                    <img src="<?php echo site_furl('/images/mini/btn_dhp.png?v=2'); ?>" />
                                                     <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                                                         <div data-uk-margin="" class="uk-transition-slide-bottom-small">
                                                             <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="동행파워볼" data-onoff="on" data-cid="DHP">Play </button>
