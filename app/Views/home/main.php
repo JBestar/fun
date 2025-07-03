@@ -1540,11 +1540,13 @@
                                      <?php if(!$dhp_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_dhp.png?v=2'); ?>" />
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="동행파워볼" data-onoff="on" data-cid="DHP">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <img src="<?php echo site_furl('/images/mini/btn_dhp.png?v=2'); ?>" />
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="동행파워볼" data-onoff="on" data-cid="DHP">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1562,11 +1564,13 @@
                                     <?php if(!$pbg_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_pbg.png?v=1'); ?>" />
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="PBG파워볼" data-onoff="on" data-cid="PBG">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <img src="<?php echo site_furl('/images/mini/btn_pbg.png?v=1'); ?>" />
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="PBG파워볼" data-onoff="on" data-cid="PBG">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1584,11 +1588,13 @@
                                     <?php if(!$evp_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_evp.png?v=2'); ?>" />
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="에볼루션파워볼" data-onoff="on" data-cid="EVP">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <img src="<?php echo site_furl('/images/mini/btn_evp.png?v=2'); ?>" />
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="에볼루션파워볼" data-onoff="on" data-cid="EVP">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1606,11 +1612,13 @@
                                     <?php if(!$spk_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_spk.png?v=2'); ?>" />
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="스피드키노" data-onoff="on" data-cid="SPKN">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <img src="<?php echo site_furl('/images/mini/btn_spk.png?v=2'); ?>" />
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="스피드키노" data-onoff="on" data-cid="SPKN">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1628,15 +1636,17 @@
                                     <?php if(!$bpg_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
-                                                        <img src="<?php echo site_furl('/images/mini/btn_bgb_'.$_ENV['game.img_suf'].'.png'); ?>" />
-                                                    <?php else :?>
-                                                        <img src="<?php echo site_furl('/images/mini/btn_bgb.png?v=2'); ?>" />
-                                                    <?php endif ?>
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="보글파워볼" data-onoff="on" data-cid="BGB">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
+                                                            <img src="<?php echo site_furl('/images/mini/btn_bgb_'.$_ENV['game.img_suf'].'.png'); ?>" />
+                                                        <?php else :?>
+                                                            <img src="<?php echo site_furl('/images/mini/btn_bgb.png?v=2'); ?>" />
+                                                        <?php endif ?>
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="보글파워볼" data-onoff="on" data-cid="BGB">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1652,15 +1662,17 @@
                                         </div>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
-                                                        <img src="<?php echo site_furl('/images/mini/btn_bgl_'.$_ENV['game.img_suf'].'.png'); ?>" />
-                                                    <?php else :?>
-                                                        <img src="<?php echo site_furl('/images/mini/btn_bgl.png?v=2'); ?>" />
-                                                    <?php endif ?>
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="보글사다리" data-onoff="on"  data-cid="BGL">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <?php if( array_key_exists('game.img_suf', $_ENV)) :?>
+                                                            <img src="<?php echo site_furl('/images/mini/btn_bgl_'.$_ENV['game.img_suf'].'.png'); ?>" />
+                                                        <?php else :?>
+                                                            <img src="<?php echo site_furl('/images/mini/btn_bgl.png?v=2'); ?>" />
+                                                        <?php endif ?>
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="보글사다리" data-onoff="on"  data-cid="BGL">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1678,11 +1690,13 @@
                                     <?php if(!$eos5_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_eos5.png?v=2'); ?>" />
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="EOS5분파워볼" data-onoff="on"  data-cid="EOS5">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <img src="<?php echo site_furl('/images/mini/btn_eos5.png?v=2'); ?>" />
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="EOS5분파워볼" data-onoff="on"  data-cid="EOS5">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1700,11 +1714,13 @@
                                     <?php if(!$eos3_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_eos3.png?v=2'); ?>" />
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="EOS3분파워볼" data-onoff="on" data-cid="EOS3">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <img src="<?php echo site_furl('/images/mini/btn_eos3.png?v=2'); ?>" />
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="EOS3분파워볼" data-onoff="on" data-cid="EOS3">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1722,11 +1738,13 @@
                                     <?php if(!$coin5_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_coin5.png?v=2'); ?>" />
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="코인5분파워볼" data-onoff="on" data-cid="COIN5">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <img src="<?php echo site_furl('/images/mini/btn_coin5.png?v=2'); ?>" />
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="코인5분파워볼" data-onoff="on" data-cid="COIN5">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1744,11 +1762,13 @@
                                     <?php if(!$coin3_deny) :?>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_coin3.png?v=2'); ?>" />
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="코인3분파워볼" data-onoff="on" data-cid="COIN3">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <img src="<?php echo site_furl('/images/mini/btn_coin3.png?v=2'); ?>" />
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="코인3분파워볼" data-onoff="on" data-cid="COIN3">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1768,11 +1788,13 @@
                                         
                                         <!-- <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_pb.png'); ?>" />
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="파워볼" data-onoff="off"  data-cid="PBG">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <img src="<?php echo site_furl('/images/mini/btn_pb.png'); ?>" />
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="파워볼" data-onoff="off"  data-cid="PBG">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1787,11 +1809,13 @@
                                         </div>
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_ang.png'); ?>" />
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="ANGELS" data-onoff="off"  data-cid="ANG">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <img src="<?php echo site_furl('/images/mini/btn_ang.png'); ?>" />
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="ANGELS" data-onoff="off"  data-cid="ANG">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1828,11 +1852,13 @@
                                     <!-- item -->
                                     <div>
                                             <div class="uk-card uk-card-default uk-card-small">
-                                                <div class="uk-inline-clip uk-transition-toggle uk-light">
-                                                    <img src="<?php echo site_furl('/images/mini/btn_hold.png?v=1'); ?>" />
-                                                    <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
-                                                        <div data-uk-margin="" class="uk-transition-slide-bottom-small">
-                                                            <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="<?=lang('common.holdem')?>" data-onoff="on" data-cid="Holdem">Play </button>
+                                                <div class="uk-card-media-top">
+                                                    <div class="uk-inline-clip uk-transition-toggle uk-light">
+                                                        <img src="<?php echo site_furl('/images/mini/btn_hold.png?v=1'); ?>" />
+                                                        <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+                                                            <div data-uk-margin="" class="uk-transition-slide-bottom-small">
+                                                                <button class="uk-button uk-button-primary openGameBtn uk-first-column" id="playBtn" title="<?=lang('common.holdem')?>" data-onoff="on" data-cid="Holdem">Play </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1868,7 +1894,6 @@
                                 <div class="uk-grid uk-grid-small uk-child-width-1-3 uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-grid-match uk-grid-stack" data-uk-lightbox="toggle:a.uk-position-cover" data-uk-grid="">
                                     <!-- item -->
                                     <?php foreach ($apps_auto as $item):?>
-
                                         <div>
                                             <div class="uk-card uk-card-default uk-card-small">
                                                 <div class="uk-card-media-top">
