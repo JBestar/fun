@@ -136,6 +136,7 @@
                                         src="https://bepick.net/live/dhpowerball/scrap"
                                         style="transform: scale(0.859375); position: inherit; width: 830px; height: 640px;"
                                     ></iframe>
+                                    <!-- https://dhpowerball.net/rpowerball/live.php -->
                                 </div>
                                 <?php else :?>
                                 <div class="game_area npl_game" style="height: 550px;">

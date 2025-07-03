@@ -188,14 +188,16 @@ class BaseController extends Controller
 										$app->act = 1;
 										if(count($info) > 3){
 											$app->act = intval($info[3]);
-											if($app->act == 0)
+											if($app->act == 0){
 												$app->path = "";
+												continue;
+											}
 										}
 										array_push($confs['apps_auto'], $app);
 									}
-
 								}
-		
+								if(count($confs['apps_auto']) == 0)
+									$confs['apps_enable'] = false;
 							}
 						}
 					}

@@ -149,19 +149,28 @@ class Home extends BaseController
                     $arrMemInfo = explode('#', $memConf->conf_str_1);
                 }
                 $i=0;
+                $showApps = [];
                 foreach($headInfo['apps_auto'] as $app){
                     if($app->act == 1 && count($arrMemInfo) > $i){
                         $app->act = intval($arrMemInfo[$i]);
-                        if($app->act == 0)
+                        if($app->act == 0){
                             $app->path = "";
+                        } else {
+                            array_push($showApps, $app);
+                        }
                     } else if($app->act == 1 && $objMember->mb_level >= LEVEL_ADMIN){
-                    
-                    }else {
+                            array_push($showApps, $app);
+                    } else {
                         $app->act = 0;
                         $app->path = "";
                     }
                     $i++;
                 }
+
+                $headInfo['apps_auto'] = $showApps;
+                if(count($headInfo['apps_auto']) == 0)
+                    $headInfo['apps_enable'] = false;
+                writeLog("[index] mb_uid=".$objMember->mb_uid." apps_auto=".count($headInfo['apps_auto']));
             }
 
 
