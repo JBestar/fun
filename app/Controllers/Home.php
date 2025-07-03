@@ -159,7 +159,7 @@ class Home extends BaseController
                             array_push($showApps, $app);
                         }
                     } else if($app->act == 1 && $objMember->mb_level >= LEVEL_ADMIN){
-                            array_push($showApps, $app);
+                        array_push($showApps, $app);
                     } else {
                         $app->act = 0;
                         $app->path = "";
