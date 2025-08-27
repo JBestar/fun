@@ -39,13 +39,17 @@ function playSoundUnreadQna(cnt) {
     $("#_txt_qna").css('color','yellow');
 }
 
-function openCasinoGame(cid, gameid) {
+function openCasinoGame(cid, gameId) {
     if(!check_login()){
         return;
     }
-    if(gameid == 4)
+    if(gameId == 4)     // GAME_CASINO_EVOL
         window.open(FURL + "/evl", "games", "width=1200, height=800, left=100, top=50");
-    else
+    else if(gameId == 17) // GAME_CASINO_STAR
+        window.open(FURL + "/cas_h?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
+    else if(gameId == 20) // GAME_CASINO_RAVE
+        window.open(FURL + "/cas_r?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
+    else // GAME_CASINO_KGON
         window.open(FURL + "/cas?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
     
 }
