@@ -2064,7 +2064,7 @@
         <!--MODAL-->
         <div id="loginModal" uk-modal class="uk-modal">
             <div class="uk-modal-dialog">
-                <form class="ui form equal width" name="formLogin" id="formLogin" autocomplete="off">
+                <!-- <form class="ui form equal width" name="formLogin" id="formLogin" autocomplete="off"> -->
                     <div class="uk-modal-header">
                         <h2 class="uk-modal-title"><?=lang('common.login')?></h2>
                     </div>
@@ -2073,21 +2073,21 @@
                         <div class="ui fields">
                             <div class="field required">
                                 <label><?=lang('common.id')?> </label>
-                                <input type="text" name="userid" placeholder="userid" />
+                                <input type="text" name="userid" id="userid" placeholder="userid" />
                             </div>
 
                             <div class="field required">
                                 <label><?=lang('common.password')?> </label>
-                                <input type="password" name="passwd" placeholder="password" />
+                                <input type="password" name="passwd" id="passwd" placeholder="password" />
                             </div>
-                            <input type="text" name="ip" class="ip_addr" hidden/>
+                            <input type="text" name="ip" class="ip_addr" ip="ip"  hidden/>
                         </div>
                     </div>
                     <div class="uk-modal-footer">
-                        <button class="ui primary submit button" type="submit"><?=lang('common.log_in')?></button>
+                        <button class="ui primary submit button" type="submit" onclick="login();"><?=lang('common.log_in')?></button>
                         <div class="ui uk-modal-close button"><?=lang('common.cancel')?></div>
                     </div>
-                </form>
+                <!-- </form> -->
             </div>
         </div>
         <?php else :?>
@@ -2291,7 +2291,7 @@
                 </div>
 
                 <div class="login-form-container flex-1 d-flex flex-column gap-16 justify-content-center align-items-center">
-                    <form style="width:100%;" name="formLogin" id="formLogin" autocomplete="off">
+                    <!-- <form style="width:100%;" name="formLogin" id="formLogin" autocomplete="off"> -->
                         <div class="login-title"><?=lang('common.login')?></div>
                         <div class="login-form d-flex flex-column gap-16">
                             <div class="input-group mb-4">
@@ -2300,7 +2300,7 @@
                                     <?=lang('common.id')?>
                                 </span>
                                 <div class="field required">
-                                    <input type="text" name="userid" placeholder="<?=lang('common.id')?>" style="width:100%;" />
+                                    <input type="text" name="userid" id="userid" placeholder="<?=lang('common.id')?>" style="width:100%;" />
                                 </div>
                             </div>
                             <div class="input-group mb-4">
@@ -2309,24 +2309,24 @@
                                     <?=lang('common.password')?>
                                 </span>
                                 <div class="field required">
-                                    <input type="password" name="passwd" placeholder="<?=lang('common.password')?>" style="width:100%;" />
+                                    <input type="password" name="passwd" id="passwd" placeholder="<?=lang('common.password')?>" style="width:100%;" />
                                 </div>
                             </div>
                             <?php if(strlen($captcha) > 0) :?>
                             <div class="input-group mb-4">
                                 <img id="image_id" name="<?=$captcha?>" src="<?php echo site_furl('/download/captcha/'.$captcha.'.jpg'); ?>" style="width: 100%; height: 30px; margin-bottom: 10px; border-radius: 0.25rem; background-color: beige;" >
                                 <div class="field required">
-                                    <input name="captchacode" placeholder="<?=lang('common.security_character')?>" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
+                                    <input name="captchacode" id="captchacode" placeholder="<?=lang('common.security_character')?>" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
                                 </div>
                             </div>
                             <?php endif ?>
-                            <input type="text" name="ip" class="ip_addr" hidden/>
+                            <input type="text" name="ip" class="ip_addr" id="ip_addr"  hidden/>
                             <input type="text" name="captchasrc" id="captchasrc" value="<?=$captcha?>" hidden/>
                             <div class="button-group">
-                                <button class="btn btn-login ng-scope" type="submit"><?=lang('common.login')?></button>
+                                <button class="btn btn-login ng-scope" type="submit"  onclick="login();"><?=lang('common.login')?></button>
                             </div>
                         </div>
-                    </form>
+                    <!-- </form> -->
                 </div>
             </div>
         </div>
@@ -2635,44 +2635,97 @@
                     ],
                 },
             };
-            $("#formLogin").form({
-                fields: validationLoginRules,
-                inline: true,
-                on: "submit",
-                onSuccess: function (event) {
-                    return true;
-                },
-            });
+            // $("#formLogin").form({
+            //     fields: validationLoginRules,
+            //     inline: true,
+            //     on: "submit",
+            //     onSuccess: function (event) {
+            //         return true;
+            //     },
+            // });
 
-            $("#formLogin").ajaxForm({
-                dataType: "json",
-                url: FURL + "/api/login",
-                type: "POST",
-                data: $(this).serialize(),
-                beforeSubmit: function () {
-                    //return $('#formLogin').valid();
-                },
-                success: function (response) {
-                    if (response.status == 'success') {
-                        setLogCookie('logged', 'yes', 0);
-                        location.reload();
-                        // window.location.href = "/home";
-                    } else if (response.status == 'fail') {
-                        if(response.code == 11){  //보안코드
-                            $("#loginModal input[name=captchacode]").val('');
-                        } else {
-                            $("#loginModal input[name=userid]").val('');
-                            $("#loginModal input[name=passwd]").val('');
-                        }
-                        showAlert(response.msg, 0);
-                    }
+            // $("#formLogin").ajaxForm({
+            //     dataType: "json",
+            //     url: FURL + "/api/login",
+            //     type: "POST",
+            //     data: $(this).serialize(),
+            //     beforeSubmit: function () {
+            //         //return $('#formLogin').valid();
+            //     },
+            //     success: function (response) {
+            //         if (response.status == 'success') {
+            //             setLogCookie('logged', 'yes', 0);
+            //             location.reload();
+            //             // window.location.href = "/home";
+            //         } else if (response.status == 'fail') {
+            //             if(response.code == 11){  //보안코드
+            //                 $("#loginModal input[name=captchacode]").val('');
+            //             } else {
+            //                 $("#loginModal input[name=userid]").val('');
+            //                 $("#loginModal input[name=passwd]").val('');
+            //             }
+            //             showAlert(response.msg, 0);
+            //         }
 
-                },
-                error: function(request, status, error) {
-                    // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            //     },
+            //     error: function(request, status, error) {
+            //         // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            //     }
+            // });
+            function login(){
+                var user_id = $("#loginModal #userid").val();
+                var user_pw = $("#loginModal #passwd").val();
+                var captchacode = $("#loginModal #captchacode").val();
+                var captchasrc = $("#loginModal #captchasrc").val();
+                var ip = $("#loginModal #ip_addr").val();
+
+                if (user_id == "") {
+                    showAlert(langMessage.id_input);
+                    return;
                 }
-            });
 
+                if (user_pw == "") {
+                    showAlert(langMessage.password_input);
+                    return;
+                }
+
+                if (captchacode == "") {
+                    showAlert(langMessage.security_character_input, 0);
+                    return;
+                }
+
+                var data = {
+                    'userid': user_id,
+                    'passwd': user_pw,
+                    'captchacode': captchacode,
+                    'captchasrc': captchasrc,
+                    'ip':ip,
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: FURL + "/api/login",
+                    dataType: "json",
+                    data:  data,
+                    success: function (response) {
+                        if (response.status == "success") {
+                            setLogCookie('logged', 'yes', 0);
+                            location.reload();
+                        }  else if (response.status == 'fail') {
+                            if(response.code == 11){  //보안코드
+                                $("#loginModal input[name=captchacode]").val('');
+                            } else {
+                                $("#loginModal input[name=userid]").val('');
+                                $("#loginModal input[name=passwd]").val('');
+                            }
+                            showAlert(response.msg, 0);
+                        }
+                    },
+                    error: function(request, status, error) {
+                        // confirmAlert(langMessage.administrator_ask+"\n" + request.status, 'reloadPage()');
+                    }
+                });
+            }
             var validationRegRules = {
                 userid: {
                     identifier: "userid",
