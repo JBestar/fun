@@ -1,5 +1,16 @@
 <?php
-    
+    function findMemberByFid($arrMember, $fid){
+
+      $findMember = null;
+      foreach ($arrMember as $objMember) {
+          if($objMember->mb_fid == $fid){
+            $findMember = $objMember;
+            break;
+          }
+      }
+      return $findMember;
+    }
+
     function findMemberByLiveId($arrMember, $liveId, $gameId){
 
       $findMember = null;
@@ -35,6 +46,11 @@
             $findMember = $objMember;
             break;
           }
+        } else if($gameId == GAME_CASINO_TREEM || $gameId == GAME_SLOT_TREEM ){
+          if($objMember->mb_treem_uid == $liveId){
+            $findMember = $objMember;
+            break;
+          }
         }
         
       }
@@ -54,6 +70,7 @@
           case GAME_CASINO_STAR: 
           case GAME_CASINO_EVOL: 
           case GAME_CASINO_RAVE: 
+          case GAME_CASINO_TREEM: 
                 $fRatio = $objMember->mb_game_cs_ratio;
                 break;
           case GAME_BOGLE_BALL: 
@@ -68,6 +85,7 @@
           case GAME_SLOT_KGON: 
           case GAME_SLOT_STAR: 
           case GAME_SLOT_RAVE: 
+          case GAME_SLOT_TREEM: 
                 $fRatio = $objMember->mb_game_sl_ratio;
                 break;
           default: break;

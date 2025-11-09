@@ -38,6 +38,10 @@
 	if(array_key_exists('app_casino', $arrConfig)){
 		$appCasino=$arrConfig['app_casino'];
 	}
+	$proxyUrl = 0;
+	if(array_key_exists('proxy_url', $arrConfig)){
+		$proxyUrl=$arrConfig['proxy_url'];
+	}
 
 	$tRootDir = dirname(__FILE__);
 	
@@ -60,6 +64,7 @@
 	$bGsplay = false;
 	$bGold = false;
 	$bRave = false;
+	$bTreem = false;
 
 	if(!$bSlDeny){
 		if($appType == APP_TYPE_1 || $appType == APP_TYPE_3){
@@ -71,6 +76,8 @@
 				$bStar = true;
 			else if($appSlot == APP_SLOT_RAVE)
 				$bRave = true;
+			else if($appSlot == APP_SLOT_TREEM)
+				$bTreem = true;
 		}
 		if($appType == APP_TYPE_1 || $appType == APP_TYPE_2){
 			if($appFslot == APP_FSLOT_GSPLAY)
@@ -86,6 +93,8 @@
 			$bStar = true;
 		else if($appCasino == APP_CASINO_RAVE)
 			$bRave = true;
+		else if($appCasino == APP_CASINO_TREEM)
+			$bTreem = true;
 	}
 	
 
@@ -95,6 +104,7 @@
 	$hGsplay = null;
 	$hStar = null;
 	$hRave = null;
+	$hTreem = null;
 
 	$bGoldReg = false;
 	$bKgonReg = false;
@@ -102,6 +112,7 @@
 	$bGsplayReg = false;
 	$bStarReg = false;
 	$bRaveReg = false;
+	$bTreemReg = false;
 
 	$ordGsplay = 0;
 	$logHead = "<Oive>";
@@ -278,13 +289,37 @@
 			}
 		}
 
-		if($hGold == null && $hKgon == null && $hPlus == null && $hGsplay == null && $hStar == null && $hRave == null){
+		//Treem
+		if($bRave && !$bTreemReg){
+			if($hTreem == null){
+				$hTreem = curl_multi_init();
+				$curl = $objServLogic->curlTreemBets($proxyUrl);
+				if($curl)
+					curl_multi_add_handle($hTreem, $curl);
+				else {
+					$hTreem = null;
+					$bTreemReg = true;
+				}
+				writeLog($fLog, $logHead."RAVE-REQ-".$hTreem);
+			}
+			if($hTreem){
+				$result = curlProc2($hTreem, $fLog );
+				if($result != null){
+					$bTreemReg = true;
+					$bInsert = $objServLogic->registerTreemBets($result, $proxyUrl);
+				}
+			}
+		}
+
+		if($hGold == null && $hKgon == null && $hPlus == null && $hGsplay == null && 
+			$hStar == null && $hRave == null && $hTreem == null){
 			$bGoldReg = false;
 			$bKgonReg = false;
 			$bPlusReg = false;
 			$bGsplayReg = false;
 			$bStarReg = false;
 			$bRaveReg = false;
+			$bTreeReg = false;
 
 			if(!$bInsert)
 				sleep($secSleep);

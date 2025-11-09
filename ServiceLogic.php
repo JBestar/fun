@@ -1428,16 +1428,6 @@ class ServiceLogic
 			return false;
 		}
 
-		// $arrCasIds = [];
-		// foreach ($arrCasPrd as $casPrd) {
-		// 	array_push($arrCasIds, $casPrd->vendor_id);
-		// }
-
-		// $arrSlotIds = [];
-		// foreach ($arrSlotPrd as $slotPrd) {
-		// 	array_push($arrSlotIds, $slotPrd->key);
-		// }
-
 		$nBetCnt = count($arrBet);
 		writeLog($this->fLog, $logHead."Bet Count-".count($arrBet));
 		$lastIdx = "";
@@ -1699,6 +1689,447 @@ class ServiceLogic
 		return $bInsert;
 	}
 
+	//===========Treem게임================
+		
+	public function curlTreemBets($proxyUrl=""){
+		$confId = CONF_API_TREEM;
+		$logHead = "<TREEM> ";
+
+		$objConf = $this->modelConfSite->getById($confId);
+		
+		if(is_null($objConf))
+			return null;
+		$arrInfo = explode("#", $objConf->conf_content);
+
+		if(count($arrInfo) < 3)	//0-host, 1-ag_code, 2-ag_token
+			return null;
+
+		$arrIdx = getHistoryDate($objConf->conf_idx);
+		if($arrIdx['idx'] == ""){
+			$arrIdx['idx'] = date('Y-m-d H:i:s', strtotime("-10 hours", time())); 
+		} else {
+			$arrIdx['idx'] = date('Y-m-d H:i:s', strtotime($arrIdx['idx']));
+		}
+		$startAt = $arrIdx['idx'];
+		$endAt = date('Y-m-d H:i:s', strtotime("+1 hour", strtotime($arrIdx['idx'])));
+
+		$url = $arrInfo[0]."/transactions?";
+		$url.="start=".urlencode($startAt);
+		$url.="&end=".urlencode($endAt);
+		$url.="&page=1&perPage=1000&withDetails=1";
+
+		$header =  [
+			'Content-Type: application/json',
+			'Accept: application/json',
+			'Authorization: Bearer '.$arrInfo[2]
+		];
+        
+		writeLog($this->fLog, $logHead.$startAt."~".$endAt);
+		$this->modelConfSite->updateLastIdx($objConf->conf_id, $startAt."#".$arrIdx['fid']."#".$arrIdx['fid2']);
+
+		return getCurlWithProxy($url, $proxyUrl, $header);
+	}
+
+	public function registerTreemBets($arrResult, $proxyUrl=""){
+		$gameSlotId = GAME_SLOT_TREEM;
+		$gameCasId = GAME_CASINO_TREEM;
+		$confId = CONF_API_TREEM;
+		$logHead = "<TREEM> ";
+
+		$arrCasPrd = $this->modelCasinoPrd->getByCat($gameCasId);
+		$arrSlotPrd = $this->modelSlotPrd->getByCat($gameSlotId);
+		$objConf = $this->modelConfSite->getById($confId);
+		
+		if(is_null($arrResult))
+			return false;
+
+		if(is_null($objConf))
+			return false;
+
+		$arrInfo = explode("#", $objConf->conf_content);
+
+		if(count($arrInfo) < 3)	//0-host, 1-ag_code, 2-ag_token
+			return false;
+
+		$arrIdx = getHistoryDate($objConf->conf_idx);
+		$arrTrans = null;
+		
+		if(!array_key_exists("code", $arrResult)){
+			writeLog($this->fLog, $logHead." Error=No Http Code");
+		} else if($arrResult['code'] == HTTP_CODE_200){ 
+			$jsonData = json_decode($arrResult['body'], true);
+			if(array_key_exists("data", $jsonData)){
+				$arrTrans = $jsonData["data"];
+			}
+		} else {
+			writeLog($this->fLog, $logHead." Error=".json_encode($arrResult));
+		}
+
+		if(is_null($arrTrans)) {			
+			return false;
+		}
+
+		$arrCasIds = [];
+		foreach ($arrCasPrd as $casPrd) {
+			array_push($arrCasIds, $casPrd->key);
+		}
+
+		$arrSlotIds = [];
+		foreach ($arrSlotPrd as $slotPrd) {
+			array_push($arrSlotIds, $slotPrd->name);
+		}
+
+		$nBetCnt = count($arrTrans);
+		writeLog($this->fLog, $logHead."Bet Count-".count($arrTrans));
+		$lastIdx = "";
+		if($nBetCnt == 0){
+
+			$tmNow = time();
+			$startAt = strtotime("-10 hours", $tmNow);
+
+			if($arrIdx['idx'] < date('Y-m-d H:i:s', $startAt)){
+				$lastIdx = date('Y-m-d H:i:s', strtotime("+1 hour", strtotime($arrIdx['idx'])));
+				writeLog($this->fLog, $logHead."lastIdx=".$lastIdx);
+			} 
+		}
+
+		$lastSlFid = 0;
+		if($arrIdx['fid'] > FID_OFFSET){
+			$lastSlFid = $arrIdx['fid'] - FID_OFFSET;
+		}
+		$lastCsFid = 0;
+		if($arrIdx['fid2'] > FID_OFFSET){
+			$lastCsFid = $arrIdx['fid2'] - FID_OFFSET;
+		} 
+		writeLog($this->fLog, $logHead."Last Fid-".$lastSlFid);
+
+		$objMember = null;
+		$arrEmpPoint = array();
+		$arrMemBlank = array();
+		$arrMemBet = array();
+		$arrTransMember = [];
+		
+		$arrBet = [];
+		$arrLiveUids = [];
+		$slExist = false;
+		$csExist = false;
+		$logHead = "<TREEM_CHECK> ";
+		foreach ($arrTrans as $bet) {
+			if($bet['status'] != "success"){
+				writeLog($this->fLog, $logHead.$bet['type'].">> status=".$bet['status'].", user=".$bet['user']['username']." amount=".$bet['amount'].", before=".$bet['before']);
+			}
+			if($bet['type'] != "bet" && $bet['type'] != "win"){
+				writeLog($this->fLog, $logHead.$bet['type'].">> NotBet user=".$bet['user']['username']." amount=".$bet['amount'].", before=".$bet['before']);
+				continue;
+			}
+
+			$bet['amount'] = abs($bet['amount']);
+			if(!is_null($bet['details'])){
+				writeLog($this->fLog, $logHead.$bet['type'].">> user=".$bet['user']['username']." amount=".$bet['amount'].", before=".$bet['before'].", id=".$bet['id']." referer_id=".$bet['referer_id']);
+
+				if(in_array(strval($bet['details']['game']['vendor']), $arrCasIds)){
+					$csExist = true;
+					$bet['game_id'] = $gameCasId;
+					array_push($arrBet, $bet);
+					writeLog($this->fLog, $logHead.$bet['type'].">> user=".$bet['user']['username']." amount=".$bet['amount'].", before=".$bet['before'].", id=".$bet['id']." referer_id=".$bet['referer_id']);
+				} else if(in_array(strval($bet['details']['game']['vendor']), $arrSlotIds)){
+					$slExist = true;
+					$bet['game_id'] = $gameSlotId;
+					array_push($arrBet, $bet);
+					writeLog($this->fLog, $logHead.$bet['type'].">> user=".$bet['user']['username']." amount=".$bet['amount'].", before=".$bet['before'].", id=".$bet['id']." referer_id=".$bet['referer_id']);
+				}
+			}
+
+			if(!in_array($bet['user']['username'], $arrLiveUids))
+				array_push($arrLiveUids, $bet['user']['username']);
+		}
+		$arrMember = $this->modelMember->getMembersByLiveUids($arrLiveUids, $gameSlotId);
+		if(count($arrMember) > 0)
+			writeLog($this->fLog, $logHead."Member Count-".count($arrMember));
+		foreach ($arrMember as $member) {
+			if($slExist)
+				$member->ratio_sl = $this->modelMember->getEmployeeRatio($member, $gameSlotId);
+			if($csExist)
+				$member->ratio_cs = $this->modelMember->getEmployeeRatio($member, $gameCasId);
+		}
+		$bInsert = false;
+		$rwSlLastFid = $this->modelReward->getLastFid($gameSlotId);
+		writeLog($this->fLog, $logHead."Reward LastFid=".$rwSlLastFid);
+		if($rwSlLastFid > FID_OFFSET*3){
+			$rwSlLastFid = $rwSlLastFid - FID_OFFSET*3;
+		}
+
+		$rwCsLastFid = $this->modelReward->getLastFid(GAME_CASINO_EVOL);
+		writeLog($this->fLog, $logHead."Reward LastFid=".$rwCsLastFid);
+		if($rwCsLastFid > FID_OFFSET*3){
+			$rwCsLastFid = $rwCsLastFid - FID_OFFSET*3;
+		}
+
+
+		foreach ($arrBet as $bet) {
+
+			$lastIdx = date('Y-m-d H:i:s', strtotime("-32399 second", strtotime($bet['created_at'])));;
+			// $lastIdx = date('Y-m-d H:i:s', strtotime($bet['created_at']));;
+
+			$bet['created_at'] = date('Y-m-d H:i:s', strtotime($bet['created_at']));
+			// $bet['processed_at'] = date('Y-m-d H:i:s', strtotime($bet['processed_at']));
+
+			$objMember = findMemberByLiveId($arrMember, $bet['user']['username'], $gameSlotId);
+			if(is_null($objMember)){
+				$logHead = "<TREEM>";
+				writeLog($this->fLog, $logHead."No member-".$bet['type'].">> user=".$bet['user']['username']." amount=".$bet['amount'].", before=".$bet['before'].", id=".$bet['id']." referer_id=".$bet['referer_id']);
+				continue;
+			}
+
+			$bet['agent_id'] = $arrInfo[1];			//agent code			
+
+			if($bet['game_id'] == $gameCasId){
+				$logHead = "<TREEM_CASINO> ";
+				
+				$objPrd = getPrdByKey($arrCasPrd, $bet['details']['game']['vendor']);
+				if(is_null($objPrd))
+					continue;
+				writeLog($this->fLog, $logHead.$bet['type'].">> user=".$bet['user']['username']." amount=".$bet['amount'].", before=".$bet['before'].", id=".$bet['id'].", referer_id=".$bet['referer_id'].", created_at=".$bet['created_at']);
+
+				$bet['prd_id'] = $objPrd->vendor_id;			//provider code
+
+				if(strtolower($bet['type']) != "bet")			//청산
+				{		
+					$betting = null;
+					if($bet['referer_id'] != null)
+						$betting = $this->modelCasinoBet->getByIdx($objPrd->vendor_id, $bet['referer_id'], $lastCsFid);	//베팅내역체크
+					if(is_null($betting)){
+						writeLog($this->fLog, $logHead."ACC-Not Found referer_id=".$bet['referer_id']."=>".$bet['amount']);
+						continue;
+					}
+
+					$betId = $betting['bet_fid'];
+					if(trim($betting['bet_result']) == $bet['id']){
+						writeLog($this->fLog, $logHead."ACC-Already referer_id=".$bet['referer_id']."=>".$bet['amount']);
+						continue;
+					}
+					$this->modelCasinoBet->updateT($betId, $bet, $this->fLog);
+
+					writeLog($this->fLog, $logHead."Update ACCId=".$betId);
+					$arrMemBet[$objMember->mb_fid] = $bet['created_at'];
+					
+					if($bet['amount'] == $betting["bet_money"]){	//타이라면
+						
+						$arrRewards = $this->modelReward->getByBetId(GAME_CASINO_EVOL, $betId, $rwCsLastFid);
+						foreach($arrRewards as $objReward){
+							writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." mb_fid=".$objReward->rw_mb_fid);
+
+							if(array_key_exists($objReward->rw_mb_fid, $arrEmpPoint )){
+								// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point1 =".$arrEmpPoint[$objReward->rw_mb_fid]);
+								$arrEmpPoint[$objReward->rw_mb_fid] -= $objReward->rw_point;
+								// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
+							}
+							else {
+								$arrEmpPoint[$objReward->rw_mb_fid] = 0-$objReward->rw_point;	
+								// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
+							}
+
+							if(array_key_exists($objMember->mb_fid, $arrTransMember )){
+								// writeLog($this->fLog, $logHead."Cancel RwId=".$objMember->mb_fid." point1 =".$arrTransMember[$objMember->mb_fid]);
+								$arrTransMember[$objMember->mb_fid] -= $objReward->rw_point;
+								// writeLog($this->fLog, $logHead."Cancel RwId=".$objMember->mb_fid." point =".$arrTransMember[$objMember->mb_fid]);
+							}
+							else {
+								$arrTransMember[$objMember->mb_fid] = 0-$objReward->rw_point;	
+								// writeLog($this->fLog, $logHead."Cancel RwId=".$objMember->mb_fid." point =".$arrTransMember[$objMember->mb_fid]);
+							}
+						}
+
+						$this->modelReward->deleteByBetId(GAME_CASINO_EVOL, $betId, $rwCsLastFid);
+					}
+
+				} else	//베팅
+				{
+					$betting = $this->modelCasinoBet->getByIdx($objPrd->vendor_id, $bet['id'], $lastCsFid);	//베팅내역체크
+					if(!is_null($betting)){
+						writeLog($this->fLog, $logHead."BET-Exist-".$bet['id']."=>".$bet['amount']);
+						continue;
+					}
+					
+					$betId = $this->modelCasinoBet->insertT($objMember, $bet);
+					writeLog($this->fLog, $logHead."Insert BetId=".$betId);
+					$arrMemBet[$objMember->mb_fid] = $bet['created_at'];
+					if($betId > 0){
+						
+						$arrIdx['fid2'] = $betId;
+						$bInsert = true;
+						writeLog($this->fLog, $logHead."BET-INSERT-".$bet['type']."-".$bet['id']."=>".$bet['amount']);
+
+						$arrEmpRatio = calcEmpPoint($objMember->ratio_cs, $bet['amount'], $bet['created_at']);
+						foreach($arrEmpRatio as $ratio){
+							if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
+								$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
+							else 
+								$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
+
+							if(array_key_exists($ratio['mb_fid'], $arrTransMember ))
+								$arrTransMember[$objMember->mb_fid] += $ratio['point'];
+							else 
+								$arrTransMember[$objMember->mb_fid] = $ratio['point'];
+						}
+						$this->modelReward->insert(GAME_CASINO_EVOL, $betId, $arrEmpRatio, $rwCsLastFid);
+					}
+					
+				}
+			} else {
+				$logHead = "<TREEM_SLOT> ";
+
+				// writeLog($this->fLog, $logHead."bet-".$bet['id']."=>".$bet['amount']);
+				$bet['game_id'] = $gameSlotId;
+				$objPrd = getPrdByName($arrSlotPrd, $bet['details']['game']['vendor']);
+				if(is_null($objPrd))
+					continue;
+
+				$bet['prd_id'] = $objPrd->code;			//provider code
+				
+				if(strtolower($bet['type']) != "bet")			//청산
+				{	
+					$betting = null;
+					if(!is_null($bet['referer_id']))
+						$betting = $this->modelSlotBet->getByRslot($gameSlotId, $bet['prd_id'], $bet['referer_id'], $lastSlFid);	//베팅내역체크
+
+					if(is_null($betting)){
+						writeLog($this->fLog, $logHead."ACC-Not Found referer_id=".$bet['referer_id']."=>".$bet['amount']);
+						continue;
+					}
+
+					// if(strlen(trim($betting['bet_result'])) > 0 ){
+					if(trim($betting['bet_result']) == $bet['id']){
+						writeLog($this->fLog, $logHead."ACC-Already referer_id=".$bet['referer_id']."=>".$bet['amount']);
+						continue;
+					}
+					$arrMemBet[$objMember->mb_fid] = $bet['created_at'];
+
+					$betId = $betting['bet_fid'];
+					$bResult = $this->modelSlotBet->updateRslot($betId, $bet);
+					writeLog($this->fLog, $logHead."Update ACCId=".$betId."=>Result-".$bResult);
+				} else {								//베팅
+					$betting = $this->modelSlotBet->getByRslot($gameSlotId, $bet['prd_id'], $bet['id'], $lastSlFid);	//베팅내역체크
+					if(!is_null($betting)){
+						writeLog($this->fLog, $logHead."BET-Exist-".$bet['id']."=>".$bet['amount']);
+						continue;
+					}
+					
+					$bBlank = false;
+					$nBlankPt = 0;
+
+					$arrEmpRatio = calcEmpPoint($objMember->ratio_sl, $bet['amount'], $bet['created_at']);
+					if($objMember->mb_blank_count > 0 && intval($objMember->mb_blank_current) >= intval($objMember->mb_blank_count)-1 ){
+						$objMember->mb_blank_current = 0;
+						$bBlank = true;
+						$nBlankPt = calcCompPoint($objMember->ratio_sl, $bet['amount']);
+						$arrMemBlank[$objMember->mb_fid] = $objMember->mb_blank_current;
+						writeLog($this->fLog, $logHead."Blank Cross Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current." Comp=".$nBlankPt);
+					} else {
+						foreach($arrEmpRatio as $ratio){
+							
+							if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
+								$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
+							else 
+								$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
+
+							if(array_key_exists($ratio['mb_fid'], $arrTransMember ))
+								$arrTransMember[$objMember->mb_fid] += $ratio['point'];
+							else 
+								$arrTransMember[$objMember->mb_fid] = $ratio['point'];
+						}
+						if($objMember->mb_blank_count > 0){
+							$objMember->mb_blank_current ++;
+							$arrMemBlank[$objMember->mb_fid] = $objMember->mb_blank_current;
+							writeLog($this->fLog, $logHead."Blank Id=".$objMember->mb_uid." Current=".$objMember->mb_blank_current);
+						}
+						
+					}
+
+					$arrMemBet[$objMember->mb_fid] = $bet['created_at'];
+						
+					$betId = $this->modelSlotBet->insertTslot($objMember, $bet, $bBlank, $nBlankPt);
+					writeLog($this->fLog, $logHead."Insert BetId=".$betId);
+						
+					if($betId > 0){
+						$arrIdx['fid'] = $betId;
+						$this->modelReward->insert($gameSlotId, $betId, $arrEmpRatio, $rwSlLastFid, $bBlank);
+						$bInsert = true;
+						writeLog($this->fLog, $logHead."Insert Reward Count=".count($arrEmpRatio));
+					}
+				}
+
+			} 
+			
+		}
+
+		if(strlen($lastIdx) > 0)
+			$this->modelConfSite->updateLastIdx($objConf->conf_id, $lastIdx."#".$arrIdx['fid']."#".$arrIdx['fid2']);
+		writeLog($this->fLog, $logHead."lastIdx=".$lastIdx);
+
+		$this->modelMember->updateMemberBetTm($arrMemBet);
+		$bResult = $this->modelMember->updateMemberBlank($arrMemBlank);
+		writeLog($this->fLog, $logHead."UpdateMemBlank-Count=".count($arrMemBlank)." Result=".$bResult);
+		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
+		writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);
+
+		writeLog($this->fLog, $logHead."TransPoint-Count=".count($arrTransMember)." Result=".$bResult);
+
+		//Money Transfer
+		foreach ($arrTransMember as $fid => $point) {
+			if($point <= 1)
+				continue;
+			$member = findMemberByFid($arrMember, $fid);
+			writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." point=".$point);
+
+			// $result = $this->transferEgg($arrInfo, $member->mb_treem_uid, $point, $proxyUrl);
+		
+			// writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." result=".$result['status']);
+        }
+
+		return $bInsert;
+	}
+
+	//=============TREEM==============
+	public function transferEgg($arrAgentInfo, $uid, $amount, $proxyUrl) {	
+
+		$url = $arrAgentInfo[0]."/user/sub-balance-all";
+		$url.= "?username=$uid&amount=$amount";
+        $post = "";
+
+		$header =  ['Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: Bearer '.$arrAgentInfo[2]
+        ];
+
+		$curlResult = getCurlRequestWithProxy($url, $proxyUrl, $header, $post);
+		$balance = -1;
+
+		if(!is_null($curlResult) && array_key_exists("code", $curlResult)) {
+			if($curlResult['code'] == HTTP_CODE_200){
+                // $curlResult['body'] =>
+                // "agentId": 4496,
+                // "loginId": "bsj001",
+                // "balance": 100000
+                $arrResult = json_decode($curlResult['body'], true);
+				$arrResult['status'] = 1;
+                $balance = $arrResult['balance'];
+            } else { //
+                // $curlResult['body'] =>
+                // "code":403,
+				// "error":"",
+				// "body":"Access Denied"
+                // 
+                writeLog($this->fLog, $logHead."Error result=".json_encode($curlResult));
+                $arrResult['status'] = 0;
+            }
+
+		} else {
+            $arrResult['status'] = 0;
+        }
+
+		return $arrResult;
+	}
 
 
 }

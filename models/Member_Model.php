@@ -82,6 +82,8 @@ class Member_Model {
             $where = " WHERE mb_uid IN ( ".$whereIn.")";
         } else if($iGame == GAME_CASINO_RAVE || $iGame == GAME_SLOT_RAVE){
             $where = " WHERE mb_rave_id IN ( ".$whereIn.")";
+        } else if($iGame == GAME_CASINO_TREEM || $iGame == GAME_SLOT_TREEM){
+            $where = " WHERE mb_treem_uid IN ( ".$whereIn.")";
         } else return $arrMember; 
         
         $strSql = "SELECT * FROM ".$this->mTableName;

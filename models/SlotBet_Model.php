@@ -597,6 +597,59 @@ class SlotBet_Model {
 		
 		return $this->mDbConn->query($strSql);
 	}
+
+	public function insertTslot($objMember, $bet, $bBlank = false, $nBlankPt = 0){
+		// $strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		$strSql.= " bet_money, bet_win_money, bet_agent_id, bet_player_id, bet_game_id, bet_game_type, bet_table_code, ";
+		$strSql.= " bet_choice, bet_result, point_amount, company_amount, obj_id ) VALUES "; 
+		
+		//bet_idx
+		$strSql.= " ( '".$bet['id']."',";
+		//bet_emp_fid
+		$strSql.= " '".$objMember->mb_emp_fid."', ";
+		//bet_mb_fid
+		// $strSql.= " '".$objMember->mb_fid."', ";
+		//bet_mb_uid
+		$strSql.= " '".$objMember->mb_uid."', ";
+		//bet_round_no
+		$strSql.= " '".$bet['details']['game']['round']."', ";
+		//bet_time
+		$strSql.= " '".$bet['created_at']."', "; //Local "2022-03-15 08:30:27"
+		//bet_money
+		$strSql.= " '".$bet['amount']."', ";
+		//bet_win_money
+		$strSql.= " '0', ";
+		//bet_agent_id
+		$strSql.= " '".$bet['agent_id']."', "; 
+		//bet_player_id
+		$strSql.= " '".$bet['user']['username']."', ";
+		//bet_game_id
+		$strSql.= " '".$bet['game_id']."', ";
+		//bet_game_type
+		$strSql.= " '".$bet['prd_id']."', ";
+		//bet_table_code
+		$strSql.= " '".$bet['details']['game']['title']."', ";
+		//beforeCash
+		$strSql.= " '".$bet['before']."', ";
+		//afterCash
+		$strSql.= " '', ";
+		//Blank point
+		if($bBlank){
+			$strSql.= " '1', ";
+			$strSql.= " '".$nBlankPt."', ";
+		} else {
+			$strSql.= " '0', '0', ";
+		}
+		$strSql.= " 0 ";
+		$strSql.= " )";
+
+		if ($this->mDbConn->query($strSql) === TRUE) {
+			return $this->mDbConn->insert_id;
+		}
+		return 0;
+    } 
+    
 }
 
 ?>
