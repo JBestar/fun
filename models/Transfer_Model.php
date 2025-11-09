@@ -28,7 +28,7 @@ class Transfer_Model {
 		//money_before
 		$strSql.= " '".$objMember->mb_money."', "; 
 		//money_after
-		$strSql.= " '".($objMember->mb_money-$balance)."', "; 
+		$strSql.= " '".$objMember->mb_money."', "; 
 		//money_before
 		$strSql.= " '".$gPoint."', "; 
 		//money_after

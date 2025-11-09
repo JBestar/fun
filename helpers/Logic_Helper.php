@@ -223,7 +223,6 @@
 
 		if( strlen($proxyUrl) > 10 ){
 			$proxyType=CURLPROXY_SOCKS5;
-			$proxyUrl = $_ENV['app.proxy'];
 			$proxyAuth = "jmaster:startend";
 			// Specify proxy type 
 			curl_setopt($curl, CURLOPT_PROXYTYPE, $proxyType);

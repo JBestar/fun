@@ -9,6 +9,7 @@ include_once('models/CasinoPrd_Model.php');
 
 include_once('models/Member_Model.php');
 include_once('models/Reward_Model.php');
+include_once('models/Transfer_Model.php');
 
 class ServiceLogic
 {
@@ -19,6 +20,7 @@ class ServiceLogic
 
 	private $modelMember;
 	private $modelReward;
+	private $modelTransfer;
 
 	private $modelConfSite;
 	private $modelSlotPrd;
@@ -38,6 +40,7 @@ class ServiceLogic
 
 		$this->modelMember = new Member_Model($dbConn);
 		$this->modelReward = new Reward_Model($dbConn);
+		$this->modelTransfer = new Transfer_Model($dbConn);
 	}
 
 
@@ -1967,7 +1970,7 @@ class ServiceLogic
 							else 
 								$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
 
-							if(array_key_exists($ratio['mb_fid'], $arrTransMember ))
+							if(array_key_exists($objMember->mb_fid, $arrTransMember ))
 								$arrTransMember[$objMember->mb_fid] += $ratio['point'];
 							else 
 								$arrTransMember[$objMember->mb_fid] = $ratio['point'];
@@ -2033,7 +2036,7 @@ class ServiceLogic
 							else 
 								$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
 
-							if(array_key_exists($ratio['mb_fid'], $arrTransMember ))
+							if(array_key_exists($objMember->mb_fid, $arrTransMember ))
 								$arrTransMember[$objMember->mb_fid] += $ratio['point'];
 							else 
 								$arrTransMember[$objMember->mb_fid] = $ratio['point'];
@@ -2082,9 +2085,13 @@ class ServiceLogic
 			$member = findMemberByFid($arrMember, $fid);
 			writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." point=".$point);
 
-			// $result = $this->transferEgg($arrInfo, $member->mb_treem_uid, $point, $proxyUrl);
-		
-			// writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." result=".$result['status']);
+			$result = $this->transferEgg($arrInfo, $member->mb_treem_uid, $point, $proxyUrl);
+
+			writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." result=".$result['status']);
+			if($result['status'] == 1){
+				$this->$modelTransfer->insertRow(TRANS_TREEM_SITE, $objMember, $result['balance'], 0-$point);
+			}
+			sleep(1);
         }
 
 		return $bInsert;
@@ -2093,7 +2100,7 @@ class ServiceLogic
 	//=============TREEM==============
 	public function transferEgg($arrAgentInfo, $uid, $amount, $proxyUrl) {	
 
-		$url = $arrAgentInfo[0]."/user/sub-balance-all";
+		$url = $arrAgentInfo[0]."/user/sub-balance";
 		$url.= "?username=$uid&amount=$amount";
         $post = "";
 
@@ -2102,18 +2109,31 @@ class ServiceLogic
             'Authorization: Bearer '.$arrAgentInfo[2]
         ];
 
+		$logHead = "<TREEM> TransferEgg() ";
 		$curlResult = getCurlRequestWithProxy($url, $proxyUrl, $header, $post);
 		$balance = -1;
 
 		if(!is_null($curlResult) && array_key_exists("code", $curlResult)) {
 			if($curlResult['code'] == HTTP_CODE_200){
                 // $curlResult['body'] =>
-                // "agentId": 4496,
-                // "loginId": "bsj001",
-                // "balance": 100000
+                // "username": "test1",
+                // "balance": 0,
+                // "amount": -1000,
+                // "transaction_id": 1,
+                // "cached": false
+
+                // "username": "e01",
+                // "balance": 0,
+                // "amount": 0,
+                // "message": "유저의 잔액이 0원입니다.",
+                // "cached": false
                 $arrResult = json_decode($curlResult['body'], true);
-				$arrResult['status'] = 1;
+				if($arrResult['amount'] != 0)
+					$arrResult['status'] = 1;
+				else 
+					$arrResult['status'] = 0;
                 $balance = $arrResult['balance'];
+                writeLog($this->fLog, $logHead."body=".$curlResult['body']);
             } else { //
                 // $curlResult['body'] =>
                 // "code":403,

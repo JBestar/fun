@@ -122,7 +122,7 @@
 	
 	writeLog($fLog, $logHead."==============START==============");
 
-	writeLog($fLog, $logHead."ThePlus=".$bPlus." KGON=".$bKgon." GSPlay=".$bGsplay." STAR=".$bStar." GOLD=".$bGold." RAVE=".$bRave );
+	writeLog($fLog, $logHead."ThePlus=".$bPlus." KGON=".$bKgon." GSPlay=".$bGsplay." STAR=".$bStar." GOLD=".$bGold." RAVE=".$bRave." TREEM=".$bTreem );
 
 	while(true){
 
@@ -290,7 +290,7 @@
 		}
 
 		//Treem
-		if($bRave && !$bTreemReg){
+		if($bTreem && !$bTreemReg){
 			if($hTreem == null){
 				$hTreem = curl_multi_init();
 				$curl = $objServLogic->curlTreemBets($proxyUrl);
@@ -319,7 +319,7 @@
 			$bGsplayReg = false;
 			$bStarReg = false;
 			$bRaveReg = false;
-			$bTreeReg = false;
+			$bTreemReg = false;
 
 			if(!$bInsert)
 				sleep($secSleep);
