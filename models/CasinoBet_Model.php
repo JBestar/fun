@@ -510,7 +510,7 @@ class CasinoBet_Model {
 
 			$betDetail = null;
 			try{
-				if(array_key_exists('detail', $bet['external']) && array_key_exists('data', $bet['external']['detail'])){
+				if(array_key_exists('detail', $bet['external']) && !is_null($bet['external']['detail']) && array_key_exists('data', $bet['external']['detail'])){
 					$betDetail = $bet['external']['detail']['data'];
 					writeLog($fLog, "detail-1");
 				} else $betDetail = null;
@@ -532,7 +532,7 @@ class CasinoBet_Model {
 				} 
 			} 
 			if(strlen($betSpec) < 1 && !is_null($fLog)){
-				writeLog($fLog, "detail Error=".$bet['detail']);
+				// writeLog($fLog, "detail Error=".json_encode($bet['external']));
 			}
 		}
 

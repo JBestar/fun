@@ -71,6 +71,7 @@ define('HTTP_CODE_409', 409);
 
 define('TRANS_SITE_TREEM', 17); 
 define('TRANS_TREEM_SITE', 18); 
+define('RECOVER_TREEM', 19); 
 
 
 ?>

@@ -42,6 +42,10 @@
 	if(array_key_exists('proxy_url', $arrConfig)){
 		$proxyUrl=$arrConfig['proxy_url'];
 	}
+	$recoverEgg = 0;
+	if(array_key_exists('recover_egg', $arrConfig)){
+		$recoverEgg=$arrConfig['recover_egg'];
+	}
 
 	$tRootDir = dirname(__FILE__);
 	
@@ -117,8 +121,8 @@
 	$ordGsplay = 0;
 	$logHead = "<Oive>";
 	
-	$secSleep = 41;
-	$secRepeat = 31;
+	$secSleep = 61;
+	$secRepeat = 41;
 	
 	writeLog($fLog, $logHead."==============START==============");
 
@@ -306,7 +310,7 @@
 				$result = curlProc2($hTreem, $fLog );
 				if($result != null){
 					$bTreemReg = true;
-					$bInsert = $objServLogic->registerTreemBets($result, $proxyUrl);
+					$bInsert = $objServLogic->registerTreemBets($result, $proxyUrl, $recoverEgg);
 				}
 			}
 		}

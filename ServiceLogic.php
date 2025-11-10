@@ -1733,7 +1733,7 @@ class ServiceLogic
 		return getCurlWithProxy($url, $proxyUrl, $header);
 	}
 
-	public function registerTreemBets($arrResult, $proxyUrl=""){
+	public function registerTreemBets($arrResult, $proxyUrl="", $recoverEgg=0){
 		$gameSlotId = GAME_SLOT_TREEM;
 		$gameCasId = GAME_CASINO_TREEM;
 		$confId = CONF_API_TREEM;
@@ -1818,6 +1818,8 @@ class ServiceLogic
 		$csExist = false;
 		$logHead = "<TREEM_CHECK> ";
 		foreach ($arrTrans as $bet) {
+			$lastIdx = date('Y-m-d H:i:s', strtotime("-32399 second", strtotime($bet['created_at'])));
+
 			if($bet['status'] != "success"){
 				writeLog($this->fLog, $logHead.$bet['type'].">> status=".$bet['status'].", user=".$bet['user']['username']." amount=".$bet['amount'].", before=".$bet['before']);
 			}
@@ -1870,9 +1872,6 @@ class ServiceLogic
 
 
 		foreach ($arrBet as $bet) {
-
-			$lastIdx = date('Y-m-d H:i:s', strtotime("-32399 second", strtotime($bet['created_at'])));;
-			// $lastIdx = date('Y-m-d H:i:s', strtotime($bet['created_at']));;
 
 			$bet['created_at'] = date('Y-m-d H:i:s', strtotime($bet['created_at']));
 			// $bet['processed_at'] = date('Y-m-d H:i:s', strtotime($bet['processed_at']));
@@ -2076,23 +2075,25 @@ class ServiceLogic
 		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
 		writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);
 
-		writeLog($this->fLog, $logHead."TransPoint-Count=".count($arrTransMember)." Result=".$bResult);
+		if($recoverEgg == 1){
 
-		//Money Transfer
-		foreach ($arrTransMember as $fid => $point) {
-			if($point <= 1)
-				continue;
-			$member = findMemberByFid($arrMember, $fid);
-			writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." point=".$point);
+			writeLog($this->fLog, $logHead."TransPoint-Count=".count($arrTransMember));
+			foreach ($arrTransMember as $fid => $point) {
+				if($point <= 1)
+					continue;
+				$member = findMemberByFid($arrMember, $fid);
 
-			$result = $this->transferEgg($arrInfo, $member->mb_treem_uid, $point, $proxyUrl);
+				$result = $this->transferEgg($arrInfo, $member->mb_treem_uid, $point, $proxyUrl);
 
-			writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." result=".$result['status']);
-			if($result['status'] == 1){
-				$this->$modelTransfer->insertRow(TRANS_TREEM_SITE, $objMember, $result['balance'], 0-$point);
+				writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." point=".$point." result=".$result['status']);
+				if($result['status'] == 1){
+					writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid.", balance=".$result['balance'].", point=".$point);
+
+					$this->modelTransfer->insertRow(RECOVER_TREEM, $member, $result['balance']+$point, 0-$point, $this->fLog);
+				}
+				sleep(1);
 			}
-			sleep(1);
-        }
+		}
 
 		return $bInsert;
 	}
