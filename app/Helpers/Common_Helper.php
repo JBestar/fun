@@ -370,15 +370,17 @@
           case GAME_CASINO_EVOL:
           case GAME_CASINO_KGON:
           case GAME_CASINO_STAR: 
-          case GAME_CASINO_RAVE: return $objMember->mb_game_cs;
+          case GAME_CASINO_RAVE: 
+          case GAME_CASINO_TREEM: return $objMember->mb_game_cs;
           case GAME_BOGLE_BALL: return $objMember->mb_game_bb;
           case GAME_BOGLE_LADDER: return $objMember->mb_game_bs;
           case GAME_SLOT_THEPLUS: 
           case GAME_SLOT_GSPLAY: 
           case GAME_SLOT_GOLD:     
           case GAME_SLOT_KGON:     
+          case GAME_SLOT_STAR: 
           case GAME_SLOT_RAVE: 
-          case GAME_SLOT_STAR: return $objMember->mb_game_sl;
+          case GAME_SLOT_TREEM: return $objMember->mb_game_sl;
           case GAME_HOLD_CMS: return $objMember->mb_game_hl;
           case GAME_EOS5_BALL: 
           case GAME_EOS3_BALL:  return $objMember->mb_game_eo;
@@ -856,7 +858,8 @@
         return $nMoney;
 
       $nMoney = floatval($member->mb_money) + $member->mb_live_money + $member->mb_slot_money + $member->mb_fslot_money +
-        $member->mb_kgon_money + $member->mb_gslot_money+ $member->mb_hslot_money + $member->mb_hold_money + $member->mb_rave_money;
+        $member->mb_kgon_money + $member->mb_gslot_money+ $member->mb_hslot_money + $member->mb_hold_money + 
+        $member->mb_rave_money + $member->mb_treem_money;
       return floor($nMoney); //round($nMoney, NUM_POINT_CNT);
     }
 
@@ -866,7 +869,8 @@
         return $nMoney;
 
       $nMoney = floatval($member->mb_live_money) + $member->mb_slot_money + $member->mb_fslot_money +
-        $member->mb_kgon_money + $member->mb_gslot_money+ $member->mb_hslot_money + $member->mb_hold_money + $member->mb_rave_money;
+        $member->mb_kgon_money + $member->mb_gslot_money+ $member->mb_hslot_money + $member->mb_hold_money + 
+        $member->mb_rave_money + $member->mb_treem_money;
       return floor($nMoney); //round($nMoney, NUM_POINT_CNT);
     }
 

@@ -15,6 +15,9 @@ class Slot extends BaseController
 	{
 		$this->setLanguage();
 
+		print "<script> alert('준비중입니다.'); self.close(); </script>";
+		return;
+		
 		$prdCode = trim($this->request->getVar('prd'));
 		if(!is_login(true))
 		{
@@ -31,6 +34,8 @@ class Slot extends BaseController
 				$gameId = GAME_SLOT_STAR;
 			else if($_ENV['app.slot'] == APP_SLOT_RAVE)
 				$gameId = GAME_SLOT_RAVE;
+			else if($_ENV['app.slot'] == APP_SLOT_TREEM)
+				$gameId = GAME_SLOT_TREEM;
 
 			$modelSlotgame = new SlotGame_Model();
             $prdCode = trim($this->request->getVar('prd'));
@@ -83,6 +88,8 @@ class Slot extends BaseController
 		$prdCode = trim($this->request->getVar('prd'));
 		$slotId = trim($this->request->getVar('game'));
 
+		print "<script> alert('준비중입니다.'); self.close(); </script>";
+		return;
 		if(!is_login())
 		{
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
@@ -100,6 +107,8 @@ class Slot extends BaseController
 				$gameId = GAME_SLOT_STAR;
 			else if($_ENV['app.slot'] == APP_SLOT_RAVE)
 				$gameId = GAME_SLOT_RAVE;
+			else if($_ENV['app.slot'] == APP_SLOT_TREEM)
+				$gameId = GAME_SLOT_TREEM;
 			$logHead = "<XSLOT>";
 			
 			$user_id = $this->session->user_id;
@@ -145,7 +154,7 @@ class Slot extends BaseController
 					$iCreated = 100;
 				} else if($objConfig->game_bet_permit != PERMIT_OK){			//Preparing
 					$iCreated = 4;									
-				} else if($_ENV['app.slot'] == APP_SLOT_KGON || $_ENV['app.slot'] == APP_SLOT_STAR || $_ENV['app.slot'] == APP_SLOT_RAVE)
+				} else if($_ENV['app.slot'] == APP_SLOT_KGON || $_ENV['app.slot'] == APP_SLOT_STAR || $_ENV['app.slot'] == APP_SLOT_RAVE || $_ENV['app.slot'] == APP_SLOT_TREEM)
 					$iCreated = 101;
 				else if($objMember->mb_slot_uid == ""){
 					//Creation of Player

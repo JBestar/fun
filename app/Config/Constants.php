@@ -86,6 +86,7 @@ defined('APP_SLOT_THEPLUS')  || define('APP_SLOT_THEPLUS', 1);
 defined('APP_SLOT_KGON')     || define('APP_SLOT_KGON', 2); 
 defined('APP_SLOT_STAR')     || define('APP_SLOT_STAR', 3); 
 defined('APP_SLOT_RAVE')     || define('APP_SLOT_RAVE', 4); 
+defined('APP_SLOT_TREEM')     || define('APP_SLOT_TREEM', 5); 
 
 //Natural 
 defined('APP_FSLOT_GSPLAY')  || define('APP_FSLOT_GSPLAY', 1); 
@@ -95,6 +96,7 @@ defined('APP_FSLOT_GOLD')    || define('APP_FSLOT_GOLD', 2);
 defined('APP_CASINO_KGON')      || define('APP_CASINO_KGON', 2); 
 defined('APP_CASINO_STAR')      || define('APP_CASINO_STAR', 3); 
 defined('APP_CASINO_RAVE')      || define('APP_CASINO_RAVE', 4); 
+defined('APP_CASINO_TREEM')     || define('APP_CASINO_TREEM', 5); 
 
 
 defined('EXIT_SUCCESS')        || define('EXIT_SUCCESS', 0); // no errors
@@ -138,8 +140,9 @@ defined('CONF_API_HPPLAY')     || define('CONF_API_HPPLAY', 21);
 defined('CONF_API_THEPLUS')    || define('CONF_API_THEPLUS', 22);
 defined('CONF_API_GSPLAY')     || define('CONF_API_GSPLAY', 23);
 defined('CONF_API_STAR')       || define('CONF_API_STAR', 30);
-defined('CONF_API_HOLD')        || define('CONF_API_HOLD', 68);
+defined('CONF_API_HOLD')       || define('CONF_API_HOLD', 68);
 defined('CONF_API_RAVE')       || define('CONF_API_RAVE', 89);
+defined('CONF_API_TREEM')      || define('CONF_API_TREEM', 112);
 
 defined('CONF_CHARGE_MANUAL')  || define('CONF_CHARGE_MANUAL', 24);
 defined('CONF_DISCHA_MANUAL')  || define('CONF_DISCHA_MANUAL', 25);
@@ -252,7 +255,9 @@ defined('GAME_CASINO_STAR')      || define('GAME_CASINO_STAR', 17);  //STAR casi
 defined('GAME_HOLD_CMS')         || define('GAME_HOLD_CMS', 18);  //HOLDEM
 defined('GAME_SLOT_RAVE')        || define('GAME_SLOT_RAVE', 19);  //RAVE slot
 defined('GAME_CASINO_RAVE')      || define('GAME_CASINO_RAVE', 20);  //RAVE casino
-defined('GAME_EVOL_BALL')        || define('GAME_EVOL_BALL', 22);
+defined('GAME_SLOT_TREEM')       || define('GAME_SLOT_TREEM', 21);  //TREEM slot
+defined('GAME_CASINO_TREEM')     || define('GAME_CASINO_TREEM', 22);  //TREEM casino
+defined('GAME_EVOL_BALL')        || define('GAME_EVOL_BALL', 23);
 
 defined('N2P_MAX_HOLE')          || define('N2P_MAX_HOLE', 4);
 

@@ -28,6 +28,7 @@ class Member_Model extends Model {
         'mb_hslot_token', 'mb_hslot_money', 
         'mb_hold_uid', 'mb_hold_money', 
         'mb_rave_id', 'mb_rave_uid', 'mb_rave_money' ,
+        'mb_treem_uid', 'mb_treem_money' ,
     ];
   
     private $getFields = ['mb_fid', 'mb_uid', 'mb_level','mb_emp_fid', 'mb_nickname', 'mb_time_call', 'mb_ip_join', 'mb_ip_last',
@@ -42,7 +43,9 @@ class Member_Model extends Model {
         'mb_hslot_token', 'mb_hslot_money', 
         'mb_hold_uid', 'mb_hold_money', 
         'mb_rave_id', 'mb_rave_uid', 'mb_rave_money' ,
+        'mb_treem_uid', 'mb_treem_money' ,
     ];
+
 
     public function getByUid($uid, $all = false){
     
@@ -131,9 +134,7 @@ class Member_Model extends Model {
             'mb_live_money' => $member->mb_live_money,
         ];
         return $this->update($member->mb_fid, $data);
-
     }
-
 
     public function updateSlotInfo($member){
         $data = [
@@ -141,7 +142,6 @@ class Member_Model extends Model {
             'mb_slot_money' => $member->mb_slot_money,
         ];
         return $this->update($member->mb_fid, $data);
-
     }
 
     public function updateSlotMoney($member){
@@ -149,9 +149,7 @@ class Member_Model extends Model {
             'mb_slot_money' => $member->mb_slot_money,
         ];
         return $this->update($member->mb_fid, $data);
-
     }
-
 
     public function updateFslotInfo($member){
         $data = [
@@ -170,6 +168,7 @@ class Member_Model extends Model {
         return $this->update($member->mb_fid, $data);
 
     }
+
     
     public function updateKgonInfo($member){
         $data = [
@@ -186,14 +185,16 @@ class Member_Model extends Model {
             'mb_kgon_money' => $member->mb_kgon_money,
         ];
         return $this->update($member->mb_fid, $data);
+
     }
-    
+
     public function updateGslotInfo($member){
         $data = [
             'mb_gslot_uid' => $member->mb_gslot_uid,
             'mb_gslot_money' => $member->mb_gslot_money,
         ];
         return $this->update($member->mb_fid, $data);
+
     }
 
     public function updateGslotMoney($member){
@@ -201,6 +202,7 @@ class Member_Model extends Model {
             'mb_gslot_money' => $member->mb_gslot_money,
         ];
         return $this->update($member->mb_fid, $data);
+
     }
 
     public function updateHslotInfo($member){
@@ -209,6 +211,7 @@ class Member_Model extends Model {
             'mb_hslot_money' => $member->mb_hslot_money,
         ];
         return $this->update($member->mb_fid, $data);
+
     }
 
     public function updateHslotMoney($member){
@@ -216,6 +219,7 @@ class Member_Model extends Model {
             'mb_hslot_money' => $member->mb_hslot_money,
         ];
         return $this->update($member->mb_fid, $data);
+
     }
 
     public function updateHoldInfo($member){
@@ -260,6 +264,20 @@ class Member_Model extends Model {
         return $this->update($member->mb_fid, $data);
     }
     
+    public function updateTreemInfo($member){
+        $data = [
+            'mb_treem_uid' => $member->mb_treem_uid,
+            'mb_treem_money' => $member->mb_treem_money,
+        ];
+        return $this->update($member->mb_fid, $data);
+    }
+
+    public function updateTreemMoney($member){
+        $data = [
+            'mb_treem_money' => $member->mb_treem_money,
+        ];
+        return $this->update($member->mb_fid, $data);
+    }
 
     public function updateBetTm($member){
         $data = [

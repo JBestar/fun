@@ -96,6 +96,7 @@ $routes->get('evl', 'Casino::evl');
 $routes->get('cas', 'Casino::cas');
 $routes->get('cas_h', 'Casino::cas_h');
 $routes->get('cas_r', 'Casino::cas_r');
+$routes->get('cas_t', 'Casino::cas_t');
 $routes->get('holdem', 'Casino::holdem');
 
 $routes->get('casino', 'Casino::casino');

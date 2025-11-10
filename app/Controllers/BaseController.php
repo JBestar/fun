@@ -35,6 +35,7 @@ use App\Libraries\ApiGslot_Lib;
 use App\Libraries\ApiHslot_Lib;
 use App\Libraries\ApiHold_Lib;
 use App\Libraries\ApiRave_Lib;
+use App\Libraries\ApiTreem_Lib;
 
 class BaseController extends Controller
 {
@@ -65,6 +66,8 @@ class BaseController extends Controller
 	protected $libApiGslot;
 	protected $libApiHslot;
 	protected $libApiHold;
+	protected $libApiRave;
+	protected $libApiTreem;
 
     /**
      * Constructor.
@@ -99,6 +102,8 @@ class BaseController extends Controller
         $this->libApiHslot = new ApiHslot_Lib();
         $this->libApiHold = new ApiHold_Lib();
         $this->libApiRave = new ApiRave_Lib();
+        $this->libApiTreem = new ApiTreem_Lib();
+	
     }
 
 	protected function setLanguage(){
@@ -245,6 +250,8 @@ class BaseController extends Controller
 				$gameId = GAME_CASINO_STAR;
 			else if($_ENV['app.casino'] == APP_CASINO_RAVE)
 				$gameId = GAME_CASINO_RAVE;
+			else if($_ENV['app.casino'] == APP_CASINO_TREEM)
+				$gameId = GAME_CASINO_TREEM;
 			$navInfo['cas_kgon'] = $this->modelCasprd->gets($gameId);
 		}
 		$navInfo['cas_cnt'] += count($navInfo['cas_kgon']);
@@ -268,6 +275,8 @@ class BaseController extends Controller
 					$gameId =GAME_SLOT_STAR;
 				else if($_ENV['app.slot'] == APP_SLOT_RAVE)
 					$gameId =GAME_SLOT_RAVE;
+				else if($_ENV['app.slot'] == APP_SLOT_TREEM)
+					$gameId =GAME_SLOT_TREEM;
 			}	
 			$navInfo['slot_plus'] = $this->modelSlotprd->gets($gameId);
 					
@@ -284,6 +293,7 @@ class BaseController extends Controller
 		$bHcasino = false;
 		$bKcasino = false;
 		$bRcasino = false;
+		$bTcasino = false;
 		if(!$confs["cas_deny"]){
 			if($_ENV['app.casino'] == APP_CASINO_STAR){
 				$this->hslEgg($objMember);
@@ -291,7 +301,11 @@ class BaseController extends Controller
 			} else if($_ENV['app.casino'] == APP_CASINO_RAVE){
 				$this->raveEgg($objMember);
 				$bRcasino = true;
-			} else {
+			} else if($_ENV['app.casino'] == APP_CASINO_TREEM){
+				$this->treemEgg($objMember);
+				$bTcasino = true;
+			}
+			else {
 				$this->kgonEgg($objMember);
 				$bKcasino = true;
 			}
@@ -306,6 +320,8 @@ class BaseController extends Controller
 				$this->hslEgg($objMember);
 			else if($_ENV['app.slot'] == APP_SLOT_RAVE && !$bRcasino)
 				$this->raveEgg($objMember);
+			else if($_ENV['app.slot'] == APP_SLOT_TREEM && !$bTcasino)
+				$this->treemEgg($objMember);
 		}
 		if($_ENV['app.type'] == APP_TYPE_1 || $_ENV['app.type'] == APP_TYPE_2){
 			usleep(100000);
@@ -388,9 +404,9 @@ class BaseController extends Controller
 		$iResult = 0;
 		$logHead = "<FslEgg> ";
 
-		//네츄럴 => 슬롯 머니넘기기
+		//fslot money
 		if($objMember->mb_fslot_id > 0){
-			//네츄럴 머니 요청
+
 			$arrResult = $this->libApiFslot->getUserInfo($objMember->mb_fslot_uid);
 			writeLog($logHead.$objMember->mb_uid."-UserInfo Status=".$arrResult['status']);
 
@@ -472,14 +488,14 @@ class BaseController extends Controller
         }
 		return $iResult;
 	}
-	
+
 	protected function raveEgg(&$objMember){
 		$iResult = 0;
 
 		$logHead = "<RaveEgg>";
-		//슬롯 머니조회
+		
 		if($objMember->mb_rave_id > 0){
-			//슬롯머니 요청
+		
 			$arrResult = $this->libApiRave->getUserInfo($objMember->mb_rave_uid);
 			writeLog($logHead." ".$objMember->mb_uid."-UserInfo Status=".$arrResult['status']);
 			if($arrResult['status'] == 1)
@@ -487,6 +503,28 @@ class BaseController extends Controller
 				writeLog($logHead." ".$objMember->mb_uid."-UserInfo Balance=".$arrResult['balance']." Money=".$objMember->mb_money);
 				$objMember->mb_rave_money = floor($arrResult['balance']);
 				$this->modelMember->updateRaveMoney($objMember);   
+				$iResult = 1;
+			}
+		} else {
+            $iResult = 1;
+        }
+		return $iResult;
+	}
+	
+	protected function treemEgg(&$objMember){
+		$iResult = 0;
+
+		$logHead = "<TreemEgg>";
+		
+		if(strlen($objMember->mb_treem_uid) > 0){
+		
+			$arrResult = $this->libApiTreem->getUserInfo($objMember->mb_treem_uid);
+			writeLog($logHead." ".$objMember->mb_uid."-UserInfo Status=".$arrResult['status']);
+			if($arrResult['status'] == 1)
+			{
+				writeLog($logHead." ".$objMember->mb_uid."-UserInfo Balance=".$arrResult['balance']." Money=".$objMember->mb_money);
+				$objMember->mb_treem_money = floor($arrResult['balance']);
+				$this->modelMember->updateTreemMoney($objMember);   
 				$iResult = 1;
 			}
 		} else {
@@ -509,77 +547,82 @@ class BaseController extends Controller
 			if($this->sltoMb($objMember) == 1 && $this->fsltoMb($objMember) == 1 &&
 				$this->kgtoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && 
 				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
-				$this->rvtoMb($objMember) == 1){
+				$this->rvtoMb($objMember) == 1 && $this->trtoMb($objMember) == 1){
 					$iResult = $this->mbtoEv($objMember);
 			}
 		} else if($iGame == GAME_SLOT_THEPLUS){
 			if($this->evtoMb($objMember) == 1 && $this->fsltoMb($objMember) == 1 &&
 				$this->kgtoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && 
 				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
-				$this->rvtoMb($objMember) == 1) {
+				$this->rvtoMb($objMember) == 1 && $this->trtoMb($objMember) == 1) {
 					$iResult = $this->mbtoSl($objMember);
 			}
 		} else if($iGame == GAME_SLOT_GSPLAY){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->kgtoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && 
 				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
-				$this->rvtoMb($objMember) == 1) {
+				$this->rvtoMb($objMember) == 1 && $this->trtoMb($objMember) == 1) {
 					$iResult = $this->mbtoFsl($objMember);
 			}
 		} else if($iGame == GAME_SLOT_GOLD){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->kgtoMb($objMember) == 1 && $this->fsltoMb($objMember) == 1 && 
 				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
-				$this->rvtoMb($objMember) == 1) {
+				$this->rvtoMb($objMember) == 1 && $this->trtoMb($objMember) == 1) {
 					$iResult = $this->mbtoGsl($objMember);
 			}
 		} else if($iGame == GAME_CASINO_KGON || $iGame == GAME_SLOT_KGON){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->gsltoMb($objMember) == 1 && 
 				$this->hsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
-				$this->rvtoMb($objMember) == 1) {
+				$this->rvtoMb($objMember) == 1 && $this->trtoMb($objMember) == 1) {
 					$iResult = $this->mbtoKg($objMember);
 			}
 		} else if($iGame == GAME_CASINO_STAR || $iGame == GAME_SLOT_STAR){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->kgtoMb($objMember) == 1 && 
 				$this->gsltoMb($objMember) == 1 && $this->holtoMb($objMember) == 1 &&
-				$this->rvtoMb($objMember) == 1) {
+				$this->rvtoMb($objMember) == 1 && $this->trtoMb($objMember) == 1) {
 					$iResult = $this->mbtoHsl($objMember);
 			}
 		} else if($iGame == GAME_HOLD_CMS){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->kgtoMb($objMember) == 1 && 
 				$this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 &&
-				$this->rvtoMb($objMember) == 1) {
+				$this->rvtoMb($objMember) == 1 && $this->trtoMb($objMember) == 1) {
 					$iResult = $this->mbtoHol($objMember);
 			}
 		} else if($iGame == GAME_CASINO_RAVE || $iGame == GAME_SLOT_RAVE){
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->kgtoMb($objMember) == 1 && 
 				$this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 && 
-				$this->holtoMb($objMember) == 1) {
+				$this->holtoMb($objMember) == 1 && $this->trtoMb($objMember) == 1) {
 					$iResult = $this->mbtoRv($objMember);
+			}
+		} else if($iGame == GAME_CASINO_TREEM || $iGame == GAME_SLOT_TREEM){
+			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
+				$this->fsltoMb($objMember) == 1 && $this->kgtoMb($objMember) == 1 && 
+				$this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 && 
+				$this->holtoMb($objMember) == 1 && $this->rvtoMb($objMember) == 1) {
+					$iResult = $this->mbtoTr($objMember);
 			}
 		} else {
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->kgtoMb($objMember) == 1 &&
 				$this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 && 
-				$this->holtoMb($objMember) == 1 && $this->rvtoMb($objMember) == 1) {
+				$this->holtoMb($objMember) == 1  && $this->rvtoMb($objMember) == 1 &&
+				$this->trtoMb($objMember) == 1) {
 					$iResult = 1;
 			}
 		}
 		return $iResult ;
 
 	}
+
 	
 	protected function evtoMb(&$objMember){
 		$iResult = 0;
 		$logHead = "<EvtoMb> ";
-		// $confs = $this->getSiteConf();
-		// if($confs["evol_deny"]){
-		// 	return 1;
-		// }
 		//Evol => Site
 		if($objMember->mb_live_id > 0){
 			//Evol Money
@@ -616,9 +659,8 @@ class BaseController extends Controller
                     }
                 } 
 			} else {
-				// if($objMember->mb_live_money == 0){
+				// if($objMember->mb_live_money == 0)
 					$iResult = 1;
-				// }
 			}
 		} else {
             $iResult = 1;
@@ -630,10 +672,7 @@ class BaseController extends Controller
 	protected function kgtoMb(&$objMember){
 		$iResult = 0;
 		$logHead = "<KgtoMb> ";
-		// $confs = $this->getSiteConf();
-		// if($confs["cas_deny"]){
-		// 	return 1;
-		// }
+
 		//KGON => Site
 		if($objMember->mb_kgon_id > 0){
 			$arrResult = $this->libApiKgon->getUserInfo($objMember->mb_kgon_uid);
@@ -668,9 +707,8 @@ class BaseController extends Controller
 					}
 				} 
 			} else {
-				// if($objMember->mb_kgon_money == 0){
+				// if($objMember->mb_kgon_money == 0)
 					$iResult = 1;
-				// }
 			}
 		} else {
             $iResult = 1;
@@ -719,9 +757,8 @@ class BaseController extends Controller
                     }
                 } 
 			} else {
-				// if($objMember->mb_slot_money == 0){
+				// if($objMember->mb_slot_money == 0)
 					$iResult = 1;
-				// }
 			}
 		} else {
             $iResult = 1;
@@ -772,7 +809,6 @@ class BaseController extends Controller
 			} else {
 				// if($objMember->mb_fslot_money == 0){
 					$iResult = 1;
-				// }
 			}
 		} else {
             $iResult = 1;
@@ -820,6 +856,7 @@ class BaseController extends Controller
 					}
                 } 
 			} else {
+				// if($objMember->mb_gslot_money == 0)
 				$iResult = 1;
 			}
 		} else {
@@ -894,15 +931,14 @@ class BaseController extends Controller
 					
 					if($this->modelMember->updateAssets($objMember, $amount)){
 						$this->modelTransfer->register(TRANS_HOLD_SITE, $objMember, $objMember->mb_hold_money+$amount, 0-$amount);
-						$objMember->mb_money += $amount;   
+						$objMember->mb_money += $amount;
 						writeLog($logHead.$objMember->mb_uid."-Withdraw Money=".$objMember->mb_money);
                         $iResult = 1;
                     }
                 } 
 			} else {
-				// if($objMember->mb_hold_money == 0){
+				// if($objMember->mb_hold_money == 0)
 					$iResult = 1;
-				// }
 			}
 		} else {
             $iResult = 1;
@@ -951,6 +987,41 @@ class BaseController extends Controller
 					$iResult = 1;
 				// }
 			}
+		} else {
+            $iResult = 1;
+        }
+
+		return $iResult;
+	}
+
+	protected function trtoMb(&$objMember){
+		$iResult = 0;
+		$logHead = "<TrtoMb> ";
+		//Treem => Site
+		if(strlen($objMember->mb_treem_uid) > 0){
+			$amount = 0;
+			//Withdraw
+			$arrResp = $this->libApiTreem->subBalance($objMember->mb_treem_uid, $amount, true);
+		
+			if($arrResp['status'] == 1)
+			{
+				$amount = floor(abs($arrResp['amount']));
+				writeLog($logHead.$objMember->mb_uid."-Withdraw RemainBalance=".$arrResp['balance']);
+				$objMember->mb_treem_money = $arrResp['balance'];
+				$this->modelMember->updateTreemMoney($objMember);   
+					
+				if( $this->modelMember->updateAssets($objMember, $amount)){
+					$this->modelTransfer->register(TRANS_TREEM_SITE, $objMember, $objMember->mb_treem_money+$amount, 0-$amount);
+					$objMember->mb_money += $amount;   
+					writeLog($logHead.$objMember->mb_uid."-Withdraw Money=".$objMember->mb_money);
+					$iResult = 1;
+				}
+			} else if(array_key_exists('balance', $arrResp)) {
+				$objMember->mb_treem_money = $arrResp['balance'];
+				$this->modelMember->updateTreemMoney($objMember);   
+				$iResult = 1;
+			}
+		
 		} else {
             $iResult = 1;
         }
@@ -1018,7 +1089,6 @@ class BaseController extends Controller
 
 	protected function mbtoSl(&$objMember){
 		$iResult = 0;
-
 		$logHead = "<MbtoSl> ";
 		//Site => Slot
 		if($objMember->mb_slot_uid !== "" && intval($objMember->mb_money) > 0){
@@ -1100,7 +1170,7 @@ class BaseController extends Controller
         }
 		return $iResult;
 	}
-	
+
 	protected function mbtoHsl(&$objMember){
 		$iResult = 0;
 		$logHead = "<MbtoHsl> ";
@@ -1127,7 +1197,7 @@ class BaseController extends Controller
         }
 		return $iResult;
 	}
-	
+
 	protected function mbtoHol(&$objMember){
 		$iResult = 0;
 		$logHead = "<MbtoHold> ";
@@ -1159,7 +1229,7 @@ class BaseController extends Controller
 		$iResult = 0;
 		$logHead = "<MbtoRv> ";
 
-		//Site => KGON
+		//Site => Rave
 		if($objMember->mb_rave_id > 0 && floor($objMember->mb_money) > 0){
 			//
 			$arrResult = $this->libApiRave->addBalance($objMember->mb_rave_uid, $objMember->mb_money);
@@ -1183,4 +1253,34 @@ class BaseController extends Controller
 
 		return $iResult;
 	}
+	
+	protected function mbtoTr(&$objMember){
+		$iResult = 0;
+		$logHead = "<MbtoTr> ";
+
+		//Site => Treem
+		if(strlen($objMember->mb_treem_uid) > 0 && floor($objMember->mb_money) > 0){
+			//
+			$arrResult = $this->libApiTreem->addBalance($objMember->mb_treem_uid, $objMember->mb_money);
+			writeLog($logHead.$objMember->mb_uid."-Deposit Status=".$arrResult['status']);
+				
+			if($arrResult['status'] == 1)
+			{
+				writeLog($logHead.$objMember->mb_uid."-Deposit Balance=".$arrResult['balance']);
+				if($this->modelMember->updateAssets($objMember, 0-$arrResult['amount'])){
+					$objMember->mb_treem_money = $arrResult['balance'];
+					$amount = $arrResult['amount'];
+					$this->modelTransfer->register(TRANS_SITE_TREEM, $objMember, $objMember->mb_treem_money-$amount, $amount);
+					$this->modelMember->updateTreemMoney($objMember);   
+					$objMember->mb_money -= $arrResult['amount'];   
+					$iResult = 1;
+				}
+			} 
+		} else {
+            $iResult = 1;
+        }
+
+		return $iResult;
+	}
+
 }
