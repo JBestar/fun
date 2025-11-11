@@ -649,7 +649,7 @@
                 }
                 .logo_icon{
                     width: 150px;
-                    margin-top: 50px;
+                    margin-top: 55px;
                     margin-right:0px;
                 }
                 .MainMenu-top-wrapper {

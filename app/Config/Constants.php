@@ -332,7 +332,8 @@ defined('TRANS_SITE_HOLD')      || define('TRANS_SITE_HOLD', 13);
 defined('TRANS_HOLD_SITE')      || define('TRANS_HOLD_SITE', 14); 
 defined('TRANS_SITE_RAVE')      || define('TRANS_SITE_RAVE', 15); 
 defined('TRANS_RAVE_SITE')      || define('TRANS_RAVE_SITE', 16); 
-
+defined('TRANS_SITE_TREEM')     || define('TRANS_SITE_TREEM', 17); 
+defined('TRANS_TREEM_SITE')     || define('TRANS_TREEM_SITE', 18); 
 // 
 defined('NOTICE_MSG')            || define('NOTICE_MSG', 0);
 defined('NOTICE_BOARD')          || define('NOTICE_BOARD', 1);   
