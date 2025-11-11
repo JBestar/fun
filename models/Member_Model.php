@@ -101,6 +101,44 @@ class Member_Model {
         return $arrMember;		
     }
 
+      
+    public function updateAssets(&$objUser, $inMoney , $inPoint = 0, $iChange=-1, $spec=""){
+
+        if(is_null($objUser))
+            return false;
+
+        $inMoney = floatval($inMoney);
+        $inPoint = floatval($inPoint);
+
+        if($inMoney == 0 && $inPoint == 0)
+            return true;
+        
+        $strSql = "UPDATE ".$this->table." SET ";
+        if($inMoney != 0){
+            $strSql.= "mb_money = mb_money";
+            $strSql.= $inMoney > 0 ? " + ":" ";
+            $strSql.= $inMoney;   
+            $strSql.= ", mb_change = ".$iChange;
+            $strSql.= ", mb_spec = '".$spec."'";
+        }
+        
+        if($inPoint != 0){
+            $strSql.= $inMoney != 0 ? " , ":" ";
+
+            $strSql.= "mb_point = mb_point";
+            $strSql.= $inPoint > 0 ? " + ":" ";
+            $strSql.= $inPoint;
+        }
+
+        $strSql.= " WHERE mb_fid=".$objUser->mb_fid;
+        if($inMoney < 0){
+            $strSql.= " AND mb_money >= ".abs($inMoney);
+        }
+
+		return $this->mDbConn->query($strSql);
+        
+    }
+
     function updateWinMoney($objBetInfo){
 
     	$nEarnMoney = 0;

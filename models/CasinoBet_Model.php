@@ -464,11 +464,42 @@ class CasinoBet_Model {
 		
 	}
 
-	public function insertT($objMember, $bet){
+	public function insertT($objMember, $bet, $fLog=null){
     	
+		$betSpec = "";
+		if(array_key_exists('external', $bet)) {
+
+			$betDetail = null;
+			try{
+				if(array_key_exists('detail', $bet['external']) && !is_null($bet['external']['detail']) && array_key_exists('data', $bet['external']['detail'])){
+					$betDetail = $bet['external']['detail']['data'];
+					// writeLog($fLog, "detail-1");
+				} else $betDetail = null;
+
+
+			} catch (Exception $e) {
+				$betDetail = null;
+			}
+
+			if($betDetail == null){
+				$betSpec = "";
+			} else if(array_key_exists('participants', $betDetail)) {
+				// writeLog($fLog, "detail-2");
+				if(is_array($betDetail['participants']) && count($betDetail['participants']) > 0 && array_key_exists('bets', $betDetail['participants'][0]) ){
+					foreach($betDetail['participants'][0]['bets'] as $detail){
+						$betSpec.= $detail['code'].",".$detail['stake'].",";
+						$betSpec.= $detail['payout']."#";
+					}
+				} 
+			} 
+			if(strlen($betSpec) < 1 && !is_null($fLog)){
+				// writeLog($fLog, "detail Error=".json_encode($bet['external']));
+			}
+		}
+
 		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, ";
 		$strSql.= " bet_money, bet_agent_id, bet_player_id, bet_game_id, bet_game_type, bet_table_code, ";
-		$strSql.= " bet_result ) VALUES "; 
+		$strSql.= " bet_spec ) VALUES "; 
 		
 		//bet_idx
 		$strSql.= " ( '".$bet['id']."',";
@@ -492,8 +523,8 @@ class CasinoBet_Model {
 		$strSql.= " '".$bet['details']['game']['type']."', ";	//"baccarat"
 		//bet_table_code
 		$strSql.= " '".$bet['details']['game']['id']."', ";	//386-"Speed Baccarat 1"
-		//bet_result
-		$strSql.= " '' ";
+		//bet_spec
+		$strSql.= " '".$betSpec."' ";
 		$strSql.= " )";
 
 		
@@ -506,35 +537,35 @@ class CasinoBet_Model {
 	public function updateT($fid, $bet, $fLog=null){
 
 		$betSpec = "";
-		if(array_key_exists('external', $bet)) {
+		// if(array_key_exists('external', $bet)) {
 
-			$betDetail = null;
-			try{
-				if(array_key_exists('detail', $bet['external']) && !is_null($bet['external']['detail']) && array_key_exists('data', $bet['external']['detail'])){
-					$betDetail = $bet['external']['detail']['data'];
-					writeLog($fLog, "detail-1");
-				} else $betDetail = null;
+		// 	$betDetail = null;
+		// 	try{
+		// 		if(array_key_exists('detail', $bet['external']) && !is_null($bet['external']['detail']) && array_key_exists('data', $bet['external']['detail'])){
+		// 			$betDetail = $bet['external']['detail']['data'];
+		// 			writeLog($fLog, "detail-1");
+		// 		} else $betDetail = null;
 
 
-			} catch (Exception $e) {
-				$betDetail = null;
-			}
+		// 	} catch (Exception $e) {
+		// 		$betDetail = null;
+		// 	}
 
-			if($betDetail == null){
-				$betSpec = "";
-			} else if(array_key_exists('participants', $betDetail)) {
-				writeLog($fLog, "detail-2");
-				if(is_array($betDetail['participants']) && count($betDetail['participants']) > 0 && array_key_exists('bets', $betDetail['participants'][0]) ){
-					foreach($betDetail['participants'][0]['bets'] as $detail){
-						$betSpec.= $detail['code'].",".$detail['stake'].",";
-						$betSpec.= $detail['payout']."#";
-					}
-				} 
-			} 
-			if(strlen($betSpec) < 1 && !is_null($fLog)){
-				// writeLog($fLog, "detail Error=".json_encode($bet['external']));
-			}
-		}
+		// 	if($betDetail == null){
+		// 		$betSpec = "";
+		// 	} else if(array_key_exists('participants', $betDetail)) {
+		// 		writeLog($fLog, "detail-2");
+		// 		if(is_array($betDetail['participants']) && count($betDetail['participants']) > 0 && array_key_exists('bets', $betDetail['participants'][0]) ){
+		// 			foreach($betDetail['participants'][0]['bets'] as $detail){
+		// 				$betSpec.= $detail['code'].",".$detail['stake'].",";
+		// 				$betSpec.= $detail['payout']."#";
+		// 			}
+		// 		} 
+		// 	} 
+		// 	if(strlen($betSpec) < 1 && !is_null($fLog)){
+		// 		// writeLog($fLog, "detail Error=".json_encode($bet['external']));
+		// 	}
+		// }
 
 		$strSql = "UPDATE ".$this->mTableName." SET ";	
 	

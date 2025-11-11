@@ -4,6 +4,7 @@ include_once('models/SlotBet_Model.php');
 include_once('models/CasinoBet_Model.php');
 
 include_once('models/ConfSite_Model.php');
+include_once('models/ConfGame_Model.php');
 include_once('models/SlotPrd_Model.php');
 include_once('models/CasinoPrd_Model.php');
 
@@ -23,6 +24,7 @@ class ServiceLogic
 	private $modelTransfer;
 
 	private $modelConfSite;
+	private $modelConfGame;
 	private $modelSlotPrd;
 	
 	public $fLog;
@@ -35,6 +37,7 @@ class ServiceLogic
 		$this->modelSlotBet = new SlotBet_Model($dbConn);
 
 		$this->modelConfSite = new ConfSite_Model($dbConn);
+		$this->modelConfGame = new ConfGame_Model($dbConn);
 		$this->modelSlotPrd = new SlotPrd_Model($dbConn);
 		$this->modelCasinoPrd = new CasinoPrd_Model($dbConn);
 
@@ -1733,7 +1736,7 @@ class ServiceLogic
 		return getCurlWithProxy($url, $proxyUrl, $header);
 	}
 
-	public function registerTreemBets($arrResult, $proxyUrl="", $recoverEgg=0){
+	public function registerTreemBets($arrResult, $proxyUrl=""){
 		$gameSlotId = GAME_SLOT_TREEM;
 		$gameCasId = GAME_CASINO_TREEM;
 		$confId = CONF_API_TREEM;
@@ -1743,6 +1746,8 @@ class ServiceLogic
 		$arrSlotPrd = $this->modelSlotPrd->getByCat($gameSlotId);
 		$objConf = $this->modelConfSite->getById($confId);
 		
+		$objGameCas = $this->modelConfGame->getById($gameCasId);
+
 		if(is_null($arrResult))
 			return false;
 
@@ -1915,34 +1920,69 @@ class ServiceLogic
 					writeLog($this->fLog, $logHead."Update ACCId=".$betId);
 					$arrMemBet[$objMember->mb_fid] = $bet['created_at'];
 					
-					if($bet['amount'] == $betting["bet_money"]){	//타이라면
+					// if($bet['amount'] == $betting["bet_money"]){	//타이라면
 						
-						$arrRewards = $this->modelReward->getByBetId(GAME_CASINO_EVOL, $betId, $rwCsLastFid);
-						foreach($arrRewards as $objReward){
-							writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." mb_fid=".$objReward->rw_mb_fid);
+					// 	$arrRewards = $this->modelReward->getByBetId(GAME_CASINO_EVOL, $betId, $rwCsLastFid);
+					// 	foreach($arrRewards as $objReward){
+					// 		writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." mb_fid=".$objReward->rw_mb_fid);
 
-							if(array_key_exists($objReward->rw_mb_fid, $arrEmpPoint )){
-								// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point1 =".$arrEmpPoint[$objReward->rw_mb_fid]);
-								$arrEmpPoint[$objReward->rw_mb_fid] -= $objReward->rw_point;
-								// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
-							}
-							else {
-								$arrEmpPoint[$objReward->rw_mb_fid] = 0-$objReward->rw_point;	
-								// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
-							}
+					// 		if(array_key_exists($objReward->rw_mb_fid, $arrEmpPoint )){
+					// 			// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point1 =".$arrEmpPoint[$objReward->rw_mb_fid]);
+					// 			$arrEmpPoint[$objReward->rw_mb_fid] -= $objReward->rw_point;
+					// 			// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
+					// 		}
+					// 		else {
+					// 			$arrEmpPoint[$objReward->rw_mb_fid] = 0-$objReward->rw_point;	
+					// 			// writeLog($this->fLog, $logHead."Cancel RwId=".$objReward->rw_fid." point =".$arrEmpPoint[$objReward->rw_mb_fid]);
+					// 		}
 
-							if(array_key_exists($objMember->mb_fid, $arrTransMember )){
-								// writeLog($this->fLog, $logHead."Cancel RwId=".$objMember->mb_fid." point1 =".$arrTransMember[$objMember->mb_fid]);
-								$arrTransMember[$objMember->mb_fid] -= $objReward->rw_point;
-								// writeLog($this->fLog, $logHead."Cancel RwId=".$objMember->mb_fid." point =".$arrTransMember[$objMember->mb_fid]);
-							}
-							else {
-								$arrTransMember[$objMember->mb_fid] = 0-$objReward->rw_point;	
-								// writeLog($this->fLog, $logHead."Cancel RwId=".$objMember->mb_fid." point =".$arrTransMember[$objMember->mb_fid]);
-							}
+					// 		if(array_key_exists($objMember->mb_fid, $arrTransMember )){
+					// 			// writeLog($this->fLog, $logHead."Cancel RwId=".$objMember->mb_fid." point1 =".$arrTransMember[$objMember->mb_fid]);
+					// 			$arrTransMember[$objMember->mb_fid] -= $objReward->rw_point;
+					// 			// writeLog($this->fLog, $logHead."Cancel RwId=".$objMember->mb_fid." point =".$arrTransMember[$objMember->mb_fid]);
+					// 		}
+					// 		else {
+					// 			$arrTransMember[$objMember->mb_fid] = 0-$objReward->rw_point;	
+					// 			// writeLog($this->fLog, $logHead."Cancel RwId=".$objMember->mb_fid." point =".$arrTransMember[$objMember->mb_fid]);
+					// 		}
+					// 	}
+
+					// 	$this->modelReward->deleteByBetId(GAME_CASINO_EVOL, $betId, $rwCsLastFid);
+					// }
+
+					if($bet['amount'] != $betting["bet_money"]){
+						$bNeedTrans = false;
+						if($objGameCas->game_percent_1 == 1){ 	//Recover Enabled
+							if($objGameCas->game_percent_2 != 1 && $objGameCas->game_percent_3 == 1){ //Win-Recover Enabled
+								$bNeedTrans = true;
+							} else if($objGameCas->game_percent_3 == 1){ //PlayerWin-Recover Enabled
+								if($bet['amount'] > $betting["bet_money"] && strpos(strtolower($betting["bet_spec"]), 'player') !== false )
+									$bNeedTrans = true;
+							} else if($objGameCas->game_percent_2 == 1){ //Win-Recover Enabled
+								if($bet['amount'] > $betting["bet_money"])
+									$bNeedTrans = true;
+							} 
+							
+							writeLog($this->fLog, $logHead." referer_id=".$bet['referer_id']." bNeedTrans=".$bNeedTrans." bet_money=".$betting["bet_money"]." win_money=".$bet["amount"]." bet_spec=".$betting["bet_spec"]);
 						}
 
-						$this->modelReward->deleteByBetId(GAME_CASINO_EVOL, $betId, $rwCsLastFid);
+						$arrEmpRatio = calcEmpPoint($objMember->ratio_cs, $betting['bet_money'], $betting['bet_time']);
+						foreach($arrEmpRatio as $ratio){
+							if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
+								$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
+							else 
+								$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
+
+							if($bNeedTrans){
+								if(array_key_exists($objMember->mb_fid, $arrTransMember ))
+									$arrTransMember[$objMember->mb_fid] += $ratio['point'];
+								else 
+									$arrTransMember[$objMember->mb_fid] = $ratio['point'];
+							}
+							
+						}
+						$this->modelReward->insert(GAME_CASINO_EVOL, $betId, $arrEmpRatio, $rwCsLastFid);
+
 					}
 
 				} else	//베팅
@@ -1953,7 +1993,7 @@ class ServiceLogic
 						continue;
 					}
 					
-					$betId = $this->modelCasinoBet->insertT($objMember, $bet);
+					$betId = $this->modelCasinoBet->insertT($objMember, $bet, $this->fLog);
 					writeLog($this->fLog, $logHead."Insert BetId=".$betId);
 					$arrMemBet[$objMember->mb_fid] = $bet['created_at'];
 					if($betId > 0){
@@ -1962,19 +2002,19 @@ class ServiceLogic
 						$bInsert = true;
 						writeLog($this->fLog, $logHead."BET-INSERT-".$bet['type']."-".$bet['id']."=>".$bet['amount']);
 
-						$arrEmpRatio = calcEmpPoint($objMember->ratio_cs, $bet['amount'], $bet['created_at']);
-						foreach($arrEmpRatio as $ratio){
-							if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
-								$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
-							else 
-								$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
+						// $arrEmpRatio = calcEmpPoint($objMember->ratio_cs, $bet['amount'], $bet['created_at']);
+						// foreach($arrEmpRatio as $ratio){
+						// 	if(array_key_exists($ratio['mb_fid'], $arrEmpPoint ))
+						// 		$arrEmpPoint[$ratio['mb_fid']] += $ratio['point'];
+						// 	else 
+						// 		$arrEmpPoint[$ratio['mb_fid']] = $ratio['point'];	
 
-							if(array_key_exists($objMember->mb_fid, $arrTransMember ))
-								$arrTransMember[$objMember->mb_fid] += $ratio['point'];
-							else 
-								$arrTransMember[$objMember->mb_fid] = $ratio['point'];
-						}
-						$this->modelReward->insert(GAME_CASINO_EVOL, $betId, $arrEmpRatio, $rwCsLastFid);
+						// 	if(array_key_exists($objMember->mb_fid, $arrTransMember ))
+						// 		$arrTransMember[$objMember->mb_fid] += $ratio['point'];
+						// 	else 
+						// 		$arrTransMember[$objMember->mb_fid] = $ratio['point'];
+						// }
+						// $this->modelReward->insert(GAME_CASINO_EVOL, $betId, $arrEmpRatio, $rwCsLastFid);
 					}
 					
 				}
@@ -2075,24 +2115,27 @@ class ServiceLogic
 		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
 		writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);
 
-		if($recoverEgg == 1){
+		writeLog($this->fLog, $logHead."TransPoint-Count=".count($arrTransMember));
+		foreach ($arrTransMember as $fid => $point) {
+			if($point <= 1)
+				continue;
+			$member = findMemberByFid($arrMember, $fid);
 
-			writeLog($this->fLog, $logHead."TransPoint-Count=".count($arrTransMember));
-			foreach ($arrTransMember as $fid => $point) {
-				if($point <= 1)
-					continue;
-				$member = findMemberByFid($arrMember, $fid);
-
+			for($i=0; $i<3; $i++){
 				$result = $this->transferEgg($arrInfo, $member->mb_treem_uid, $point, $proxyUrl);
 
 				writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." point=".$point." result=".$result['status']);
 				if($result['status'] == 1){
 					writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid.", balance=".$result['balance'].", point=".$point);
-
+					// $this->modelMember->updateAssets($member, 0-$point, 0, MONEYCHANGE_WITHDRAW, "정산회수");
 					$this->modelTransfer->insertRow(RECOVER_TREEM, $member, $result['balance']+$point, 0-$point, $this->fLog);
+					break;
+				} else {
+					sleep(3);
 				}
-				sleep(1);
 			}
+			
+			sleep(1);
 		}
 
 		return $bInsert;

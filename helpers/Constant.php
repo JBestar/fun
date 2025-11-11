@@ -73,5 +73,6 @@ define('TRANS_SITE_TREEM', 17);
 define('TRANS_TREEM_SITE', 18); 
 define('RECOVER_TREEM', 19); 
 
+define('MONEYCHANGE_WITHDRAW', 24); //머니회수
 
 ?>
