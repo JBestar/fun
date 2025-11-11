@@ -1953,14 +1953,19 @@ class ServiceLogic
 					if($bet['amount'] != $betting["bet_money"]){
 						$bNeedTrans = false;
 						if($objGameCas->game_percent_1 == 1){ 	//Recover Enabled
-							if($objGameCas->game_percent_2 != 1 && $objGameCas->game_percent_3 != 1){ //Win-Recover Enabled
+							if($objGameCas->game_percent_2 != 1){ //Win-Recover Enabled
 								$bNeedTrans = true;
-							} else if($objGameCas->game_percent_3 == 1){ //PlayerWin-Recover Enabled
-								if($bet['amount'] > $betting["bet_money"] && (strlen($betting["bet_spec"]) == 0 || strpos(strtolower($betting["bet_spec"]), 'player') !== false) )
-									$bNeedTrans = true;
-							} else if($objGameCas->game_percent_2 == 1){ //Win-Recover Enabled
-								if($bet['amount'] > $betting["bet_money"])
-									$bNeedTrans = true;
+							} else { //Win-Recover Enabled
+								if($bet['amount'] > $betting["bet_money"]){
+
+									if($objGameCas->game_percent_3 == 1){ //PlayerWin-Recover Enabled
+										if(strlen($betting["bet_spec"]) == 0 || strpos(strtolower($betting["bet_spec"]), 'player') !== false ){
+											$bNeedTrans = true;
+										} 
+									} else {
+										$bNeedTrans = true;
+									}
+								}
 							} 
 							
 							writeLog($this->fLog, $logHead." referer_id=".$bet['referer_id']." bNeedTrans=".$bNeedTrans." bet_money=".$betting["bet_money"]." win_money=".$bet["amount"]." bet_spec=".$betting["bet_spec"]);
