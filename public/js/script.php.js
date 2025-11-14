@@ -43,12 +43,18 @@ function openCasinoGame(cid, gameId) {
     if(!check_login()){
         return;
     }
-    if(gameId == 4)     // GAME_CASINO_EVOL
+    let ip = $("#loginModal #ip_addr").val();
+
+    if(gameId == GAME_CASINO_EVOL)     // GAME_CASINO_EVOL
         window.open(FURL + "/evl", "games", "width=1200, height=800, left=100, top=50");
-    else if(gameId == 17) // GAME_CASINO_STAR
+    else if(gameId == GAME_CASINO_STAR) // GAME_CASINO_STAR
         window.open(FURL + "/cas_h?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
-    else if(gameId == 20) // GAME_CASINO_RAVE
+    else if(gameId == GAME_CASINO_RAVE) // GAME_CASINO_RAVE
         window.open(FURL + "/cas_r?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
+    else if(gameId == GAME_CASINO_TREEM) // GAME_CASINO_TREEM
+        window.open(FURL + "/cas_t?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
+    else if(gameId == GAME_CASINO_SIGMA) // GAME_CASINO_SIGMA
+        window.open(FURL + "/cas_s?prd=" + cid + "&ip=" + ip , "games", "width=1200, height=800, left=100, top=50");
     else // GAME_CASINO_KGON
         window.open(FURL + "/cas?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
     
@@ -72,7 +78,9 @@ function openSlotGame(cid, cname) {
     if(!check_login()){
         return;
     }
-    SLB(FURL+'/xslotlist?prd='+cid, {'width': 'fifteen wide column ','height' : $(window).height()*0.9,'caption': '<i class=\'th icon\'></i>' + cname});
+    let ip = $("#loginModal #ip_addr").val();
+
+    SLB(FURL+'/xslotlist?prd='+cid+'&ip='+ip, {'width': 'fifteen wide column ','height' : $(window).height()*0.9,'caption': '<i class=\'th icon\'></i>' + cname});
 
 }
 

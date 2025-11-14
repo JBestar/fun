@@ -34,7 +34,7 @@
         <script type="text/javascript" src="<?php echo site_furl('js/vue.js'); ?>"></script>
         <!--순서중요-->
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <script type="text/javascript" src="<?php echo site_furl('js/script.php.js?ver=2'); ?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/script.php.js?ver=3'); ?>"></script>
             <script type="text/javascript" src="<?php echo site_furl('js/lib.js?ver=1'); ?>"></script>
             <script type="text/javascript" src="<?php echo site_furl('js/common.js?ver=2'); ?>"></script>
             <script type="text/javascript" src="<?php echo site_furl('js/SLB.js?ver=4'); ?>"></script>
@@ -72,6 +72,13 @@
     
         <script>
             const FURL = "<?=$_ENV['app.furl']?>";
+            const GAME_CASINO_EVOL = <?=GAME_CASINO_EVOL?>;
+            const GAME_CASINO_KGON = <?=GAME_CASINO_KGON?>;
+            const GAME_CASINO_STAR = <?=GAME_CASINO_STAR?>;
+            const GAME_CASINO_RAVE = <?=GAME_CASINO_RAVE?>;
+            const GAME_CASINO_TREEM = <?=GAME_CASINO_TREEM?>;
+            const GAME_CASINO_SIGMA = <?=GAME_CASINO_SIGMA?>;
+
             var langMessage = {
                 administrator_ask : '<?=lang('common.administrator_ask')?>', 
                 ask_quick : '<?=lang('common.ask_quick')?>',

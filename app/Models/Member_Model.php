@@ -29,6 +29,7 @@ class Member_Model extends Model {
         'mb_hold_uid', 'mb_hold_money', 
         'mb_rave_id', 'mb_rave_uid', 'mb_rave_money' ,
         'mb_treem_uid', 'mb_treem_money' ,
+        'mb_sigma_uid', 'mb_sigma_money' ,
     ];
   
     private $getFields = ['mb_fid', 'mb_uid', 'mb_level','mb_emp_fid', 'mb_nickname', 'mb_time_call', 'mb_ip_join', 'mb_ip_last',
@@ -44,6 +45,7 @@ class Member_Model extends Model {
         'mb_hold_uid', 'mb_hold_money', 
         'mb_rave_id', 'mb_rave_uid', 'mb_rave_money' ,
         'mb_treem_uid', 'mb_treem_money' ,
+        'mb_sigma_uid', 'mb_sigma_money' ,
     ];
 
 
@@ -275,6 +277,21 @@ class Member_Model extends Model {
     public function updateTreemMoney($member){
         $data = [
             'mb_treem_money' => $member->mb_treem_money,
+        ];
+        return $this->update($member->mb_fid, $data);
+    }
+
+    public function updateSigmaInfo($member){
+        $data = [
+            'mb_sigma_uid' => $member->mb_sigma_uid,
+            'mb_sigma_money' => $member->mb_sigma_money,
+        ];
+        return $this->update($member->mb_fid, $data);
+    }
+
+    public function updateSigmaMoney($member){
+        $data = [
+            'mb_sigma_money' => $member->mb_sigma_money,
         ];
         return $this->update($member->mb_fid, $data);
     }

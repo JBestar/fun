@@ -131,6 +131,7 @@ class Casino extends BaseController
 	{
 		$this->setLanguage();
 		$prdId = trim($this->request->getVar('prd'));
+		$ip = trim($this->request->getVar('ip'));
 						
 		if(!is_login())
 		{
@@ -142,6 +143,8 @@ class Casino extends BaseController
 			$this->response->redirect(site_furl('/cas_r?prd='.$prdId));	
 		} else if($_ENV['app.casino'] == APP_CASINO_TREEM){
 			$this->response->redirect(site_furl('/cas_t?prd='.$prdId));	
+		} else if($_ENV['app.casino'] == APP_CASINO_SIGMA){
+			$this->response->redirect(site_furl("/cas_s?prd=.$prdId&ip=$ip"));	
 		} else {
 			$this->sess_action();                
 			$gameId = GAME_CASINO_KGON;
@@ -177,7 +180,7 @@ class Casino extends BaseController
 			else if(!is_null($sessAuto))
 				$iCreated = 9;	
 			else if($objMember->mb_kgon_id == 0){
-				//플레이어 창조
+				//Create Player
                 $createId = createGameId(substr($_ENV['app.gm_prefix'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 				$arrResult = $this->libApiKgon->createUser($createId, $objMember->mb_nickname, $objMember->mb_uid);
                 
@@ -292,7 +295,7 @@ class Casino extends BaseController
 			else if(!is_null($sessAuto))
 				$iCreated = 9;	
 			else if($objMember->mb_kgon_id == 0){
-				//플레이어 창조
+				//Create Player
                 $createId = createGameId(substr($_ENV['app.gm_prefix'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
 				$arrResult = $this->libApiKgon->createUser($createId, $objMember->mb_nickname, $objMember->mb_uid);
                 
@@ -422,7 +425,7 @@ class Casino extends BaseController
 			else if(!is_null($sessAuto))
 				$iCreated = 9;	
 			else if($objMember->mb_hslot_token == ""){
-				//플레이어 창조
+				//Create Player
 				$arrResult = $this->libApiHslot->createUser($objMember->mb_uid, $objMember->mb_nickname);
                 
                 if($arrResult['status'] == 1){
@@ -530,7 +533,7 @@ class Casino extends BaseController
 			else if(!is_null($sessAuto))
 				$iCreated = 9;	
 			else if($objMember->mb_rave_id == 0){
-				//플레이어 창조
+				//Create Player
 				$arrResult = $this->libApiRave->createUser($objMember->mb_fid, $objMember->mb_nickname, $objMember->mb_uid);
                 
                 if($arrResult['status'] == 1){
@@ -570,7 +573,6 @@ class Casino extends BaseController
 					$iResult = $this->alltoGame($objMember, $gameId);
 				else $iResult = 1;
 
-				$iResult = 1;
                 if($iResult != 1){
                     print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
                 } else {
@@ -637,7 +639,7 @@ class Casino extends BaseController
 			else if(!is_null($sessAuto))
 				$iCreated = 9;	
 			else if(strlen($objMember->mb_treem_uid) == 0){
-				//플레이어 창조
+				//Create Player
 				$arrResult = $this->libApiTreem->createUser($objMember->mb_fid, $objMember->mb_uid);
                 
                 if($arrResult['status'] == 1){
@@ -676,7 +678,6 @@ class Casino extends BaseController
 					$iResult = $this->alltoGame($objMember, $gameId);
 				else $iResult = 1;
 
-				$iResult = 1;
                 if($iResult != 1){
                     print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
                 } else {
@@ -695,6 +696,108 @@ class Casino extends BaseController
 			
         }
 
+    }
+
+	public function cas_s()
+	{
+		$this->setLanguage();
+						
+		if(!is_login())
+		{
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
+
+        } else {
+			$this->sess_action();                
+			$gameId = GAME_CASINO_SIGMA;
+            $logHead = "<CAS_SIGMA>";
+			$prdId = trim($this->request->getVar('prd'));
+			$ip = trim($this->request->getVar('ip'));
+			if(strlen($ip) < 1)
+				$ip = $this->request->getIPAddress();
+
+			$user_id = $this->session->user_id;
+			$sessId = $this->session->session_id;
+
+			$objMember = $this->modelMember->getByUid($user_id);
+			$objConfig = $this->modelConfgame->find($gameId);  //Casino config
+			$headInfo = $this->getSiteConf();
+			$objCas = $this->modelCasprd->getById($gameId, $prdId);
+			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
+			$sessAuto = $this->modelSess->getByUid($objMember->mb_uid, false);
+			$sess = $this->modelSess->getBySess($sessId);
+            
+            $iCreated = 0;
+			if(is_null($objMember) || is_null($objConfig) || is_null($sess))
+				$iCreated = 0;
+            else if(is_null($objCas))
+				$iCreated = 6;									//Error of game
+            else if(intval($sess->sess_spec) != 2 && ($objCas->maintain == STATE_ACTIVE || $objCas->hidden == STATE_ACTIVE))
+				$iCreated = 7;
+			else if($objConfig->game_bet_permit != PERMIT_OK)
+				$iCreated = 4;									//Preparing
+            else if($headInfo['cas_deny'])
+                $iCreated = 3;									//Stop
+			else if(!$this->modelMember->isPermitMember($objMember, $gameId))
+				$iCreated = 3;									//Stop
+			else if($diffDt < DELAY_GAME)
+				$iCreated = 8;	
+			else if(!is_null($sessAuto))
+				$iCreated = 9;	
+			else if(strlen($objMember->mb_sigma_uid) == 0){
+				//Create Player
+				$arrResult = $this->libApiSigma->createUser($objMember->mb_fid, $objMember->mb_uid);
+                
+                if($arrResult['status'] == 1){
+                    $objMember->mb_sigma_uid = $arrResult['username'];
+                    $this->modelMember->updateSigmaInfo($objMember);
+                    $iCreated = 1;
+
+                    writeLog($logHead.$objMember->mb_uid."-CreateUser Sucess !!");
+                } else {
+                    $iCreated = 2;								//Fail in Creation of user
+                }
+			} else{
+				$iCreated = 1;
+			}
+
+			if($iCreated == 0){
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
+			} else if($iCreated == 2){
+				print "<script language=javascript> alert('계정창조중 오류가 발생하였습니다.'); self.close(); </script>";
+			} else if($iCreated == 3){
+				print "<script language=javascript> alert('".lang("common.game_stop")."'); self.close(); </script>";
+			} else if($iCreated == 4){
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
+			} else if($iCreated == 5){
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
+			} else if($iCreated == 6){
+				print "<script language=javascript> alert('게임을 정확히 선택해주세요.'); self.close(); </script>";
+			} else if($iCreated == 7){
+				print "<script language=javascript> alert('".lang("common.inspection")."'); self.close(); </script>";
+			} else if($iCreated == 8){
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
+			} else if($iCreated == 9){
+				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
+			} else if($iCreated == 1){
+				if(array_key_exists('app.transEg', $_ENV) && $_ENV['app.transEg'] == 1)
+					$iResult = $this->alltoGame($objMember, $gameId);
+				else $iResult = 1;
+
+                if($iResult != 1){
+                    print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+                } else {
+                    
+					$arrResult = $this->libApiSigma->gameUrl($objMember->mb_sigma_uid, $objMember->mb_uid, $objCas->key, $objCas->lobby, $ip, $sessId);
+					if($arrResult['status'] == 1){
+						writeLog($logHead.$arrResult['url']);
+						$this->modelMember->updateBetTm($objMember);
+						$this->response->redirect($arrResult['url']);
+					} else {
+						print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+					}
+                }
+			}
+        }
     }
 
 	public function holdem()
@@ -729,7 +832,7 @@ class Casino extends BaseController
 			else if($diffDt < DELAY_GAME)
 				$iCreated = 8;	
 			else if($objMember->mb_hold_uid == ""){
-				//플레이어 창조
+				//Create Player
                 // $createId = createGameId(substr($_ENV['app.gm_prefix'], 0, 2)."_".$objMember->mb_fid);//."_".$objMember->mb_uid
                 $createId = createGameId(strtoupper(substr($_ENV['app.gm_prefix'], 0, 2))."_".$objMember->mb_uid);//."_".$objMember->mb_uid
 				$objOther = $this->modelMember->getByHoldId($createId, $objMember->mb_fid);

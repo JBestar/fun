@@ -149,6 +149,7 @@
                 el: "#gamelist",
                 data: {
                     cid: <?=$prd?>,
+                    ip: "<?=$ip?>",
                     gamesOriginal: [],
                     games: [],
                     sort: false,
@@ -186,7 +187,7 @@
                     },
                     openGame: function (code) {
                         // console.log(FURL + "/slot/xslot?prd=" + this.cid + "&game=" + code);
-                        popWindow = window.open(FURL + "/slot/xslot?prd=" + this.cid + "&game=" + code, "games", "width=1200, height=800, left=100, top=50");
+                        popWindow = window.open(FURL + "/slot/xslot?prd=" + this.cid + "&game=" + code + "&ip=" + this.ip, "games", "width=1200, height=800, left=100, top=50");
                     },
                     search: function () {
                         if (this.keyword == "") {

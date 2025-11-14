@@ -14,11 +14,9 @@ class Slot extends BaseController
 	public function xslotlist()
 	{
 		$this->setLanguage();
-
-		print "<script> alert('준비중입니다.'); self.close(); </script>";
-		return;
 		
 		$prdCode = trim($this->request->getVar('prd'));
+		$ip = trim($this->request->getVar('ip'));
 		if(!is_login(true))
 		{
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
@@ -36,6 +34,8 @@ class Slot extends BaseController
 				$gameId = GAME_SLOT_RAVE;
 			else if($_ENV['app.slot'] == APP_SLOT_TREEM)
 				$gameId = GAME_SLOT_TREEM;
+			else if($_ENV['app.slot'] == APP_SLOT_SIGMA)
+				$gameId = GAME_SLOT_SIGMA;
 
 			$modelSlotgame = new SlotGame_Model();
             $prdCode = trim($this->request->getVar('prd'));
@@ -74,9 +74,9 @@ class Slot extends BaseController
 
 				$games = $modelSlotgame->gets($gameId, $objPrd->code);
 
-				writeLog("<XSLOT PRD> Code:".$objPrd->code." Count:".count($games));
+				writeLog("<XSLOT_PRD> Code:".$objPrd->code." ip=".$ip." Count:".count($games));
 
-                echo view('home/slotlist', array("prd" => $objPrd->code, "games" => $games));
+                echo view('home/slotlist', array("prd" => $objPrd->code, "games" => $games, "ip" => $ip));
 
 			}
         }
@@ -87,9 +87,8 @@ class Slot extends BaseController
 		
 		$prdCode = trim($this->request->getVar('prd'));
 		$slotId = trim($this->request->getVar('game'));
+		$ip = trim($this->request->getVar('ip'));
 
-		print "<script> alert('준비중입니다.'); self.close(); </script>";
-		return;
 		if(!is_login())
 		{
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
@@ -109,12 +108,13 @@ class Slot extends BaseController
 				$gameId = GAME_SLOT_RAVE;
 			else if($_ENV['app.slot'] == APP_SLOT_TREEM)
 				$gameId = GAME_SLOT_TREEM;
+			else if($_ENV['app.slot'] == APP_SLOT_SIGMA)
+				$gameId = GAME_SLOT_SIGMA;
 			$logHead = "<XSLOT>";
 			
 			$user_id = $this->session->user_id;
 			$objMember = $this->modelMember->getByUid($user_id, true);
 			$objConfig = $this->modelConfgame->find($gameId);  //slot 1
-
 			
 			$objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
 			$objSlot = $modelSlotgame->getById($gameId, $prdCode, $slotId);
@@ -154,7 +154,9 @@ class Slot extends BaseController
 					$iCreated = 100;
 				} else if($objConfig->game_bet_permit != PERMIT_OK){			//Preparing
 					$iCreated = 4;									
-				} else if($_ENV['app.slot'] == APP_SLOT_KGON || $_ENV['app.slot'] == APP_SLOT_STAR || $_ENV['app.slot'] == APP_SLOT_RAVE || $_ENV['app.slot'] == APP_SLOT_TREEM)
+				} else if($_ENV['app.slot'] == APP_SLOT_KGON || $_ENV['app.slot'] == APP_SLOT_STAR || 
+					$_ENV['app.slot'] == APP_SLOT_RAVE || $_ENV['app.slot'] == APP_SLOT_TREEM ||
+					$_ENV['app.slot'] == APP_SLOT_SIGMA)
 					$iCreated = 101;
 				else if($objMember->mb_slot_uid == ""){
 					//Creation of Player
@@ -219,6 +221,10 @@ class Slot extends BaseController
 					$this->response->redirect(site_furl('/xsloth?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid));	
 				else if($_ENV['app.slot'] == APP_SLOT_RAVE)
 					$this->response->redirect(site_furl('/xslotr?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid));	
+				else if($_ENV['app.slot'] == APP_SLOT_TREEM)
+					$this->response->redirect(site_furl('/xslott?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid));	
+				else if($_ENV['app.slot'] == APP_SLOT_SIGMA)
+					$this->response->redirect(site_furl('/xslots?prd='.$objSlot->prd_code.'&game='.$objSlot->uuid.'&ip='.$ip));	
 			} else if($iCreated == 1){
 				writeLog($logHead.$objMember->mb_uid."-Slot Game=>".$objSlot->name ); 
 				$iResult = $this->alltoGame($objMember, $gameId);
@@ -842,6 +848,207 @@ class Slot extends BaseController
 				 
 			}
 
+		}
+	}
+
+	public function xslott(){
+		$this->setLanguage();
+		if(!is_login())
+		{
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
+
+        } else {
+			$this->sess_action();                
+			$modelSlotgame = new SlotGame_Model();
+
+			$gameId = GAME_SLOT_TREEM;
+			$logHead = "<TSLOT>";
+			
+			$user_id = $this->session->user_id;
+			$objMember = $this->modelMember->getByUid($user_id);
+			$objConfig = $this->modelConfgame->find($gameId);  //Slot 3
+
+			$prdCode = trim($this->request->getVar('prd'));
+			$slotId = trim($this->request->getVar('game'));
+			$objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
+			$objSlot = $modelSlotgame->getById($gameId, $prdCode, $slotId);
+			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
+			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
+
+            $iCreated = 0;
+			if(is_null($objMember) || is_null($objConfig))
+				$iCreated = 0;
+			else if($objConfig->game_bet_permit != PERMIT_OK){
+				$iCreated = 4;									//Preparing
+			}
+			// else if($_ENV['app.type'] == APP_TYPE_3 && !$this->modelMember->isPermitMember($objMember, $gameId))
+			// 	$iCreated = 3;									//Stop
+			else if(is_null($objSlot) || is_null($objPrd)){
+				$iCreated = 6;
+			} 
+			// else if($_ENV['app.type'] == APP_TYPE_3 && $objSlot->maintain == STATE_ACTIVE){
+			// 	$iCreated = 7;
+			// } 
+			else if($diffDt < DELAY_GAME)
+				$iCreated = 8;
+			else if(!is_null($sess))
+				$iCreated = 9;
+			else if(strlen($objMember->mb_treem_uid) == 0){
+				//Create Player
+				$arrResult = $this->libApiTreem->createUser($objMember->mb_fid, $objMember->mb_uid);
+                
+                if($arrResult['status'] == 1){
+                    $objMember->mb_treem_uid = $arrResult['username'];
+                    $this->modelMember->updateTreemInfo($objMember);
+                    $iCreated = 1;
+
+                    writeLog($logHead.$objMember->mb_uid."-CreateUser Sucess !!");
+                } else {
+                    $iCreated = 2;								//Fail in Creation of user
+                }
+			} else {
+				$iCreated = 1;
+			}
+
+			if($iCreated == 0){
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
+			} else if($iCreated == 2){
+				print "<script language=javascript> alert('계정생성중 오류가 발생하였습니다.'); self.close(); </script>";
+			} else if($iCreated == 3){
+				print "<script language=javascript> alert('게임실행이 중지되었습니다.'); self.close(); </script>";
+			} else if($iCreated == 4){
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
+			} else if($iCreated == 5){
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
+			} else if($iCreated == 6){
+				print "<script language=javascript> alert('존재하지 않는 게임입니다.'); self.close(); </script>";
+			} else if($iCreated == 7){
+				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
+			} else if($iCreated == 8){
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
+			} else if($iCreated == 9){
+				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
+			} else if($iCreated == 1){
+				writeLog($logHead.$objMember->mb_uid." Game=>".$objSlot->prd_code.":".$objSlot->name_ko ); 
+
+				$iResult = $this->alltoGame($objMember, $gameId);
+				if($iResult == 1){
+                    $arrResult = $this->libApiTreem->gameUrl($objMember->mb_treem_uid, $objMember->mb_uid, $objSlot->provider, $objSlot->game_code);
+					if($arrResult['status'] == 1){
+						writeLog($logHead.$arrResult['link']);
+						$this->modelMember->updateBetTm($objMember);
+						$this->response->redirect($arrResult['link']);
+					} else {
+						print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+					}
+				} else { //Fail in Transfering of money
+					print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+				}
+				 
+			}
+
+		}
+	}
+
+	public function xslots(){
+		$this->setLanguage();
+		if(!is_login())
+		{
+			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
+
+        } else {
+			$this->sess_action();                
+			$modelSlotgame = new SlotGame_Model();
+
+			$gameId = GAME_SLOT_SIGMA;
+			$logHead = "<SSLOT>";
+			
+			$user_id = $this->session->user_id;
+			$sessId = $this->session->session_id;
+			$objMember = $this->modelMember->getByUid($user_id);
+			$objConfig = $this->modelConfgame->find($gameId);  //Slot 3
+
+			$prdCode = trim($this->request->getVar('prd'));
+			$slotId = trim($this->request->getVar('game'));
+			$ip = trim($this->request->getVar('ip'));
+			if(strlen($ip) < 1)
+				$ip = $this->request->getIPAddress();
+
+			$objPrd = $this->modelSlotprd->getByCode($gameId, $prdCode);
+			$objSlot = $modelSlotgame->getById($gameId, $prdCode, $slotId);
+			$diffDt = diffDt(date('Y-m-d H:i:s'), $objMember->mb_time_call) ;
+			$sess = $this->modelSess->getByUid($objMember->mb_uid, false);
+
+            $iCreated = 0;
+			if(is_null($objMember) || is_null($objConfig))
+				$iCreated = 0;
+			else if($objConfig->game_bet_permit != PERMIT_OK){
+				$iCreated = 4;									//Preparing
+			}
+			// else if($_ENV['app.type'] == APP_TYPE_3 && !$this->modelMember->isPermitMember($objMember, $gameId))
+			// 	$iCreated = 3;									//Stop
+			else if(is_null($objSlot) || is_null($objPrd)){
+				$iCreated = 6;
+			} 
+			// else if($_ENV['app.type'] == APP_TYPE_3 && $objSlot->maintain == STATE_ACTIVE){
+			// 	$iCreated = 7;
+			// } 
+			else if($diffDt < DELAY_GAME)
+				$iCreated = 8;
+			else if(!is_null($sess))
+				$iCreated = 9;
+			else if(strlen($objMember->mb_sigma_uid) == 0){
+				//Create Player
+				$arrResult = $this->libApiSigma->createUser($objMember->mb_fid, $objMember->mb_uid);
+                
+                if($arrResult['status'] == 1){
+                    $objMember->mb_sigma_uid = $arrResult['username'];
+                    $this->modelMember->updateSigmaInfo($objMember);
+                    $iCreated = 1;
+
+                    writeLog($logHead.$objMember->mb_uid."-CreateUser Sucess !!");
+                } else {
+                    $iCreated = 2;								//Fail in Creation of user
+                }
+			} else {
+				$iCreated = 1;
+			}
+
+			if($iCreated == 0){
+				print "<script language=javascript> alert('".lang("common.administrator_ask")."'); self.close(); </script>";
+			} else if($iCreated == 2){
+				print "<script language=javascript> alert('계정생성중 오류가 발생하였습니다.'); self.close(); </script>";
+			} else if($iCreated == 3){
+				print "<script language=javascript> alert('게임실행이 중지되었습니다.'); self.close(); </script>";
+			} else if($iCreated == 4){
+				print "<script language=javascript> alert('".lang("common.prepare")."'); self.close(); </script>";
+			} else if($iCreated == 5){
+				print "<script language=javascript> alert('".lang("common.user_duplicated").lang("common.administrator_ask")."'); self.close(); </script>";
+			} else if($iCreated == 6){
+				print "<script language=javascript> alert('존재하지 않는 게임입니다.'); self.close(); </script>";
+			} else if($iCreated == 7){
+				print "<script language=javascript> alert('점검중입니다.'); self.close(); </script>";
+			} else if($iCreated == 8){
+				print "<script language=javascript> alert('".langTo($this->session->lang, "game_delay", DELAY_GAME-$diffDt)."'); self.close(); </script>";
+			} else if($iCreated == 9){
+				print "<script language=javascript> alert('앱이 실행중이므로 게임실행이 중지되었습니다.'); self.close(); </script>";
+			} else if($iCreated == 1){
+				writeLog($logHead.$objMember->mb_uid." Game=>".$objSlot->prd_code.":".$objSlot->name_ko ); 
+
+				$iResult = $this->alltoGame($objMember, $gameId);
+				if($iResult == 1){
+                    $arrResult = $this->libApiSigma->gameUrl($objMember->mb_sigma_uid, $objMember->mb_uid, $objSlot->provider, $objSlot->game_code, $ip, $sessId);
+					if($arrResult['status'] == 1){
+						writeLog($logHead.$arrResult['url']);
+						$this->modelMember->updateBetTm($objMember);
+						$this->response->redirect($arrResult['url']);
+					} else {
+						print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_RESPONSE.")'); self.close(); </script>";
+					}
+				} else { //Fail in Transfering of money
+					print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
+				}
+			}
 		}
 	}
 

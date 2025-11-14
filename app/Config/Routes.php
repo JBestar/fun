@@ -85,18 +85,21 @@ $routes->get('loginip', 'Home::loginip');
 
 $routes->get('xslotlist', 'Slot::xslotlist');
 $routes->get('fslotlist', 'Slot::fslotlist');
-$routes->get('xslot', 'Slot::xslot');
-$routes->get('xslotf', 'Slot::xslotf');
-$routes->get('xslotg', 'Slot::xslotg');
-$routes->get('xslotk', 'Slot::xslotk');
-$routes->get('xsloth', 'Slot::xsloth');
-$routes->get('xslotr', 'Slot::xslotr');
+$routes->get('xslot', 'Slot::xslot'); 		//Theplus
+$routes->get('xslotf', 'Slot::xslotf'); 	//GSPLAY
+$routes->get('xslotg', 'Slot::xslotg'); 	//Gold
+$routes->get('xslotk', 'Slot::xslotk'); 	//Kgon
+$routes->get('xsloth', 'Slot::xsloth'); 	//Star
+$routes->get('xslotr', 'Slot::xslotr'); 	//Rave
+$routes->get('xslott', 'Slot::xslott'); 	//Treem
+$routes->get('xslots', 'Slot::xslots'); 	//Sigma
 
-$routes->get('evl', 'Casino::evl');
-$routes->get('cas', 'Casino::cas');
-$routes->get('cas_h', 'Casino::cas_h');
-$routes->get('cas_r', 'Casino::cas_r');
-$routes->get('cas_t', 'Casino::cas_t');
+$routes->get('evl', 'Casino::evl'); 		//Evol
+$routes->get('cas', 'Casino::cas'); 		//Kgon
+$routes->get('cas_h', 'Casino::cas_h'); 	//Star
+$routes->get('cas_r', 'Casino::cas_r'); 	//Rave
+$routes->get('cas_t', 'Casino::cas_t'); 	//Treem
+$routes->get('cas_s', 'Casino::cas_s'); 	//Sigma
 $routes->get('holdem', 'Casino::holdem');
 
 $routes->get('casino', 'Casino::casino');
