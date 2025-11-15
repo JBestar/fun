@@ -162,7 +162,7 @@ class BaseController extends Controller
 					break;
 				case CONF_SLOT_DENY: $confs['slot_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
-				case CONF_KGON_DENY:	$confs['cas_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
+				case CONF_CAS_DENY:	$confs['cas_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;
 				case CONF_EOS5_DENY:	$confs['eos5_deny'] = $objConf->conf_active == STATE_ACTIVE?true:false;
 					break;

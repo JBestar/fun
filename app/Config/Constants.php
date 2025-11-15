@@ -153,7 +153,7 @@ defined('CONF_API_VACC')        || define('CONF_API_VACC', 26);     //virtual ac
 defined('CONF_BPG_DENY')        || define('CONF_BPG_DENY', 27);
 defined('CONF_EVOL_DENY')       || define('CONF_EVOL_DENY', 28);
 defined('CONF_SLOT_DENY')       || define('CONF_SLOT_DENY', 29);
-defined('CONF_KGON_DENY')       || define('CONF_KGON_DENY', 31);
+defined('CONF_CAS_DENY')       || define('CONF_CAS_DENY', 31);
 defined('CONF_EOS5_DENY')       || define('CONF_EOS5_DENY', 32);
 defined('CONF_EOS3_DENY')       || define('CONF_EOS3_DENY', 33);
 defined('CONF_PBG_DENY')        || define('CONF_PBG_DENY', 34);

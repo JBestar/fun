@@ -47,7 +47,7 @@ class ApiSigma_Lib  {
 
         $header =  $this->getHeader();
 
-        $curlResult = getCurlRequest2($url, $header);
+        $curlResult = getCurlRequestWithProxy($url, $header);
 		
 		if(!is_null($curlResult) && array_key_exists("code", $curlResult)) {
 			if($curlResult['code'] == HTTP_CODE_200){
@@ -92,7 +92,7 @@ class ApiSigma_Lib  {
 
         $header =  $this->getHeader();
 
-        $curlResult = getCurlRequest2($url, $header);
+        $curlResult = getCurlRequestWithProxy($url, $header);
         // writeLog($logHead."result=".json_encode($curlResult));
         
 		if(!is_null($curlResult) && array_key_exists("code", $curlResult)) {
@@ -142,7 +142,7 @@ class ApiSigma_Lib  {
         writeLog($logHead." url=".$url);
         $header =  $this->getHeader();
         
-        $curlResult = getCurlRequest2($url, $header);
+        $curlResult = getCurlRequestWithProxy($url, $header);
 
 		if(!is_null($curlResult) && array_key_exists("code", $curlResult)) {
 			if($curlResult['code'] == HTTP_CODE_200){
@@ -189,7 +189,7 @@ class ApiSigma_Lib  {
 
         $header =  $this->getHeader();
         
-        $curlResult = getCurlRequest2($url, $header);
+        $curlResult = getCurlRequestWithProxy($url, $header);
 
 		if(!is_null($curlResult) && array_key_exists("code", $curlResult)) {
 			if($curlResult['code'] == HTTP_CODE_200){
@@ -247,7 +247,7 @@ class ApiSigma_Lib  {
         $header =  $this->getHeader();
         writeLog($logHead." url=".$url);
         
-        $curlResult = getCurlRequest2($url, $header);
+        $curlResult = getCurlRequestWithProxy($url, $header);
 
 		if(!is_null($curlResult) && array_key_exists("code", $curlResult)) {
 			if($curlResult['code'] == HTTP_CODE_200){
