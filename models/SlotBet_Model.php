@@ -221,7 +221,8 @@ class SlotBet_Model {
 			return $this->mDbConn->insert_id;
 		}
 		return 0;
-    } 
+    }
+
 	public function insertHslot($objMember, $bet, $bBlank = false, $nBlankPt = 0){
     	
 		// $strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
@@ -271,6 +272,7 @@ class SlotBet_Model {
 		}
 		return 0;
     } 
+
 	public function insertXslot($objMember, $bet, $bBlank = false, $nBlankPt = 0){
     	
 		// $strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
@@ -650,6 +652,56 @@ class SlotBet_Model {
 		return 0;
     } 
     
+	public function insertSslot($objMember, $bet, $bBlank = false, $nBlankPt = 0){
+    	
+		// $strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, ";
+		$strSql.= " bet_money, bet_win_money, bet_agent_id, bet_player_id, bet_game_id, bet_game_type, bet_table_code, ";
+		$strSql.= " point_amount, company_amount, obj_id ) VALUES "; 
+		
+		//bet_idx
+		$strSql.= " ( '".$bet['transaction_id']."',";
+		//bet_emp_fid
+		$strSql.= " '".$objMember->mb_emp_fid."', ";
+		//bet_mb_fid
+		// $strSql.= " '".$objMember->mb_fid."', ";
+		//bet_mb_uid
+		$strSql.= " '".$objMember->mb_uid."', ";
+		//bet_round_no
+		$strSql.= " '".$bet['game_id']."', ";
+		//bet_time
+		$strSql.= " '".$bet['startDate']."', ";	//UTC "2022-04-24T17:05:34.000Z"
+		//bet_money
+		$strSql.= " '".$bet['bet']."', ";
+		//bet_win_money
+		$strSql.= " '".$bet['win']."', ";
+		//bet_agent_id
+		$strSql.= " '".$bet['agent_id']."', "; 
+		//bet_player_id
+		$strSql.= " '".$bet['user_id']."', ";
+		//bet_game_id
+		$strSql.= " '".$bet['game_id']."', ";
+		//bet_game_type
+		$strSql.= " '".$bet['prd_id']."', ";
+		//bet_table_code
+		$strSql.= " '".$bet['gameCode']."', ";
+		//Blank point
+		if($bBlank){
+			$strSql.= " '1', ";
+			$strSql.= " '".$nBlankPt."', ";
+		} else {
+			$strSql.= " '0', '0', ";
+		}
+		//ObjectID
+		$strSql.= " 0 ";
+		$strSql.= " )";
+
+		if ($this->mDbConn->query($strSql) === TRUE) {
+			return $this->mDbConn->insert_id;
+		}
+		return 0;
+    }
+
 }
 
 ?>

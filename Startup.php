@@ -38,7 +38,7 @@
 	if(array_key_exists('app_casino', $arrConfig)){
 		$appCasino=$arrConfig['app_casino'];
 	}
-	$proxyUrl = 0;
+	$proxyUrl = "";
 	if(array_key_exists('proxy_url', $arrConfig)){
 		$proxyUrl=$arrConfig['proxy_url'];
 	}
@@ -51,11 +51,11 @@
 	
     $fName = date( 'Y-m-d', time());
 	$fLog = fopen($tRootDir."/log/acc_".$fName, "a") ;
-	sleep(1);
 
+	sleep(1);
 	$objServLogic = new ServiceLogic($dbConn, $fLog);
 	$bSlDeny = $objServLogic->getSiteConf(CONF_SLOT_DENY);
-	$bCsDeny = $objServLogic->getSiteConf(CONF_KGON_DENY);
+	$bCsDeny = $objServLogic->getSiteConf(CONF_CAS_DENY);
 	
 	//정산상태 
 	$bPlus = false;
@@ -65,6 +65,8 @@
 	$bGold = false;
 	$bRave = false;
 	$bTreem = false;
+	$bSigmaCs = false;
+	$bSigmaSl = false;
 
 	if(!$bSlDeny){
 		if($appType == APP_TYPE_1 || $appType == APP_TYPE_3){
@@ -78,6 +80,8 @@
 				$bRave = true;
 			else if($appSlot == APP_SLOT_TREEM)
 				$bTreem = true;
+			else if($appSlot == APP_SLOT_SIGMA)
+				$bSigmaSl = true;
 		}
 		if($appType == APP_TYPE_1 || $appType == APP_TYPE_2){
 			if($appFslot == APP_FSLOT_GSPLAY)
@@ -95,6 +99,8 @@
 			$bRave = true;
 		else if($appCasino == APP_CASINO_TREEM)
 			$bTreem = true;
+		else if($appCasino == APP_CASINO_SIGMA)
+			$bSigmaCs = true;
 	}
 	
 
@@ -105,6 +111,7 @@
 	$hStar = null;
 	$hRave = null;
 	$hTreem = null;
+	$hSigma = null;
 
 	$bGoldReg = false;
 	$bKgonReg = false;
@@ -113,16 +120,18 @@
 	$bStarReg = false;
 	$bRaveReg = false;
 	$bTreemReg = false;
+	$bSigmaReg = false;
 
 	$ordGsplay = 0;
-	$logHead = "<Oive>";
+	$logHead = "<History>";
 	
 	$secSleep = 61;
-	$secRepeat = 41;
+	$secRepeat = 61;
 	
 	writeLog($fLog, $logHead."==============START==============");
 
-	writeLog($fLog, $logHead."ThePlus=".$bPlus." KGON=".$bKgon." GSPlay=".$bGsplay." STAR=".$bStar." GOLD=".$bGold." RAVE=".$bRave." TREEM=".$bTreem );
+	writeLog($fLog, $logHead."ThePlus=".$bPlus." KGON=".$bKgon." GSPlay=".$bGsplay." STAR=".$bStar
+		." GOLD=".$bGold." RAVE=".$bRave." TREEM=".$bTreem." SIGMA=".$bSigmaCs );
 
 	while(true){
 
@@ -300,7 +309,7 @@
 					$hTreem = null;
 					$bTreemReg = true;
 				}
-				writeLog($fLog, $logHead."RAVE-REQ-".$hTreem);
+				writeLog($fLog, $logHead."TREEM-REQ-".$hTreem);
 			}
 			if($hTreem){
 				$result = curlProc2($hTreem, $fLog );
@@ -311,8 +320,30 @@
 			}
 		}
 
+		//Sigma
+		if(($bSigmaCs || $bSigmaSl) && !$bSigmaReg){
+			if($hSigma == null){
+				$hSigma = curl_multi_init();
+				$curl = $objServLogic->curlSigmaBets($bSigmaCs, $proxyUrl);
+				if($curl)
+					curl_multi_add_handle($hSigma, $curl);
+				else {
+					$hSigma = null;
+					$bSigmaReg = true;
+				}
+				writeLog($fLog, $logHead."SIGMA-REQ-".$hSigma);
+			}
+			if($hSigma){
+				$result = curlProc2($hSigma, $fLog );
+				if($result != null){
+					$bSigmaReg = true;
+					$bInsert = $objServLogic->registerSigmaBets($bSigmaCs, $result, $proxyUrl);
+				}
+			}
+		}
+
 		if($hGold == null && $hKgon == null && $hPlus == null && $hGsplay == null && 
-			$hStar == null && $hRave == null && $hTreem == null){
+			$hStar == null && $hRave == null && $hTreem == null && $hSigma == null){
 			$bGoldReg = false;
 			$bKgonReg = false;
 			$bPlusReg = false;
@@ -320,6 +351,9 @@
 			$bStarReg = false;
 			$bRaveReg = false;
 			$bTreemReg = false;
+			$bSigmaReg = false;
+			if($bSigmaSl)
+				$bSigmaCs = !$bSigmaCs;
 
 			if(!$bInsert)
 				sleep($secSleep);

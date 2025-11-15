@@ -15,6 +15,7 @@ define('APP_SLOT_KGON', 2);
 define('APP_SLOT_STAR', 3); 
 define('APP_SLOT_RAVE', 4); 
 define('APP_SLOT_TREEM', 5); 
+define('APP_SLOT_SIGMA', 6); 
 
 //Natural 
 define('APP_FSLOT_GSPLAY', 1); 
@@ -25,6 +26,7 @@ define('APP_CASINO_KGON', 2);
 define('APP_CASINO_STAR', 3); 
 define('APP_CASINO_RAVE', 4); 
 define('APP_CASINO_TREEM', 5); 
+define('APP_CASINO_SIGMA', 6); 
 
 //game type
 define('GAME_POWER_BALL', 1);
@@ -49,6 +51,8 @@ define('GAME_SLOT_RAVE', 19);
 define('GAME_CASINO_RAVE', 20);
 define('GAME_SLOT_TREEM', 21);
 define('GAME_CASINO_TREEM', 22);
+define('GAME_SLOT_SIGMA', 23);
+define('GAME_CASINO_SIGMA', 24);
 
 define('CONF_API_GOLD', 19);
 define('CONF_API_KGON', 20);
@@ -58,10 +62,11 @@ define('CONF_API_GSPLAY', 23);
 define('CONF_API_STAR', 30);
 define('CONF_API_RAVE', 89);
 define('CONF_API_TREEM', 112);
+define('CONF_API_SIGMA', 113);
 
 define('CONF_EVOL_DENY', 28);
 define('CONF_SLOT_DENY', 29);
-define('CONF_KGON_DENY', 31);
+define('CONF_CAS_DENY', 31);
 
 define('HTTP_CODE_200', 200);
 define('HTTP_CODE_400', 400);

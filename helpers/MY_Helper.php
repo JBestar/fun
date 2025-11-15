@@ -51,8 +51,12 @@
             $findMember = $objMember;
             break;
           }
+        } else if($gameId == GAME_CASINO_SIGMA || $gameId == GAME_SLOT_SIGMA ){
+          if($objMember->mb_sigma_uid == $liveId){
+            $findMember = $objMember;
+            break;
+          }
         }
-        
       }
       return $findMember;
     }
@@ -71,6 +75,7 @@
           case GAME_CASINO_EVOL: 
           case GAME_CASINO_RAVE: 
           case GAME_CASINO_TREEM: 
+          case GAME_CASINO_SIGMA: 
                 $fRatio = $objMember->mb_game_cs_ratio;
                 break;
           case GAME_BOGLE_BALL: 
@@ -86,6 +91,7 @@
           case GAME_SLOT_STAR: 
           case GAME_SLOT_RAVE: 
           case GAME_SLOT_TREEM: 
+          case GAME_SLOT_SIGMA: 
                 $fRatio = $objMember->mb_game_sl_ratio;
                 break;
           default: break;
@@ -168,6 +174,29 @@
       }
       return $arrIdx;
     }
+    
+    function getHistory2Date($idx){
+
+      $arrIdx = array("idx"=>"", "idx2"=>"", "fid"=>0, "fid2"=>0);
+      
+      $arrInfo = explode("#", $idx);
+      if(count($arrInfo) >= 1){
+        if(strlen(trim($arrInfo[0])) > 10) 
+          $arrIdx['idx'] = trim($arrInfo[0]);
+      } 
+      if(count($arrInfo) >= 2){
+        $arrIdx['fid'] = intval($arrInfo[1]);
+      }
+      if(count($arrInfo) >= 3){
+        if(strlen(trim($arrInfo[2])) > 10) 
+          $arrIdx['idx2'] = trim($arrInfo[2]);
+      }
+      if(count($arrInfo) >= 4){
+        $arrIdx['fid2'] = intval($arrInfo[3]);
+      }
+      return $arrIdx;
+    }
+
     function calcEmpPoint($arrRatio, $amount, $dt){
       $arrEmpPoint = [];
       if($amount <= 0)
@@ -210,6 +239,32 @@
       
       $tmDt = strtotime($strDt);		//UTC "2022-04-24T17:05:34.000Z"
       return date("Y-m-d H:i:s", $tmDt);
+    }
+
+    function generateString($length, $seed)  
+    {  
+        // $characters  = "0123456789";  
+        $characters = "abcdefghijklmnopqrstuvwxyz";  
+        // $characters .= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";  
+        
+        $randStr = "";  
+        $nmr_loops = $length;  
+        
+        while ($nmr_loops--)  
+        {  
+            mt_srand($seed++);
+            $randStr .= $characters[mt_rand(0, strlen($characters) - 1)];  
+        }  
+        
+        return $randStr;  
+    }  
+    
+    function generateExtId(){
+      $seed = microtime(true); //1709876543.123456 - 16 digits
+      
+      $randStr = generateString(48, $seed);
+      $secs = intval($seed);
+      return $randStr.intval($seed).intval(($seed-$secs)*1000000);
     }
 
 ?>

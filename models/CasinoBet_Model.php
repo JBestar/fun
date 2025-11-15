@@ -537,36 +537,6 @@ class CasinoBet_Model {
 	public function updateT($fid, $bet, $fLog=null){
 
 		$betSpec = "";
-		// if(array_key_exists('external', $bet)) {
-
-		// 	$betDetail = null;
-		// 	try{
-		// 		if(array_key_exists('detail', $bet['external']) && !is_null($bet['external']['detail']) && array_key_exists('data', $bet['external']['detail'])){
-		// 			$betDetail = $bet['external']['detail']['data'];
-		// 			writeLog($fLog, "detail-1");
-		// 		} else $betDetail = null;
-
-
-		// 	} catch (Exception $e) {
-		// 		$betDetail = null;
-		// 	}
-
-		// 	if($betDetail == null){
-		// 		$betSpec = "";
-		// 	} else if(array_key_exists('participants', $betDetail)) {
-		// 		writeLog($fLog, "detail-2");
-		// 		if(is_array($betDetail['participants']) && count($betDetail['participants']) > 0 && array_key_exists('bets', $betDetail['participants'][0]) ){
-		// 			foreach($betDetail['participants'][0]['bets'] as $detail){
-		// 				$betSpec.= $detail['code'].",".$detail['stake'].",";
-		// 				$betSpec.= $detail['payout']."#";
-		// 			}
-		// 		} 
-		// 	} 
-		// 	if(strlen($betSpec) < 1 && !is_null($fLog)){
-		// 		// writeLog($fLog, "detail Error=".json_encode($bet['external']));
-		// 	}
-		// }
-
 		$strSql = "UPDATE ".$this->mTableName." SET ";	
 	
 		//bet_round_no
@@ -585,6 +555,90 @@ class CasinoBet_Model {
 		return $this->mDbConn->query($strSql);
 		
 	}
+
+	public function insertS($objMember, $bet, $fLog=null){
+    	
+		$betSpec = "";
+		if(array_key_exists('betting_data', $bet)) {
+
+			$betDetail = null;
+			try{
+				$betting_data = json_decode($bet['betting_data'], true);
+				if(array_key_exists('bets', $betting_data)){
+					$betDetail = $betting_data['bets'];
+					// writeLog($fLog, "detail-1");
+				} else $betDetail = null;
+
+			} catch (Exception $e) {
+				$betDetail = null;
+			}
+
+			if($betDetail == null){
+				$betSpec = "";
+			} else {
+				// writeLog($fLog, "detail-2");
+				if(is_array($betDetail)){
+					foreach($betDetail as $detail){
+						if(array_key_exists('code', $detail) && array_key_exists('stake', $detail) && array_key_exists('payout', $detail)){
+							$betSpec.= $detail['code'].",".$detail['stake'].",";
+							$betSpec.= $detail['payout']."#";
+						} 
+					}
+				} else {
+					foreach ($betDetail as $side => $amount) {
+						$betSpec.= $side.",".$amount.",";
+						$betSpec.= $bet['win']."#";
+					}
+				}
+			} 
+			if(strlen($betSpec) < 1 && !is_null($fLog)){
+				writeLog($fLog, "detail Error=".json_encode($bet['betting_data']));
+			}
+		}
+
+		$strSql = "INSERT IGNORE INTO ".$this->mTableName." (bet_idx, bet_emp_fid, bet_mb_uid, bet_round_no, bet_time, acc_time, ";
+		$strSql.= " bet_money, bet_win_money, bet_agent_id, bet_player_id, bet_game_id, bet_game_type, bet_table_code, ";
+		$strSql.= " bet_result, bet_spec ) VALUES "; 
+		
+		//bet_idx
+		$strSql.= " ( '".$bet['transaction_id']."',";
+		//bet_emp_fid
+		$strSql.= " '".$objMember->mb_emp_fid."', ";
+		//bet_mb_uid
+		$strSql.= " '".$objMember->mb_uid."', ";
+		//bet_round_no
+		$strSql.= " '".$bet['gameCode']."', ";	
+		//bet_time		
+		$strSql.= " '".$bet['startDate']."', ";	
+		//acc_time		
+		$strSql.= " '".$bet['endDate']."', ";		
+		//bet_money
+		$strSql.= " '".$bet['bet']."', ";
+		//bet_win_money
+		$strSql.= " '".$bet['win']."', ";
+		//bet_agent_id
+		$strSql.= " '".$bet['agent_id']."', "; 
+		//bet_player_id
+		$strSql.= " '".$bet['user_id']."', ";
+		//bet_game_id
+		$strSql.= " '".$bet['prd_id']."', ";	
+		//bet_game_type
+		$strSql.= " 'baccarat', ";	
+		//bet_table_code
+		$strSql.= " '".$bet['gameCode']."', ";	
+		//bet_result
+		$strSql.= " '".$bet['balance']."', ";
+		//bet_spec
+		$strSql.= " '".$betSpec."' ";
+		$strSql.= " )";
+
+		
+		if ($this->mDbConn->query($strSql) === TRUE) {
+			return $this->mDbConn->insert_id;
+		}
+		return 0;
+    } 
+
 }
 
 ?>
