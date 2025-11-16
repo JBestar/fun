@@ -17,34 +17,32 @@ class Sigma extends BaseController
 
         writeLog("[sigma_api] subUrl=".$subUrl." reqData=".$reqtData);
 
-    
-            $arrResult['code'] = RESULT_OK;			
-            $arrResult['status'] = STATUS_SUCCESS;
+        $arrResult['code'] = RESULT_OK;			
+        $arrResult['status'] = STATUS_SUCCESS;
     
         if($subUrl == "balance"){
             echo "1000";
         } else {
-
             echo json_encode($arrResult);
         }
 
     }
 
-    public function req_agent(){
+    // public function req_agent(){
 
-        $domain = "https://api.honorlink.org/api";
-        $url = "$domain/my-info";
+    //     $domain = "";
+    //     $url = "$domain/my-info";
 
-        writeLog("[sigma_req_agent] url=".$url);
+    //     writeLog("[sigma_req_agent] url=".$url);
 
-        $Authorization = "htam1tzUpCcNb7mf0dKGFGxl341io2j3DhO9YgVYc0d83230";
-        $header = ['Content-Type: application/json',
-            'Accept: application/json',
-            'Authorization: Bearer '.$Authorization
-        ];
-        $response = getCurlRequest2($url, $header);
+    //     $Authorization = "";
+    //     $header = ['Content-Type: application/json',
+    //         'Accept: application/json',
+    //         'Authorization: Bearer '.$Authorization
+    //     ];
+    //     $response = getCurlRequest2($url, $header);
 
-        var_dump($response);
-    }
+    //     var_dump($response);
+    // }
 
 }

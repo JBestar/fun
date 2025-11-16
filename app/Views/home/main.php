@@ -36,7 +36,7 @@
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
             <script type="text/javascript" src="<?php echo site_furl('js/script.php.js?ver=3'); ?>"></script>
             <script type="text/javascript" src="<?php echo site_furl('js/lib.js?ver=1'); ?>"></script>
-            <script type="text/javascript" src="<?php echo site_furl('js/common.js?ver=2'); ?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/common.js?ver=3'); ?>"></script>
             <script type="text/javascript" src="<?php echo site_furl('js/SLB.js?ver=4'); ?>"></script>
             <script type="text/javascript" src="<?php echo site_furl('js/main.js?ver=7'); ?>"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/devel.css?v=3'); ?>" />
@@ -2080,12 +2080,12 @@
                         <div class="ui fields">
                             <div class="field required">
                                 <label><?=lang('common.id')?> </label>
-                                <input type="text" name="userid" id="userid" placeholder="userid" />
+                                <input type="text" name="userid" id="userid" placeholder="userid" onKeyDown="onEnter();"/>
                             </div>
 
                             <div class="field required">
                                 <label><?=lang('common.password')?> </label>
-                                <input type="password" name="passwd" id="passwd" placeholder="password" />
+                                <input type="password" name="passwd" id="passwd" placeholder="password" onKeyDown="onEnter();"/>
                             </div>
                             <input type="text" name="ip" class="ip_addr" ip="ip"  hidden/>
                         </div>
@@ -2307,7 +2307,7 @@
                                     <?=lang('common.id')?>
                                 </span>
                                 <div class="field required">
-                                    <input type="text" name="userid" id="userid" placeholder="<?=lang('common.id')?>" style="width:100%;" />
+                                    <input type="text" name="userid" id="userid" placeholder="<?=lang('common.id')?>" style="width:100%;" onKeyDown="onEnter();"/>
                                 </div>
                             </div>
                             <div class="input-group mb-4">
@@ -2316,14 +2316,14 @@
                                     <?=lang('common.password')?>
                                 </span>
                                 <div class="field required">
-                                    <input type="password" name="passwd" id="passwd" placeholder="<?=lang('common.password')?>" style="width:100%;" />
+                                    <input type="password" name="passwd" id="passwd" placeholder="<?=lang('common.password')?>" style="width:100%;" onKeyDown="onEnter();"/>
                                 </div>
                             </div>
                             <?php if(strlen($captcha) > 0) :?>
                             <div class="input-group mb-4">
                                 <img id="image_id" name="<?=$captcha?>" src="<?php echo site_furl('/download/captcha/'.$captcha.'.jpg'); ?>" style="width: 100%; height: 30px; margin-bottom: 10px; border-radius: 0.25rem; background-color: beige;" >
                                 <div class="field required">
-                                    <input name="captchacode" id="captchacode" placeholder="<?=lang('common.security_character')?>" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;">
+                                    <input name="captchacode" id="captchacode" placeholder="<?=lang('common.security_character')?>" maxlength="10" type="text" id="captchacode" style="width: 100%; margin-bottom:10px;" onKeyDown="onEnter();">
                                 </div>
                             </div>
                             <?php endif ?>
@@ -2679,12 +2679,17 @@
             //         // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
             //     }
             // });
+            function onEnter()
+            {
+                if( window.event.keyCode == 13 ) login();
+            }
+
             function login(){
-                var user_id = $("#loginModal #userid").val();
-                var user_pw = $("#loginModal #passwd").val();
-                var captchacode = $("#loginModal #captchacode").val();
-                var captchasrc = $("#loginModal #captchasrc").val();
-                var ip = $("#loginModal #ip_addr").val();
+                let user_id = $("#loginModal #userid").val();
+                let user_pw = $("#loginModal #passwd").val();
+                let captchacode = $("#loginModal #captchacode").val();
+                let captchasrc = $("#loginModal #captchasrc").val();
+                let ip = $("#loginModal #ip_addr").val();
 
                 if (user_id == "") {
                     showAlert(langMessage.id_input);
@@ -2771,10 +2776,10 @@
                             type: "empty",
                             prompt: langMessage.password_verify,
                         },
-                        {
-                            type: "match[passwd]",
-                            prompt: langMessage.password_verify_c,
-                        },
+                        // {
+                        //     type: "match[passwd]",
+                        //     prompt: langMessage.password_verify_c,
+                        // },
                     ],
                 },
                 name: {
@@ -2853,6 +2858,12 @@
                 inline: true,
                 on: "submit",
                 onSuccess: function (event) {
+                    let passwd = $("#fregisterform #passwd").val();
+                    let passwd_re = $("#fregisterform #passwd_re").val();
+                    if(passwd != passwd_re){
+                        showAlert(langMessage.password_verify_c);
+                        return false;
+                    }
                     return true;
                 },
             });

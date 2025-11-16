@@ -350,9 +350,9 @@ function checkDupUserid() {
     if(!$('#fregisterform').valid())
         return;
 
-    var userid = $('#userid').val();
+    var userid = $('#fregisterform #userid').val();
     if(userid=="") {
-        show("아이디를 입력해주세요");
+        showAlert("아이디를 입력해주세요");
         return false;
     }
     $.post('/api/check_account', {
