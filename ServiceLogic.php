@@ -9,6 +9,7 @@ include_once('models/SlotPrd_Model.php');
 include_once('models/CasinoPrd_Model.php');
 
 include_once('models/Member_Model.php');
+include_once('models/MoneyHistory_Model.php');
 include_once('models/Reward_Model.php');
 include_once('models/Transfer_Model.php');
 
@@ -22,6 +23,7 @@ class ServiceLogic
 	private $modelMember;
 	private $modelReward;
 	private $modelTransfer;
+	private $modelMoneyHistory;
 
 	private $modelConfSite;
 	private $modelConfGame;
@@ -42,6 +44,7 @@ class ServiceLogic
 		$this->modelCasinoPrd = new CasinoPrd_Model($dbConn);
 
 		$this->modelMember = new Member_Model($dbConn);
+		$this->modelMoneyHistory = new MoneyHistory_Model($dbConn);
 		$this->modelReward = new Reward_Model($dbConn);
 		$this->modelTransfer = new Transfer_Model($dbConn);
 	}
@@ -2080,20 +2083,27 @@ class ServiceLogic
 				continue;
 			$member = findMemberByFid($arrMember, $fid);
 
-			for($i=0; $i<3; $i++){
-				$result = $this->withdrawTreemEgg($arrInfo, $member->mb_treem_uid, $point, $proxyUrl);
-
-				writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." point=".$point." result=".$result['status']);
-				if($result['status'] == 1){
-					writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid.", balance=".$result['balance'].", point=".$point);
-					// $this->modelMember->updateAssets($member, 0-$point, 0, MONEYCHANGE_WITHDRAW, "정산회수");
-					$this->modelTransfer->insertRow(RECOVER_TREEM, $member, $result['balance']+$point, 0-$point, $this->fLog);
-					break;
-				} else {
-					sleep(3);
-				}
+			$moneyUpdated = false;
+			if($member->mb_money >= $point){
+				$moneyUpdated = $this->modelMember->updateAssets($member, 0-$point, 0, MONEYCHANGE_WITHDRAW, MONEYCHANGE_WITHDRAW_CUT);
 			}
-			
+			if(!$moneyUpdated){
+				for($i=0; $i<3; $i++){
+					$result = $this->withdrawTreemEgg($arrInfo, $member->mb_treem_uid, $point, $proxyUrl);
+
+					writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." point=".$point." result=".$result['status']);
+					if($result['status'] == 1){
+						$member->mb_treem_money = $result['balance'];
+						writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid.", balance=".$result['balance'].", point=".$point);
+						$this->modelTransfer->insertRow(RECOVER_TREEM, $member, $result['balance']+$point, 0-$point, $this->fLog);
+						$this->modelMoneyHistory->insertRow(MONEYCHANGE_WITHDRAW, $member, 0-$point, "", MONEYCHANGE_WITHDRAW_CUT, $this->fLog);
+						break;
+					} else {
+						sleep(3);
+					}
+				}
+			}	
+
 			sleep(1);
 		}
 
@@ -2135,7 +2145,6 @@ class ServiceLogic
 					$arrResult['status'] = 1;
 				else 
 					$arrResult['status'] = 0;
-                $balance = $arrResult['balance'];
                 writeLog($this->fLog, $logHead."body=".$curlResult['body']);
             } else { //
                 // $curlResult['body'] =>
@@ -2447,17 +2456,24 @@ class ServiceLogic
 				continue;
 			$member = findMemberByFid($arrMember, $fid);
 
-			for($i=0; $i<3; $i++){
-				$result = $this->withdrawSigmaEgg($arrInfo, $member->mb_sigma_uid, $point, $proxyUrl);
+			$moneyUpdated = false;
+			if($member->mb_money >= $point){
+				$moneyUpdated = $this->modelMember->updateAssets($member, 0-$point, 0, MONEYCHANGE_WITHDRAW, MONEYCHANGE_WITHDRAW_CUT);
+			}
+			if(!$moneyUpdated){
+				for($i=0; $i<3; $i++){
+					$result = $this->withdrawSigmaEgg($arrInfo, $member->mb_sigma_uid, $point, $proxyUrl);
 
-				writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." point=".$point." result=".$result['status']);
-				if($result['status'] == 1){
-					writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid.", balance=".$result['balance'].", point=".$point);
-					// $this->modelMember->updateAssets($member, 0-$point, 0, MONEYCHANGE_WITHDRAW, "정산회수");
-					$this->modelTransfer->insertRow(RECOVER_TREEM, $member, $result['balance']+$point, 0-$point, $this->fLog);
-					break;
-				} else {
-					sleep(3);
+					writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." point=".$point." result=".$result['status']);
+					if($result['status'] == 1){
+						$member->mb_sigma_money = $result['balance'];
+						writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid.", balance=".$result['balance'].", point=".$point);
+						$this->modelTransfer->insertRow(RECOVER_TREEM, $member, $result['balance']+$point, 0-$point, $this->fLog);
+						$this->modelMoneyHistory->insertRow(MONEYCHANGE_WITHDRAW, $member, 0-$point, "", MONEYCHANGE_WITHDRAW_CUT, $this->fLog);
+						break;
+					} else {
+						sleep(3);
+					}
 				}
 			}
 			

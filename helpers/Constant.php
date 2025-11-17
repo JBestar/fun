@@ -79,5 +79,6 @@ define('TRANS_TREEM_SITE', 18);
 define('RECOVER_TREEM', 19); 
 
 define('MONEYCHANGE_WITHDRAW', 24); //머니회수
+define('MONEYCHANGE_WITHDRAW_CUT', '정산회수'); //정산회수
 
 ?>

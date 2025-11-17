@@ -102,7 +102,17 @@
         $fRatio = 0;
       return $fRatio;
     } 
+    
+    function allMoney($member){
+      $nMoney = 0;
+      if(is_null($member))
+        return $nMoney;
 
+      $nMoney = floatval($member->mb_money) + $member->mb_live_money + $member->mb_slot_money + $member->mb_fslot_money
+         + $member->mb_kgon_money + $member->mb_gslot_money + $member->mb_hslot_money + $member->mb_hold_money 
+         + $member->mb_rave_money + $member->mb_treem_money + $member->mb_sigma_money;
+      return floor($nMoney); // round($nMoney, NUM_POINT_CNT);
+    }
     
     function writeLog($fLog, $tContent, $bTm = true){
       

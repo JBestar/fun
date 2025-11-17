@@ -115,7 +115,7 @@ class Member_Model {
         if($inMoney == 0 && $inPoint == 0)
             return true;
         
-        $strSql = "UPDATE ".$this->table." SET ";
+        $strSql = "UPDATE ".$this->mTableName." SET ";
         if($inMoney != 0){
             $strSql.= "mb_money = mb_money";
             $strSql.= $inMoney > 0 ? " + ":" ";
