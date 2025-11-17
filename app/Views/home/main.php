@@ -34,7 +34,7 @@
         <script type="text/javascript" src="<?php echo site_furl('js/vue.js'); ?>"></script>
         <!--순서중요-->
         <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-            <script type="text/javascript" src="<?php echo site_furl('js/script.php.js?ver=3'); ?>"></script>
+            <script type="text/javascript" src="<?php echo site_furl('js/script.php.js?ver=4'); ?>"></script>
             <script type="text/javascript" src="<?php echo site_furl('js/lib.js?ver=1'); ?>"></script>
             <script type="text/javascript" src="<?php echo site_furl('js/common.js?ver=3'); ?>"></script>
             <script type="text/javascript" src="<?php echo site_furl('js/SLB.js?ver=4'); ?>"></script>

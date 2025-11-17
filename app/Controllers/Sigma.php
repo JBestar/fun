@@ -22,27 +22,31 @@ class Sigma extends BaseController
     
         if($subUrl == "balance"){
             echo "1000";
+        } else if($subUrl == "url"){
+            $this->req_agent();
         } else {
             echo json_encode($arrResult);
         }
 
     }
 
-    // public function req_agent(){
+    public function req_agent(){
 
-    //     $domain = "";
-    //     $url = "$domain/my-info";
+        $currentUrl = current_url();
+        echo $currentUrl;
+        // $domain = "";
+        // $url = "$domain/my-info";
 
-    //     writeLog("[sigma_req_agent] url=".$url);
+        // writeLog("[sigma_req_agent] url=".$url);
 
-    //     $Authorization = "";
-    //     $header = ['Content-Type: application/json',
-    //         'Accept: application/json',
-    //         'Authorization: Bearer '.$Authorization
-    //     ];
-    //     $response = getCurlRequest2($url, $header);
+        // $Authorization = "";
+        // $header = ['Content-Type: application/json',
+        //     'Accept: application/json',
+        //     'Authorization: Bearer '.$Authorization
+        // ];
+        // $response = getCurlRequest2($url, $header);
 
-    //     var_dump($response);
-    // }
+        // var_dump($response);
+    }
 
 }

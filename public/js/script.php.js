@@ -43,20 +43,24 @@ function openCasinoGame(cid, gameId) {
     if(!check_login()){
         return;
     }
-    let ip = $("#loginModal #ip_addr").val();
+    let url = FURL + "/cas?prd=" + cid;
+    if(gameId == GAME_CASINO_SIGMA){
+        let ip = $("#loginModal #ip_addr").val();
+        url += `&ip=${ip}`;
+    }
+    // if(gameId == GAME_CASINO_EVOL)     // GAME_CASINO_EVOL
+    //     window.open(FURL + "/evl", "games", "width=1200, height=800, left=100, top=50");
+    // else if(gameId == GAME_CASINO_STAR) // GAME_CASINO_STAR
+    //     window.open(FURL + "/cas_h?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
+    // else if(gameId == GAME_CASINO_RAVE) // GAME_CASINO_RAVE
+    //     window.open(FURL + "/cas_r?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
+    // else if(gameId == GAME_CASINO_TREEM) // GAME_CASINO_TREEM
+    //     window.open(FURL + "/cas_t?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
+    // else if(gameId == GAME_CASINO_SIGMA) // GAME_CASINO_SIGMA
+    //     window.open(FURL + "/cas_s?prd=" + cid + "&ip=" + ip , "games", "width=1200, height=800, left=100, top=50");
+    // else // GAME_CASINO_KGON
 
-    if(gameId == GAME_CASINO_EVOL)     // GAME_CASINO_EVOL
-        window.open(FURL + "/evl", "games", "width=1200, height=800, left=100, top=50");
-    else if(gameId == GAME_CASINO_STAR) // GAME_CASINO_STAR
-        window.open(FURL + "/cas_h?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
-    else if(gameId == GAME_CASINO_RAVE) // GAME_CASINO_RAVE
-        window.open(FURL + "/cas_r?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
-    else if(gameId == GAME_CASINO_TREEM) // GAME_CASINO_TREEM
-        window.open(FURL + "/cas_t?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
-    else if(gameId == GAME_CASINO_SIGMA) // GAME_CASINO_SIGMA
-        window.open(FURL + "/cas_s?prd=" + cid + "&ip=" + ip , "games", "width=1200, height=800, left=100, top=50");
-    else // GAME_CASINO_KGON
-        window.open(FURL + "/cas?prd=" + cid , "games", "width=1200, height=800, left=100, top=50");
+    window.open(url , "games", "width=1200, height=800, left=100, top=50");
     
 }
 

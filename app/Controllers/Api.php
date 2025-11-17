@@ -1707,11 +1707,11 @@ class Api extends BaseController
 			}
 
 			$arrResult['data'] = $arrInfo;
-			$arrResult['status'] = "success";
+			$arrResult['status'] = STATUS_SUCCESS;
 			echo json_encode($arrResult);
 		}
 		else{//logout		
-			$arrResult['status'] = "logout";
+			$arrResult['status'] = STATUS_LOGOUT;
 			echo json_encode($arrResult);	
 		}
 	}
@@ -1775,11 +1775,11 @@ class Api extends BaseController
 				$modelFollow->saveByUser($arrInfo);
 			}
 
-			$arrResult['status'] = "success";
+			$arrResult['status'] = STATUS_SUCCESS;
 			echo json_encode($arrResult);
 		}
 		else{//logout		
-			$arrResult['status'] = "logout";
+			$arrResult['status'] = STATUS_LOGOUT;
 			echo json_encode($arrResult);	
 		}
 	}
@@ -1909,30 +1909,30 @@ class Api extends BaseController
 
 			$arrResult['data'] = $iResult;
 			if($iResult == 1 && $iBetId > 0){
-				$arrResult['status'] = "success";	
+				$arrResult['status'] = STATUS_SUCCESS;	
 				$arrResult['data'] = $iBetId;			
 			}
 			else if($iResult == 2 || $iResult == 3){
 				$arrResult['status'] = "stop";
 				$arrResult['msg'] = lang("common.bet_block");
 			} else if($iResult == 4){
-				$arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['msg'] = lang("common.bet_min_msg");
 			} else if($iResult == 5){
-				$arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['msg'] = lang("common.bet_max_msg");
 			} else if($iResult == 6 || $iResult == 8){
-				$arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['msg'] = lang("common.bet_amount_exceed");
 			} else if($iResult == 7){
-				$arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['msg'] = lang("common.win_max_exceed");
 			} else if($iResult == 9){
-				$arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['msg'] = lang("common.bet_hole");
 			}
 			else{
-				$arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['msg'] = lang("common.bet_fail");
 			}	
 				
@@ -1941,7 +1941,7 @@ class Api extends BaseController
 		}
 		else{//logout		
 			
-			$arrResult['status'] = "logout";
+			$arrResult['status'] = STATUS_LOGOUT;
 			echo json_encode($arrResult);	
 		}
 	}
@@ -2026,12 +2026,12 @@ class Api extends BaseController
 			$arrResult['data'] = $iResult;	
 
 			if($iResult == 1){
-				$arrResult['status'] = "success";	
+				$arrResult['status'] = STATUS_SUCCESS;	
 			} else if($iResult == 5){
-				$arrResult['status'] = "fail";	
+				$arrResult['status'] = STATUS_FAIL;	
 				$arrResult['msg'] = lang("common.bet_cancel_not");	
 			} else {
-				$arrResult['status'] = "fail";	
+				$arrResult['status'] = STATUS_FAIL;	
 				$arrResult['msg'] = lang("common.reject");	
 			}
 			echo json_encode($arrResult);	
@@ -2039,7 +2039,7 @@ class Api extends BaseController
 		}
 		else{//logout		
 			
-			$arrResult['status'] = "logout";
+			$arrResult['status'] = STATUS_LOGOUT;
 			echo json_encode($arrResult);	
 		}
 	}
@@ -2180,26 +2180,26 @@ class Api extends BaseController
 
 			$arrResult['data'] = $iResult;
 			if($iResult == 1 && $iBetId > 0){
-				$arrResult['status'] = "success";				
+				$arrResult['status'] = STATUS_SUCCESS;				
 			}
 			else if($iResult == 2 || $iResult == 3){
 				$arrResult['status'] = "stop";
 				// $arrResult['msg'] = "베팅이 차단되었습니다.";
 			} else if($iResult == 4){
-				$arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_FAIL;
 				// $arrResult['msg'] = "최소베팅금액보다 작은 금액으로는 베팅하실 수 없습니다.";
 			} else if($iResult == 5){
-				$arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_FAIL;
 				// $arrResult['msg'] = "최대베팅금액을 초과하셨습니다.";
 			} else if($iResult == 6){
-				$arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_FAIL;
 				// $arrResult['msg'] = "베팅금액이 보유금액을 초과하셨습니다.";
 			} else if($iResult == 7){
-				$arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_FAIL;
 				// $arrResult['msg'] = "최대적중금액을 초과하셨습니다.";
 			}
 			else{
-				$arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_FAIL;
 				$arrResult['msg'] = "베팅이 실패되었습니다.";
 			}	
 
@@ -2207,7 +2207,7 @@ class Api extends BaseController
 		}
 		else{//logout		
 			
-			$arrResult['status'] = "logout";
+			$arrResult['status'] = STATUS_LOGOUT;
 			echo json_encode($arrResult);	
 		}
 	}
@@ -2280,12 +2280,12 @@ class Api extends BaseController
 			$arrResult['data'] = $iResult;	
 
 			if($iResult == 1){
-				$arrResult['status'] = "success";	
+				$arrResult['status'] = STATUS_SUCCESS;	
 			} else if($iResult == 5){
-				$arrResult['status'] = "fail";	
+				$arrResult['status'] = STATUS_FAIL;	
 				$arrResult['msg'] = "베팅을 취소할수 없습니다.";	
 			} else {
-				$arrResult['status'] = "fail";	
+				$arrResult['status'] = STATUS_FAIL;	
 				$arrResult['msg'] = "거절되었습니다.";	
 			}
 			echo json_encode($arrResult);	
@@ -2293,7 +2293,7 @@ class Api extends BaseController
 		}
 		else{//logout		
 			
-			$arrResult['status'] = "logout";
+			$arrResult['status'] = STATUS_LOGOUT;
 			echo json_encode($arrResult);	
 		}
 	}
@@ -2321,7 +2321,7 @@ class Api extends BaseController
 		$configData = array($arrConf1, $arrConf2, $arrConf3, $arrConf4, $arrConf5, $arrConf6);
 		$objResult = new \StdClass;
 		$objResult->data = $configData;			
-		$objResult->status = "success";
+		$objResult->status = STATUS_SUCCESS;
 	
 		echo json_encode($objResult);
 
@@ -2333,7 +2333,7 @@ class Api extends BaseController
 		
 		$objResult = new \StdClass;
 		if(!array_key_exists('game', $arrReqData) || empty($arrReqData['game'])){
-			$objResult->status = "fail";
+			$objResult->status = STATUS_FAIL;
 		} else {
 
 			$modelBet = null;
@@ -2368,7 +2368,7 @@ class Api extends BaseController
 			} else $modelBet = null;
 
 			if(is_null($modelBet)){
-				$objResult->status = "fail";
+				$objResult->status = STATUS_FAIL;
 			} else {
 				if($this->modelConfsite->IsGamePerFull()){
 					$objConfig = null;
@@ -2379,7 +2379,7 @@ class Api extends BaseController
 				$data['balance'] = $modelBet->getBetSumByMode($arrRoundData, $objConfig);
 
 				$objResult->data = $data;
-				$objResult->status = "success";
+				$objResult->status = STATUS_SUCCESS;
 			}
 		}
 		echo json_encode($objResult);
@@ -2456,11 +2456,11 @@ class Api extends BaseController
 			$user_id = $this->session->user_id;
 			$bResult = $this->modelMember->updateAlarmState($user_id, $arrData);
 			if($bResult)
-				$arrResult['status'] = "success";
-			else $arrResult['status'] = "fail";
+				$arrResult['status'] = STATUS_SUCCESS;
+			else $arrResult['status'] = STATUS_FAIL;
 		}
 		else {
-			$arrResult['status'] = "logout";			
+			$arrResult['status'] = STATUS_LOGOUT;			
 		}
 		echo json_encode($arrResult);	
 	}

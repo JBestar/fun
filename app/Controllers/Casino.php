@@ -127,6 +127,41 @@ class Casino extends BaseController
 
     }
 
+	public function cas_list() {
+		$result = new \StdClass;
+		if(!is_login())
+		{
+            $result->status = STATUS_LOGOUT;
+		} else {
+			$gameId = GAME_CASINO_KGON;
+			if($_ENV['app.casino'] == APP_CASINO_STAR){
+				$gameId = GAME_CASINO_STAR;
+			} else if($_ENV['app.casino'] == APP_CASINO_RAVE){
+				$gameId = GAME_CASINO_RAVE;
+			} else if($_ENV['app.casino'] == APP_CASINO_TREEM){
+				$gameId = GAME_CASINO_TREEM;
+			} else if($_ENV['app.casino'] == APP_CASINO_SIGMA){
+				$gameId = GAME_CASINO_SIGMA;
+			} 
+			$rows = $this->modelCasprd->gets($gameId);
+
+			$games = [];
+			foreach($rows as $row){
+				$prd = new \stdClass();
+				$prd->name = $row->name_ko;
+				$prd->prd_id = $row->cas_id;
+				$prd->maintain = $row->maintain;
+				array_push($games, $prd);
+			}
+			$data['game_url'] = "/cas";
+			$data['games'] = $games;
+
+			$result->data = $data;
+			$result->status = STATUS_SUCCESS;
+		}
+		echo json_encode($result);
+	}
+
     public function cas()
 	{
 		$this->setLanguage();
@@ -138,13 +173,17 @@ class Casino extends BaseController
 			print "<script> alert('".lang("common.session_expired")."'); self.close(); </script>";
 
         } else if($_ENV['app.casino'] == APP_CASINO_STAR){
-			$this->response->redirect(site_furl('/cas_h?prd='.$prdId));	
+			// $this->response->redirect(site_furl('/cas_h?prd='.$prdId));	
+			$this->cas_h();
 		} else if($_ENV['app.casino'] == APP_CASINO_RAVE){
-			$this->response->redirect(site_furl('/cas_r?prd='.$prdId));	
+			// $this->response->redirect(site_furl('/cas_r?prd='.$prdId));	
+			$this->cas_r();
 		} else if($_ENV['app.casino'] == APP_CASINO_TREEM){
-			$this->response->redirect(site_furl('/cas_t?prd='.$prdId));	
+			// $this->response->redirect(site_furl('/cas_t?prd='.$prdId));	
+			$this->cas_t();
 		} else if($_ENV['app.casino'] == APP_CASINO_SIGMA){
-			$this->response->redirect(site_furl("/cas_s?prd=.$prdId&ip=$ip"));	
+			// $this->response->redirect(site_furl("/cas_s?prd=.$prdId&ip=$ip"));
+			$this->cas_s();
 		} else {
 			$this->sess_action();                
 			$gameId = GAME_CASINO_KGON;
@@ -258,7 +297,6 @@ class Casino extends BaseController
 		$prdId = trim($this->request->getVar('prd'));
 						
 		if(!is_login())
-		// if(false)
 		{
 			$result->status = STATUS_LOGOUT;
         } else {
@@ -266,7 +304,6 @@ class Casino extends BaseController
             $logHead = "<CAS_KGON>";
 
 			$user_id = $this->session->user_id;
-			// $user_id = 'jbestar';
 			$objMember = $this->modelMember->getByUid($user_id);
 			$objConfig = $this->modelConfgame->find($gameId);  //Casino config
 			$headInfo = $this->getSiteConf();
@@ -682,7 +719,7 @@ class Casino extends BaseController
                     print "<script language=javascript> alert('".lang("common.game_fail")."(".PLAY_FAIL_TRANSFER.")'); self.close(); </script>";
                 } else {
                     
-					$arrResult = $this->libApiTreem->gameUrl($objMember->mb_treem_uid, $objMember->mb_uid, $objCas->key, $objCas->lobby);
+					$arrResult = $this->libApiTreem->gameUrl($objMember->mb_treem_uid, $objMember->mb_uid, $objCas->key, $objCas->lobby, $objCas->range);
 					if($arrResult['status'] == 1){
 						writeLog($logHead.$arrResult['link']);
 						$this->modelMember->updateBetTm($objMember);

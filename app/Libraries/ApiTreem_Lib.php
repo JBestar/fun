@@ -176,7 +176,7 @@ class ApiTreem_Lib  {
         return $arrResult;
     }
 
-    public function gameUrl($uid, $nickname, $vendor, $gameId)
+    public function gameUrl($uid, $nickname, $vendor, $gameId, $range)
     {
         if(strlen($this->mHost) < 1){
             return array('status' => 0);
@@ -185,6 +185,8 @@ class ApiTreem_Lib  {
         $url = $this->mHost."/game-launch-link";
         $url.= "?username=$uid&nickname=".urlencode($nickname);
         $url.= "&vendor=".urlencode($vendor)."&game_id=".urlencode($gameId);
+        if(strlen($range) > 0)
+            $url.= "&skin=".$range;
         
         $logHead = "<ApiTreem_Lib> gameUrl() ";
         writeLog($logHead."url=".$url);
