@@ -1083,18 +1083,18 @@ class BaseController extends Controller
 	protected function sgtoMb(&$objMember){
 		$iResult = 0;
 		$logHead = "<SgtoMb> ";
-		//Treem => Site
+		//Sigma => Site
 		if(strlen($objMember->mb_sigma_uid) > 0){
 			$amount = 0;
 			//Withdraw
-			$arrResp = $this->libApiTreem->subBalance($objMember->mb_sigma_uid, $amount, true);
+			$arrResp = $this->libApiSigma->subBalance($objMember->mb_sigma_uid, $amount, true);
 		
 			if($arrResp['status'] == 1)
 			{
 				$amount = floor(abs($arrResp['amount']));
 				writeLog($logHead.$objMember->mb_uid."-Withdraw RemainBalance=".$arrResp['balance']);
 				$objMember->mb_sigma_money = $arrResp['balance'];
-				$this->modelMember->updateTreemMoney($objMember);   
+				$this->modelMember->updateSigmaMoney($objMember);   
 					
 				if( $this->modelMember->updateAssets($objMember, $amount)){
 					$this->modelTransfer->register(TRANS_SIGMA_SITE, $objMember, $objMember->mb_sigma_money+$amount, 0-$amount);
@@ -1104,7 +1104,7 @@ class BaseController extends Controller
 				}
 			} else if(array_key_exists('balance', $arrResp)) {
 				$objMember->mb_sigma_money = $arrResp['balance'];
-				$this->modelMember->updateTreemMoney($objMember);   
+				$this->modelMember->updateSigmaMoney($objMember);   
 				$iResult = 1;
 			}
 		

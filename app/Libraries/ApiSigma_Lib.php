@@ -75,7 +75,7 @@ class ApiSigma_Lib  {
         }
 
         $username = createGameId(substr($_ENV['app.gm_prefix'], 0, 2).$id);
-        $arrResult['username'] = $username;
+        $arrResult['username'] = strtolower($username);
         $arrResult['status'] = 1;
         return $arrResult;
     }
