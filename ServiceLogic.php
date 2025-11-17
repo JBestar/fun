@@ -2093,10 +2093,14 @@ class ServiceLogic
 
 					writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." point=".$point." result=".$result['status']);
 					if($result['status'] == 1){
-						$member->mb_treem_money = $result['balance'];
+						if($member->mb_treem_money != $result['balance']){
+							$member->mb_treem_money = $result['balance'];
+							$bUpdated = $this->modelMember->updateGameMoney($member);
+							writeLog($this->fLog, $logHead."uid=".$member->mb_uid.", balance=".$result['balance'].", updated=".$bUpdated);
+						}
 						writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid.", balance=".$result['balance'].", point=".$point);
 						$this->modelTransfer->insertRow(RECOVER_TREEM, $member, $result['balance']+$point, 0-$point, $this->fLog);
-						$this->modelMoneyHistory->insertRow(MONEYCHANGE_WITHDRAW, $member, 0-$point, "", MONEYCHANGE_WITHDRAW_CUT, $this->fLog);
+						// $this->modelMoneyHistory->insertRow(MONEYCHANGE_WITHDRAW, $member, 0-$point, "", MONEYCHANGE_WITHDRAW_CUT, $this->fLog);
 						break;
 					} else {
 						sleep(3);
@@ -2466,10 +2470,14 @@ class ServiceLogic
 
 					writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid." point=".$point." result=".$result['status']);
 					if($result['status'] == 1){
-						$member->mb_sigma_money = $result['balance'];
+						if($member->mb_sigma_money != $result['balance']){
+							$member->mb_sigma_money = $result['balance'];
+							$bUpdated = $this->modelMember->updateGameMoney($member);
+							writeLog($this->fLog, $logHead."uid=".$member->mb_uid.", balance=".$result['balance'].", updated=".$bUpdated);
+						}
 						writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid.", balance=".$result['balance'].", point=".$point);
 						$this->modelTransfer->insertRow(RECOVER_TREEM, $member, $result['balance']+$point, 0-$point, $this->fLog);
-						$this->modelMoneyHistory->insertRow(MONEYCHANGE_WITHDRAW, $member, 0-$point, "", MONEYCHANGE_WITHDRAW_CUT, $this->fLog);
+						// $this->modelMoneyHistory->insertRow(MONEYCHANGE_WITHDRAW, $member, 0-$point, "", MONEYCHANGE_WITHDRAW_CUT, $this->fLog);
 						break;
 					} else {
 						sleep(3);
