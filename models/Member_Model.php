@@ -192,8 +192,8 @@ class Member_Model {
         
         $strSql = "UPDATE ".$this->mTableName ;
         $strSql.= " SET mb_treem_money = ".$member->mb_treem_money;
-        $strSql.= ", SET mb_sigma_money = ".$member->mb_sigma_money;
-        $strSql.= " WHERE mb_fid='".$member->mb_fid."' ";
+        $strSql.= ", mb_sigma_money = ".$member->mb_sigma_money;
+        $strSql.= " WHERE mb_fid=".$member->mb_fid;
         
         return $this->mDbConn->query($strSql);
     }
