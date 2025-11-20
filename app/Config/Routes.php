@@ -101,7 +101,7 @@ $routes->get('cas_r', 'Casino::cas_r'); 	//Rave
 $routes->get('cas_t', 'Casino::cas_t'); 	//Treem
 $routes->get('cas_s', 'Casino::cas_s'); 	//Sigma
 $routes->get('holdem', 'Casino::holdem');
-$routes->get('game_list', 'Casino::cas_list');
+$routes->get('api/game_list', 'Casino::cas_list');
 
 $routes->get('casino', 'Casino::casino');
 
