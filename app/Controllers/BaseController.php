@@ -645,8 +645,8 @@ class BaseController extends Controller
 			if($this->evtoMb($objMember) == 1 && $this->sltoMb($objMember) == 1 &&
 				$this->fsltoMb($objMember) == 1 && $this->kgtoMb($objMember) == 1 && 
 				$this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 && 
-				$this->holtoMb($objMember) == 1 && $this->rvtoMb($objMember) == 1 &&
-				$this->sgtoMb($objMember) == 1) {
+				$this->holtoMb($objMember) == 1 && $this->rvtoMb($objMember) == 1 
+				/*&& $this->sgtoMb($objMember) == 1*/) {
 					$iResult = $this->mbtoTr($objMember);
 			}
 		} else if($iGame == GAME_CASINO_SIGMA || $iGame == GAME_SLOT_SIGMA){
@@ -662,7 +662,7 @@ class BaseController extends Controller
 				$this->fsltoMb($objMember) == 1 && $this->kgtoMb($objMember) == 1 &&
 				$this->gsltoMb($objMember) == 1 && $this->hsltoMb($objMember) == 1 && 
 				$this->holtoMb($objMember) == 1  && $this->rvtoMb($objMember) == 1 &&
-				$this->trtoMb($objMember) == 1 && $this->sgtoMb($objMember) == 1) {
+				$this->trtoMb($objMember) == 1 /*&& $this->sgtoMb($objMember) == 1*/) {
 					$iResult = 1;
 			}
 		}
