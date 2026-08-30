@@ -130,3 +130,4 @@ nb-configuration.xml
 /public/assets
 /public/*.config
 /public/.well-known
+/public/download
