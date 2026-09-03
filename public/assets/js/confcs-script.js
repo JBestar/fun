@@ -20,6 +20,8 @@ function showConfGame(objConfig, objAgent) {
 
     if (objAgent != null) {
         $("#confpb-agent-code-id").val(objAgent.code);
+        if($("#confpb-agent-token-id").length > 0 && objAgent.token != null)
+            $("#confpb-agent-token-id").val(objAgent.token);
         $("#confpb-agent-egg-id").val(parseInt(objAgent.egg).toLocaleString());
         
         if(objAgent.useregg != null)
@@ -140,7 +142,8 @@ function addBtnEvent() {
             data: { json_: jsonData },
             success: function(jResult) {
                 if (jResult.status == "success") {
-                    location.reload();
+                    showAlert("성공적으로 저장되었습니다.");
+                    // location.reload();
                 } else if (jResult.status == "logout") {
                     window.location.replace( FURL +'/');
                 } else if (jResult.status == "fail") {
@@ -154,6 +157,42 @@ function addBtnEvent() {
             }
 
         });
+
+        if($("#confpb-agent-token-id").length > 0){
+            var agentToken = $("#confpb-agent-token-id").val();
+            if(agentToken != null && String(agentToken).length > 0){
+                jsonData = new Object();
+                jsonData.game_id = $(".confsite-game-panel").attr('id');
+                jsonData.agent_id = $("#confpb-agent-code-id").val();
+                jsonData.agent_token = agentToken;
+                jsonData = JSON.stringify(jsonData);
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: FURL + "/api/saveAgent",
+                    data: { json_: jsonData },
+                    success: function(jResult) {
+                        if (jResult.status == "success") {
+                            location.reload();
+                        } else if (jResult.status == "logout") {
+                            window.location.replace( FURL +'/');
+                        } else if (jResult.status == "fail") {
+                            showAlert("저장이 실패되었습니다.", 0);
+                        } else if (jResult.status == "nopermit") {
+                            showAlert("권한이 없습니다.", 0);
+                        }
+                    },
+                    error: function(request, status, error) {
+                        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                    }
+
+                });
+            } else {
+                location.reload();
+            }
+        } else {
+            location.reload();
+        }
     });
 
 

@@ -54,7 +54,11 @@
 		</div>
 		<div class="confsite-game-text-div">
 			<p>에이젼트 코드:</p> 
-			<input type = "text" class="conf-text-input" style="min-width:200px;"  id="confpb-agent-code-id" disabled>
+			<input type="text" class="conf-text-input" style="min-width:200px;" id="confpb-agent-code-id" placeholder="아이디를 입력해 주세요.">
+		</div>
+		<div class="confsite-game-text-div">
+			<p>토큰:</p> 
+			<input type="text" class="conf-text-input" style="min-width:400px;" id="confpb-agent-token-id" placeholder="토큰을 입력해 주세요.">
 		</div>
 		<div class="confsite-game-text-div">
 			<p>에이젼트 보유알:</p> 
@@ -102,7 +106,7 @@
     <script src="<?php echo site_furl('/assets/js/confcs-script.js?t='.time());?>"></script>
     <script src="<?php echo site_furl('/assets/js/confkg-script.js?t='.time());?>"></script>
 <?php else : ?>
-    <script src="<?php echo site_furl('/assets/js/confcs-script.js?v=5');?>"></script>
+    <script src="<?php echo site_furl('/assets/js/confcs-script.js?v=6');?>"></script>
     <script src="<?php echo site_furl('/assets/js/confkg-script.js?v=2');?>"></script>
 <?php endif ?>
 <?= $this->endSection() ?>

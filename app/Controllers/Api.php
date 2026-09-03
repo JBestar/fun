@@ -216,6 +216,7 @@ class Api extends BaseController{
 				$arrInfo = explode("#", $agConf->conf_content);
 				if(count($arrInfo) >= 3){ //0-host, 1-ag_code, 2-ag_token
 					$agInfo['code'] = $arrInfo[1];
+					$agInfo['token'] = $arrInfo[2];
 					$agInfo['egg'] = $agConf->conf_active;
 					if($agUserEgg >= 0)
 						$agInfo['useregg'] = $agUserEgg;	
@@ -259,6 +260,36 @@ class Api extends BaseController{
 				//model
 				$confsiteModel = new ConfSite_Model();
 				$confsiteModel->saveData($arrData);
+			
+				$arrResult['status'] = "success";
+			} else $arrResult['status'] = "nopermit";
+		}
+		else {
+			$arrResult['status'] = "logout";			
+		}
+		echo json_encode($arrResult);	
+	}
+
+	public function saveAgent(){
+		$jsonData = $_REQUEST['json_'];
+		$arrData = json_decode($jsonData, true);
+
+		if(is_login())
+		{
+			$this->sess_action();                
+			$bPermit = false;
+			
+			$strUid = $this->session->user_id;
+			$objUser = $this->modelMember->getInfo($strUid);
+			
+			if(!is_null($objUser))
+			{				
+				if($objUser->mb_level >= LEVEL_ADMIN )
+					$bPermit = true;					
+			}
+			if($bPermit){
+				$confsiteModel = new ConfSite_Model();
+				$confsiteModel->saveAgent($arrData);
 			
 				$arrResult['status'] = "success";
 			} else $arrResult['status'] = "nopermit";

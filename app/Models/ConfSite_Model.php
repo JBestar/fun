@@ -497,6 +497,53 @@ class ConfSite_Model extends Model
     }
 
 
+    public function saveAgent($arrData){
+        $logHead = "<ConfSite_Model saveAgent()>";
+        writeLog($logHead." started.");
+        if($arrData == null) return false;
+        if (!array_key_exists("game_id", $arrData)) return false;
+        if (!array_key_exists("agent_token", $arrData) || strlen(trim($arrData['agent_token'])) == 0)
+            return false;
+
+        $gameId = intval($arrData['game_id']);
+        if($gameId == GAME_CASINO_EVOL){
+            $confId = CONF_API_HPPLAY;
+		} else if($gameId == GAME_SLOT_THEPLUS){
+            $confId = CONF_API_THEPLUS;
+		} else if($gameId == GAME_SLOT_GSPLAY){
+            $confId = CONF_API_GSPLAY;
+		} else if($gameId == GAME_SLOT_GOLD){
+            $confId = CONF_API_GOLD;
+		} else if($gameId == GAME_CASINO_KGON || $gameId == GAME_SLOT_KGON){
+            $confId = CONF_API_KGON;
+		} else if($gameId == GAME_CASINO_STAR || $gameId == GAME_SLOT_STAR){
+            $confId = CONF_API_STAR;
+		} else if($gameId == GAME_HOLD_CMS){
+            $confId = CONF_API_HOLD;
+		} else if($gameId == GAME_CASINO_RAVE || $gameId == GAME_SLOT_RAVE){
+            $confId = CONF_API_RAVE;
+		} else if($gameId == GAME_CASINO_TREEM || $gameId == GAME_SLOT_TREEM){
+            $confId = CONF_API_TREEM;
+            $host = "https://api.honorlink.org/api";
+            $objConf = $this->getConf($confId);
+            if(!is_null($objConf) && strlen($objConf->conf_content) > 0){
+                $arrInfo = explode("#", $objConf->conf_content);
+                if(count($arrInfo) >= 1 && strlen($arrInfo[0]) > 0)
+                    $host = $arrInfo[0];
+            }
+            $agentId = array_key_exists('agent_id', $arrData) ? $arrData['agent_id'] : '';
+            $confContent = $host."#".$agentId."#".$arrData['agent_token'];
+            $updateData = array();
+            $updateData['conf_content'] = $confContent;
+            $updateData['conf_update'] = date('Y-m-d H:i:s');
+            $this->builder()->where('conf_id', $confId)->update($updateData);		
+            writeLog($logHead."'conf_content' has changed with {$updateData['conf_content']}");
+		} else if($gameId == GAME_CASINO_SIGMA || $gameId == GAME_SLOT_SIGMA){
+            $confId = CONF_API_SIGMA;
+        }
+        return true;
+    }
+
     public function saveMaintainConfig($arrData){
 
         if($arrData == null) return false;
