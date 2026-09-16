@@ -127,6 +127,8 @@
 	
 	$secSleep = 61;
 	$secRepeat = 61;
+	$tmTreemRetry = 0;
+	$nTreemBackoff = 0;
 	
 	writeLog($fLog, $logHead."==============START==============");
 
@@ -300,7 +302,10 @@
 
 		//Treem
 		if($bTreem && !$bTreemReg){
-			if($hTreem == null){
+			if($tmNow < $tmTreemRetry){
+				$bTreemReg = true;
+				$hTreem = null;
+			} else if($hTreem == null){
 				$hTreem = curl_multi_init();
 				$curl = $objServLogic->curlTreemBets($proxyUrl);
 				if($curl)
@@ -315,7 +320,18 @@
 				$result = curlProc2($hTreem, $fLog );
 				if($result != null){
 					$bTreemReg = true;
-					$bInsert = $objServLogic->registerTreemBets($result, $proxyUrl);
+					$nTreemCode = 0;
+					if(array_key_exists('code', $result))
+						$nTreemCode = intval($result['code']);
+					if($nTreemCode == HTTP_CODE_429){
+						$nTreemBackoff = min($nTreemBackoff + TREEM_MIN_INTERVAL, TREEM_BACKOFF_MAX);
+						$tmTreemRetry = time() + $nTreemBackoff;
+						writeLog($fLog, $logHead."TREEM 429 backoff=".$nTreemBackoff." next=".date('H:i:s', $tmTreemRetry));
+					} else {
+						$bInsert = $objServLogic->registerTreemBets($result, $proxyUrl);
+						$nTreemBackoff = 0;
+						$tmTreemRetry = time() + TREEM_MIN_INTERVAL;
+					}
 				}
 			}
 		}
