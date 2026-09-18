@@ -670,6 +670,122 @@
                     background-size: cover;
                     background-position: 0% 50%
                 }
+                <?php if($_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) :?>
+                /* banner5~7 실제 비율(1672x940 ≈ 56.22%) — a.min.css의 height:600px 고정 해제 */
+                .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop {
+                    height: 0 !important;
+                    padding-bottom: 56.22% !important;
+                }
+                .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop .bg-img {
+                    background-size: cover;
+                    background-position: center center;
+                }
+                @media (max-width: 900px) {
+                    .BannerSlider-bg {
+                        height: auto !important;
+                        min-height: 0 !important;
+                    }
+                    .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop {
+                        height: 0 !important;
+                        padding-bottom: 56.22% !important;
+                    }
+                }
+
+                /* 히어로 오버레이: 배너 위에 로고/로그인 */
+                #wrapper.hero-banner-overlay {
+                    position: relative;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-top-wrapper {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    z-index: 1100;
+                    overflow: visible;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper,
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper.js-sticky,
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper.js-is-game-open {
+                    position: relative !important;
+                    height: auto !important;
+                    min-height: 110px;
+                    overflow: visible;
+                    background: transparent !important;
+                    background-color: transparent !important;
+                    opacity: 1 !important;
+                    box-shadow: none !important;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper::before {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    height: 120px;
+                    background: linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 45%, transparent 100%);
+                    pointer-events: none;
+                    z-index: 0;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-ActionsContainer {
+                    position: relative;
+                    z-index: 1;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper.is-scrolled {
+                    background: rgba(8, 10, 16, 0.92) !important;
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
+                    box-shadow: 0 6px 24px rgba(0,0,0,0.4) !important;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper.is-scrolled::before {
+                    opacity: 0;
+                }
+                #wrapper.hero-banner-overlay .logo_icon {
+                    margin-top: 55px;
+                    width: 150px;
+                    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.55));
+                }
+                #wrapper.hero-banner-overlay .MainMenu-ActionsContainer .btn-box {
+                    margin-top: 55px;
+                    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+                }
+                #wrapper.hero-banner-overlay .MainContent {
+                    padding-top: 0;
+                    margin-top: 0;
+                }
+                #wrapper.hero-banner-overlay .MainBanner-container.banner-top {
+                    margin-top: 0;
+                    position: relative;
+                }
+                #wrapper.hero-banner-overlay .MainBanner-container.banner-top .BannerSlider-bg::after {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    height: 140px;
+                    background: linear-gradient(180deg, rgba(0,0,0,0.35), transparent);
+                    pointer-events: none;
+                    z-index: 2;
+                }
+                #wrapper.hero-banner-overlay .star-container {
+                    display: none;
+                }
+                @media (max-width: 760px) {
+                    #wrapper.hero-banner-overlay .logo_icon {
+                        width: 120px;
+                        margin-top: 40px;
+                    }
+                    #wrapper.hero-banner-overlay .MainMenu-ActionsContainer .btn-box {
+                        margin-top: 40px;
+                        width: 84px;
+                        font-size: 16px;
+                    }
+                    #wrapper.hero-banner-overlay .MainMenu-open-wrapper,
+                    #wrapper.hero-banner-overlay .MainMenu-open-wrapper.js-sticky {
+                        min-height: 90px;
+                    }
+                }
+                <?php endif ?>
 
                 #MainMenu {
                     background: linear-gradient(180deg,#292929 ,#2b2b2b);
@@ -832,7 +948,7 @@
         </div>
         <div id="SLB_loading"></div>
 
-        <div id="wrapper" data-login="<?=is_login(true)?1:0?>" >
+        <div id="wrapper" data-login="<?=is_login(true)?1:0?>" class="<?= ($_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) ? 'hero-banner-overlay' : '' ?>">
             <input type="checkbox" id="MainMenu-controller" />
             <label class="MainMenu-open burger at-hamburger-menu-button" for="MainMenu-controller">
                 <div class="line"></div>
@@ -1125,7 +1241,7 @@
                                     images: ["<?php echo site_furl('/images/main/banner61.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner62.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner63.png?v=2'); ?>"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) :?>
-                                    images: ["<?php echo site_furl('/images/main/banner1.png'); ?>", "<?php echo site_furl('/images/main/banner2.png'); ?>", "<?php echo site_furl('/images/main/banner3.png'); ?>", "<?php echo site_furl('/images/main/banner4.png'); ?>"],
+                                    images: ["<?php echo site_furl('/images/main/banner5.png'); ?>", "<?php echo site_furl('/images/main/banner6.png'); ?>", "<?php echo site_furl('/images/main/banner7.png'); ?>"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_DOLPHIN) :?>
                                     images: ["<?php echo site_furl('/images/main/banner51_'.$_ENV['app.home'].'.png?v=1.5'); ?>", "<?php echo site_furl('/images/main/banner52_'.$_ENV['app.home'].'.png?v=1.5'); ?>", "<?php echo site_furl('/images/main/banner53_'.$_ENV['app.home'].'.png?v=1.5'); ?>"],
@@ -1138,6 +1254,17 @@
                             });
 
                             $(".scroll_text").marquee();
+
+                            (function() {
+                                var bar = document.querySelector("#wrapper.hero-banner-overlay .MainMenu-open-wrapper");
+                                if (!bar) return;
+                                var onScroll = function() {
+                                    if (window.scrollY > 40) bar.classList.add("is-scrolled");
+                                    else bar.classList.remove("is-scrolled");
+                                };
+                                onScroll();
+                                window.addEventListener("scroll", onScroll, { passive: true });
+                            })();
 
                             function showTabMenu(menu) {
 
