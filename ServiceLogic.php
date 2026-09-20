@@ -2311,9 +2311,9 @@ class ServiceLogic
 			} else {
 				writeLog($this->fLog, $logHead."RecoverFail betId=".$pending['betId']." uid=".$member->mb_uid." point=".$pending['total_point']);
 			}
-			// 사이트머니/422(실패): sleep 없음, API 성공만 0.3초
+			// 사이트머니/422(실패): sleep 없음, API 성공만 1.0초 (HonorLink ~1req/s)
 			if($recoverWay === 'api')
-				usleep(300000);
+				sleep(1);
 			$nProc++;
 		}
 
