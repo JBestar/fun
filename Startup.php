@@ -15,7 +15,6 @@
 
 	//자료기지 접속
 	$dbConn = connectDb($arrConfig);
-
 	if ($dbConn->connect_error) {
 	    echo "Connection failed.". $dbConn->connect_error;
 	    sleep(50);
@@ -371,18 +370,9 @@
 			if($bSigmaSl)
 				$bSigmaCs = !$bSigmaCs;
 
-			$sleepSec = $bInsert ? $secRepeat : $secSleep;
-			if($bTreem && $objServLogic->hasPendingTreemRecover()){
-				$until = $tmTreemRetry > 0 ? $tmTreemRetry : (time() + $sleepSec);
-				$objServLogic->drainTreemRecoverUntil($until);
-				$remain = $until - time();
-				if($remain > 0)
-					sleep($remain);
-			} else if(!$bInsert){
+			if(!$bInsert)
 				sleep($secSleep);
-			} else {
-				sleep($secRepeat);	//usleep(500000);
-			}
+			else sleep($secRepeat);	//usleep(500000);
 		}
 		
 	}
