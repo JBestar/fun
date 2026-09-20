@@ -2290,17 +2290,8 @@ class ServiceLogic
 				writeLog($this->fLog, $logHead."RecoverSkip betId=".$pending['betId']." member not found");
 				continue;
 			}
-<<<<<<< HEAD
-			if(is_null($this->treemRecoverAgentInfo)){
-				writeLog($this->fLog, $logHead."RecoverSkip betId=".$pending['betId']." agent info missing");
-				continue;
-			}
-
-			if($this->tryRecoverFromMemberTreem($member, $pending['total_point'], $this->treemRecoverAgentInfo, $this->treemRecoverProxyUrl, $logHead)){
-=======
 			$recoverWay = $this->tryRecoverFromMemberTreem($member, $pending['total_point'], $arrInfo, $proxyUrl, $logHead);
 			if($recoverWay === 'site' || $recoverWay === 'api'){
->>>>>>> temp-branch
 				$this->applyEmpRatioPoints($arrEmpPoint, $pending['arrEmpRatio']);
 				$recoverGameId = isset($pending['game_id']) ? $pending['game_id'] : GAME_CASINO_EVOL;
 				$recoverRwFid = isset($pending['rwLastFid']) ? $pending['rwLastFid'] : 0;
