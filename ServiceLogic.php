@@ -2290,7 +2290,18 @@ class ServiceLogic
 				writeLog($this->fLog, $logHead."RecoverSkip betId=".$pending['betId']." member not found");
 				continue;
 			}
-			$recoverWay = $this->tryRecoverFromMemberTreem($member, $pending['total_point'], $arrInfo, $proxyUrl, $logHead);
+			if(is_null($this->treemRecoverAgentInfo)){
+				writeLog($this->fLog, $logHead."RecoverSkip betId=".$pending['betId']." agent info missing");
+				continue;
+			}
+
+			$recoverWay = $this->tryRecoverFromMemberTreem(
+				$member,
+				$pending['total_point'],
+				$this->treemRecoverAgentInfo,
+				$this->treemRecoverProxyUrl,
+				$logHead
+			);
 			if($recoverWay === 'site' || $recoverWay === 'api'){
 				$this->applyEmpRatioPoints($arrEmpPoint, $pending['arrEmpRatio']);
 				$recoverGameId = isset($pending['game_id']) ? $pending['game_id'] : GAME_CASINO_EVOL;
@@ -2303,6 +2314,7 @@ class ServiceLogic
 			// 사이트머니/422(실패): sleep 없음, API 성공만 0.3초
 			if($recoverWay === 'api')
 				usleep(300000);
+			$nProc++;
 		}
 
 		if(count($arrEmpPoint) > 0){
