@@ -2262,8 +2262,17 @@ class ServiceLogic
 		$api = isset($stat['api']) ? $stat['api'] : 0;
 		$eggSync = 'skip';
 
-		// API 회수가 있었을 때만 HonorLink 보유알 동기화 (배치당 1회, 직전 sub-balance와 겹치지 않게 sleep)
-		if($api > 0 && is_array($arrInfo) && count($arrInfo) >= 3){
+		// TREEM: AVAIL 로그 전에 항상 HonorLink /my-info로 에이전트알 동기화
+		// SIGMA: API 회수가 있었을 때만 (기존)
+		$needEggSync = false;
+		if(is_array($arrInfo) && count($arrInfo) >= 3){
+			if($provider === 'treem')
+				$needEggSync = true;
+			else if($api > 0)
+				$needEggSync = true;
+		}
+		if($needEggSync){
+			// 직전 sub-balance/transactions와 겹치지 않게 1초 대기
 			sleep(1);
 			$sync = $this->syncAgentEggFromProvider($provider, $confId, $arrInfo, $proxyUrl);
 			$eggSync = $sync ? 'ok' : 'fail';
