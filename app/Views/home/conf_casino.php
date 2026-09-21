@@ -77,7 +77,7 @@
 
 		<div class="confsite-game-text-div">
 			<p>정산설정:</p> 
-			<input type="checkbox" id="conf-account-check-id" style="zoom:120%; margin-top:4px;" onchange="onChangeElement();">
+			<input type="checkbox" id="conf-account-check-id" style="zoom:120%; margin-top:4px;<?php if(!isset($mb_level) || intval($mb_level) !== 102) echo 'opacity:0.45;'; ?>" onchange="onChangeElement();" <?php if(!isset($mb_level) || intval($mb_level) !== 102) echo 'disabled'; ?>>
 			<label style="font-size:13px; font-weight:normal; top:-3px; position:relative;"> 정산 시 컷(역정산)</label>
 
 			<input type="checkbox" name="account-setting" id="conf-accwin-check-id" style="zoom:120%; margin-top:0px; margin-left:10px;"  onchange="onChangeElement();">

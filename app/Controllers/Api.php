@@ -356,6 +356,14 @@ class Api extends BaseController{
 			if($bPermit){
 				//model
 				$confgameModel = new ConfGame_Model();
+				// 정산 시 컷(game_percent_1)은 mb_level=102만 변경
+				if(intval($objUser->mb_level) !== 102 && array_key_exists('game_percent_1', $arrData)){
+					$existGame = $confgameModel->getByIndex($arrData['game_index']);
+					if(is_array($existGame) && array_key_exists('game_percent_1', $existGame))
+						$arrData['game_percent_1'] = $existGame['game_percent_1'];
+					else
+						unset($arrData['game_percent_1']);
+				}
                 $query = "";
 				if($confgameModel->saveData($arrData, $query)){
                     $this->modelModify->add($this->session->user_id, MOD_GM_CONF, $query, $this->request->getIPAddress());
