@@ -216,7 +216,11 @@ class Member_Model {
 
     function sumMoneyPoint(){
         $sum = array('money' => 0, 'point' => 0);
+        // fun_adm calcGiveLiability와 동일: 관리자급 미만, 삭제·테스트 제외
         $strSql = "SELECT IFNULL(SUM(mb_money),0) AS money_sum, IFNULL(SUM(mb_point),0) AS point_sum FROM ".$this->mTableName;
+        $strSql.= " WHERE mb_level < 100";
+        $strSql.= " AND mb_state_active <> '4'";
+        $strSql.= " AND mb_state_test = 0";
         if($objResult = $this->mDbConn->query($strSql)){
             if($arrRow = $objResult->fetch_assoc()){
                 $sum['money'] = floatval($arrRow['money_sum']);
