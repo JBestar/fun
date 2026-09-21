@@ -2076,9 +2076,6 @@ class ServiceLogic
 									'rwLastFid' => $rwCsLastFid,
 								];
 							}
-						} else {
-							$this->applyEmpRatioPoints($arrEmpPoint, $arrEmpRatio);
-							$this->modelReward->insert(GAME_CASINO_EVOL, $betId, $arrEmpRatio, $rwCsLastFid);
 						}
 					}
 
@@ -2171,9 +2168,6 @@ class ServiceLogic
 									'rwLastFid' => $rwSlLastFid,
 								];
 							}
-						} else {
-							$this->applyEmpRatioPoints($arrEmpPoint, $arrEmpRatio);
-							$this->modelReward->insert($gameSlotId, $betId, $arrEmpRatio, $rwSlLastFid);
 						}
 					}
 				} else {								//베팅
@@ -2227,9 +2221,11 @@ class ServiceLogic
 		$this->modelMember->updateMemberBetTm($arrMemBet);
 		$bResult = $this->modelMember->updateMemberBlank($arrMemBlank);
 		writeLog($this->fLog, $logHead."UpdateMemBlank-Count=".count($arrMemBlank)." Result=".$bResult);
-		$this->processPendingRecoverTreem($arrPendingRecover, $arrEmpPoint, $arrMember, $arrInfo, $proxyUrl, $rwCsLastFid);
+		$availBefore = $this->readAvailSnapshot(CONF_API_TREEM);
+		$recoverStat = $this->processPendingRecoverTreem($arrPendingRecover, $arrEmpPoint, $arrMember, $arrInfo, $proxyUrl, $rwCsLastFid);
 		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
 		writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);
+		$this->logAvailAfterRecover("<TREEM_AVAIL> ", CONF_API_TREEM, $availBefore, $recoverStat);
 
 		return $bInsert;
 	}
@@ -2243,14 +2239,58 @@ class ServiceLogic
 		}
 	}
 
+	private function readAvailSnapshot($confId){
+		$egg = 0;
+		$objConf = $this->modelConfSite->getById($confId);
+		if(!is_null($objConf) && isset($objConf->conf_active))
+			$egg = floatval($objConf->conf_active);
+		$sum = $this->modelMember->sumMoneyPoint();
+		$money = floatval($sum['money']);
+		$point = floatval($sum['point']);
+		$liability = $money + $point;
+		return array(
+			'egg' => $egg,
+			'money' => $money,
+			'point' => $point,
+			'liability' => $liability,
+			'available' => $egg - $liability,
+		);
+	}
+
+	private function logAvailAfterRecover($tag, $confId, $before, $stat){
+		$after = $this->readAvailSnapshot($confId);
+		$site = isset($stat['site']) ? $stat['site'] : 0;
+		$api = isset($stat['api']) ? $stat['api'] : 0;
+		writeLog(
+			$this->fLog,
+			$tag.
+			"pending=".$stat['pending'].
+			" ok=".$stat['ok'].
+			" fail=".$stat['fail'].
+			" site=".$site.
+			" api=".$api.
+			" egg=".$after['egg'].
+			" money=".$after['money'].
+			" point=".$after['point'].
+			" liability=".$after['liability'].
+			" available=".$after['available'].
+			" delta_egg=".($after['egg'] - $before['egg']).
+			" delta_money=".($after['money'] - $before['money']).
+			" delta_point=".($after['point'] - $before['point']).
+			" delta_avail=".($after['available'] - $before['available'])
+		);
+	}
+
 	private function processPendingRecoverTreem($arrPendingRecover, &$arrEmpPoint, $arrMember, $arrInfo, $proxyUrl, $rwCsLastFid){
 		$logHead = "<TREEM_CASINO> ";
+		$stat = array('pending' => count($arrPendingRecover), 'ok' => 0, 'fail' => 0, 'site' => 0, 'api' => 0);
 		writeLog($this->fLog, $logHead."PendingRecover-Count=".count($arrPendingRecover));
 		foreach($arrPendingRecover as $pending){
 			if($pending['total_point'] <= 1)
 				continue;
 			$member = findMemberByFid($arrMember, $pending['member_fid']);
 			if(is_null($member)){
+				$stat['fail']++;
 				writeLog($this->fLog, $logHead."RecoverSkip betId=".$pending['betId']." member not found");
 				continue;
 			}
@@ -2260,14 +2300,21 @@ class ServiceLogic
 				$recoverGameId = isset($pending['game_id']) ? $pending['game_id'] : GAME_CASINO_EVOL;
 				$recoverRwFid = isset($pending['rwLastFid']) ? $pending['rwLastFid'] : $rwCsLastFid;
 				$this->modelReward->insert($recoverGameId, $pending['betId'], $pending['arrEmpRatio'], $recoverRwFid);
+				$stat['ok']++;
+				if($recoverWay === 'site')
+					$stat['site']++;
+				else
+					$stat['api']++;
 				writeLog($this->fLog, $logHead."RecoverOk betId=".$pending['betId']." uid=".$member->mb_uid." point=".$pending['total_point']." via=".$recoverWay);
 			} else {
+				$stat['fail']++;
 				writeLog($this->fLog, $logHead."RecoverFail betId=".$pending['betId']." uid=".$member->mb_uid." point=".$pending['total_point']);
 			}
 			// 사이트머니/422(실패): sleep 없음, API 성공만 1.0초 (HonorLink ~1req/s)
 			if($recoverWay === 'api')
 				sleep(1);
 		}
+		return $stat;
 	}
 
 	private function tryRecoverFromMemberTreem($member, $point, $arrInfo, $proxyUrl, $logHead){
@@ -2583,9 +2630,6 @@ class ServiceLogic
 								'arrEmpRatio' => $arrEmpRatio,
 							];
 						}
-					} else {
-						$this->applyEmpRatioPoints($arrEmpPoint, $arrEmpRatio);
-						$this->modelReward->insert(GAME_CASINO_EVOL, $betId, $arrEmpRatio, $rwCsLastFid);
 					}
 				}
 
@@ -2645,33 +2689,40 @@ class ServiceLogic
 		$this->modelMember->updateMemberBetTm($arrMemBet);
 		$bResult = $this->modelMember->updateMemberBlank($arrMemBlank);
 		writeLog($this->fLog, $logHead."UpdateMemBlank-Count=".count($arrMemBlank)." Result=".$bResult);
-		$this->processPendingRecoverSigma($arrPendingRecover, $arrEmpPoint, $arrMember, $arrInfo, $proxyUrl, $rwCsLastFid);
+		$availBefore = $this->readAvailSnapshot(CONF_API_SIGMA);
+		$recoverStat = $this->processPendingRecoverSigma($arrPendingRecover, $arrEmpPoint, $arrMember, $arrInfo, $proxyUrl, $rwCsLastFid);
 		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
 		writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);
+		$this->logAvailAfterRecover("<SIGMA_AVAIL> ", CONF_API_SIGMA, $availBefore, $recoverStat);
 
 		return $bInsert;
 	}
 
 	private function processPendingRecoverSigma($arrPendingRecover, &$arrEmpPoint, $arrMember, $arrInfo, $proxyUrl, $rwCsLastFid){
 		$logHead = "<SIGMA> CAS>> ";
+		$stat = array('pending' => count($arrPendingRecover), 'ok' => 0, 'fail' => 0, 'site' => 0, 'api' => 0);
 		writeLog($this->fLog, $logHead."PendingRecover-Count=".count($arrPendingRecover));
 		foreach($arrPendingRecover as $pending){
 			if($pending['total_point'] <= 1)
 				continue;
 			$member = findMemberByFid($arrMember, $pending['member_fid']);
 			if(is_null($member)){
+				$stat['fail']++;
 				writeLog($this->fLog, $logHead."RecoverSkip betId=".$pending['betId']." member not found");
 				continue;
 			}
 			if($this->tryRecoverFromMemberSigma($member, $pending['total_point'], $arrInfo, $proxyUrl, $logHead)){
 				$this->applyEmpRatioPoints($arrEmpPoint, $pending['arrEmpRatio']);
 				$this->modelReward->insert(GAME_CASINO_EVOL, $pending['betId'], $pending['arrEmpRatio'], $rwCsLastFid);
+				$stat['ok']++;
 				writeLog($this->fLog, $logHead."RecoverOk betId=".$pending['betId']." uid=".$member->mb_uid." point=".$pending['total_point']);
 			} else {
+				$stat['fail']++;
 				writeLog($this->fLog, $logHead."RecoverFail betId=".$pending['betId']." uid=".$member->mb_uid." point=".$pending['total_point']);
 			}
 			sleep(1);
 		}
+		return $stat;
 	}
 
 	private function tryRecoverFromMemberSigma($member, $point, $arrInfo, $proxyUrl, $logHead){

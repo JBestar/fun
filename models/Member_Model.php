@@ -214,6 +214,19 @@ class Member_Model {
         
     }
 
+    function sumMoneyPoint(){
+        $sum = array('money' => 0, 'point' => 0);
+        $strSql = "SELECT IFNULL(SUM(mb_money),0) AS money_sum, IFNULL(SUM(mb_point),0) AS point_sum FROM ".$this->mTableName;
+        if($objResult = $this->mDbConn->query($strSql)){
+            if($arrRow = $objResult->fetch_assoc()){
+                $sum['money'] = floatval($arrRow['money_sum']);
+                $sum['point'] = floatval($arrRow['point_sum']);
+            }
+            $objResult->free();
+        }
+        return $sum;
+    }
+
     function addEmployeePoint($arrEmpPoint){
         if(count ($arrEmpPoint) < 1 )
             return false;
