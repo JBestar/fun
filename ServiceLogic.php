@@ -2225,7 +2225,7 @@ class ServiceLogic
 		$recoverStat = $this->processPendingRecoverTreem($arrPendingRecover, $arrEmpPoint, $arrMember, $arrInfo, $proxyUrl, $rwCsLastFid);
 		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
 		writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);
-		$this->logAvailAfterRecover("<TREEM_AVAIL> ", CONF_API_TREEM, $availBefore, $recoverStat);
+		$this->logAvailAfterRecover("<TREEM_AVAIL> ", CONF_API_TREEM, $availBefore, $recoverStat, $arrInfo, $proxyUrl, 'treem');
 
 		return $bInsert;
 	}
@@ -2257,10 +2257,19 @@ class ServiceLogic
 		);
 	}
 
-	private function logAvailAfterRecover($tag, $confId, $before, $stat){
-		$after = $this->readAvailSnapshot($confId);
+	private function logAvailAfterRecover($tag, $confId, $before, $stat, $arrInfo = null, $proxyUrl = "", $provider = 'treem'){
 		$site = isset($stat['site']) ? $stat['site'] : 0;
 		$api = isset($stat['api']) ? $stat['api'] : 0;
+		$eggSync = 'skip';
+
+		// API 회수가 있었을 때만 HonorLink 보유알 동기화 (배치당 1회, 직전 sub-balance와 겹치지 않게 sleep)
+		if($api > 0 && is_array($arrInfo) && count($arrInfo) >= 3){
+			sleep(1);
+			$sync = $this->syncAgentEggFromProvider($provider, $confId, $arrInfo, $proxyUrl);
+			$eggSync = $sync ? 'ok' : 'fail';
+		}
+
+		$after = $this->readAvailSnapshot($confId);
 		writeLog(
 			$this->fLog,
 			$tag.
@@ -2269,6 +2278,7 @@ class ServiceLogic
 			" fail=".$stat['fail'].
 			" site=".$site.
 			" api=".$api.
+			" egg_sync=".$eggSync.
 			" egg=".$after['egg'].
 			" money=".$after['money'].
 			" point=".$after['point'].
@@ -2279,6 +2289,90 @@ class ServiceLogic
 			" delta_point=".($after['point'] - $before['point']).
 			" delta_avail=".($after['available'] - $before['available'])
 		);
+	}
+
+	/**
+	 * HonorLink(TREEM) /my-info 등으로 에이전트 보유알을 읽어 conf_active 갱신.
+	 * 실패·429여도 history/회수 백오프와 무관 — false만 반환.
+	 */
+	private function syncAgentEggFromProvider($provider, $confId, $arrInfo, $proxyUrl){
+		$logHead = "<".strtoupper($provider)."_EGG_SYNC> ";
+		$result = null;
+		if($provider === 'treem')
+			$result = $this->fetchTreemAgentInfo($arrInfo, $proxyUrl);
+		else if($provider === 'sigma')
+			$result = $this->fetchSigmaAgentInfo($arrInfo, $proxyUrl);
+		else {
+			writeLog($this->fLog, $logHead."unsupported provider");
+			return false;
+		}
+
+		$httpCode = isset($result['http_code']) ? intval($result['http_code']) : 0;
+		if($httpCode == HTTP_CODE_429){
+			writeLog($this->fLog, $logHead."429 skip conf_active update");
+			return false;
+		}
+		if(!isset($result['status']) || intval($result['status']) != 1 || !isset($result['balance'])){
+			writeLog($this->fLog, $logHead."fail http=".$httpCode." result=".json_encode($result, JSON_UNESCAPED_UNICODE));
+			return false;
+		}
+
+		$balance = floatval($result['balance']);
+		$bUpdated = $this->modelConfSite->updateActive($confId, $balance);
+		writeLog($this->fLog, $logHead."ok balance=".$balance." updated=".($bUpdated ? 1 : 0));
+		return $bUpdated ? true : false;
+	}
+
+	private function fetchTreemAgentInfo($arrInfo, $proxyUrl){
+		$url = $arrInfo[0]."/my-info";
+		$header = array(
+			'Content-Type: application/json',
+			'Accept: application/json',
+			'Authorization: Bearer '.$arrInfo[2]
+		);
+		$logHead = "<TREEM> fetchAgentInfo() ";
+		$curlResult = getCurlRequestWithProxy($url, $proxyUrl, $header);
+		$arrResult = array('status' => 0, 'http_code' => 0);
+
+		if(!is_null($curlResult) && array_key_exists("code", $curlResult)){
+			$arrResult['http_code'] = intval($curlResult['code']);
+			if($curlResult['code'] == HTTP_CODE_200){
+				$decoded = json_decode($curlResult['body'], true);
+				if(is_array($decoded) && array_key_exists('balance', $decoded)){
+					$arrResult = array_merge($arrResult, $decoded);
+					$arrResult['status'] = 1;
+				}
+				writeLog($this->fLog, $logHead."body=".$curlResult['body']);
+			} else {
+				writeLog($this->fLog, $logHead."http=".$curlResult['code']." body=".(isset($curlResult['body']) ? $curlResult['body'] : ''));
+			}
+		}
+		return $arrResult;
+	}
+
+	private function fetchSigmaAgentInfo($arrInfo, $proxyUrl){
+		$url = $arrInfo[0]."/agent";
+		$header = array(
+			'Authorization: '.$arrInfo[2]
+		);
+		$logHead = "<SIGMA> fetchAgentInfo() ";
+		$curlResult = getCurlRequestWithProxy($url, $proxyUrl, $header);
+		$arrResult = array('status' => 0, 'http_code' => 0);
+
+		if(!is_null($curlResult) && array_key_exists("code", $curlResult)){
+			$arrResult['http_code'] = intval($curlResult['code']);
+			if($curlResult['code'] == HTTP_CODE_200){
+				$decoded = json_decode($curlResult['body'], true);
+				if(is_array($decoded) && array_key_exists('balance', $decoded)){
+					$arrResult = array_merge($arrResult, $decoded);
+					$arrResult['status'] = 1;
+				}
+				writeLog($this->fLog, $logHead."body=".$curlResult['body']);
+			} else {
+				writeLog($this->fLog, $logHead."http=".$curlResult['code']." body=".(isset($curlResult['body']) ? $curlResult['body'] : ''));
+			}
+		}
+		return $arrResult;
 	}
 
 	private function processPendingRecoverTreem($arrPendingRecover, &$arrEmpPoint, $arrMember, $arrInfo, $proxyUrl, $rwCsLastFid){
@@ -2693,7 +2787,7 @@ class ServiceLogic
 		$recoverStat = $this->processPendingRecoverSigma($arrPendingRecover, $arrEmpPoint, $arrMember, $arrInfo, $proxyUrl, $rwCsLastFid);
 		$bResult = $this->modelMember->addEmployeePoint($arrEmpPoint);
 		writeLog($this->fLog, $logHead."AddEmpPoint-Count=".count($arrEmpPoint)." Result=".$bResult);
-		$this->logAvailAfterRecover("<SIGMA_AVAIL> ", CONF_API_SIGMA, $availBefore, $recoverStat);
+		$this->logAvailAfterRecover("<SIGMA_AVAIL> ", CONF_API_SIGMA, $availBefore, $recoverStat, $arrInfo, $proxyUrl, 'sigma');
 
 		return $bInsert;
 	}
@@ -2711,16 +2805,22 @@ class ServiceLogic
 				writeLog($this->fLog, $logHead."RecoverSkip betId=".$pending['betId']." member not found");
 				continue;
 			}
-			if($this->tryRecoverFromMemberSigma($member, $pending['total_point'], $arrInfo, $proxyUrl, $logHead)){
+			$recoverWay = $this->tryRecoverFromMemberSigma($member, $pending['total_point'], $arrInfo, $proxyUrl, $logHead);
+			if($recoverWay === 'site' || $recoverWay === 'api'){
 				$this->applyEmpRatioPoints($arrEmpPoint, $pending['arrEmpRatio']);
 				$this->modelReward->insert(GAME_CASINO_EVOL, $pending['betId'], $pending['arrEmpRatio'], $rwCsLastFid);
 				$stat['ok']++;
-				writeLog($this->fLog, $logHead."RecoverOk betId=".$pending['betId']." uid=".$member->mb_uid." point=".$pending['total_point']);
+				if($recoverWay === 'site')
+					$stat['site']++;
+				else
+					$stat['api']++;
+				writeLog($this->fLog, $logHead."RecoverOk betId=".$pending['betId']." uid=".$member->mb_uid." point=".$pending['total_point']." via=".$recoverWay);
 			} else {
 				$stat['fail']++;
 				writeLog($this->fLog, $logHead."RecoverFail betId=".$pending['betId']." uid=".$member->mb_uid." point=".$pending['total_point']);
 			}
-			sleep(1);
+			if($recoverWay === 'api')
+				sleep(1);
 		}
 		return $stat;
 	}
@@ -2731,7 +2831,7 @@ class ServiceLogic
 
 		if($member->mb_money >= $point){
 			if($this->modelMember->updateAssets($member, 0-$point, 0, MONEYCHANGE_WITHDRAW, MONEYCHANGE_WITHDRAW_CUT))
-				return true;
+				return 'site';
 		}
 		for($i=0; $i<3; $i++){
 			$result = $this->withdrawSigmaEgg($arrInfo, $member->mb_sigma_uid, $point, $proxyUrl);
@@ -2744,7 +2844,7 @@ class ServiceLogic
 				}
 				writeLog($this->fLog, $logHead."TransPoint uid=".$member->mb_uid.", balance=".$result['balance'].", point=".$point);
 				$this->modelTransfer->insertRow(RECOVER_TREEM, $member, $result['balance']+$point, 0-$point, $this->fLog);
-				return true;
+				return 'api';
 			}
 			sleep(3);
 		}
