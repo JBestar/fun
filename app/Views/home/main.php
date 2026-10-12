@@ -939,6 +939,45 @@
                 }
             <?php endif ?>
 
+            <?php if($_ENV['app.name'] == APP_TEN) :?>
+                .jackpot-container.jackpot-ten {
+                    background-image: url('<?php echo site_furl('/images/jackpot/ten_jackpot-bg.png'); ?>');
+                }
+                .jackpot-ten .odometer {
+                    font-weight: 700;
+                }
+                .jackpot-ten .odometer-value,
+                .jackpot-ten .odometer-formatting-mark {
+                    background: linear-gradient(to bottom, #FFFFFF 0%, #8FF3FF 30%, #4C7DFF 60%, #D94CFF 100%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                .jackpot-ten .odometer-value {
+                    filter: drop-shadow(0 0 6px rgba(140, 90, 255, 0.85)) drop-shadow(2px 4px 2px #0b0620);
+                }
+                .autoscroller.autoscroller-ten {
+                    background-image: url('<?php echo site_furl('/images/jackpot/ten_bg-customer.jpg'); ?>');
+                }
+                .autoscroller-ten .scroller-header {
+                    background: transparent;
+                }
+            <?php endif ?>
+
+            <?php if($_ENV['app.logo'] == 'telefi') :?>
+                #wrapper.hero-banner-overlay .header-bar__logo .logo_icon {
+                    width: 225px;
+                    position: relative;
+                    top: 28px;
+                }
+                @media (max-width: 760px) {
+                    #wrapper.hero-banner-overlay .header-bar__logo .logo_icon {
+                        width: 165px;
+                        top: 20px;
+                    }
+                }
+            <?php endif ?>
+
             <?php if($is_ten_login) :?>
                 body {
                     background: transparent !important;
@@ -1741,10 +1780,10 @@
                         <?php endif ?>
 
                     <?php if( array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1 && !is_login(true)) :?>
-                        <div class="jackpot-container justify-content-end">
-                            <img class="golden-bull" src="<?php echo site_furl('/images/jackpot/jackpot.png'); ?>" alt="">
+                        <div class="jackpot-container justify-content-end<?= $_ENV['app.name'] == APP_TEN ? ' jackpot-ten' : '' ?>">
+                            <img class="golden-bull" src="<?php echo site_furl('/images/jackpot/'.($_ENV['app.name'] == APP_TEN ? 'ten_jackpot.png' : 'jackpot.png')); ?>" alt="">
                             <div class="jackpot-amount">
-                                <img src="<?php echo site_furl('/images/jackpot/won-sign.png'); ?>" alt="" style="display:inline-block;">
+                                <img src="<?php echo site_furl('/images/jackpot/'.($_ENV['app.name'] == APP_TEN ? 'ten_won-sign.png' : 'won-sign.png')); ?>" alt="" style="display:inline-block;">
                                 <div id="jackpot" class=""></div>
                             </div>
                         </div>
@@ -1780,7 +1819,7 @@
 
                         </script>
 
-                        <div class="autoscroller">
+                        <div class="autoscroller<?= $_ENV['app.name'] == APP_TEN ? ' autoscroller-ten' : '' ?>">
                             <div class="autoscroller-d d-flex" >
                                 
                                 <div class="ps-card flex-1 flex-column ps-realtime">
