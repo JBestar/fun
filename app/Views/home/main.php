@@ -1524,9 +1524,9 @@
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_TEN) :?>
                                     <?php if(is_login(true)) :?>
-                                    images: ["<?php echo site_furl('/images/main/banner64.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner67.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner68.png?v=2'); ?>"],
+                                    images: ["<?php echo site_furl('/images/main/banner64.jpg?v=2'); ?>", "<?php echo site_furl('/images/main/banner67.jpg?v=2'); ?>", "<?php echo site_furl('/images/main/banner68.jpg?v=2'); ?>"],
                                     <?php else :?>
-                                    images: ["<?php echo site_furl('/images/main/banner64.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner65.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner66.png?v=2'); ?>"],
+                                    images: ["<?php echo site_furl('/images/main/banner64.jpg?v=2'); ?>", "<?php echo site_furl('/images/main/banner65.jpg?v=2'); ?>", "<?php echo site_furl('/images/main/banner66.jpg?v=2'); ?>"],
                                     <?php endif ?>
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
