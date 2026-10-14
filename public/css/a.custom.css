@@ -514,18 +514,6 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child {
     margin-right: -5px;
 }
 
-/* 상단 탭(카지노/슬롯 등) 이미지 간격 */
-.categories-desktop .ui.grid > .five.column.row > .column,
-.seoCategoryPage-category .ui.grid > .five.column.row > .column {
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-}
-
-.categories-desktop .column.first,
-.seoCategoryPage-category .column.first {
-    margin-right: 0;
-}
-
 @media (max-width: 1280px) {
     .after_login, .after_login2,
     .after_money, .after_money2 {

@@ -675,25 +675,7 @@
                     background-position: 0% 50%
                 }
                 <?php if($_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) :?>
-                /* banner5~7 실제 비율(1672x940 ≈ 56.22%) — a.min.css의 height:600px 고정 해제 */
-                .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop {
-                    height: 0 !important;
-                    padding-bottom: 56.22% !important;
-                }
-                .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop .bg-img {
-                    background-size: cover;
-                    background-position: center center;
-                }
-                @media (max-width: 900px) {
-                    .BannerSlider-bg {
-                        height: auto !important;
-                        min-height: 0 !important;
-                    }
-                    .MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop {
-                        height: 0 !important;
-                        padding-bottom: 56.22% !important;
-                    }
-                }
+                /* 배너 크기/비율은 ATM과 동일: a.min.css height 600px(모바일 475px) + cover */
 
                 /* 히어로 오버레이: 배너 위에 로고/로그인 */
                 #wrapper.hero-banner-overlay {
@@ -956,12 +938,6 @@
                 .jackpot-ten .odometer-value {
                     filter: drop-shadow(0 0 6px rgba(140, 90, 255, 0.85)) drop-shadow(2px 4px 2px #0b0620);
                 }
-                .autoscroller.autoscroller-ten {
-                    background-image: url('<?php echo site_furl('/images/jackpot/ten_bg-customer.jpg'); ?>');
-                }
-                .autoscroller-ten .scroller-header {
-                    background: transparent;
-                }
             <?php endif ?>
 
             <?php if($_ENV['app.logo'] == 'telefi') :?>
@@ -978,6 +954,7 @@
                 }
             <?php endif ?>
 
+            <?php /* TEN login layout (ten-bg / ten-layout) disabled
             <?php if($is_ten_login) :?>
                 body {
                     background: transparent !important;
@@ -1196,16 +1173,19 @@
                     }
                 }
             <?php endif ?>
+            */ ?>
 
         </style>
     </head>
     <body>
+        <?php /* TEN login ten-bg disabled
         <?php if($is_ten_login) :?>
             <div id="ten-bg" aria-hidden="true">
                 <div class="ten-bg__layer is-active"></div>
                 <div class="ten-bg__layer"></div>
             </div>
         <?php endif ?>
+        */ ?>
         <div class="main-navbar-dropdown-container" id="main-navbar-dropdown-container-id" style="display: none;">
             <div class="main-navbar-dropdown-div"> 
                 <button id="main-navbar-dropdown-ko-id"><image src="<?php echo site_furl('/images/common/ko.png?v=1'); ?>" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
@@ -1226,7 +1206,7 @@
         </div>
         <div id="SLB_loading"></div>
 
-        <div id="wrapper" data-login="<?=is_login(true)?1:0?>" class="<?= ($_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) ? 'hero-banner-overlay' : '' ?><?= $is_ten_login ? ' ten-layout' : '' ?>">
+        <div id="wrapper" data-login="<?=is_login(true)?1:0?>" class="<?= ($_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) ? 'hero-banner-overlay' : '' ?><?php /* <?= $is_ten_login ? ' ten-layout' : '' ?> */ ?>">
             <input type="checkbox" id="MainMenu-controller" />
             <label class="MainMenu-open burger at-hamburger-menu-button" for="MainMenu-controller">
                 <div class="line"></div>
@@ -1306,14 +1286,16 @@
                                     </nav>
                                     <?php $nav_chips_html = ob_get_clean(); ?>
 
+                                    <?php /* TEN login: header notice instead of nav chips
                                     <?php if($is_ten_login) :?>
                                         <div class="scroll_area header-bar__notice">
                                             <div class="scroll_text"><?=$notice_main?>
                                             </div>
                                         </div>
                                     <?php else :?>
+                                    */ ?>
                                         <?= $nav_chips_html ?>
-                                    <?php endif ?>
+                                    <?php /* endif */ ?>
 
                                     <div class="header-bar__user">
                                         <span class="header-user__name"><?=$user_name?>님</span>
@@ -1376,11 +1358,13 @@
                 </div>
             </div>
 
+            <?php /* TEN login sidebar disabled
             <?php if($is_ten_login && isset($nav_chips_html)) :?>
                 <aside class="ten-sidebar" aria-label="main shortcuts">
                     <?= $nav_chips_html ?>
                 </aside>
             <?php endif ?>
+            */ ?>
 
             <div id="MainMenu" class="MainMenu">
                 <div class="MainMenu-wrapper">
@@ -1478,7 +1462,9 @@
             <div class="MainContent" id="js-main-content">
                 <div class="MainContentPage">
                     <div class="SeoPage">
+                        <?php /* TEN login: banner hide disabled — always show
                         <?php if(!$is_ten_login) :?>
+                        */ ?>
                         <section class="MainBanner-container banner-top">
                             <div class="container-max">
                                 <div class="BannerSlider-container">
@@ -1520,25 +1506,24 @@
                                 </div>
                             </div>
                         </section>
-                        <?php endif ?>
+                        <?php /* endif */ ?>
                         <!-- 메인 텍스트공지 마퀴-->
+                        <?php /* TEN login: scroll_area hide disabled — always show
                         <?php if(!$is_ten_login) :?>
+                        */ ?>
                         <div class="scroll_area">
                             <div class="scroll_text"><?=$notice_main?>
                             </div>
                         </div>
-                        <?php endif ?>
+                        <?php /* endif */ ?>
                         
                         <script type="text/javascript">
                            $(".BannerSlider-bgDesktop .field_decoupled_block_bg_image_category_video_slots").bgswitcher({
                                 <?php if($_ENV['app.name'] == APP_HERMES) :?>
                                     images: ["<?php echo site_furl('/images/main/banner31.png?v=1'); ?>", "<?php echo site_furl('/images/main/banner32.png?v=1'); ?>"],
                                     effect: "clip",
-                                <?php elseif($_ENV['app.name'] == APP_ATM) :?>
+                                <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) :?>
                                     images: ["<?php echo site_furl('/images/main/banner61.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner62.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner63.png?v=2'); ?>"],
-                                    effect: "clip",
-                                <?php elseif($_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) :?>
-                                    images: ["<?php echo site_furl('/images/main/banner5.png'); ?>", "<?php echo site_furl('/images/main/banner6.png'); ?>", "<?php echo site_furl('/images/main/banner7.png'); ?>"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_DOLPHIN) :?>
                                     images: ["<?php echo site_furl('/images/main/banner51_'.$_ENV['app.home'].'.png?v=1.5'); ?>", "<?php echo site_furl('/images/main/banner52_'.$_ENV['app.home'].'.png?v=1.5'); ?>", "<?php echo site_furl('/images/main/banner53_'.$_ENV['app.home'].'.png?v=1.5'); ?>"],
@@ -1578,20 +1563,20 @@
                                 if($("#holdem").length > 0)
                                     $("#img_casino").attr("src", "<?php echo site_furl('/images/common/tab_casino_mid.png?v=1'); ?>");
                                 else
-                                    $("#img_casino").attr("src", "<?php echo site_furl('/images/common/tab_casino_2.png?v=2'); ?>");
+                                    $("#img_casino").attr("src", "<?php echo site_furl('/images/common/tab_casino.png?v=1'); ?>");
 
                                 if($("#auto").length > 0)
                                     $("#img_mini").attr("src", "<?php echo site_furl('/images/common/tab_mini.png?v=1'); ?>");
                                 else 
                                     $("#img_mini").attr("src", "<?php echo site_furl('/images/common/tab_mini_rit.png?v=1'); ?>");
                                 
-                                $("#img_slots").attr("src", "<?php echo site_furl('/images/common/tab_slot_2.png?v=2'); ?>");
-                                $("#img_auto").attr("src", "<?php echo site_furl('/images/common/tab_auto_2.png?v=2'); ?>");
+                                $("#img_slots").attr("src", "<?php echo site_furl('/images/common/tab_slot.png?v=1'); ?>");
+                                $("#img_auto").attr("src", "<?php echo site_furl('/images/common/tab_auto.png?v=1'); ?>");
                                 $("#img_holdem").attr("src", "<?php echo site_furl('/images/common/tab_holdem.png?v=1'); ?>");
 
                                 if (menu == "slots") {
                                     $("#slots").fadeIn("slow");
-                                    $("#img_slots").attr("src", "<?php echo site_furl('/images/common/tab_slot_select_2.png?v=2'); ?>");
+                                    $("#img_slots").attr("src", "<?php echo site_furl('/images/common/tab_slot_select.png?v=1'); ?>");
                                 } else if (menu == "mini") {
                                     $("#mini").fadeIn("slow");
                                     if($("#auto").length > 0)
@@ -1600,7 +1585,7 @@
                                         $("#img_mini").attr("src", "<?php echo site_furl('/images/common/tab_mini_select_rit.png?v=1'); ?>");
                                 } else if (menu == "auto") {
                                     $("#auto").fadeIn("slow");
-                                    $("#img_auto").attr("src", "<?php echo site_furl('/images/common/tab_auto_select_2.png?v=2'); ?>");
+                                    $("#img_auto").attr("src", "<?php echo site_furl('/images/common/tab_auto_select.png?v=1'); ?>");
                                 } else if (menu == "holdem") {
                                     $("#holdem").fadeIn("slow");
                                     $("#img_holdem").attr("src", "<?php echo site_furl('/images/common/tab_holdem_select.png?v=1'); ?>");
@@ -1609,7 +1594,7 @@
                                     if($("#holdem").length > 0)
                                         $("#img_casino").attr("src", "<?php echo site_furl('/images/common/tab_casino_select_mid.png?v=1'); ?>");
                                     else
-                                        $("#img_casino").attr("src", "<?php echo site_furl('/images/common/tab_casino_select_2.png?v=2'); ?>");
+                                        $("#img_casino").attr("src", "<?php echo site_furl('/images/common/tab_casino_select.png?v=1'); ?>");
                                 }
                             }
 
@@ -1617,6 +1602,7 @@
                                 $("#MainMenu-controller").prop("checked", false);
                             });
                         </script>
+                        <?php /* TEN login ten-bg switcher disabled
                         <?php if($is_ten_login) :?>
                         <script type="text/javascript">
                             (function() {
@@ -1688,7 +1674,7 @@
                             })();
                         </script>
                         <?php endif ?>
-                        <?php if(!$is_ten) :?>
+                        */ ?>
                         <div class="seoCategoryPage-category categories-wrapper js-seo-category-page-categories">
                             <div class="categories categories-desktop js-games-categories-slider slick-initialized slick-slider">
                                 <div class="ui two column centered grid">
@@ -1704,14 +1690,14 @@
                                                     <?php if (!$hold_deny):?>
                                                         src="<?php echo site_furl('/images/common/tab_casino_mid.png?v=1');?>" 
                                                     <?php else :?>
-                                                        src="<?php echo site_furl('/images/common/tab_casino_select_2.png?v=2');?>" 
+                                                        src="<?php echo site_furl('/images/common/tab_casino_select.png?v=1');?>" 
                                                     <?php endif ?>
                                                     onclick="javascript:showTabMenu('live-casino');" id="img_casino" style="cursor: pointer;" />
                                             </div>
                                         <?php endif ?>
                                         <?php if (!$slot_deny):?>
                                             <div class="column first">
-                                                <img src="<?php echo site_furl('/images/common/tab_slot_2.png?v=2');?>" onclick="javascript:showTabMenu('slots');" id="img_slots" style="cursor: pointer;" />
+                                                <img src="<?php echo site_furl('/images/common/tab_slot.png?v=1');?>" onclick="javascript:showTabMenu('slots');" id="img_slots" style="cursor: pointer;" />
                                             </div>
                                         <?php endif ?>
                                         
@@ -1728,56 +1714,13 @@
                                         <?php endif ?>
                                         <?php if ($apps_enable):?>
                                             <div class="column first">
-                                                <img src="<?php echo site_furl('/images/common/tab_auto_2.png?v=2');?>" onclick="javascript:showTabMenu('auto');" id="img_auto" style="cursor: pointer;" />
+                                                <img src="<?php echo site_furl('/images/common/tab_auto.png?v=1');?>" onclick="javascript:showTabMenu('auto');" id="img_auto" style="cursor: pointer;" />
                                             </div>
                                         <?php endif ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <?php elseif($is_ten_login) :?>
-                        <div class="uk-container">
-                            <div class="ten-game-tabs">
-                                <?php if (!$hold_deny):?>
-                                    <div class="ten-game-tab">
-                                        <img src="<?php echo site_furl('/images/common/tab_holdem_select.png?v=1');?>" onclick="showTabMenu('holdem');" id="img_holdem" alt="HOLDEM" />
-                                    </div>
-                                <?php endif ?>
-                                <?php if (!$evol_deny || !$cas_deny):?>
-                                    <div class="ten-game-tab">
-                                        <img
-                                            <?php if (!$hold_deny):?>
-                                                src="<?php echo site_furl('/images/common/tab_casino_mid.png?v=1');?>"
-                                            <?php else :?>
-                                                src="<?php echo site_furl('/images/common/tab_casino_select_2.png?v=2');?>"
-                                            <?php endif ?>
-                                            onclick="showTabMenu('live-casino');" id="img_casino" alt="LIVE CASINO" />
-                                    </div>
-                                <?php endif ?>
-                                <?php if (!$slot_deny):?>
-                                    <div class="ten-game-tab">
-                                        <img src="<?php echo site_furl('/images/common/tab_slot_2.png?v=2');?>" onclick="showTabMenu('slots');" id="img_slots" alt="SLOT GAMES" />
-                                    </div>
-                                <?php endif ?>
-                                <?php if(!$bpg_deny || !$eos5_deny || !$eos3_deny || !$coin5_deny || !$coin3_deny || !$pbg_deny || !$dhp_deny) :?>
-                                    <div class="ten-game-tab">
-                                        <img
-                                            <?php if ($apps_enable):?>
-                                                src="<?php echo site_furl('/images/common/tab_mini.png?v=1');?>"
-                                            <?php else:?>
-                                                src="<?php echo site_furl('/images/common/tab_mini_rit.png?v=1');?>"
-                                            <?php endif ?>
-                                            onclick="showTabMenu('mini');" id="img_mini" alt="MINI GAMES" />
-                                    </div>
-                                <?php endif ?>
-                                <?php if ($apps_enable):?>
-                                    <div class="ten-game-tab">
-                                        <img src="<?php echo site_furl('/images/common/tab_auto_2.png?v=2');?>" onclick="showTabMenu('auto');" id="img_auto" alt="AUTO APPS" />
-                                    </div>
-                                <?php endif ?>
-                            </div>
-                        </div>
-                        <?php endif ?>
 
                     <?php if( array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1 && !is_login(true)) :?>
                         <div class="jackpot-container justify-content-end<?= $_ENV['app.name'] == APP_TEN ? ' jackpot-ten' : '' ?>">
@@ -1810,16 +1753,19 @@
                                     }
                                 }, 5000);
 
+                                <?php if($_ENV['app.name'] != APP_TEN) :?>
                                 setInterval(function(){
                                     reqExchanges();
                                 }, 300000);
+                                <?php endif ?>
                                 
                             }
                             playJackpot();
 
                         </script>
 
-                        <div class="autoscroller<?= $_ENV['app.name'] == APP_TEN ? ' autoscroller-ten' : '' ?>">
+                        <?php if($_ENV['app.name'] != APP_TEN) :?>
+                        <div class="autoscroller">
                             <div class="autoscroller-d d-flex" >
                                 
                                 <div class="ps-card flex-1 flex-column ps-realtime">
@@ -1899,6 +1845,7 @@
                                 </div>
                             </div>
                         </div>
+                        <?php endif ?>
                     <?php else: ?>
                         <?php if(!$is_ten || is_login(true)) :?>
 
