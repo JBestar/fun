@@ -1523,7 +1523,11 @@
                                     images: ["<?php echo site_furl('/images/main/banner31.png?v=1'); ?>", "<?php echo site_furl('/images/main/banner32.png?v=1'); ?>"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_TEN) :?>
-                                    images: ["<?php echo site_furl('/images/main/banner64.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner61.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner62.png?v=2'); ?>"],
+                                    <?php if(is_login(true)) :?>
+                                    images: ["<?php echo site_furl('/images/main/banner64.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner67.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner68.png?v=2'); ?>"],
+                                    <?php else :?>
+                                    images: ["<?php echo site_furl('/images/main/banner64.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner65.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner66.png?v=2'); ?>"],
+                                    <?php endif ?>
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                                     images: ["<?php echo site_furl('/images/main/banner61.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner62.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner63.png?v=2'); ?>"],
