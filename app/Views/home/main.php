@@ -1522,7 +1522,10 @@
                                 <?php if($_ENV['app.name'] == APP_HERMES) :?>
                                     images: ["<?php echo site_furl('/images/main/banner31.png?v=1'); ?>", "<?php echo site_furl('/images/main/banner32.png?v=1'); ?>"],
                                     effect: "clip",
-                                <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) :?>
+                                <?php elseif($_ENV['app.name'] == APP_TEN) :?>
+                                    images: ["<?php echo site_furl('/images/main/banner64.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner61.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner62.png?v=2'); ?>"],
+                                    effect: "clip",
+                                <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
                                     images: ["<?php echo site_furl('/images/main/banner61.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner62.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner63.png?v=2'); ?>"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_DOLPHIN) :?>
