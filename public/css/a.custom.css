@@ -342,6 +342,11 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child {
     z-index:1030;
 }
 
+/* 헤더(1100), 언어메뉴(2001)보다 위에 두어 알림이 로그인/가입 버튼에 깔리지 않게 한다 */
+.swal2-container {
+    z-index: 3000;
+}
+
 /* 레이어 헤더색상 변경 steelblue => */
 .uk-modal-header, .SLB_caption {
     background: linear-gradient(to right, mediumpurple, dodgerblue);

@@ -64,7 +64,7 @@
         <script type="text/javascript" src="<?php echo site_furl('js/jquery-ui/marquee.js'); ?>"></script>
 
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/a.custom.css?ver=14'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/a.custom.css?ver=15'); ?>" />
         <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/c.custom.css?ver=6'); ?>" />
         <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/darkmode.css?ver=4'); ?>" />
     <?php else : ?>
