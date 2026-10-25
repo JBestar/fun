@@ -349,4 +349,43 @@ class ApiTreem_Lib  {
         return $arrResult;   
     }
 
+    public function getGameList($vendor)
+    {
+        if(strlen($this->mHost) < 1){
+            return array('status' => 0, 'error'=>INTERNAL_ERROR);
+        }
+
+        $url = $this->mHost."/game-list?vendor=".rawurlencode($vendor);
+
+        $logHead = "<ApiTreem_Lib> getGameList() ";
+
+        $header =  $this->getHeader();
+        $curlResult = getCurlRequestWithProxy($url, $header, null, null, 60);
+
+        $arrResult = [];
+		if(!is_null($curlResult) && array_key_exists("code", $curlResult)) {
+			if($curlResult['code'] == HTTP_CODE_200){
+                // $curlResult['body'] =>
+                // [{"title":"3 Genie Wishes", "type":"slot", "id":"vs50aladdin", "vendor":"PragmaticPlay",
+                //   "thumbnail":"https://.../game_pic/square/200/vs50aladdin.png", "langs":{"ko":"3 마리의 요정의 소원"}, ...}]
+                $games = json_decode($curlResult['body'], true);
+                if(is_array($games) && (count($games) == 0 || array_key_exists(0, $games))) {
+                    $arrResult['games'] = $games;
+                    $arrResult['status'] = 1;
+                } else {
+                    writeLog($logHead."vendor=".$vendor." Error response=".mb_substr($curlResult['body'], 0, 500));
+                    $arrResult['status'] = 0;
+                }
+            } else {
+                writeLog($logHead."vendor=".$vendor." Error code=".$curlResult['code']." error=".$curlResult['error']." body=".mb_substr($curlResult['body'], 0, 500));
+                $arrResult['status'] = 0;
+            }
+		} else {
+            $arrResult['status'] = 0;
+            $arrResult['error'] = CONNECT_ERROR;
+        }
+
+        return $arrResult;
+    }
+
 }

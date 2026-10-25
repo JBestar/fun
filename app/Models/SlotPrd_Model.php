@@ -38,5 +38,17 @@ class SlotPrd_Model extends Model {
                     ->findAll(); 
     }
 
+    public function getsForSync($cat, $code = ''){
+        $where = ['cat' => $cat];
+        if(strlen($code) > 0)
+            $where['code'] = $code;
+        else
+            $where['hidden'] = STATE_DISABLE;
+
+        return $this->where($where)
+                    ->orderBy('idx ASC, id ASC')
+                    ->findAll(); 
+    }
+
 
 }
