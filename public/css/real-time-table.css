@@ -56,12 +56,10 @@
   justify-content: center;
   flex-wrap: wrap;
   margin: 0;
-  background-image: url(/images/jackpot/bg-customer3.png);
+  background-image: url(/images/jackpot/bg-customer.jpg);
   background-size: cover;
   background-position: center;
   /* margin-bottom: 10vh; */
-	opacity: 0.1;
-	height: 100px;
 }
 
 .autoscroller-d {
@@ -190,9 +188,4 @@
   100% {
     transform: rotate(720deg);
 }
-}
-@media screen and (max-width:720px){
-	.MainBanner-container .BannerSlider-list .BannerSlider-bgDesktop> div{
-		background-position: 11% 50% !important;
-	}
 }

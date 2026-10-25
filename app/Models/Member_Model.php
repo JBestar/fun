@@ -281,33 +281,6 @@ class Member_Model extends Model {
         return $this->update($member->mb_fid, $data);
     }
 
-		public function applyTreemPointChange($member, $amount, $treemBalance){
-        if(is_null($member))
-            return false;
-
-        $amount = floor(abs($amount));
-        if($amount <= 0)
-            return false;
-
-        $treemBalance = floor($treemBalance);
-        $strSql = "UPDATE ".$this->table." SET ";
-        $strSql.= "mb_money = mb_money - ".$amount;
-        $strSql.= ", mb_treem_money = ".$treemBalance;
-        $strSql.= ", mb_change = -1";
-        $strSql.= ", mb_spec = ''";
-        $strSql.= " WHERE mb_fid=".$member->mb_fid;
-        $strSql.= " AND mb_money >= ".$amount;
-
-        $objUpdate = $this->db->query($strSql);
-        $affectedRows = $objUpdate->connID->affected_rows;
-        if($affectedRows > 0){
-            $member->mb_treem_money = $treemBalance;
-            return true;
-        }
-
-        return false;
-    }
-
     public function updateSigmaInfo($member){
         $data = [
             'mb_sigma_uid' => $member->mb_sigma_uid,

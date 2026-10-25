@@ -542,21 +542,6 @@ class Api extends BaseController
 			} else if($reqAmount > 0 && $objMember->mb_point >= $reqAmount && $this->modelMember->updateAssets($objMember, $reqAmount, 0-$reqAmount, POINTCHANGE_EXCHANGE))
 			{
 				// $modelMoneyhist->registerPointToMoney($objMember, $reqAmount);
-				
-				if(intval($_ENV['app.slot'] ?? 0) == 5 && intval($_ENV['app.casino'] ?? 0) == 5){
-					if(strlen($objMember->mb_treem_uid) > 0){
-						$arrTreem = $this->libApiTreem->addBalance($objMember->mb_treem_uid, $reqAmount);
-
-						if($arrTreem['status'] == 1 && array_key_exists('balance', $arrTreem)){
-							if(!$this->modelMember->applyTreemPointChange($objMember, $reqAmount, $arrTreem['balance'])){
-								writeLog("[change_point] TREEM money db update failed uid=".$objMember->mb_uid." amount=".$reqAmount." balance=".$arrTreem['balance']);
-							}
-						} else {
-							writeLog("[change_point] TREEM addBalance failed uid=".$objMember->mb_uid." amount=".$reqAmount." result=".json_encode($arrTreem));
-						}
-					}
-				}
-				
 				$result->status = STATUS_SUCCESS;
 			}			
 

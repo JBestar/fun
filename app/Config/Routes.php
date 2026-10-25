@@ -105,6 +105,9 @@ $routes->get('api/game_list', 'Casino::cas_list');
 
 $routes->get('casino', 'Casino::casino');
 
+$routes->cli('slotsync/run', 'SlotSync::run');
+$routes->cli('slotsync/run/(:segment)', 'SlotSync::run/$1');
+
 /**
  * --------------------------------------------------------------------
  * Additional Routing

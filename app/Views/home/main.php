@@ -1,3 +1,7 @@
+<?php
+    $is_ten       = ($_ENV['app.name'] == APP_TEN) && intval($_ENV['app.home']) > 0;
+    $is_ten_login = $is_ten && is_login(true);
+?>
 <!DOCTYPE html>
 <html lang="ko">
     <head>
@@ -29,7 +33,7 @@
         <script src="<?php echo site_furl('js/worker.js?v=1'); ?>"></script>
         <script src="<?php echo site_furl('js/odometer/odometer.js?v=1'); ?>"></script>
         <link rel="stylesheet" href="<?php echo site_furl('js/odometer/odometer.css?v=1'); ?>" />
-        <link rel="stylesheet" href="<?php echo site_furl('css/real-time-table.css?v=15'); ?>" />
+        <link rel="stylesheet" href="<?php echo site_furl('css/real-time-table.css?v=3'); ?>" />
         <script src="<?php echo site_furl('js/real-time-table.js?v=1'); ?>"></script>
         <script type="text/javascript" src="<?php echo site_furl('js/vue.js'); ?>"></script>
         <!--순서중요-->
@@ -60,7 +64,7 @@
         <script type="text/javascript" src="<?php echo site_furl('js/jquery-ui/marquee.js'); ?>"></script>
 
     <?php if($_ENV['CI_ENVIRONMENT'] == ENV_PRODUCTION) :?>
-        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/a.custom.css?ver=7'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/a.custom.css?ver=15'); ?>" />
         <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/c.custom.css?ver=6'); ?>" />
         <link rel="stylesheet" type="text/css" href="<?php echo site_furl('/css/darkmode.css?ver=4'); ?>" />
     <?php else : ?>
@@ -157,7 +161,7 @@
             }
             
             .MainMenu-open-wrapper .MainMenu-LogoSlogan {
-                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']."_".$_ENV['app.home']?>.png?v=3.5);
+                background-image: url(/images/main/sample2.logo_<?=$_ENV['app.logo']."_".$_ENV['app.home']?>.png?v=2.3);
             }
 
             <?php if(array_key_exists('app.tree', $_ENV) && $_ENV['app.tree'] == 1) :?>
@@ -670,6 +674,110 @@
                     background-size: cover;
                     background-position: 0% 50%
                 }
+                <?php if($_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) :?>
+                /* 배너 크기/비율은 ATM과 동일: a.min.css height 600px(모바일 475px) + cover */
+
+                /* 히어로 오버레이: 배너 위에 로고/로그인 */
+                #wrapper.hero-banner-overlay {
+                    position: relative;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-top-wrapper {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    z-index: 1100;
+                    overflow: visible;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper,
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper.js-sticky,
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper.js-is-game-open {
+                    position: relative !important;
+                    height: auto !important;
+                    min-height: 110px;
+                    overflow: visible;
+                    background: transparent !important;
+                    background-color: transparent !important;
+                    opacity: 1 !important;
+                    box-shadow: none !important;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper::before {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    height: 120px;
+                    background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.22) 50%, transparent 100%);
+                    pointer-events: none;
+                    z-index: 0;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-ActionsContainer {
+                    position: relative;
+                    z-index: 1;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper.is-scrolled {
+                    background: rgba(8, 16, 32, 0.72) !important;
+                    backdrop-filter: blur(14px);
+                    -webkit-backdrop-filter: blur(14px);
+                    border-bottom: 1px solid rgba(255, 213, 74, 0.25);
+                    box-shadow: 0 6px 24px rgba(0,0,0,0.35) !important;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-open-wrapper.is-scrolled::before {
+                    opacity: 0;
+                }
+                #wrapper.hero-banner-overlay .MainMenu-ActionsContainer.header-bar {
+                    position: relative;
+                    z-index: 1;
+                }
+                #wrapper.hero-banner-overlay .header-bar__logo .logo_icon {
+                    margin-top: 40px;
+                    width: 150px;
+                    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.55));
+                }
+                #wrapper.hero-banner-overlay .header-bar__auth .btn-box {
+                    margin-top: 12px !important;
+                    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+                }
+                #wrapper.hero-banner-overlay .MainContent {
+                    padding-top: 0;
+                    margin-top: 0;
+                }
+                #wrapper.hero-banner-overlay .MainBanner-container.banner-top {
+                    margin-top: 0;
+                    position: relative;
+                }
+                #wrapper.hero-banner-overlay .MainBanner-container.banner-top .BannerSlider-bg::after {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    height: 140px;
+                    background: linear-gradient(180deg, rgba(0,0,0,0.35), transparent);
+                    pointer-events: none;
+                    z-index: 2;
+                }
+                #wrapper.hero-banner-overlay .star-container {
+                    display: none;
+                }
+                @media (max-width: 760px) {
+                    #wrapper.hero-banner-overlay .header-bar__logo .logo_icon {
+                        width: 110px;
+                        margin-top: 8px;
+                    }
+                    #wrapper.hero-banner-overlay .header-bar__auth .btn-box {
+                        margin-top: 8px !important;
+                        min-width: 84px;
+                        height: 40px;
+                        font-size: 14px;
+                    }
+                    #wrapper.hero-banner-overlay .MainMenu-open-wrapper,
+                    #wrapper.hero-banner-overlay .MainMenu-open-wrapper.js-sticky {
+                        min-height: 90px;
+                    }
+                }
+                <?php endif ?>
 
                 #MainMenu {
                     background: linear-gradient(180deg,#292929 ,#2b2b2b);
@@ -685,18 +793,19 @@
                     color:#ffff00;
                 }
                 #_btn_user_money{
-                    margin-left:60px;
                     cursor: default;
                 }
-                .MainMenu-ActionsContainer .btn-register{
+                .MainMenu-ActionsContainer:not(.header-bar) .btn-register{
                     margin-right: 3px;
                 }
-                .MainMenu-ActionsContainer .btn-logo{
+                .MainMenu-ActionsContainer:not(.header-bar) .btn-logo{
                     margin-right:60px;
+                }
+                .MainMenu-ActionsContainer:not(.header-bar) #_btn_user_money{
+                    margin-left:60px;
                 }
 
                 .MainMenu-ActionsContainer .btn-box{
-                    float:right; 
                     display: inline-block;
                     width:110px;
                     padding: 7px 0 8px 0;
@@ -708,6 +817,9 @@
                     background: linear-gradient(180deg, #ffbe05, #735300);
                     margin-top: 3px;
                     margin-left: 5px;
+                }
+                .MainMenu-ActionsContainer:not(.header-bar) .btn-box{
+                    float:right;
                 }
                 #lang-button{
                     z-index: 2;
@@ -741,7 +853,6 @@
                     }
                     .MainMenu-ActionsContainer .btn-logo {
                         margin-right: 5px;
-												margin-left:40px;
                     }
                     .MainMenu-ActionsContainer .btn-box{
                         width:80px;
@@ -810,9 +921,271 @@
                 }
             <?php endif ?>
 
+            <?php if($_ENV['app.name'] == APP_TEN) :?>
+                .jackpot-container.jackpot-ten {
+                    background-image: url('<?php echo site_furl('/images/jackpot/ten_jackpot-bg.png'); ?>');
+                }
+                .jackpot-ten .odometer {
+                    font-weight: 700;
+                }
+                .jackpot-ten .odometer-value,
+                .jackpot-ten .odometer-formatting-mark {
+                    background: linear-gradient(to bottom, #FFFFFF 0%, #8FF3FF 30%, #4C7DFF 60%, #D94CFF 100%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                .jackpot-ten .odometer-value {
+                    filter: drop-shadow(0 0 6px rgba(140, 90, 255, 0.85)) drop-shadow(2px 4px 2px #0b0620);
+                }
+            <?php endif ?>
+
+            <?php if($_ENV['app.logo'] == 'telefi') :?>
+                #wrapper.hero-banner-overlay .header-bar__logo .logo_icon {
+                    width: 225px;
+                    position: relative;
+                    top: 28px;
+                }
+                @media (max-width: 760px) {
+                    #wrapper.hero-banner-overlay .header-bar__logo .logo_icon {
+                        width: 165px;
+                        top: 20px;
+                    }
+                }
+            <?php endif ?>
+
+            <?php /* TEN login layout (ten-bg / ten-layout) disabled
+            <?php if($is_ten_login) :?>
+                body {
+                    background: transparent !important;
+                }
+                #ten-bg {
+                    position: fixed;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: -1;
+                    overflow: hidden;
+                    pointer-events: none;
+                    background: #1B2430;
+                }
+                #ten-bg .ten-bg__layer {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    background-size: cover;
+                    background-position: center center;
+                    background-repeat: no-repeat;
+                    opacity: 0;
+                    transition: opacity 1.2s ease;
+                }
+                #ten-bg .ten-bg__layer.is-active {
+                    opacity: 1;
+                }
+
+                #wrapper.ten-layout .SeoPage,
+                #wrapper.ten-layout .MainContent,
+                #wrapper.ten-layout .MainContentPage {
+                    background: transparent !important;
+                }
+                #wrapper.ten-layout .MainContent {
+                    box-sizing: border-box;
+                    padding-top: 130px !important;
+                    padding-left: 124px !important;
+                }
+                #wrapper.ten-layout .FooterSection {
+                    box-sizing: border-box;
+                    padding-left: 124px;
+                }
+
+                #wrapper.ten-layout .scroll_area {
+                    background: transparent !important;
+                    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+                }
+                #wrapper.ten-layout .header-bar__notice {
+                    flex: 1 1 0;
+                    min-width: 0;
+                    overflow: hidden;
+                    margin: 0 16px;
+                }
+
+                #wrapper.ten-layout .ten-game-tabs {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    gap: 12px;
+                    padding-top: 16px;
+                }
+                #wrapper.ten-layout .ten-game-tab img {
+                    display: block;
+                    height: 64px;
+                    width: auto;
+                    cursor: pointer;
+                    transition: transform 0.2s ease, filter 0.2s ease;
+                }
+                #wrapper.ten-layout .ten-game-tab img:hover {
+                    transform: translateY(-2px);
+                    filter: brightness(1.12);
+                }
+                #wrapper.ten-layout .uk-section {
+                    padding-top: 12px;
+                }
+
+                #wrapper.ten-layout .ten-sidebar {
+                    position: fixed;
+                    top: 130px;
+                    bottom: 10px;
+                    left: 12px;
+                    display: flex;
+                    flex-direction: column;
+                    width: 96px;
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                    z-index: 999;
+                    padding: 10px 0;
+                    box-sizing: border-box;
+                    background: rgba(8, 16, 32, 0.72);
+                    border: 1px solid rgba(255, 213, 74, 0.25);
+                    border-radius: 12px;
+                    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+                }
+                #wrapper.ten-layout .ten-sidebar .header-bar__nav.nav-chips {
+                    display: flex;
+                    flex: 1 1 auto;
+                    flex-direction: column;
+                    flex-wrap: nowrap;
+                    align-items: center;
+                    justify-content: space-evenly;
+                    gap: 0;
+                    order: 0;
+                    width: 100%;
+                    min-height: 0;
+                    margin: 0;
+                    padding: 0;
+                    perspective: none;
+                }
+                #wrapper.ten-layout .ten-sidebar .nav-chip {
+                    flex: 0 0 auto;
+                    width: 84px;
+                    min-width: 0;
+                    gap: clamp(2px, 0.6vh, 5px);
+                    padding: clamp(2px, 0.8vh, 10px) 6px !important;
+                }
+                #wrapper.ten-layout .ten-sidebar .nav-chip .nav-chip__icon,
+                #wrapper.ten-layout .ten-sidebar .nav-chip i.icon {
+                    width: clamp(20px, 3.6vh, 36px) !important;
+                    height: clamp(20px, 3.6vh, 36px) !important;
+                    font-size: clamp(18px, 3.2vh, 32px) !important;
+                }
+                #wrapper.ten-layout .ten-sidebar .nav-chip__label {
+                    font-size: clamp(10px, 1.4vh, 12px);
+                }
+                #wrapper.ten-layout .ten-sidebar .nav-chip:hover {
+                    transform: scale(1.08);
+                }
+
+                @media (min-width: 1200px) {
+                    #wrapper.ten-layout .ten-game-tabs,
+                    #wrapper.ten-layout #live-casino > .uk-container > h2,
+                    #wrapper.ten-layout #slots > .uk-container > h2,
+                    #wrapper.ten-layout #auto > .uk-container > h2 {
+                        width: calc((100% + 15px) * 0.75 - 15px);
+                    }
+                    #wrapper.ten-layout #live-casino > .uk-container > .uk-grid,
+                    #wrapper.ten-layout #slots > .uk-container > .uk-grid,
+                    #wrapper.ten-layout #auto > .uk-container > .uk-grid {
+                        width: calc((100% + 15px) * 0.75);
+                    }
+                    #wrapper.ten-layout #live-casino > .uk-container > .uk-grid > *,
+                    #wrapper.ten-layout #slots > .uk-container > .uk-grid > *,
+                    #wrapper.ten-layout #auto > .uk-container > .uk-grid > * {
+                        width: 33.3333%;
+                    }
+                }
+                @media (min-width: 1600px) {
+                    #wrapper.ten-layout .ten-game-tabs,
+                    #wrapper.ten-layout #live-casino > .uk-container > h2,
+                    #wrapper.ten-layout #slots > .uk-container > h2,
+                    #wrapper.ten-layout #auto > .uk-container > h2 {
+                        width: calc((100% + 15px) * 0.8 - 15px);
+                    }
+                    #wrapper.ten-layout #live-casino > .uk-container > .uk-grid,
+                    #wrapper.ten-layout #slots > .uk-container > .uk-grid,
+                    #wrapper.ten-layout #auto > .uk-container > .uk-grid {
+                        width: calc((100% + 15px) * 0.8);
+                    }
+                    #wrapper.ten-layout #live-casino > .uk-container > .uk-grid > *,
+                    #wrapper.ten-layout #slots > .uk-container > .uk-grid > *,
+                    #wrapper.ten-layout #auto > .uk-container > .uk-grid > * {
+                        width: 25%;
+                    }
+                }
+
+                @media (max-width: 900px) {
+                    #wrapper.ten-layout .header-bar__notice {
+                        order: 3;
+                        flex: 1 1 100%;
+                        width: 100%;
+                        margin: 0;
+                    }
+                    #wrapper.ten-layout .ten-game-tabs {
+                        gap: 6px;
+                    }
+                    #wrapper.ten-layout .ten-game-tab img {
+                        height: 48px;
+                    }
+                    #wrapper.ten-layout .MainContent {
+                        padding-top: 190px !important;
+                        padding-left: 88px !important;
+                    }
+                    #wrapper.ten-layout .FooterSection {
+                        padding-left: 88px;
+                    }
+                    #wrapper.ten-layout .ten-sidebar {
+                        top: 190px;
+                        left: 8px;
+                        width: 72px;
+                    }
+                    #wrapper.ten-layout .ten-sidebar .nav-chip {
+                        width: 64px;
+                    }
+                }
+                @media (max-width: 640px) {
+                    #wrapper.ten-layout .ten-game-tab img {
+                        height: 38px;
+                    }
+                    #wrapper.ten-layout .MainContent {
+                        padding-left: 68px !important;
+                    }
+                    #wrapper.ten-layout .FooterSection {
+                        padding-left: 68px;
+                    }
+                    #wrapper.ten-layout .ten-sidebar {
+                        left: 6px;
+                        width: 56px;
+                    }
+                    #wrapper.ten-layout .ten-sidebar .nav-chip {
+                        width: 48px;
+                    }
+                }
+            <?php endif ?>
+            */ ?>
+
         </style>
     </head>
     <body>
+        <?php /* TEN login ten-bg disabled
+        <?php if($is_ten_login) :?>
+            <div id="ten-bg" aria-hidden="true">
+                <div class="ten-bg__layer is-active"></div>
+                <div class="ten-bg__layer"></div>
+            </div>
+        <?php endif ?>
+        */ ?>
         <div class="main-navbar-dropdown-container" id="main-navbar-dropdown-container-id" style="display: none;">
             <div class="main-navbar-dropdown-div"> 
                 <button id="main-navbar-dropdown-ko-id"><image src="<?php echo site_furl('/images/common/ko.png?v=1'); ?>" style="width:22px; margin-top:-2px;">&nbsp;&nbsp;<span id="lang-ko"><?=lang('common.lang_korean')?></span></button>
@@ -833,9 +1206,9 @@
         </div>
         <div id="SLB_loading"></div>
 
-        <div id="wrapper" data-login="<?=is_login(true)?1:0?>" >
+        <div id="wrapper" data-login="<?=is_login(true)?1:0?>" class="<?= ($_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) ? 'hero-banner-overlay' : '' ?><?php /* <?= $is_ten_login ? ' ten-layout' : '' ?> */ ?>">
             <input type="checkbox" id="MainMenu-controller" />
-            <label class="MainMenu-open burger at-hamburger-menu-button" for="MainMenu-controller" style="position:absolute">
+            <label class="MainMenu-open burger at-hamburger-menu-button" for="MainMenu-controller">
                 <div class="line"></div>
             </label>
 
@@ -852,88 +1225,107 @@
                         </a>
                     <?php endif ?>
 
-                    <div class="MainMenu-ActionsContainer">
-                        
-                        <div class="MainMenu-Left">
+                    <div class="MainMenu-ActionsContainer header-bar">
+                        <div class="header-bar__inner MainMenu-Left">
 
                             <?php if($_ENV['app.home'] > 0) :?>
-                                <a href="/" class="js-register-open btn-register btn-tiny btn-logo" style=" <?=!is_login(true)?"float:left;":""?>">
-                                    <span> <img src="<?php echo site_furl('/images/main/sample2.logo_'.$_ENV['app.logo'].'_'.$_ENV['app.home'].'.png?v=3.0'); ?>" class="logo_icon" /> </span>
+                                <a href="/" class="js-register-open btn-register btn-tiny btn-logo header-bar__logo">
+                                    <span style="padding:0px;"> <img src="<?php echo site_furl('/images/main/sample2.logo_'.$_ENV['app.logo'].'_'.$_ENV['app.home'].'.png?v=2.3'); ?>" class="logo_icon" /> </span>
                                 </a>
+
                                 <?php if(!is_login(true)) :?>
-                                    <button class="js-login-open btn-login btn-register btn-box" style="" onclick="showAgentCheckModal();">
-                                        <span>JOIN</span>
-                                    </button>
-                                    <button class="js-login-open btn-login btn-register btn-box" style="" onclick="showLoginModal();"  
-                                        <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-                                            style="margin-top:27px;"
-                                        <?php endif ?>
-                                    >
-                                        <span>LOGIN</span>
-                                    </button>
-                                <?php endif?>
-                            <?php endif ?>
+                                    <div class="header-bar__auth">
+                                        <button class="js-login-open btn-login btn-register btn-box" type="button" onclick="showAgentCheckModal();">
+                                            <span>JOIN</span>
+                                        </button>
+                                        <button class="js-login-open btn-login btn-register btn-box" type="button" onclick="showLoginModal();">
+                                            <span>LOGIN</span>
+                                        </button>
+                                    </div>
+                                <?php else :?>
+                                    <?php ob_start(); ?>
+                                    <nav class="header-bar__nav nav-chips" aria-label="main shortcuts">
+                                        <?php if ($apps_enable && (!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) ):?>
+                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_app" onclick="$('html, body').animate({scrollTop : 450}, 300); showTabMenu('auto');" title="<?=lang('common.auto_app')?>">
+                                                <i class="ui life ring outline icon nav-chip__icon"></i>
+                                                <span class="nav-chip__label"><?=lang('common.auto_app')?></span>
+                                            </button>
+                                        <?php endif?>
+                                        <?php if(!$user_off) :?>
+                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_charge" onclick="requestCharge();">
+                                                <i class="ui cloud download icon nav-chip__icon"></i>
+                                                <span class="nav-chip__label"><?=lang('common.deposit')?></span>
+                                            </button>
+                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_discharge" onclick="requestWithdraw();">
+                                                <i class="ui cloud upload icon nav-chip__icon"></i>
+                                                <span class="nav-chip__label"><?=lang('common.withdrawal')?></span>
+                                            </button>
+                                        <?php endif?>
+                                        <button type="button" class="nav-chip at-main-register-button" id="_btn_memo" onclick="SLB_POPUP(FURL + '/mypage', 'my_memo')">
+                                            <i class="ui comment outline icon nav-chip__icon"></i>
+                                            <span class="nav-chip__label"><?=lang('common.message')?><span id="memo_count"></span></span>
+                                        </button>
+                                        <button type="button" class="nav-chip at-main-register-button" id="_btn_notice" onclick="SLB_POPUP(FURL + '/mypage', 'notice')">
+                                            <i class="ui bullhorn icon nav-chip__icon"></i>
+                                            <span class="nav-chip__label"><?=lang('common.notice')?></span>
+                                        </button>
+                                        <button type="button" class="nav-chip at-main-register-button" id="_btn_info" onclick="SLB_POPUP(FURL + '/mypage', '')">
+                                            <i class="ui user icon nav-chip__icon"></i>
+                                            <span class="nav-chip__label"><?=lang('common.myinfo')?></span>
+                                        </button>
+                                        <button type="button" class="nav-chip at-main-register-button" id="_btn_qna" onclick="SLB_POPUP(FURL + '/mypage', 'my_qna')">
+                                            <i class="ui comment alternate icon nav-chip__icon"></i>
+                                            <span class="nav-chip__label"><?=lang('common.customer')?><span id="answered_count"></span></span>
+                                        </button>
+                                        <?php if($part_en) :?>
+                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href=FURL+'/home/pt_login'">
+                                                <i class="ui users icon nav-chip__icon"></i>
+                                                <span class="nav-chip__label"><?=lang('common.partener')?></span>
+                                            </button>
+                                        <?php endif?>
+                                    </nav>
+                                    <?php $nav_chips_html = ob_get_clean(); ?>
 
-                            <?php if(is_login(true)) :?>
-                                <?php if ($apps_enable && (!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) ):?>
-                                    <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_app"  onclick="$('html, body').animate({scrollTop : 450}, 300); showTabMenu('auto');">
-                                        <span style="padding:0px;"> <img src="<?php echo site_furl('/images/common/logo_app.gif');?>" class="app_icon" /> </span>
-                                    </button>
-                                <?php endif?>
-                                <?php if(!$user_off) :?>
-                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_charge"  onclick="requestCharge();"><i class="ui cloud download icon"></i><span><?=lang('common.deposit')?></span></button>
-                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_discharge"  onclick="requestWithdraw();"><i class="ui cloud upload icon"></i><span><?=lang('common.withdrawal')?></span></button>
-                                <?php endif?>
-                            
-                                <!-- <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" onclick="requestAccount()"><i class="ui question circle icon"></i><span><?=lang('common.ask_account')?></span></button> -->
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_memo" onclick="SLB_POPUP(FURL + '/mypage', 'my_memo')">
-                                    <i class="ui comment outline icon"></i><span><?=lang('common.message')?><span id="memo_count"></span></span>
-                                </button>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_notice" onclick="SLB_POPUP(FURL + '/mypage', 'notice')"><i class="ui bullhorn icon"></i><span><?=lang('common.notice')?></span></button>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_info" onclick="SLB_POPUP(FURL + '/mypage', '')"><i class="ui user icon"></i><span><?=lang('common.myinfo')?></span></button>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_qna" onclick="SLB_POPUP(FURL + '/mypage', 'my_qna')">
-                                    <i class="ui comment alternate icon"></i><span><?=lang('common.customer')?><span id="answered_count"></span></span>
-                                </button>
+                                    <?php /* TEN login: header notice instead of nav chips
+                                    <?php if($is_ten_login) :?>
+                                        <div class="scroll_area header-bar__notice">
+                                            <div class="scroll_text"><?=$notice_main?>
+                                            </div>
+                                        </div>
+                                    <?php else :?>
+                                    */ ?>
+                                        <?= $nav_chips_html ?>
+                                    <?php /* endif */ ?>
 
-                                <?php if($part_en) :?>
-                                <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href=FURL+'/home/pt_login'"><i class="ui users icon"></i><span><?=lang('common.partener')?></span></button>
+                                    <div class="header-bar__user">
+                                        <span class="header-user__name"><?=$user_name?>님</span>
+                                        <div class="header-user__money" id="_btn_user_money" title="<?=lang('common.money')?>">
+                                            <span class="header-user__money-icon icon_cash"><img src="<?php echo site_furl('/images/common/won.png?v=1'); ?>" alt="" /></span>
+                                            <strong class="header-user__money-value _has_cash"><?=number_format($user_money)?></strong>
+                                        </div>
+                                        <button type="button" class="header-user__point" id="_btn_user_point" onclick="changePoint();" title="<?=lang('common.point')?>">
+                                            <strong class="_has_point"><?=number_format($user_point)?></strong>P
+                                        </button>
+                                        <button type="button" class="header-user__logout at-main-register-button" id="_btn_logout" onclick="location.href='/home/logout'" title="<?=lang('common.logout')?>">
+                                            <i class="ui sign out icon"></i>
+                                        </button>
+                                    </div>
                                 <?php endif?>
-                                
-                                <?php if($_ENV['app.home'] > 0) :?>
-                                    <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="">
-                                        <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
-                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="<?php echo site_furl('/images/common/won.png?v=1'); ?>"></span>
-                                        <span class="_has_cash" style="padding:12px 3px;"><?=number_format($user_money)?></span>
-                                    </button>
-                                
-                                    <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-left:10px">
-                                        <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.point')?></span> 
-                                        <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="<?php echo site_furl('/images/common/point.png?v=1'); ?>"></span>
-                                        <span class="_has_point" style="padding:12px 3px;"  ><?=number_format($user_point)?></span>
-                                    </button>
-
-                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_logout" onclick="location.href='/home/logout'">   
-                                        <span><?=lang('common.logout')?></span>     
-                                    </button>
-                                <?php endif ?>
-
                             <?php endif ?>
 
                         </div>
                         <?php if($_ENV['app.home'] == 0) :?>
                             <div class="MainMenu-Right">
                                 <?php if(is_login(true)) :?>
-                                
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="margin-right:0px">
-                                        <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span> 
+                                        <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span>
                                         <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="<?php echo site_furl('/images/common/won.png?v=1'); ?>"></span>
                                         <span class="_has_cash" style="padding:12px 3px;"><?=number_format($user_money)?></span>
                                     </button>
-                                
                                     <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-left:10px">
-                                        <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.point')?></span> 
+                                        <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.point')?></span>
                                         <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="<?php echo site_furl('/images/common/point.png?v=1'); ?>"></span>
-                                        <span class="_has_point" style="padding:12px 3px;"  ><?=number_format($user_point)?></span>
+                                        <span class="_has_point" style="padding:12px 3px;" ><?=number_format($user_point)?></span>
                                     </button>
                                 <?php endif ?>
                             </div>
@@ -953,26 +1345,26 @@
                                 <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" style="z-index:1;" onclick="showAgentCheckModal();">
                                     <span><?=lang('common.signup')?></span>
                                 </button>
-                                <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showLoginModal();"  
-                                    <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-                                        style="margin-top:27px;"
-                                    <?php endif ?>
-                                >
+                                <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" onclick="showLoginModal();">
                                     <span><?=lang('common.login')?></span>
                                 </button>
                             <?php else :?>
-                                <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" id="_btn_logout" onclick="location.href='/home/logout'"
-                                <?php if(array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0 ) :?>
-                                    style="margin-top:27px;"
-                                <?php endif ?>
-                                    >   
-                                    <span><?=lang('common.logout')?></span>     
+                                <button class="js-login-open btn-login btn-tiny btn-secondary at-login-button" id="_btn_logout" onclick="location.href='/home/logout'">
+                                    <span><?=lang('common.logout')?></span>
                                 </button>
                             <?php endif ?>
                         <?php endif ?>
                     </div>
                 </div>
             </div>
+
+            <?php /* TEN login sidebar disabled
+            <?php if($is_ten_login && isset($nav_chips_html)) :?>
+                <aside class="ten-sidebar" aria-label="main shortcuts">
+                    <?= $nav_chips_html ?>
+                </aside>
+            <?php endif ?>
+            */ ?>
 
             <div id="MainMenu" class="MainMenu">
                 <div class="MainMenu-wrapper">
@@ -1070,6 +1462,9 @@
             <div class="MainContent" id="js-main-content">
                 <div class="MainContentPage">
                     <div class="SeoPage">
+                        <?php /* TEN login: banner hide disabled — always show
+                        <?php if(!$is_ten_login) :?>
+                        */ ?>
                         <section class="MainBanner-container banner-top">
                             <div class="container-max">
                                 <div class="BannerSlider-container">
@@ -1110,26 +1505,35 @@
                                     </div>
                                 </div>
                             </div>
-                        </section>												
+                        </section>
+                        <?php /* endif */ ?>
                         <!-- 메인 텍스트공지 마퀴-->
+                        <?php /* TEN login: scroll_area hide disabled — always show
+                        <?php if(!$is_ten_login) :?>
+                        */ ?>
                         <div class="scroll_area">
                             <div class="scroll_text"><?=$notice_main?>
                             </div>
                         </div>
+                        <?php /* endif */ ?>
                         
                         <script type="text/javascript">
                            $(".BannerSlider-bgDesktop .field_decoupled_block_bg_image_category_video_slots").bgswitcher({
                                 <?php if($_ENV['app.name'] == APP_HERMES) :?>
-                                    images: ["<?php echo site_furl('/images/main/banner31.png?v=4'); ?>", "<?php echo site_furl('/images/main/banner32.png?v=4'); ?>"],
+                                    images: ["<?php echo site_furl('/images/main/banner31.png?v=1'); ?>", "<?php echo site_furl('/images/main/banner32.png?v=1'); ?>"],
                                     effect: "clip",
-                                <?php elseif($_ENV['app.name'] == APP_ATM) :?>
-                                    images: ["<?php echo site_furl('/images/main/banner61.png?v=4'); ?>", "<?php echo site_furl('/images/main/banner62.png?v=4'); ?>", "<?php echo site_furl('/images/main/banner63.png?v=4'); ?>"],
+                                <?php elseif($_ENV['app.name'] == APP_TEN) :?>
+                                    <?php if(is_login(true)) :?>
+                                    images: ["<?php echo site_furl('/images/main/banner64.jpg?v=2'); ?>", "<?php echo site_furl('/images/main/banner67.jpg?v=2'); ?>", "<?php echo site_furl('/images/main/banner68.jpg?v=2'); ?>"],
+                                    <?php else :?>
+                                    images: ["<?php echo site_furl('/images/main/banner64.jpg?v=2'); ?>", "<?php echo site_furl('/images/main/banner65.jpg?v=2'); ?>", "<?php echo site_furl('/images/main/banner66.jpg?v=2'); ?>"],
+                                    <?php endif ?>
                                     effect: "clip",
-                                <?php elseif($_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK || $_ENV['app.name'] == APP_TEN) :?>
-                                    images: ["<?php echo site_furl('/images/main/banner1.png'); ?>", "<?php echo site_furl('/images/main/banner2.png'); ?>", "<?php echo site_furl('/images/main/banner3.png'); ?>", "<?php echo site_furl('/images/main/banner4.png'); ?>"],
+                                <?php elseif($_ENV['app.name'] == APP_ATM || $_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK) :?>
+                                    images: ["<?php echo site_furl('/images/main/banner61.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner62.png?v=2'); ?>", "<?php echo site_furl('/images/main/banner63.png?v=2'); ?>"],
                                     effect: "clip",
                                 <?php elseif($_ENV['app.name'] == APP_DOLPHIN) :?>
-                                    images: ["<?php echo site_furl('/images/main/banner51_'.$_ENV['app.home'].'.png?v=4.5'); ?>", "<?php echo site_furl('/images/main/banner52_'.$_ENV['app.home'].'.png?v=4.5'); ?>", "<?php echo site_furl('/images/main/banner53_'.$_ENV['app.home'].'.png?v=4.5'); ?>"],
+                                    images: ["<?php echo site_furl('/images/main/banner51_'.$_ENV['app.home'].'.png?v=1.5'); ?>", "<?php echo site_furl('/images/main/banner52_'.$_ENV['app.home'].'.png?v=1.5'); ?>", "<?php echo site_furl('/images/main/banner53_'.$_ENV['app.home'].'.png?v=1.5'); ?>"],
                                     effect: "clip",
                                 <?php else: ?>
                                     images: ["<?php echo site_furl('/images/main/banner1.png'); ?>", "<?php echo site_furl('/images/main/banner2.png'); ?>", "<?php echo site_furl('/images/main/banner3.png'); ?>", "<?php echo site_furl('/images/main/banner4.png'); ?>"],
@@ -1139,6 +1543,17 @@
                             });
 
                             $(".scroll_text").marquee();
+
+                            (function() {
+                                var bar = document.querySelector("#wrapper.hero-banner-overlay .MainMenu-open-wrapper");
+                                if (!bar) return;
+                                var onScroll = function() {
+                                    if (window.scrollY > 40) bar.classList.add("is-scrolled");
+                                    else bar.classList.remove("is-scrolled");
+                                };
+                                onScroll();
+                                window.addEventListener("scroll", onScroll, { passive: true });
+                            })();
 
                             function showTabMenu(menu) {
 
@@ -1194,6 +1609,79 @@
                                 $("#MainMenu-controller").prop("checked", false);
                             });
                         </script>
+                        <?php /* TEN login ten-bg switcher disabled
+                        <?php if($is_ten_login) :?>
+                        <script type="text/javascript">
+                            (function() {
+                                var images = [
+                                    "<?php echo site_furl('/images/main/ten_back1.png?v=1'); ?>",
+                                    "<?php echo site_furl('/images/main/ten_back2.png?v=1'); ?>",
+                                    "<?php echo site_furl('/images/main/ten_back3.png?v=1'); ?>"
+                                ];
+                                var INTERVAL = 6000;
+                                var root = document.getElementById("ten-bg");
+                                if (!root) return;
+                                var layers = root.querySelectorAll(".ten-bg__layer");
+                                if (layers.length < 2 || images.length === 0) return;
+
+                                var index = 0;
+                                var front = 0;
+                                var timer = null;
+                                var busy = false;
+                                var loaded = {};
+
+                                function preload(src, cb) {
+                                    if (loaded[src]) { cb(true); return; }
+                                    var img = new Image();
+                                    img.onload = function() { loaded[src] = true; cb(true); };
+                                    img.onerror = function() { cb(false); };
+                                    img.src = src;
+                                }
+
+                                function schedule() {
+                                    clearTimeout(timer);
+                                    timer = null;
+                                    if (images.length < 2 || document.hidden) return;
+                                    timer = setTimeout(function() {
+                                        show((index + 1) % images.length);
+                                    }, INTERVAL);
+                                }
+
+                                function show(nextIndex) {
+                                    if (busy) return;
+                                    busy = true;
+                                    var src = images[nextIndex];
+                                    preload(src, function(ok) {
+                                        busy = false;
+                                        index = nextIndex;
+                                        if (ok) {
+                                            var back = 1 - front;
+                                            layers[back].style.backgroundImage = 'url("' + src + '")';
+                                            layers[back].classList.add("is-active");
+                                            layers[front].classList.remove("is-active");
+                                            front = back;
+                                        }
+                                        schedule();
+                                    });
+                                }
+
+                                document.addEventListener("visibilitychange", function() {
+                                    if (document.hidden) {
+                                        clearTimeout(timer);
+                                        timer = null;
+                                    } else {
+                                        schedule();
+                                    }
+                                });
+
+                                preload(images[0], function(ok) {
+                                    if (ok) layers[0].style.backgroundImage = 'url("' + images[0] + '")';
+                                    schedule();
+                                });
+                            })();
+                        </script>
+                        <?php endif ?>
+                        */ ?>
                         <div class="seoCategoryPage-category categories-wrapper js-seo-category-page-categories">
                             <div class="categories categories-desktop js-games-categories-slider slick-initialized slick-slider">
                                 <div class="ui two column centered grid">
@@ -1242,10 +1730,10 @@
                         </div>
 
                     <?php if( array_key_exists('main.jackpot', $_ENV) && $_ENV['main.jackpot'] == 1 && !is_login(true)) :?>
-                        <div class="jackpot-container justify-content-end">
-                            <img class="golden-bull" src="<?php echo site_furl('/images/jackpot/jackpot.png'); ?>" alt="">
+                        <div class="jackpot-container justify-content-end<?= $_ENV['app.name'] == APP_TEN ? ' jackpot-ten' : '' ?>">
+                            <img class="golden-bull" src="<?php echo site_furl('/images/jackpot/'.($_ENV['app.name'] == APP_TEN ? 'ten_jackpot.png' : 'jackpot.png')); ?>" alt="">
                             <div class="jackpot-amount">
-                                <img src="<?php echo site_furl('/images/jackpot/won-sign.png'); ?>" alt="" style="display:inline-block;">
+                                <img src="<?php echo site_furl('/images/jackpot/'.($_ENV['app.name'] == APP_TEN ? 'ten_won-sign.png' : 'won-sign.png')); ?>" alt="" style="display:inline-block;">
                                 <div id="jackpot" class=""></div>
                             </div>
                         </div>
@@ -1272,18 +1760,21 @@
                                     }
                                 }, 5000);
 
+                                <?php if($_ENV['app.name'] != APP_TEN) :?>
                                 setInterval(function(){
                                     reqExchanges();
                                 }, 300000);
+                                <?php endif ?>
                                 
                             }
                             playJackpot();
 
                         </script>
 
+                        <?php if($_ENV['app.name'] != APP_TEN) :?>
                         <div class="autoscroller">
                             <div class="autoscroller-d d-flex" >
-                                <!--                                 
+                                
                                 <div class="ps-card flex-1 flex-column ps-realtime">
                                     <div class="scroller-header" ><?=lang('common.realtime')?><?=lang('common.deposit')?></div>
                                     <div class="ps-card-body">
@@ -1358,11 +1849,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> -->
-																
+                                </div>
                             </div>
                         </div>
+                        <?php endif ?>
                     <?php else: ?>
+                        <?php if(!$is_ten || is_login(true)) :?>
 
                         <?php if (!$slot_deny):?>
                         <section class="uk-section" id="slots"  style="display: none;">
@@ -1932,6 +2424,8 @@
                                 </div>
                             </div>
                         </section>
+                        <?php endif ?>
+
                         <?php endif ?>
                     </div>
                 <?php endif?>

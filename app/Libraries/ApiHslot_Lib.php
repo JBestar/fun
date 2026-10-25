@@ -4,7 +4,6 @@ namespace App\Libraries;
 use App\Models\ConfSite_Model;
 
 class ApiHslot_Lib  {
-
     
     private $mHost = "";   
     private $mAgCode = "";  

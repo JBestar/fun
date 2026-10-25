@@ -74,4 +74,34 @@ class SlotGame_Model extends Model {
         return $gameFslot;
     }
 
+    public function getsByPrd($cat, $prd){
+        $where = [
+            'cat' => $cat,
+            'prd_code' => $prd,
+        ];
+        return $this->where($where)
+                    ->orderBy('fid', 'ASC')
+                    ->findAll();
+    }
+
+    public function applySync($inserts, $updates, $hideFids){
+        $builder = $this->builder();
+
+        $this->db->transStart();
+        if(count($inserts) > 0)
+            $builder->insertBatch($inserts);
+
+        foreach($updates as $fid => $data){
+            $builder->where('fid', $fid)->update($data);
+        }
+
+        if(count($hideFids) > 0){
+            $builder->whereIn('fid', $hideFids)
+                    ->update(['hidden' => STATE_ACTIVE, 'sync_removed' => STATE_ACTIVE]);
+        }
+        $this->db->transComplete();
+
+        return $this->db->transStatus();
+    }
+
 }
