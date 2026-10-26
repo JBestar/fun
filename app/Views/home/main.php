@@ -1,6 +1,7 @@
 <?php
     $is_ten       = ($_ENV['app.name'] == APP_TEN) && intval($_ENV['app.home']) > 0;
     $is_ten_login = $is_ten && is_login(true);
+    $is_fun_dunk  = ($_ENV['app.name'] == APP_FUN || $_ENV['app.name'] == APP_DUNK);
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -1225,92 +1226,151 @@
                         </a>
                     <?php endif ?>
 
-                    <div class="MainMenu-ActionsContainer header-bar">
-                        <div class="header-bar__inner MainMenu-Left">
+                    <div class="MainMenu-ActionsContainer<?= $is_fun_dunk ? '' : ' header-bar' ?>">
+                        <div class="<?= $is_fun_dunk ? 'MainMenu-Left' : 'header-bar__inner MainMenu-Left' ?>">
 
-                            <?php if($_ENV['app.home'] > 0) :?>
-                                <a href="/" class="js-register-open btn-register btn-tiny btn-logo header-bar__logo">
-                                    <span style="padding:0px;"> <img src="<?php echo site_furl('/images/main/sample2.logo_'.$_ENV['app.logo'].'_'.$_ENV['app.home'].'.png?v=2.3'); ?>" class="logo_icon" /> </span>
-                                </a>
-
-                                <?php if(!is_login(true)) :?>
-                                    <div class="header-bar__auth">
-                                        <button class="js-login-open btn-login btn-register btn-box" type="button" onclick="showAgentCheckModal();">
+                            <?php if($is_fun_dunk) :?>
+                                <?php if($_ENV['app.home'] > 0) :?>
+                                    <a href="/" class="js-register-open btn-register btn-tiny btn-logo" style=" <?=!is_login(true)?"float:left;":""?>">
+                                        <span style="padding:0px;"> <img src="<?php echo site_furl('/images/main/sample2.logo_'.$_ENV['app.logo'].'_'.$_ENV['app.home'].'.png?v=2.3'); ?>" class="logo_icon" /> </span>
+                                    </a>
+                                    <?php if(!is_login(true)) :?>
+                                        <button class="js-login-open btn-login btn-register btn-box" style="" onclick="showAgentCheckModal();">
                                             <span>JOIN</span>
                                         </button>
-                                        <button class="js-login-open btn-login btn-register btn-box" type="button" onclick="showLoginModal();">
+                                        <button class="js-login-open btn-login btn-register btn-box" onclick="showLoginModal();"<?= (array_key_exists('app.lang', $_ENV) && intval($_ENV['app.lang']) > 0) ? ' style="margin-top:27px;"' : '' ?>>
                                             <span>LOGIN</span>
                                         </button>
-                                    </div>
-                                <?php else :?>
-                                    <?php ob_start(); ?>
-                                    <nav class="header-bar__nav nav-chips" aria-label="main shortcuts">
-                                        <?php if ($apps_enable && (!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) ):?>
-                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_app" onclick="$('html, body').animate({scrollTop : 450}, 300); showTabMenu('auto');" title="<?=lang('common.auto_app')?>">
-                                                <i class="ui life ring outline icon nav-chip__icon"></i>
-                                                <span class="nav-chip__label"><?=lang('common.auto_app')?></span>
-                                            </button>
-                                        <?php endif?>
-                                        <?php if(!$user_off) :?>
-                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_charge" onclick="requestCharge();">
-                                                <i class="ui cloud download icon nav-chip__icon"></i>
-                                                <span class="nav-chip__label"><?=lang('common.deposit')?></span>
-                                            </button>
-                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_discharge" onclick="requestWithdraw();">
-                                                <i class="ui cloud upload icon nav-chip__icon"></i>
-                                                <span class="nav-chip__label"><?=lang('common.withdrawal')?></span>
-                                            </button>
-                                        <?php endif?>
-                                        <button type="button" class="nav-chip at-main-register-button" id="_btn_memo" onclick="SLB_POPUP(FURL + '/mypage', 'my_memo')">
-                                            <i class="ui comment outline icon nav-chip__icon"></i>
-                                            <span class="nav-chip__label"><?=lang('common.message')?><span id="memo_count"></span></span>
-                                        </button>
-                                        <button type="button" class="nav-chip at-main-register-button" id="_btn_notice" onclick="SLB_POPUP(FURL + '/mypage', 'notice')">
-                                            <i class="ui bullhorn icon nav-chip__icon"></i>
-                                            <span class="nav-chip__label"><?=lang('common.notice')?></span>
-                                        </button>
-                                        <button type="button" class="nav-chip at-main-register-button" id="_btn_info" onclick="SLB_POPUP(FURL + '/mypage', '')">
-                                            <i class="ui user icon nav-chip__icon"></i>
-                                            <span class="nav-chip__label"><?=lang('common.myinfo')?></span>
-                                        </button>
-                                        <button type="button" class="nav-chip at-main-register-button" id="_btn_qna" onclick="SLB_POPUP(FURL + '/mypage', 'my_qna')">
-                                            <i class="ui comment alternate icon nav-chip__icon"></i>
-                                            <span class="nav-chip__label"><?=lang('common.customer')?><span id="answered_count"></span></span>
-                                        </button>
-                                        <?php if($part_en) :?>
-                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href=FURL+'/home/pt_login'">
-                                                <i class="ui users icon nav-chip__icon"></i>
-                                                <span class="nav-chip__label"><?=lang('common.partener')?></span>
-                                            </button>
-                                        <?php endif?>
-                                    </nav>
-                                    <?php $nav_chips_html = ob_get_clean(); ?>
+                                    <?php endif?>
+                                <?php endif ?>
 
-                                    <?php /* TEN login: header notice instead of nav chips
-                                    <?php if($is_ten_login) :?>
-                                        <div class="scroll_area header-bar__notice">
-                                            <div class="scroll_text"><?=$notice_main?>
-                                            </div>
+                                <?php if(is_login(true)) :?>
+                                    <?php if ($apps_enable && (!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) ):?>
+                                        <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_app"  onclick="$('html, body').animate({scrollTop : 450}, 300); showTabMenu('auto');">
+                                            <span style="padding:0px;"> <img src="<?php echo site_furl('/images/common/logo_app.gif');?>" class="app_icon" /> </span>
+                                        </button>
+                                    <?php endif?>
+                                    <?php if(!$user_off) :?>
+                                        <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_charge"  onclick="requestCharge();"><i class="ui cloud download icon"></i><span><?=lang('common.deposit')?></span></button>
+                                        <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_discharge"  onclick="requestWithdraw();"><i class="ui cloud upload icon"></i><span><?=lang('common.withdrawal')?></span></button>
+                                    <?php endif?>
+
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_memo" onclick="SLB_POPUP(FURL + '/mypage', 'my_memo')">
+                                        <i class="ui comment outline icon"></i><span><?=lang('common.message')?><span id="memo_count"></span></span>
+                                    </button>
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_notice" onclick="SLB_POPUP(FURL + '/mypage', 'notice')"><i class="ui bullhorn icon"></i><span><?=lang('common.notice')?></span></button>
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_info" onclick="SLB_POPUP(FURL + '/mypage', '')"><i class="ui user icon"></i><span><?=lang('common.myinfo')?></span></button>
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_qna" onclick="SLB_POPUP(FURL + '/mypage', 'my_qna')">
+                                        <i class="ui comment alternate icon"></i><span><?=lang('common.customer')?><span id="answered_count"></span></span>
+                                    </button>
+
+                                    <?php if($part_en) :?>
+                                    <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href=FURL+'/home/pt_login'"><i class="ui users icon"></i><span><?=lang('common.partener')?></span></button>
+                                    <?php endif?>
+
+                                    <?php if($_ENV['app.home'] > 0) :?>
+                                        <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_money" onclick="" style="">
+                                            <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.money')?></span>
+                                            <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="<?php echo site_furl('/images/common/won.png?v=1'); ?>"></span>
+                                            <span class="_has_cash" style="padding:12px 3px;"><?=number_format($user_money)?></span>
+                                        </button>
+
+                                        <button class="js-register-open btn-register btn-tiny at-main-register-button" id="_btn_user_point" onclick="changePoint();" style="margin-left:10px">
+                                            <span class="txt_cash" style="padding:12px 0px;"><?=lang('common.point')?></span>
+                                            <span class="icon_cash" style="padding:12px 0px; width:24px; "><img src="<?php echo site_furl('/images/common/point.png?v=1'); ?>"></span>
+                                            <span class="_has_point" style="padding:12px 3px;"  ><?=number_format($user_point)?></span>
+                                        </button>
+
+                                        <button class="js-register-open btn-register btn-tiny btn-secondary at-main-register-button" id="_btn_logout" onclick="location.href='/home/logout'">
+                                            <span><?=lang('common.logout')?></span>
+                                        </button>
+                                    <?php endif ?>
+                                <?php endif ?>
+                            <?php else :?>
+                                <?php if($_ENV['app.home'] > 0) :?>
+                                    <a href="/" class="js-register-open btn-register btn-tiny btn-logo header-bar__logo">
+                                        <span style="padding:0px;"> <img src="<?php echo site_furl('/images/main/sample2.logo_'.$_ENV['app.logo'].'_'.$_ENV['app.home'].'.png?v=2.3'); ?>" class="logo_icon" /> </span>
+                                    </a>
+
+                                    <?php if(!is_login(true)) :?>
+                                        <div class="header-bar__auth">
+                                            <button class="js-login-open btn-login btn-register btn-box" type="button" onclick="showAgentCheckModal();">
+                                                <span>JOIN</span>
+                                            </button>
+                                            <button class="js-login-open btn-login btn-register btn-box" type="button" onclick="showLoginModal();">
+                                                <span>LOGIN</span>
+                                            </button>
                                         </div>
                                     <?php else :?>
-                                    */ ?>
-                                        <?= $nav_chips_html ?>
-                                    <?php /* endif */ ?>
+                                        <?php ob_start(); ?>
+                                        <nav class="header-bar__nav nav-chips" aria-label="main shortcuts">
+                                            <?php if ($apps_enable && (!array_key_exists('app.hold', $_ENV) || $_ENV['app.hold'] != 1) ):?>
+                                                <button type="button" class="nav-chip at-main-register-button" id="_btn_app" onclick="$('html, body').animate({scrollTop : 450}, 300); showTabMenu('auto');" title="<?=lang('common.auto_app')?>">
+                                                    <i class="ui life ring outline icon nav-chip__icon"></i>
+                                                    <span class="nav-chip__label"><?=lang('common.auto_app')?></span>
+                                                </button>
+                                            <?php endif?>
+                                            <?php if(!$user_off) :?>
+                                                <button type="button" class="nav-chip at-main-register-button" id="_btn_charge" onclick="requestCharge();">
+                                                    <i class="ui cloud download icon nav-chip__icon"></i>
+                                                    <span class="nav-chip__label"><?=lang('common.deposit')?></span>
+                                                </button>
+                                                <button type="button" class="nav-chip at-main-register-button" id="_btn_discharge" onclick="requestWithdraw();">
+                                                    <i class="ui cloud upload icon nav-chip__icon"></i>
+                                                    <span class="nav-chip__label"><?=lang('common.withdrawal')?></span>
+                                                </button>
+                                            <?php endif?>
+                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_memo" onclick="SLB_POPUP(FURL + '/mypage', 'my_memo')">
+                                                <i class="ui comment outline icon nav-chip__icon"></i>
+                                                <span class="nav-chip__label"><?=lang('common.message')?><span id="memo_count"></span></span>
+                                            </button>
+                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_notice" onclick="SLB_POPUP(FURL + '/mypage', 'notice')">
+                                                <i class="ui bullhorn icon nav-chip__icon"></i>
+                                                <span class="nav-chip__label"><?=lang('common.notice')?></span>
+                                            </button>
+                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_info" onclick="SLB_POPUP(FURL + '/mypage', '')">
+                                                <i class="ui user icon nav-chip__icon"></i>
+                                                <span class="nav-chip__label"><?=lang('common.myinfo')?></span>
+                                            </button>
+                                            <button type="button" class="nav-chip at-main-register-button" id="_btn_qna" onclick="SLB_POPUP(FURL + '/mypage', 'my_qna')">
+                                                <i class="ui comment alternate icon nav-chip__icon"></i>
+                                                <span class="nav-chip__label"><?=lang('common.customer')?><span id="answered_count"></span></span>
+                                            </button>
+                                            <?php if($part_en) :?>
+                                                <button type="button" class="nav-chip at-main-register-button" id="_btn_partener" onclick="window.open('about:blank').location.href=FURL+'/home/pt_login'">
+                                                    <i class="ui users icon nav-chip__icon"></i>
+                                                    <span class="nav-chip__label"><?=lang('common.partener')?></span>
+                                                </button>
+                                            <?php endif?>
+                                        </nav>
+                                        <?php $nav_chips_html = ob_get_clean(); ?>
 
-                                    <div class="header-bar__user">
-                                        <span class="header-user__name"><?=$user_name?>님</span>
-                                        <div class="header-user__money" id="_btn_user_money" title="<?=lang('common.money')?>">
-                                            <span class="header-user__money-icon icon_cash"><img src="<?php echo site_furl('/images/common/won.png?v=1'); ?>" alt="" /></span>
-                                            <strong class="header-user__money-value _has_cash"><?=number_format($user_money)?></strong>
+                                        <?php /* TEN login: header notice instead of nav chips
+                                        <?php if($is_ten_login) :?>
+                                            <div class="scroll_area header-bar__notice">
+                                                <div class="scroll_text"><?=$notice_main?>
+                                                </div>
+                                            </div>
+                                        <?php else :?>
+                                        */ ?>
+                                            <?= $nav_chips_html ?>
+                                        <?php /* endif */ ?>
+
+                                        <div class="header-bar__user">
+                                            <span class="header-user__name"><?=$user_name?>님</span>
+                                            <div class="header-user__money" id="_btn_user_money" title="<?=lang('common.money')?>">
+                                                <span class="header-user__money-icon icon_cash"><img src="<?php echo site_furl('/images/common/won.png?v=1'); ?>" alt="" /></span>
+                                                <strong class="header-user__money-value _has_cash"><?=number_format($user_money)?></strong>
+                                            </div>
+                                            <button type="button" class="header-user__point" id="_btn_user_point" onclick="changePoint();" title="<?=lang('common.point')?>">
+                                                <strong class="_has_point"><?=number_format($user_point)?></strong>P
+                                            </button>
+                                            <button type="button" class="header-user__logout at-main-register-button" id="_btn_logout" onclick="location.href='/home/logout'" title="<?=lang('common.logout')?>">
+                                                <i class="ui sign out icon"></i>
+                                            </button>
                                         </div>
-                                        <button type="button" class="header-user__point" id="_btn_user_point" onclick="changePoint();" title="<?=lang('common.point')?>">
-                                            <strong class="_has_point"><?=number_format($user_point)?></strong>P
-                                        </button>
-                                        <button type="button" class="header-user__logout at-main-register-button" id="_btn_logout" onclick="location.href='/home/logout'" title="<?=lang('common.logout')?>">
-                                            <i class="ui sign out icon"></i>
-                                        </button>
-                                    </div>
-                                <?php endif?>
+                                    <?php endif?>
+                                <?php endif ?>
                             <?php endif ?>
 
                         </div>
